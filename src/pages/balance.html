@@ -1,0 +1,52 @@
+<section class="col-xs-12 content" ng-controller="BalanceCtrl">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header">{{address}} 
+				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
+			</div>
+			<table class="BalancesTable">
+				<thead>
+					<tr class="BalancesTable__headerRow">
+						<td>{{'asset' | translate}}</td>
+						<td><sapn>{{'balance' | translate}}</sapn></td>
+						<td><sapn>{{'trust_limit' | translate}}</sapn></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="BalancesTable__row">
+						<td ng-init="native=gateways.getSourceById('')">
+							<gateway name="{{native.name}}" logo="{{native.logo}}"
+								website="{{native.website}}" code="XLM" address=""></gateway>
+						</td>
+						<td class="BalancesTable__row__amount"><span>{{balance | number : 3}} </span></td>
+						<td></td>
+					</tr>
+				</tbody>
+				<tbody ng-repeat="(code, sublines) in lines">
+					<tr class="BalancesTable__row" ng-repeat="(issuer, line) in sublines">
+						<td ng-init="gateway=gateways.getSourceById(line.issuer)">
+							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
+								code="{{code}}" address="{{line.issuer}}"></gateway>
+						</td>
+						<td class="BalancesTable__row__amount">
+							<span> {{line.balance | number : 3}}</span></td>
+						<td>
+							<span class="BalancesTable__row__limit">{{line.limit | number : 0}}</span><br/>
+							<span class="BalancesTable__row__removeLink" translate="trust_remove_desc" ng-show="line.balance>0">Trust is removable when balance is 0</span>
+							<a class="BalancesTable__row__removeLink" href="javascript:"
+								ng-hide="line.balance > 0 || isRemoving(line.code, line.issuer)"
+								ng-click="delTrust(line.code, line.issuer)"
+								translate="trust_remove">Remove trust</a>
+							<span class="BalancesTable__row__removeLink" 
+								ng-show="isRemoving(line.code, line.issuer)"
+								translate="trust_removeing">Removing</span>
+						</td>
+					</tr>
+				</tobdy>
+			</table>
+		</div>
+	</div>
+	</group>
+</section>

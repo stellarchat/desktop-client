@@ -1,0 +1,15 @@
+<div class="AssetCard AssetCard--fixed">
+	<div class="AssetCard__main">
+		<div class="AssetCard__logo">
+			<img class="AssetCard__logo__image" data-ng-src="{{__logo}}">
+		</div>
+		<div class="AssetCard__content">
+			<div class="AssetCard__header">
+				<span class="AssetCard__code">{{__code}}</span> 
+				<a class="AssetCard__federation" href="{{__website}}" target="_blank" ng-show="__website">{{__name}}</a>
+				<span class="AssetCard__federation" ng-show="!__website">{{__name}}</span>
+			</div>
+			<p class="AssetCard__issuerAccountId" title="{{__address}}">{{__address | shortaddress}}</p>
+		</div>
+	</div>
+</div>
