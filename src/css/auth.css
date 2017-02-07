@@ -1,0 +1,115 @@
+/* Auth part */
+.auth-form-wrapper {
+  background: #f3f3f3;
+  padding: 15px 20px;
+  border: 1px solid #ccccca;
+  margin-bottom: 5px;
+  margin: 0 auto 10px;
+  float: none;
+}
+.auth-form-wrapper label {
+  font-weight: 400;
+  margin-bottom: 3px;
+}
+
+.auth h1 {
+  height: 100px;
+  background: #346aa9;
+  text-align: center;
+  font: 26px 'OpenSansLight';
+  font-weight: 300;
+  line-height: 100px;
+  color: #ffffff;
+  margin-top: 0;
+}
+
+.auth-form-wrapper h2 {
+  margin: 10px 0 30px 0;
+  padding: 0 0 30px;
+  text-align: center;
+  border-bottom: 1px solid #ccccca;
+}
+
+.auth-attention {
+  margin-top: 5px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 13px;
+  background: #d1def1;
+  color: #1e3f78;
+  border: 1px solid #ccccca;
+  padding: 15px;
+} 
+
+.form-group p.error-text {
+  display: none;
+}
+.form-group .form-control {
+  margin-bottom: 0;
+}
+.form-group.field-ok p > span {
+  padding-top: 3px;
+  line-height: 15px;
+  font-size: 12px;
+  color: #41a447;
+}
+.form-group.field-ok .input-group:after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  margin-left: 4px;
+  width: 5px;
+  height: 100%;
+  background: #41a447;
+}
+.form-group.field-error {
+  margin-bottom: 15px;
+}
+.form-group.field-error p > span {
+  padding-top: 3px;
+  line-height: 15px;
+  font-size: 12px;
+  color: #b01e2e;
+}
+.form-group.field-error .input-group:after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  margin-left: 4px;
+  width: 5px;
+  height: 100%;
+  background: #b01e2e;
+}
+.form-group.field-warning .input-group:after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  margin-left: 4px;
+  width: 5px;
+  height: 100%;
+  background: #f2edbf;
+}
+
+.strength {
+  margin: 38px 0 0 0;
+}
+.strength.match {
+  color: #b01e2e;
+}
+.strength.weak {
+  color: #b01e2e;
+}
+.strength.medium {
+  color: #ff8200;
+}
+.strength.strong {
+  color: #1a6834;
+}
+
+.text-error {
+  color: #b01e2e;
+  margin: -20px 0 0 0;
+}

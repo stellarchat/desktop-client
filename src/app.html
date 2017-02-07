@@ -1,0 +1,45 @@
+<html ng-app="myApp">
+<head>
+    <title>StellarWallet</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="css/auth.css">
+	<link rel="stylesheet" href="css/balance.css">
+	
+	<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../node_modules/angular/angular.min.js"></script>
+	<script src="../node_modules/angular-route/angular-route.min.js"></script>
+	<script src="../node_modules/angular-translate/dist/angular-translate.min.js"></script>
+	<script src="../node_modules/underscore/underscore-min.js"></script>
+	<script src="../node_modules/stellar-sdk/dist/stellar-sdk.min.js"></script>
+	
+	<script src="js/lang/translate_cn.js"></script>
+	<script src="js/lang/translate_en.js"></script>
+	<script src="js/gateways.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/filters.js"></script>
+	<script src="js/factory.js"></script>
+	<script src="js/directives.js"></script>
+	
+	<script src="js/controllers.js"></script>
+	<script src="js/controller/balance.js"></script>
+	<script src="js/controller/trust.js"></script>
+	<script src="js/controller/send.js"></script>
+	
+	<script src="js/auth/blob.factory.js"></script>
+	<script src="js/auth/auth.factory.js"></script>
+	<script src="js/auth/auth.controller.js"></script>
+	
+	<script src="js/stellar/api.factory.js"></script>
+</head>
+
+<body>
+  <div ng-include="'pages/header.html'"></div>
+  <div class="container" ng-view></div>
+  <div ng-include="'pages/footer.html'"></div>
+</body>
+
+</html>
