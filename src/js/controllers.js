@@ -11,10 +11,11 @@ myApp.controller("HeaderCtrl", ['$scope', '$location', 'UserAuthFactory',
   }
 ]);
 
-myApp.controller("FooterCtrl", [ '$scope', '$translate',
-  function($scope, $translate) {
+myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory',
+  function($scope, $translate, SettingFactory) {
 	$scope.changeLanguage = function (key) {
 	    $translate.use(key);
+	    SettingFactory.setLang(key);
 	};
 }]);
 

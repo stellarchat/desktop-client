@@ -55,8 +55,10 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', 'AuthenticationFactory', 'StellarApi',
-           function($rootScope, $window, $location, AuthenticationFactory, StellarApi) {
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi) {
+	
+	$translate.use($window.localStorage['lang'] || 'cn');
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
