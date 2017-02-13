@@ -290,6 +290,39 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 			console.error('Payments Fail !', err);
 			callback(err, null);
 		});
+	};
+	
+	api.queryEffects = function(callback) {
+		var self = this;
+		console.debug('effects', self.address);
+		self.server.effects().forAccount(self.address).order("desc").limit("200").call().then(function(data){
+			console.log(data);
+			var effects = []; 
+			data.records.forEach(function(r){
+				var t = { "id": r.id, "type": r.type };
+				switch(r.type){
+				case 'payment':
+					t.isInbound = r.to == self.address;
+					t.counterparty = t.isInbound ? r.from : r.to;
+					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
+					t.amount = r.amount;
+					break;
+				case 'create_account':
+					t.isInbound = r.account == self.address;
+					t.counterparty = t.isInbound ? r.source_account : r.account;
+					t.asset = {code: "XLM"};
+					t.amount = r.starting_balance;
+					break;
+				default:
+					
+				}
+				effects.push(t);
+			});
+			callback(null, effects);
+		}).catch(function(err){
+			console.error('Effects Fail !', err);
+			callback(err, null);
+		});
 	}
 
 	return api;

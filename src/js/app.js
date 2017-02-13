@@ -50,6 +50,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/trades', {
+		templateUrl : 'pages/history_trades.html',
+		controller : 'TradesCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).otherwise({
 		redirectTo : '/login'
 	});
