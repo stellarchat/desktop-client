@@ -65,6 +65,13 @@ var translate_en = {
 	account_loading: 'Loading account for',
 	select_asset : 'Please select an asset to send.',
 	
+	/** History **/
+	history: 'History',
+	payments: 'Payments',
+	trades: 'Trades',
+	latest_payments : 'Latest Payments',
+	you: 'You',
+	
 	choose : 'Choose',
 	example : 'example',
 	refresh : 'Refresh',

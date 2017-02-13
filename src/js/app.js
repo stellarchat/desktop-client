@@ -44,9 +44,9 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
-	}).when('/history', {
-		templateUrl : 'pages/history.html',
-		controller : 'HistoryCtrl',
+	}).when('/payments', {
+		templateUrl : 'pages/history_payments.html',
+		controller : 'PaymentsCtrl',
 		access : {
 			requiredLogin : true
 		}

@@ -17,9 +17,9 @@
 	      <ul class="nav navbar-nav">
 	        <li ng-class="{active:isActive('/')}"><a href="javascript:" ng-click="goTo('/')">Home</a></li>
 	        <li class="dropdown">
-	          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">History <span class="caret"></span></a>
+	          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">{{'history' | translate}} <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
-	            <li><a href="javascript:">Transaction</a></li>
+	            <li><a href="javascript:" ng-click="goTo('/payments')">{{'payments' | translate}}</a></li>
 	            <li><a href="javascript:">Trade</a></li>
 	          </ul>
 	        </li>

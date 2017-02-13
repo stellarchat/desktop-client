@@ -2,8 +2,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 	var api = {
 		address : undefined,
 		seed : undefined,
-		balances : {},
-		working_info : false
+		balances : {}
 	};
 	
 	api.random = function() {
@@ -247,9 +246,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);
-		self.working_info = true;
 		self.getInfo(self.address, function(err, data){
-			self.working_info = false;
 			if (err) {
 				if (callback) { callback(err); }
 				return;
@@ -259,6 +256,39 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 			$scope.$apply();
 			if (callback) { callback(); }
 			return;
+		});
+	};
+	
+	api.queryPayments = function(callback) {
+		var self = this;
+		console.debug('payments', self.address);
+		self.server.payments().forAccount(self.address).order("desc").limit("200").call().then(function(data){
+			console.log(data);
+			var payments = []; 
+			data.records.forEach(function(r){
+				var t = { "id": r.id, "type": r.type };
+				switch(r.type){
+				case 'payment':
+					t.isInbound = r.to == self.address;
+					t.counterparty = t.isInbound ? r.from : r.to;
+					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
+					t.amount = r.amount;
+					break;
+				case 'create_account':
+					t.isInbound = r.account == self.address;
+					t.counterparty = t.isInbound ? r.source_account : r.account;
+					t.asset = {code: "XLM"};
+					t.amount = r.starting_balance;
+					break;
+				default:
+					
+				}
+				payments.push(t);
+			});
+			callback(null, payments);
+		}).catch(function(err){
+			console.error('Payments Fail !', err);
+			callback(err, null);
 		});
 	}
 

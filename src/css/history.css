@@ -1,0 +1,23 @@
+#tx-history {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+  #tx-history .tx {
+    padding: 3px 5px; }
+    #tx-history .tx + .tx {
+      border-top: 1px solid #ccc; }
+    #tx-history .tx .asset {
+      font-size: 80%;
+      font-weight: bold; }
+    #tx-history .tx .comment {
+      font-size: 80%; }
+    #tx-history .tx .amount-sign {
+      font-weight: bold; }
+    #tx-history .tx .amount-credit {
+      color: #74e349; }
+    #tx-history .tx .amount-debit {
+      color: #e34949; }
+    #tx-history .tx .otherParty {
+      font-size: 75%; }
+      #tx-history .tx .otherParty i {
+        font-size: 100%; }
