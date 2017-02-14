@@ -1,4 +1,4 @@
-myApp.factory('StellarApi', ['$rootScope', function($scope) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, history) {
 	var api = {
 		address : undefined,
 		seed : undefined,
@@ -33,6 +33,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 		
 		StellarSdk.Network.usePublicNetwork();
 		this.server = new StellarSdk.Server(url);
+		history.server = this.server;
 	};
 	api.setAccount = function(address, seed) {
 		this.address = address;
@@ -260,69 +261,13 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 	};
 	
 	api.queryPayments = function(callback) {
-		var self = this;
-		console.debug('payments', self.address);
-		self.server.payments().forAccount(self.address).order("desc").limit("200").call().then(function(data){
-			console.log(data);
-			var payments = []; 
-			data.records.forEach(function(r){
-				var t = { "id": r.id, "type": r.type };
-				switch(r.type){
-				case 'payment':
-					t.isInbound = r.to == self.address;
-					t.counterparty = t.isInbound ? r.from : r.to;
-					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
-					t.amount = r.amount;
-					break;
-				case 'create_account':
-					t.isInbound = r.account == self.address;
-					t.counterparty = t.isInbound ? r.source_account : r.account;
-					t.asset = {code: "XLM"};
-					t.amount = r.starting_balance;
-					break;
-				default:
-					
-				}
-				payments.push(t);
-			});
-			callback(null, payments);
-		}).catch(function(err){
-			console.error('Payments Fail !', err);
-			callback(err, null);
-		});
+		console.debug('payments', this.address);
+		history.payments(this.address, callback);
 	};
 	
 	api.queryEffects = function(callback) {
-		var self = this;
-		console.debug('effects', self.address);
-		self.server.effects().forAccount(self.address).order("desc").limit("200").call().then(function(data){
-			console.log(data);
-			var effects = []; 
-			data.records.forEach(function(r){
-				var t = { "id": r.id, "type": r.type };
-				switch(r.type){
-				case 'payment':
-					t.isInbound = r.to == self.address;
-					t.counterparty = t.isInbound ? r.from : r.to;
-					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
-					t.amount = r.amount;
-					break;
-				case 'create_account':
-					t.isInbound = r.account == self.address;
-					t.counterparty = t.isInbound ? r.source_account : r.account;
-					t.asset = {code: "XLM"};
-					t.amount = r.starting_balance;
-					break;
-				default:
-					
-				}
-				effects.push(t);
-			});
-			callback(null, effects);
-		}).catch(function(err){
-			console.error('Effects Fail !', err);
-			callback(err, null);
-		});
+		console.debug('effects', this.address);
+		history.effects(this.address, callback);
 	}
 
 	return api;

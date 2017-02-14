@@ -21,3 +21,60 @@
       font-size: 75%; }
       #tx-history .tx .otherParty i {
         font-size: 100%; }
+
+.feed {
+	margin-bottom: 80px;
+}
+
+.feed-item.item > .item-content {
+	background-color: white;
+}
+
+.feed-item {
+	display: table;
+	position: relative;
+	height: 80px;
+	border-top: 1px solid #E5E5E5;
+	padding: 0 16px;
+	overflow: hidden;
+	background-color: white;
+}
+
+.feed-item-comment {
+	display: table-cell;
+	color:#444;
+	padding-left:16px;
+	vertical-align: middle;
+}
+
+.feed-item-icon {
+	display: table-cell;
+	vertical-align: middle;
+}
+    
+.circle {
+	border-radius: 50%;
+	border-width: 1px;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	border-style: solid;
+	align-items: center;
+	justify-content: center;
+}
+
+.circle-red {
+	border-color: #D60000;
+	color: #D60000;
+}
+
+.circle-green {
+	border-color: #00D600;
+	color: #00D600;
+}
+
+.circle-blue {
+	border-color: #0000D6;
+	color: #0000D6;
+}
+        

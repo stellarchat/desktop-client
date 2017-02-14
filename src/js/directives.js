@@ -54,7 +54,7 @@ myApp.directive('masterKey', function() {
 			ctrl.$formatters.push(validator);
 			ctrl.$parsers.unshift(validator);
 
-			attr.$observe('rpMasterKey', function() {
+			attr.$observe('masterKey', function() {
 				validator(ctrl.$viewValue);
 			});
 		}
