@@ -23,7 +23,11 @@
         font-size: 100%; }
 
 .feed {
-	margin-bottom: 80px;
+	margin: 0;
+}
+
+.feed a {
+	text-decoration: none;
 }
 
 .feed-item.item > .item-content {
@@ -50,6 +54,24 @@
 .feed-item-icon {
 	display: table-cell;
 	vertical-align: middle;
+}
+
+.timestamp {
+	text-align: right;
+	color: #AAAAAA;
+}
+
+.payment {
+	width: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.more {
+	text-align: right;
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 16px;
 }
     
 .circle {

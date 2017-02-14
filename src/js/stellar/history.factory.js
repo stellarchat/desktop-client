@@ -63,6 +63,18 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 			console.error('Effects Fail !', err);
 			callback(err, null);
 		});
+	};
+	
+	history.transactions = function(address, callback) {
+		this.server.transactions().forAccount(address).order('desc').limit("200").call().then(function(data) {
+			console.log(data);
+			var transactions = [];
+			
+			callback(null, transactions);
+		}).catch(function(err){
+			console.error('Transactions Fail !', err);
+			callback(err, null);
+		});
 	}
 
 	return history;

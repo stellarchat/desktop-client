@@ -28,7 +28,7 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
  	$scope.working = false;
  	$scope.refresh = function() {
  		if ($scope.working) { return; }
- 		StellarApi.queryEffects(function(err, trades){
+ 		StellarApi.queryTransactions(function(err, trades){
  			if (err) {
  				$scope.error_msg = err.message;
  			} else {

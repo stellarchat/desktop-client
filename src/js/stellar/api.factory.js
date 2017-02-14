@@ -173,7 +173,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, hi
     				self.balances = res.balances;
     				self.updateRootBalance();
     				$scope.$apply();
-    				console.warn(self.balances, res);
+    				console.warn('balance', self.balances, res);
     			}
     		}
     	});
@@ -201,7 +201,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, hi
 				lines[line.asset_code][line.asset_issuer] = item;
 			}
 		});
-		console.log(lines);
+		console.log('lines', lines);
 		$scope.balance = native;
 		$scope.lines = lines;
 	}
@@ -268,6 +268,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, hi
 	api.queryEffects = function(callback) {
 		console.debug('effects', this.address);
 		history.effects(this.address, callback);
+	};
+	
+	api.queryTransactions = function(callback) {
+		console.debug('transactions', this.address);
+		history.transactions(this.address, callback);
 	}
 
 	return api;

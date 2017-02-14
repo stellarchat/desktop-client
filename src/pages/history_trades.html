@@ -13,6 +13,52 @@
 							<li>{{error_msg}}</li>
 						</ul>
 				</div>
+				<div class="feed">
+					<div class="feed-item"
+						href="#/account/transaction/0037743004366147585-0000000002">
+						<div class="feed-item-icon">
+							<div class="circle circle-red">
+								<i class="icon ion-ios-upload-outline"></i>
+							</div>
+						</div>
+						<div class="feed-item-comment">Sent</div>
+						<div class="payment">
+							<div style="text-align: right; color: #444;">-29 XLM</div>
+							<div class="timestamp" time="1485410680">/account/transaction/003774ac2033703538689-0000000002</div>
+							<div class="timestamp" time="1485410680">Memo: /account/transaction/003774ac2033703538689-0000000002</div>
+						</div>
+						<div class="more">»</div>
+					</div> 
+					<a class="feed-item"
+						href="#/account/transaction/003774ac2033703538689-0000000002">
+						<div class="feed-item-icon">
+							<div class="circle circle-red">
+								<i class="icon ion-ios-upload-outline"></i>
+							</div>
+						</div>
+						<div class="feed-item-comment">Sent</div>
+						<div class="feed-item-comment">/account/transaction/003774ac2033703538689-0000000002</div>
+						<div class="payment">
+							<div style="text-align: right; color: #444;">-20 XLM</div>
+							<div class="timestamp" time="1485409548">19 days ago</div>
+						</div>
+						<div class="more">»</div>
+					</a> <a class="feed-item"
+						href="#/account/transaction/0037741745940729857-0000000001">
+						<div class="feed-item-icon">
+							<div class="circle circle-green">
+								<i class="icon ion-ios-download-outline"></i>
+							</div>
+						</div>
+						<div class="feed-item-comment">Received</div>
+						<div class="payment">
+							<div style="text-align: right; color: #444;">+100 XLM</div>
+							<div class="timestamp" time="1485409216">19 days ago</div>
+						</div>
+						<div class="more">»</div>
+					</a>
+				</div>
+
 				<ul id="tx-history">
 					<li class="tx" ng-repeat="tx in trades">
                            <span class="amount amount-debit" ng-if="!tx.isInbound"><span class="amount-sign">-</span>{{tx.amount}}</span>
