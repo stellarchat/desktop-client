@@ -67,9 +67,10 @@ var translate_cn = {
 	
 	/** History **/
 	history: '历史',
-	payments: '收付',
-	trades: '交易',
+	payments: '转账',
+	trades: '所有操作',
 	latest_payments : '最近的收付记录',
+	latest_trades : '最近的所有操作',
 	you : '你',
 	
 	choose : '选择',
@@ -79,6 +80,12 @@ var translate_cn = {
 	issuer_id : '发行方账号',
 	amount : '金额',
 	optional : '选填',
+	
+	sent : '发送',
+	received : '接收',
+	created : '创建',
+	offer : '买卖',
+	price : '价格',
 	
 	Stellar : '恒星',
 	wallet : '钱包',

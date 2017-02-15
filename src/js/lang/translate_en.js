@@ -68,8 +68,9 @@ var translate_en = {
 	/** History **/
 	history: 'History',
 	payments: 'Payments',
-	trades: 'Trades',
+	trades: 'Transactions',
 	latest_payments : 'Latest Payments',
+	latest_trades : 'Latest Transactions',
 	you: 'You',
 	
 	choose : 'Choose',
@@ -79,6 +80,12 @@ var translate_en = {
 	issuer_id : 'Issuer Account ID',
 	amount : 'Amount',
 	optional : 'Optional',
+	
+	sent : 'Sent',
+	received : 'Received',
+	created : 'Created',
+	offer : 'Offer',
+	price : 'Price',
 	
 	Stellar : 'Stellar',
 	wallet : 'Wallet',

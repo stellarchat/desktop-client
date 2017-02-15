@@ -69,12 +69,53 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		this.server.transactions().forAccount(address).order('desc').limit("200").call().then(function(data) {
 			console.log(data);
 			var transactions = [];
+			data.records.forEach(function(record){
+				var tx = processTx(record, address);
+				console.log(tx);
+				transactions.push(tx);
+			});
 			
 			callback(null, transactions);
 		}).catch(function(err){
 			console.error('Transactions Fail !', err);
 			callback(err, null);
 		});
+	};
+	
+	function processTx(record, address) {
+		var tx = new StellarSdk.Transaction(record.envelope_xdr);
+		var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(record.result_xdr, 'base64');
+		
+		var result = {
+			date : new Date(record.created_at),
+			fee  : record.fee_paid,
+        	source_account : record.source_account,
+        	source_account_sequence : record.source_account_sequence,
+        	operation_count : record.operation_count,
+        	memo_type : record.memo_type,
+        	memo : record.memo,
+        	resultCode : resultXdr.result().results()[0].value().value().switch().name
+		};
+		
+		tx.operations.forEach(function(op) {
+			switch(op.type){
+			case 'payment':
+				op.isInbound = op.destination == address;
+				op.counterparty = op.isInbound ? tx.source : op.destination;
+				break;
+			case 'createAccount':
+				op.isInbound = op.destination == address;
+				op.counterparty = op.isInbound ? tx.source : op.destination;
+				op.asset = {code: "XLM"};
+				op.amount = op.startingBalance;
+				break;
+			default:
+				
+			}
+		});
+		result.tx = tx;
+		
+		return result;
 	}
 
 	return history;

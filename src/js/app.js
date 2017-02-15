@@ -150,3 +150,5 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		return StellarApi.isValidAddress(address);
 	}
 }]);
+
+//nw.App.setProxyConfig("120.26.101.219:888");

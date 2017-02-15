@@ -1,0 +1,13 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div ng-class="{true: 'circle circle-green', false: 'circle circle-red'}[item.tx.operations[0].isInbound]">
+			{{item.tx.operations[0].type}}
+		</div>
+	</div>
+	<div class="feed-item-comment">Unknown Type</div>
+
+	<div class="payment">
+		<div style="text-align: right; color: #444;"> </div>
+		<div class="timestamp" time="1485410680">19 days ago</div>
+	</div>
+</div>

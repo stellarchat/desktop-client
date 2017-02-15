@@ -1,0 +1,11 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div class="circle circle-blue" translate="trust"></div>
+	</div>
+	<div class="feed-item-comment">{{item.tx.operations[0].line.issuer}}</div>
+
+	<div class="payment">
+		<div class="txamount">{{item.tx.operations[0].limit}} {{item.tx.operations[0].line.code}}</div>
+		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+	</div>
+</div>

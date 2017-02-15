@@ -56,6 +56,10 @@
 	vertical-align: middle;
 }
 
+.txamount {
+	text-align: right;
+}
+
 .timestamp {
 	text-align: right;
 	color: #AAAAAA;
@@ -77,8 +81,8 @@
 .circle {
 	border-radius: 50%;
 	border-width: 1px;
-	width: 40px;
-	height: 40px;
+	width: 68px;
+	height: 68px;
 	display: flex;
 	border-style: solid;
 	align-items: center;
@@ -98,5 +102,10 @@
 .circle-blue {
 	border-color: #0000D6;
 	color: #0000D6;
+}
+
+.circle-offer {
+	border-color: #0000D6;
+	color: #ff00ff;
 }
         
