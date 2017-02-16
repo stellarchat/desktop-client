@@ -44,15 +44,21 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
-	}).when('/payments', {
+	}).when('/hist_payments', {
 		templateUrl : 'pages/history_payments.html',
 		controller : 'PaymentsCtrl',
 		access : {
 			requiredLogin : true
 		}
-	}).when('/trades', {
+	}).when('/hist_trades', {
 		templateUrl : 'pages/history_trades.html',
 		controller : 'TradesCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/trade', {
+		templateUrl : 'pages/trade.html',
+		controller : 'TradeCtrl',
 		access : {
 			requiredLogin : true
 		}
@@ -151,4 +157,4 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	}
 }]);
 
-//nw.App.setProxyConfig("120.26.101.219:888");
+nw.App.setProxyConfig("120.26.101.219:888");

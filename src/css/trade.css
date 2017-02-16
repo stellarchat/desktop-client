@@ -1,0 +1,122 @@
+.OfferTable {
+	width: 100%;
+	text-align: right;
+	font-size: 16px;
+}
+
+.OfferTable__header {
+	display: flex;
+	background: #f4f4f5;
+	font-weight: bold;
+	text-align: center;
+}
+
+.OfferTable__header__item {
+	width: 25%;
+	padding: 5px;
+}
+
+.OfferTable__row {
+	display: flex;
+}
+
+.OfferTable__row:hover {
+	background: #fdfdc8 !important;
+	cursor: pointer;
+}
+
+.OfferTable__row__item {
+	width: 25%;
+	padding: 5px;
+	text-align: right;
+	font-family: 'Ubuntu Mono';
+}
+
+.AssetPairRow {
+	border-top: 1px solid$s-color-neutral7;
+	padding: 0.75em 18px;
+	text-decoration: none;
+	display: block;
+}
+
+.AssetPair {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+
+.AssetPair__separator {
+	width: 18px;
+	height: 18px;
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+	flex: 0 0 18px;
+}
+
+.AssetPair__card {
+	flex: 1 0;
+}
+
+.AssetPair__card .AssetCard {
+	margin: 0 auto;
+}
+
+a.AssetPairRow:hover .AssetPair__separator {
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+}
+
+.PairPicker {
+	padding: 20px;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.PairPicker__pair {
+	padding: 0.75em 1em;
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+}
+
+.PairPicker__auxInfo {
+	font-size: 13.5px;
+	text-align: center;
+	padding: 12px 18px;
+	color: #929597;
+}
+
+.OfferMaker__table {
+	width: 100%;
+}
+
+.OfferMaker__table input, select, textarea {
+    color: #3a3f43;
+    padding: .35em 1em .3166em;
+}
+
+.OfferMaker__table__row {
+	height: 50px;
+}
+
+.OfferMaker__table__label {
+	min-width: 100px;
+}
+
+.OfferMaker__table__input {
+	width: auto;
+	min-width: 100px;
+}
+
+.OfferMaker__table__input__input {
+	width: 100%;
+}
+
+.OfferMaker__overview {
+	margin-top: 12px;
+	border-top: 1px solid #dedfe0;
+	padding-top: 12px;
+}
+
+.lightenZeros__unemph {
+  opacity: 0.4;
+}
