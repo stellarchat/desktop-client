@@ -65,6 +65,14 @@ var translate_cn = {
 	account_loading: '正在解析账号',
 	select_asset : '请先选择要发送的资产。',
 	
+	/** History **/
+	history: '历史',
+	payments: '转账',
+	trades: '所有操作',
+	latest_payments : '最近的收付记录',
+	latest_trades : '最近的所有操作',
+	you : '你',
+	
 	choose : '选择',
 	example : '示例',
 	refresh : '刷新',
@@ -73,6 +81,11 @@ var translate_cn = {
 	amount : '金额',
 	optional : '选填',
 	
+	sent : '发送',
+	received : '接收',
+	created : '创建',
+	offer : '买卖',
+	price : '价格',
 	
 	Stellar : '恒星',
 	wallet : '钱包',

@@ -65,6 +65,14 @@ var translate_en = {
 	account_loading: 'Loading account for',
 	select_asset : 'Please select an asset to send.',
 	
+	/** History **/
+	history: 'History',
+	payments: 'Payments',
+	trades: 'Transactions',
+	latest_payments : 'Latest Payments',
+	latest_trades : 'Latest Transactions',
+	you: 'You',
+	
 	choose : 'Choose',
 	example : 'example',
 	refresh : 'Refresh',
@@ -72,6 +80,12 @@ var translate_en = {
 	issuer_id : 'Issuer Account ID',
 	amount : 'Amount',
 	optional : 'Optional',
+	
+	sent : 'Sent',
+	received : 'Received',
+	created : 'Created',
+	offer : 'Offer',
+	price : 'Price',
 	
 	Stellar : 'Stellar',
 	wallet : 'Wallet',
