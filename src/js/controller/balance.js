@@ -1,14 +1,14 @@
 myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi', 
                                   function($scope, $rootScope, StellarApi) {
-	//$scope.working = StellarApi.working_info;
+	$scope.working = false;
 	$scope.refresh = function() {
 		if ($scope.working) { return; }
 		StellarApi.queryAccount(function(err){
 			$scope.$apply(function(){
-				$scope.working = StellarApi.working_info;
+				$scope.working = false;
 			});
 		});
-		$scope.working = StellarApi.working_info;
+		$scope.working = true;
 	};
 	$scope.delTrust = function(code, issuer) {
 		$scope.setRemoving(code, issuer, true);
@@ -32,4 +32,6 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi',
 			return false;
 		}
 	}
+	
+	console.debug('balance init');
 } ]);

@@ -1,0 +1,111 @@
+#tx-history {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+  #tx-history .tx {
+    padding: 3px 5px; }
+    #tx-history .tx + .tx {
+      border-top: 1px solid #ccc; }
+    #tx-history .tx .asset {
+      font-size: 80%;
+      font-weight: bold; }
+    #tx-history .tx .comment {
+      font-size: 80%; }
+    #tx-history .tx .amount-sign {
+      font-weight: bold; }
+    #tx-history .tx .amount-credit {
+      color: #74e349; }
+    #tx-history .tx .amount-debit {
+      color: #e34949; }
+    #tx-history .tx .otherParty {
+      font-size: 75%; }
+      #tx-history .tx .otherParty i {
+        font-size: 100%; }
+
+.feed {
+	margin: 0;
+}
+
+.feed a {
+	text-decoration: none;
+}
+
+.feed-item.item > .item-content {
+	background-color: white;
+}
+
+.feed-item {
+	display: table;
+	position: relative;
+	height: 80px;
+	border-top: 1px solid #E5E5E5;
+	padding: 0 16px;
+	overflow: hidden;
+	background-color: white;
+}
+
+.feed-item-comment {
+	display: table-cell;
+	color:#444;
+	padding-left:16px;
+	vertical-align: middle;
+}
+
+.feed-item-icon {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.txamount {
+	text-align: right;
+}
+
+.timestamp {
+	text-align: right;
+	color: #AAAAAA;
+}
+
+.payment {
+	width: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.more {
+	text-align: right;
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 16px;
+}
+    
+.circle {
+	border-radius: 50%;
+	border-width: 1px;
+	width: 68px;
+	height: 68px;
+	display: flex;
+	border-style: solid;
+	align-items: center;
+	justify-content: center;
+}
+
+.circle-red {
+	border-color: #D60000;
+	color: #D60000;
+}
+
+.circle-green {
+	border-color: #00D600;
+	color: #00D600;
+}
+
+.circle-blue {
+	border-color: #0000D6;
+	color: #0000D6;
+}
+
+.circle-offer {
+	border-color: #0000D6;
+	color: #ff00ff;
+}
+        

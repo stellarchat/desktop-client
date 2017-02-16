@@ -14,6 +14,35 @@ myApp.directive('gateway', [ function() {
 	}
 } ]);
 
+myApp.directive('txPayment', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-payment.html',
+		replace : true
+	}
+} ]);
+myApp.directive('txTrust', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-trust.html',
+		replace : true
+	}
+} ]);
+myApp.directive('txOffer', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-offer.html',
+		replace : true
+	}
+} ]);
+myApp.directive('txDefault', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-default.html',
+		replace : true
+	}
+} ]);
+
 
 /**
  * A generic confirmation for risky actions. Usage: Add attributes:
@@ -54,7 +83,7 @@ myApp.directive('masterKey', function() {
 			ctrl.$formatters.push(validator);
 			ctrl.$parsers.unshift(validator);
 
-			attr.$observe('rpMasterKey', function() {
+			attr.$observe('masterKey', function() {
 				validator(ctrl.$viewValue);
 			});
 		}

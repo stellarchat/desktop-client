@@ -44,9 +44,15 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
-	}).when('/history', {
-		templateUrl : 'pages/history.html',
-		controller : 'HistoryCtrl',
+	}).when('/payments', {
+		templateUrl : 'pages/history_payments.html',
+		controller : 'PaymentsCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/trades', {
+		templateUrl : 'pages/history_trades.html',
+		controller : 'TradesCtrl',
 		access : {
 			requiredLogin : true
 		}
@@ -55,8 +61,10 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', 'AuthenticationFactory', 'StellarApi',
-           function($rootScope, $window, $location, AuthenticationFactory, StellarApi) {
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi) {
+	
+	$translate.use($window.localStorage['lang'] || 'cn');
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -142,3 +150,5 @@ myApp.run(['$rootScope', '$window', '$location', 'AuthenticationFactory', 'Stell
 		return StellarApi.isValidAddress(address);
 	}
 }]);
+
+//nw.App.setProxyConfig("120.26.101.219:888");

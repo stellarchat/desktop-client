@@ -1,0 +1,34 @@
+<section class="col-xs-12 content">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header">{{'latest_payments' | translate}}
+				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
+				
+			</div>
+			<div class="AddTrustFromDirectory">
+				<div class="s-alert s-alert--alert" ng-show="error_msg">
+						<ul class="AddTrust__errorList">
+							<li>{{error_msg}}</li>
+						</ul>
+				</div>
+				<ul id="tx-history">
+					<li class="tx" ng-repeat="tx in payments">
+                           <span class="amount amount-debit" ng-if="!tx.isInbound"><span class="amount-sign">-</span>{{tx.amount}}</span>
+                           <span class="amount amount-credit" ng-if="tx.isInbound"><span class="amount-sign">+</span>{{tx.amount}}</span>
+                           <span class="asset">{{tx.asset.code}}</span>
+                           <span class="comment">{{tx.type}}({{tx.id}})</span>
+                           <div class="otherParty" ng-if="!tx.isInbound">
+                           	{{'you' | translate}} <span class="glyphicon glyphicon-arrow-right"></span> {{tx.counterparty}}
+                           </div>
+                           <div class="otherParty" ng-if="tx.isInbound">
+                           	{{tx.counterparty}} <span class="glyphicon glyphicon-arrow-right"></span> {{'you' | translate}}
+                           </div>
+					</li>
+            	</ul>
+        	</div>
+		</div>
+	</div>
+	</group>
+</section>

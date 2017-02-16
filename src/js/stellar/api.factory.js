@@ -1,9 +1,8 @@
-myApp.factory('StellarApi', ['$rootScope', function($scope) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, history) {
 	var api = {
 		address : undefined,
 		seed : undefined,
-		balances : {},
-		working_info : false
+		balances : {}
 	};
 	
 	api.random = function() {
@@ -34,6 +33,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 		
 		StellarSdk.Network.usePublicNetwork();
 		this.server = new StellarSdk.Server(url);
+		history.server = this.server;
 	};
 	api.setAccount = function(address, seed) {
 		this.address = address;
@@ -173,7 +173,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
     				self.balances = res.balances;
     				self.updateRootBalance();
     				$scope.$apply();
-    				console.warn(self.balances, res);
+    				console.warn('balance', self.balances, res);
     			}
     		}
     	});
@@ -201,7 +201,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 				lines[line.asset_code][line.asset_issuer] = item;
 			}
 		});
-		console.log(lines);
+		console.log('lines', lines);
 		$scope.balance = native;
 		$scope.lines = lines;
 	}
@@ -247,9 +247,7 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);
-		self.working_info = true;
 		self.getInfo(self.address, function(err, data){
-			self.working_info = false;
 			if (err) {
 				if (callback) { callback(err); }
 				return;
@@ -260,6 +258,21 @@ myApp.factory('StellarApi', ['$rootScope', function($scope) {
 			if (callback) { callback(); }
 			return;
 		});
+	};
+	
+	api.queryPayments = function(callback) {
+		console.debug('payments', this.address);
+		history.payments(this.address, callback);
+	};
+	
+	api.queryEffects = function(callback) {
+		console.debug('effects', this.address);
+		history.effects(this.address, callback);
+	};
+	
+	api.queryTransactions = function(callback) {
+		console.debug('transactions', this.address);
+		history.transactions(this.address, callback);
 	}
 
 	return api;
