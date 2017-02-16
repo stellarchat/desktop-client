@@ -20,6 +20,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : false
 		}
+	}).when('/security', {
+		templateUrl : 'pages/security.html',
+		controller : 'SecurityCtrl',
+		access : {
+			requiredLogin : false
+		}
 	}).when('/', {
 		templateUrl : 'pages/home.html',
 		controller : 'HomeCtrl',
