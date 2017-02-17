@@ -235,6 +235,11 @@ a.AssetPairRow:hover .AssetPair__separator {
     cursor: pointer;
 }
 
+.s-alert--success {
+    border: 1px solid #383;
+    background: #d6e7d6;
+}
+
 .s-alert--info {
     border: 1px solid #69f;
     background: #e8f0ff;

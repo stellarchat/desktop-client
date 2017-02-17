@@ -14,13 +14,13 @@
 				<div class="PairPicker__pair">
 					<div class="AssetPair">
 						<div class="AssetPair__card">
-							<gateway name="XLM" logo=""
-								website="" code="XLM" address=""></gateway>
+							<gateway name="{{base.name}}" logo="{{base.logo}}"
+								website="" code="{{base_code}}" address="{{base_issuer}}"></gateway>
 						</div>
 						<div class="AssetPair__separator"></div>
 						<div class="AssetPair__card">
-							<gateway name="ripplefox.com" logo="{{native.logo}}"
-								website="" code="CNY" address=""></gateway>
+							<gateway name="{{counter.name}}" logo="{{counter.logo}}"
+								website="" code="{{counter_code}}" address="{{counter_issuer}}"></gateway>
 						</div>
 					</div>
 				</div>
@@ -80,7 +80,8 @@
 								<div class="OfferMaker__youHave">
 									You have 800.1500000 CNY
 								</div>
-								<input type="submit" class="s-button" value="Buy XLM" disabled="">
+								<div class="s-alert s-alert--success OfferMaker__message">Offer successfully created</div>
+								<button class="s-button btn btn-success" >{{'buy' | translate}} XLM</button>
 							</div>
 						</form>
 					</div>

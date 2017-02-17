@@ -273,7 +273,19 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, hi
 	api.queryTransactions = function(callback) {
 		console.debug('transactions', this.address);
 		history.transactions(this.address, callback);
-	}
+	};
+	
+	api.queryOffer = function(callback) {
+		var self = this;
+		console.debug('offers', self.address);
+		self.server.offers('accounts', self.address).call().then(function(data) {
+			console.log('offers', data.records);
+			callback(null, data.records);
+		}).catch(function(err){
+			console.error('QueryOffer Fail !', err);
+			callback(err, null);
+		});
+	};
 
 	return api;
 } ]);

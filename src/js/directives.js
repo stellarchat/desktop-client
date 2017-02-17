@@ -4,6 +4,7 @@ myApp.directive('gateway', [ function() {
 		restrict : 'E',
 		templateUrl : 'directive/gateway.html',
 		replace : true,
+		scope : true,
 		link : function(scope, element, attrs) {
             scope.__name = attrs.name;
             scope.__code = attrs.code;
