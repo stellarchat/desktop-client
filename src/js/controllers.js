@@ -25,9 +25,3 @@ myApp.controller("HomeCtrl", ['$scope',
   }
 ]);
 
-myApp.controller("SecurityCtrl", ['$scope',
-  function($scope) {
-    $scope.name = "Security Controller";
-  }
-]);
-
