@@ -12,7 +12,7 @@ var nw = new NwBuilder({
 	        'src/node_modules/stellar-sdk/dist/stellar-sdk.min.js'
 	],
 	platforms: ['win64', 'osx64'],
-	version: '0.20.0'
+	version: '0.20.2'
 });
 
 nw.on('log', console.log);
