@@ -1,4 +1,4 @@
-myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, history) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', function($scope, history, orderbook) {
 	var api = {
 		address : undefined,
 		seed : undefined,
@@ -34,6 +34,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', function($scope, hi
 		StellarSdk.Network.usePublicNetwork();
 		this.server = new StellarSdk.Server(url);
 		history.server = this.server;
+		orderbook.server = this.server;
 	};
 	api.setAccount = function(address, seed) {
 		this.address = address;

@@ -1,5 +1,5 @@
-myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 
-                                  function($scope, $rootScope, StellarApi) {
+myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook',
+                                  function($scope, $rootScope, StellarApi, StellarOrderbook) {
 	$scope.offers = [];
 	$scope.offers_buy = [];
 	$scope.offers_sell = [];
@@ -11,6 +11,14 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi',
 	$scope.base = $rootScope.gateways.getSourceById($scope.base_issuer);
 	$scope.counter = $rootScope.gateways.getSourceById($scope.counter_issuer);
 	
+	$scope.refreshBook = function() {
+		var base = {code: $scope.base_code, issuer: $scope.base_issuer};
+		var counter = {code: $scope.counter_code, issuer: $scope.counter_issuer};
+		StellarOrderbook.get(base, counter, function(err, data) {
+			
+		});
+	}
+	
 	StellarApi.queryOffer(function(err, offers){
 		$scope.offers = offers;
 		offers.forEach(function(offer){
@@ -18,6 +26,8 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		});
 		$scope.$apply();
 	});
+	
+	
 	
 	function sameAsset(code, issuer, code2, issuer2) {
 		if (code == 'XLM') {
