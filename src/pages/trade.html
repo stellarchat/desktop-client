@@ -37,10 +37,7 @@
 		</div>
 		<div class="island island--pb">
 
-			<div class="island__header">Orderbook
-				<a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="working">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
-			</div>
+			
 			<div class="OfferMakers island__sub">
 				<div class="OfferMakers_maker island__sub__division">
 					<div>
@@ -142,7 +139,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="island__separator"></div>
+		</div>
+		<div class="island island--pb">
+			<div class="island__header">Orderbook
+				<a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="working">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
+			</div>
+			
 			<div class="OfferTables island__sub">
 				<div class="island__sub__division">
 					<h3 class="island__sub__division__title">Buy offers</h3>
