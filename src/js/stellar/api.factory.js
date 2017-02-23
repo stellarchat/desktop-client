@@ -276,6 +276,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		history.transactions(this.address, callback);
 	};
 	
+	api.queryBook = function(baseBuy, counterSell, callback) {
+		orderbook.get(baseBuy, counterSell, callback);
+	}
+	
 	api.queryOffer = function(callback) {
 		var self = this;
 		console.debug('offers', self.address);

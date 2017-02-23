@@ -7,7 +7,7 @@ myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
 		var key = getKey(baseBuying) + '/' + getKey(counterSelling);
 		console.debug('orderbook', key);
 		this.server.orderbook(getAsset(baseBuying), getAsset(counterSelling)).call().then(function(data){
-			console.log(key, data);
+			callback(null, data);
 		}).catch(function(err){
 			console.error(key, err);
 			callback(err);
