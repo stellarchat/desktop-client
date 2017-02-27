@@ -59,15 +59,15 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		});
 	}
 	
-	StellarApi.queryOffer(function(err, offers){
-		$scope.offers = offers;
-		offers.forEach(function(offer){
-			
+	$scope.refreshOffer = function() {
+		StellarApi.queryOffer(function(err, offers){
+			$scope.offers = offers;
+			offers.forEach(function(offer){
+				
+			});
+			$scope.$apply();
 		});
-		$scope.$apply();
-	});
-	
-	
+	}
 	
 	function sameAsset(code, issuer, code2, issuer2) {
 		if (code == 'XLM') {
