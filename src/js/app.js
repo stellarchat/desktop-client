@@ -68,15 +68,19 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/settings', {
+		templateUrl : 'pages/settings.html',
+		controller : 'SettingsCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).otherwise({
 		redirectTo : '/login'
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi',
-           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi) {
-	
-	$translate.use($window.localStorage['lang'] || 'cn');
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory) {
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -153,14 +157,21 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		reset();
 	}
 	
-	StellarApi.setServer('https://horizon.stellar.org');
-	
 	$rootScope.objKeyLength = function(obj) {
 		return Object.keys(obj).length;
 	}
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	
+	$translate.use(SettingFactory.getLang());
+	StellarApi.setServer(SettingFactory.getStellarUrl());
+	if (SettingFactory.getProxy()) {
+		try {
+			nw.App.setProxyConfig(SettingFactory.getProxy()); //"127.0.0.1:53323"
+		} catch(e) {
+			console.error("Cannot set proxy", SettingFactory.getProxy(), e);
+		}
+	}
 }]);
 
-nw.App.setProxyConfig("120.26.101.219:888");
