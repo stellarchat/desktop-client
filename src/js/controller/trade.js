@@ -1,8 +1,41 @@
 myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook',
                                   function($scope, $rootScope, StellarApi, StellarOrderbook) {
-	$scope.offers = [];
-	$scope.offers_buy = [];
-	$scope.offers_sell = [];
+	$scope.offers = {
+		origin : null,
+		ask : [],
+		bid : [],
+		update : function(data) {
+			this.origin = data;
+			this.ask = [];
+			this.bid = [];
+			for (var i=0; i<data.length; i++) {
+				var offer = data[i];
+				var buy_code = offer.buying.asset_type == 'native' ? 'XLM' : offer.buying.asset_code;
+				var buy_issuer = buy_code == 'XLM' ? '' : offer.buying.asset_issuer;
+				var sell_code = offer.selling.asset_type == 'native' ? 'XLM' : offer.selling.asset_code;
+				var sell_issuer = sell_code == 'XLM' ? '' : offer.selling.asset_issuer;
+				
+				if (sameAsset(sell_code, sell_issuer, $scope.base_code, $scope.base_issuer)
+						&& sameAsset(buy_code, buy_issuer, $scope.counter_code, $scope.counter_issuer)) {
+					this.ask.push({
+						id : offer.id,
+						amount : parseFloat(offer.amount),
+						price  : parseFloat(offer.price),
+						volume : offer.amount * offer.price
+					});
+				}
+				if (sameAsset(sell_code, sell_issuer, $scope.counter_code, $scope.counter_issuer)
+						&& sameAsset(buy_code, buy_issuer, $scope.base_code, $scope.base_issuer) ) {
+					this.bid.push({
+						id : offer.id,
+						amount : offer.amount * offer.price,
+						price  : 1 / offer.price,
+						volume : parseFloat(offer.amount)
+					});
+				}
+			}
+		}
+	}
 	
 	$scope.base_code = 'XLM';
 	$scope.base_issuer = '';
@@ -61,11 +94,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	
 	$scope.refreshOffer = function() {
 		StellarApi.queryOffer(function(err, offers){
-			$scope.offers = offers;
-			offers.forEach(function(offer){
+			if (err) {
 				
-			});
-			$scope.$apply();
+			} else {
+				$scope.offers.update(offers);
+				console.log($scope.offers);
+				$scope.$apply();
+			}
 		});
 	}
 	
