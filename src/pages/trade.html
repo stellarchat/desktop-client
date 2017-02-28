@@ -41,101 +41,75 @@
 			<div class="OfferMakers island__sub">
 				<div class="OfferMakers_maker island__sub__division">
 					<div>
-						<h3
-							class="island__sub__division__title island__sub__division__title--left">Buy
-							XLM</h3>
-						<form disabled="">
-							<table class="OfferMaker__table">
-								<tbody>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1378 -->Price per <!-- /react-text -->
-											<!-- react-text: 1379 -->XLM<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value="0.0169837"
-											placeholder=""></td>
-									</tr>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1384 -->Amount <!-- /react-text -->
-											<!-- react-text: 1385 -->XLM<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value=""
-											placeholder=""></td>
-									</tr>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1390 -->Total <!-- /react-text -->
-											<!-- react-text: 1391 -->CNY<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value=""
-											placeholder=""></td>
-									</tr>
-								</tbody>
-							</table>
-							<div class="OfferMaker__overview">
-								<div class="OfferMaker__youHave">
-									You have 800.1500000 CNY
-								</div>
-								<div class="s-alert s-alert--success OfferMaker__message">Offer successfully created</div>
-								<button class="s-button btn btn-success" >{{'buy' | translate}} XLM</button>
+						<h3 class="island__sub__division__title island__sub__division__title--left">Buy {{base_code}}</h3>
+						<table class="OfferMaker__table">
+							<tbody>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Price of Each </td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="buy_price" ng-change="calculate('buy_price')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Amount</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="buy_amount" ng-change="calculate('buy_amount')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Order Value ({{counter_code}})</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="buy_volume" ng-change="calculate('buy_volume')">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="OfferMaker__overview">
+							<div class="OfferMaker__youHave">
+								You have 800.1500000 CNY
 							</div>
-						</form>
+							<div class="s-alert s-alert--success OfferMaker__message">Offer successfully created</div>
+							<button class="s-button btn btn-success" ng-click="offer('buy')">{{'buy' | translate}} {{base_code}}</button>
+						</div>
 					</div>
 				</div>
 				<div class="OfferMakers_maker island__sub__division">
 					<div>
-						<h3
-							class="island__sub__division__title island__sub__division__title--left">Sell
-							XLM</h3>
-						<form disabled="">
-							<table class="OfferMaker__table">
-								<tbody>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1406 -->Price per <!-- /react-text -->
-											<!-- react-text: 1407 -->XLM<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value="0.017"
-											placeholder=""></td>
-									</tr>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1412 -->Amount <!-- /react-text -->
-											<!-- react-text: 1413 -->XLM<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value=""
-											placeholder=""></td>
-									</tr>
-									<tr class="OfferMaker__table__row">
-										<td class="OfferMaker__table__label">
-											<!-- react-text: 1418 -->Total <!-- /react-text -->
-											<!-- react-text: 1419 -->CNY<!-- /react-text -->
-										</td>
-										<td class="OfferMaker__table__input"><input type="text"
-											class="OfferMaker__table__input__input" value=""
-											placeholder=""></td>
-									</tr>
-								</tbody>
-							</table>
+						<h3 class="island__sub__division__title island__sub__division__title--left">Sell {{base_code}}</h3>
+						<table class="OfferMaker__table">
+							<tbody>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Price of Each </td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="sell_price" ng-change="calculate('sell_price')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Amount</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="sell_amount" ng-change="calculate('sell_amount')">
+									</td>
+								</tr>
+								<tr class="OfferMaker__table__row">
+									<td class="OfferMaker__table__label">Order Value ({{counter_code}})</td>
+									<td class="OfferMaker__table__input">
+										<input type="text" class="OfferMaker__table__input__input" ng-model="sell_volume" ng-change="calculate('sell_volume')">
+									</td>
+								</tr>
+							</tbody>
+						</table>
 
-							<div class="OfferMaker__overview">
-								<div class="OfferMaker__youHave">
-									You have 100140.9995500 XLM
-								</div>
-								<div class="s-alert s-alert--info">
-									Buy 100 XLM for 1.6983700 CNY
-								</div>
-
-								<input type="submit" class="s-button" value="Sell XLM">
+						<div class="OfferMaker__overview">
+							<div class="OfferMaker__youHave">
+								You have 100140.9995500 XLM
+							</div>
+							<div class="s-alert s-alert--info">
+								Buy 100 XLM for 1.6983700 CNY
 							</div>
 
-						</form>
+							<button class="s-button btn btn-success" ng-click="offer('sell')">{{'sell' | translate}} {{base_code}}</button>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -187,7 +161,7 @@
 		</div>
 
 
-		<div class="island island--pb" >
+		<div class="island" >
 			<div class="island__header">Manage offers
 				<a class="btn btn-success btn-sm" ng-click="refreshOffer()" ng-disabled="working">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
@@ -207,7 +181,9 @@
 								<td class="ManageOffers__table__row__item">{{item.price | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
-								<td class="ManageOffers__table__row__item"><a>Cancel</a></td>
+								<td class="ManageOffers__table__row__item">
+									<a href="javascript:" ng-click="cancel(item.id)">Cancel</a>
+								</td>
 							</tr>
 						</tbody></table>
 					</div>
@@ -224,7 +200,9 @@
 								<td class="ManageOffers__table__row__item">{{item.price | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
-								<td class="ManageOffers__table__row__item"><a>Cancel</a></td>
+								<td class="ManageOffers__table__row__item">
+									<a href="javascript:" ng-click="cancel(item.id)">Cancel</a>
+								</td>
 							</tr>
 						</tbody></table>
 					</div>

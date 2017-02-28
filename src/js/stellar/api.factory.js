@@ -278,7 +278,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.queryBook = function(baseBuy, counterSell, callback) {
 		orderbook.get(baseBuy, counterSell, callback);
-	}
+	};
 	
 	api.queryOffer = function(callback) {
 		var self = this;
@@ -288,6 +288,72 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			callback(null, data.records);
 		}).catch(function(err){
 			console.error('QueryOffer Fail !', err);
+			callback(err, null);
+		});
+	};
+	
+	api._offer = function(selling, buying, amount, price, callback) {
+		var self = this;
+		console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
+		self.server.loadAccount(self.address).then(function(account){
+			var op = StellarSdk.Operation.manageOffer({
+				selling: selling,
+				buying: buying,
+				amount: amount.toString(),
+				price : price.toString()
+	        });
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log(txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('Offer Fail !', err);
+			callback(err, null);
+		});
+	};
+	
+	// option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
+	api.offer = function(option, callback) {
+		var self = this;
+		console.debug('%s %s %s use %s@ %s', option.type, option.amount, option.currency, option.base, option.price);
+		var buying, selling;
+		var selling_amount, selling_price;
+		
+		if (option.type == 'buy') {
+			selling = getAsset(option.base, option.base_issuer);
+			buying = getAsset(option.currency, option.issuer);
+			selling_amount = option.amount * option.price;
+			selling_price = 1 / option.price;
+		} else {
+			selling = getAsset(option.currency, option.issuer);
+			buying = getAsset(option.base, option.base_issuer);
+			selling_amount = option.amount;
+			selling_price = option.price;
+		}
+		self._offer(selling, buying, selling_amount, selling_price, callback);
+	};
+	
+	api.cancel = function(offer_id, callback) {
+		var self = this;
+		console.debug('Cancel Offer', offer_id);
+		self.server.loadAccount(self.address).then(function(account){
+			var op = StellarSdk.Operation.manageOffer({
+				selling: StellarSdk.Asset.native(),
+				buying: new StellarSdk.Asset('DUMMY', account.accountId()),
+				amount: "0",
+				price : "1",
+				offerId : offer_id
+	        });
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log(txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('Cancel Offer Fail !', err);
 			callback(err, null);
 		});
 	};

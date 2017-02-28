@@ -104,11 +104,64 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		});
 	}
 	
+	$scope.buy_price;
+	$scope.buy_amount;
+	$scope.buy_volume;
+	$scope.sell_price;
+	$scope.sell_amount;
+	$scope.sell_volume;
+	$scope.calculate = function(name) {
+		switch(name) {
+		case 'buy_price':
+			$scope.buy_volume = round($scope.buy_price * $scope.buy_amount, 8);
+			break;
+		case 'buy_amount':
+			$scope.buy_volume = round($scope.buy_price * $scope.buy_amount, 8);
+			break;
+		case 'buy_volume':
+			$scope.buy_amount = round($scope.buy_volume / $scope.buy_price, 8);
+			break;
+		case 'sell_price':
+			$scope.sell_volume = round($scope.sell_price * $scope.sell_amount, 8);
+			break;
+		case 'sell_amount':
+			$scope.sell_volume = round($scope.sell_price * $scope.sell_amount, 8);
+			break;
+		case 'sell_volume':
+			$scope.sell_amount = round($scope.sell_volume / $scope.sell_price, 8);
+			break;
+		}
+	}
+	
+	
+	$scope.offer = function(type) {
+		
+	}
+	
+	$scope.cancel = function(offer_id) {
+		StellarApi.cancel(offer_id, function(err, hash){
+			if (err) {
+				
+			} else {
+				$scope.refreshOffer();
+			}
+		});
+	}
+	
 	function sameAsset(code, issuer, code2, issuer2) {
 		if (code == 'XLM') {
 			return code == code2;
 		} else {
 			return code == code2 && issuer == issuer2;
 		}
+	}
+	
+	function round(dight, howMany) {
+		if(howMany) {
+			dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
+		} else {
+			dight = Math.round(dight);
+		}	
+		return dight;
 	}
 } ]);
