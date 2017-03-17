@@ -90,5 +90,8 @@ var translate_cn = {
 	Stellar : '恒星',
 	wallet : '钱包',
 	logout : '注销',
-	settings : '设置'
+	settings : '设置',
+	proxy : '代理',
+	public_url : '恒星公网节点',
+	save : '保存'
 }

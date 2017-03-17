@@ -90,5 +90,8 @@ var translate_en = {
 	Stellar : 'Stellar',
 	wallet : 'Wallet',
 	logout : 'Logout',
-	settings : 'Settings'
+	settings : 'Settings',
+	proxy : 'Proxy',
+	public_url : 'Public Net URL',
+	save : 'Save'
 }

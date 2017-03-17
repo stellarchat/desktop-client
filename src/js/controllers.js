@@ -25,3 +25,15 @@ myApp.controller("HomeCtrl", ['$scope',
   }
 ]);
 
+myApp.controller("SettingsCtrl", [ '$scope', '$location', 'SettingFactory', 
+                                   function($scope, $location, SettingFactory) {
+	$scope.proxy = SettingFactory.getProxy();
+	$scope.url = SettingFactory.getStellarUrl();
+	
+	$scope.save = function() {
+		SettingFactory.setProxy($scope.proxy);
+		SettingFactory.setStellarUrl($scope.url);
+		$location.path('/');
+	};
+} ]);
+
