@@ -91,6 +91,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			}
 		});
 	}
+	$scope.refreshBook();
 	
 	$scope.refreshOffer = function() {
 		StellarApi.queryOffer(function(err, offers){
@@ -103,6 +104,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			}
 		});
 	}
+	$scope.refreshOffer();
 	
 	$scope.buy_price;
 	$scope.buy_amount;
@@ -133,9 +135,29 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
-	
+	//option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
 	$scope.offer = function(type) {
-		
+		var option = {
+			type : type,
+			currency : $scope.base_code,
+			issuer   : $scope.base_issuer,
+			base        : $scope.counter_code,
+			base_issuer : $scope.counter_issuer0
+		};
+		if (type == 'buy') {
+			option.amount = $scope.buy_amount;
+			option.price  = $scope.buy_price;
+		} else {
+			option.amount = $scope.sell_amount;
+			option.price  = $scope.sell_price;
+		}
+		StellarApi.offer(option, function(err, hash) {
+			if (err) {
+				
+			} else {
+				$scope.refreshOffer();
+			}
+		});
 	}
 	
 	$scope.cancel = function(offer_id) {
