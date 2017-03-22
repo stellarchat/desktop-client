@@ -357,6 +357,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			callback(err, null);
 		});
 	};
+	
+	function getAsset(code, issuer) {
+		if (typeof code == 'object') {
+			issuer = code.issuer;
+			code = code.code;
+		}
+		return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer); 
+	}
 
 	return api;
 } ]);

@@ -132,6 +132,13 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			limit : 1000000
 		} ]
 	}; // {CNY: [{code: 'CNY', issuer: 'xxx', balance: 200}]}
+	$rootScope.getBalance = function(code, issuer) {
+		if (code == 'XLM') {
+			return $rootScope.balance;
+		} else {
+			return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
+		}
+	}
 	
 	//the default gateway list
 	$rootScope.gateways = gateways;

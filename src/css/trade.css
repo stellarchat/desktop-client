@@ -246,6 +246,12 @@ a.AssetPairRow:hover .AssetPair__separator {
     border: 1px solid #69f;
     background: #e8f0ff;
 }
+
+.s-alert--error {
+	border: 1px solid #d12;
+	background: #f8cfd3
+}
+
 .s-alert {
     display: block;
     padding: .5em 1em;

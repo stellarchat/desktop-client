@@ -106,6 +106,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	}
 	$scope.refreshOffer();
 	
+	$scope.buying = false;
+	$scope.buy_ok;
+	$scope.buy_fail;
+	$scope.selling = false;
+	$scope.sell_ok;
+	$scope.sell_fail;
+	
 	$scope.buy_price;
 	$scope.buy_amount;
 	$scope.buy_volume;
@@ -137,12 +144,15 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	
 	//option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
 	$scope.offer = function(type) {
+		$scope[type + 'ing'] = true;
+		$scope[type + '_ok'] = false;
+		$scope[type + '_fail'] = "";
 		var option = {
 			type : type,
 			currency : $scope.base_code,
 			issuer   : $scope.base_issuer,
 			base        : $scope.counter_code,
-			base_issuer : $scope.counter_issuer0
+			base_issuer : $scope.counter_issuer
 		};
 		if (type == 'buy') {
 			option.amount = $scope.buy_amount;
@@ -152,11 +162,15 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			option.price  = $scope.sell_price;
 		}
 		StellarApi.offer(option, function(err, hash) {
+			$scope[type + 'ing'] = false;
 			if (err) {
-				
+				console.error(err);
+				$scope[type + '_fail'] = err.message;
 			} else {
+				$scope[type + '_ok'] = true;
 				$scope.refreshOffer();
 			}
+			$scope.$apply();
 		});
 	}
 	

@@ -1,6 +1,7 @@
 <div class="feed-item">
 	<div class="feed-item-icon">
-		<div class="circle circle-blue" translate="offer"></div>
+		<div class="circle circle-blue" translate="offer" ng-show="{{item.tx.operations[0].amount}}"></div>
+		<div class="circle circle-blue" translate="offer_cancel" ng-hide="{{item.tx.operations[0].amount}}"></div>
 	</div>
 	<div class="feed-item-comment">
 		<span>{{item.tx.operations[0].selling.code}}/{{item.tx.operations[0].buying.code}}</span>
