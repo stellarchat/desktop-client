@@ -20,6 +20,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : false
 		}
+	}).when('/security', {
+		templateUrl : 'pages/security.html',
+		controller : 'SecurityCtrl',
+		access : {
+			requiredLogin : false
+		}
 	}).when('/', {
 		templateUrl : 'pages/home.html',
 		controller : 'HomeCtrl',
@@ -44,15 +50,27 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
-	}).when('/payments', {
+	}).when('/hist_payments', {
 		templateUrl : 'pages/history_payments.html',
 		controller : 'PaymentsCtrl',
 		access : {
 			requiredLogin : true
 		}
-	}).when('/trades', {
+	}).when('/hist_trades', {
 		templateUrl : 'pages/history_trades.html',
 		controller : 'TradesCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/trade', {
+		templateUrl : 'pages/trade.html',
+		controller : 'TradeCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/settings', {
+		templateUrl : 'pages/settings.html',
+		controller : 'SettingsCtrl',
 		access : {
 			requiredLogin : true
 		}
@@ -61,10 +79,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi',
-           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi) {
-	
-	$translate.use($window.localStorage['lang'] || 'cn');
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory) {
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -116,6 +132,13 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			limit : 1000000
 		} ]
 	}; // {CNY: [{code: 'CNY', issuer: 'xxx', balance: 200}]}
+	$rootScope.getBalance = function(code, issuer) {
+		if (code == 'XLM') {
+			return $rootScope.balance;
+		} else {
+			return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
+		}
+	}
 	
 	//the default gateway list
 	$rootScope.gateways = gateways;
@@ -141,14 +164,21 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		reset();
 	}
 	
-	StellarApi.setServer('https://horizon.stellar.org');
-	
 	$rootScope.objKeyLength = function(obj) {
 		return Object.keys(obj).length;
 	}
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	
+	$translate.use(SettingFactory.getLang());
+	StellarApi.setServer(SettingFactory.getStellarUrl());
+	if (SettingFactory.getProxy()) {
+		try {
+			nw.App.setProxyConfig(SettingFactory.getProxy()); //"127.0.0.1:53323"
+		} catch(e) {
+			console.error("Cannot set proxy", SettingFactory.getProxy(), e);
+		}
+	}
 }]);
 
-//nw.App.setProxyConfig("120.26.101.219:888");
