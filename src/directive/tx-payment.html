@@ -6,7 +6,10 @@
 			<span ng-if="item.tx.operations[0].type == 'createAccount'" translate="created"></span>
 		</div>
 	</div>
-	<div class="feed-item-comment">{{item.tx.operations[0].counterparty}}</div>
+	<div class="feed-item-comment">
+		<span>{{item.tx.operations[0].counterparty}}</span>
+		<span ng-if="item.memo" class="timestamp">Memo-{{item.memo_type}}: {{item.memo}}</span>
+	</div>
 
 	<div class="payment">
 		<div class="txamount">{{item.tx.operations[0].amount}} {{item.tx.operations[0].asset.code}}</div>

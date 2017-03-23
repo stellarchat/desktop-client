@@ -25,9 +25,15 @@ myApp.controller("HomeCtrl", ['$scope',
   }
 ]);
 
-myApp.controller("HistoryCtrl", ['$scope',
-  function($scope) {
-    $scope.name = "History Controller";
-  }
-]);
+myApp.controller("SettingsCtrl", [ '$scope', '$location', 'SettingFactory', 
+                                   function($scope, $location, SettingFactory) {
+	$scope.proxy = SettingFactory.getProxy();
+	$scope.url = SettingFactory.getStellarUrl();
+	
+	$scope.save = function() {
+		SettingFactory.setProxy($scope.proxy);
+		SettingFactory.setStellarUrl($scope.url);
+		$location.path('/');
+	};
+} ]);
 

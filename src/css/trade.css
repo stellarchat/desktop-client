@@ -1,0 +1,264 @@
+.AssetPairRow {
+	border-top: 1px solid #dedfe0;
+	padding: 0.75em 18px;
+	text-decoration: none;
+	display: block;
+}
+
+.AssetPair {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+
+.AssetPair__separator {
+	width: 18px;
+	height: 18px;
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+	flex: 0 0 18px;
+}
+
+.AssetPair__card {
+	flex: 1 0;
+}
+
+.AssetPair__card .AssetCard {
+	margin: 0 auto;
+}
+
+a.AssetPairRow:hover .AssetPair__separator {
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+}
+
+.PairPicker {
+	padding: 20px;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.PairPicker__pair {
+	padding: 0.75em 1em;
+	border-top: 1px solid #dedfe0;
+	border-bottom: 1px solid #dedfe0;
+}
+
+.PairPicker__auxInfo {
+	font-size: 13.5px;
+	text-align: center;
+	padding: 12px 18px;
+	color: #929597;
+}
+
+.OfferMaker__table {
+	width: 100%;
+}
+
+.OfferMaker__table input, select, textarea {
+	color: #3a3f43;
+	padding: .35em 1em .3166em;
+}
+
+.OfferMaker__table__row {
+	height: 50px;
+}
+
+.OfferMaker__table__label {
+	min-width: 100px;
+}
+
+.OfferMaker__table__input {
+	width: auto;
+	min-width: 100px;
+}
+
+.OfferMaker__table__input__input {
+	width: 100%;
+}
+
+.OfferMaker__overview {
+	margin-top: 12px;
+	border-top: 1px solid #dedfe0;
+	padding-top: 12px;
+}
+
+.OfferTable {
+	width: 100%;
+	text-align: right;
+	font-size: 16px;
+}
+
+.OfferTable__header {
+	display: flex;
+	background: #f4f4f5;
+	font-weight: bold;
+	text-align: center;
+}
+
+.OfferTable__header__item {
+	width: 25%;
+	padding: 5px;
+}
+
+.OfferTable__row {
+	display: flex;
+}
+
+.OfferTable__row:hover {
+	background: #fdfdc8 !important;
+	cursor: pointer;
+}
+
+.OfferTable__row__item {
+	width: 25%;
+	padding: 5px;
+	text-align: right;
+	font-family: 'Ubuntu Mono';
+}
+
+
+.OfferTable {
+	width: 100%;
+	text-align: right;
+	font-size: 16px;
+}
+
+.OfferTable__header {
+	display: flex;
+	background: #f4f4f5;
+	font-weight: bold;
+	text-align: center;
+}
+
+.OfferTable__header__item {
+	width: 25%;
+	padding: 5px;
+	text-align: right;
+}
+
+.OfferTable__row {
+	display: flex;
+}
+
+.OfferTable__row:hover {
+	background: #fdfdc8 !important;
+	cursor: pointer;
+}
+
+.OfferTable__row__item {
+	width: 25%;
+	padding: 5px;
+	text-align: right;
+	font-family: 'Ubuntu Mono';
+}
+
+.OfferMaker__table {
+	width: 100%;
+}
+
+.OfferMaker__table__row {
+	height: 50px;
+}
+
+.OfferMaker__table__label {
+	min-width: 100px;
+}
+
+.OfferMaker__table__input {
+	width: auto;
+	min-width: 100px;
+}
+
+.OfferMaker__message {
+	font-size: 13.5px;
+}
+
+.OfferMaker__errorList {
+	margin-left: 2em;
+}
+
+.OfferMaker__youHave {
+	font-size: 13.5px;
+	margin-bottom: 0.5em;
+}
+
+.OfferMaker__table__input__input {
+	width: 100%;
+}
+
+.OfferMaker__overview {
+	margin-top: 12px;
+	border-top: 1px solid #dedfe0;
+	padding-top: 12px;
+}
+
+.ManageOffers__table {
+  width: 100%;
+  text-align: right;
+  font-size: 16px;
+}
+
+.ManageOffers__table__header {
+	background: #f4f4f5;
+	font-weight: bold;
+	text-align: center;
+}
+
+.ManageOffers__table__header__item {
+	padding: 4px 8px 4px 2px;
+	text-align: right;
+}
+
+.ManageOffers__table__row {
+	
+}
+
+.ManageOffers__table__row:hover {
+	background: #fdfdc8;
+}
+
+.ManageOffers__table__row__item {
+	padding: 4px 8px 4px 2px;
+	text-align: right;
+	font-family: 'Ubuntu Mono';
+}
+
+.ManageOffers__table__row__none {
+	padding: 4px 8px;
+	text-align: center;
+	font-family: 'Ubuntu Mono';
+}
+
+.s-button {
+    display: inline-block;
+    margin: 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.s-alert--success {
+    border: 1px solid #383;
+    background: #d6e7d6;
+}
+
+.s-alert--info {
+    border: 1px solid #69f;
+    background: #e8f0ff;
+}
+
+.s-alert--error {
+	border: 1px solid #d12;
+	background: #f8cfd3
+}
+
+.s-alert {
+    display: block;
+    padding: .5em 1em;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.lightenZeros__unemph {
+	opacity: 0.4;
+}
