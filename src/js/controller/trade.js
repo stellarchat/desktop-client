@@ -44,6 +44,8 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	$scope.base = $rootScope.gateways.getSourceById($scope.base_issuer);
 	$scope.counter = $rootScope.gateways.getSourceById($scope.counter_issuer);
 	$scope.precise = 4;
+	$scope.price_precise = 4;
+	$scope.value_precise = 4;
 	
 	$scope.book = {
 		origin : null,
@@ -65,7 +67,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				depth = depth + this.bids[i].volumn;
 				this.bids[i].depth = depth;
 			}
-			var max_depth = this.asks[this.asks.length-1].depth > this.bids[this.bids.length-1].depth ? this.asks[this.asks.length-1].depth : this.bids[this.bids.length-1].depth;
+			var max_depth = 0;
+			if (this.asks.length>0) { 
+				max_depth = this.asks[this.asks.length-1].depth;
+			}
+			if (this.bids.length>0 && this.bids[this.bids.length-1].depth > max_depth) {
+				max_depth = this.bids[this.bids.length-1].depth;
+			}
 			for (var i=0; i<this.asks.length; i++) {
 				this.asks[i].pct = Math.round(this.asks[i].depth / max_depth * 100, 2);
 			}
@@ -177,11 +185,41 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	$scope.cancel = function(offer_id) {
 		StellarApi.cancel(offer_id, function(err, hash){
 			if (err) {
-				
+				console.error(err);
 			} else {
 				$scope.refreshOffer();
 			}
 		});
+	}
+	
+	$scope.show_pair = false;
+	$scope.choosePair = function() {
+		$scope.show_pair = !$scope.show_pair;
+		if (!$scope.show_pair) {
+			$scope.refreshBook();
+			$scope.refreshOffer();
+		}
+	}
+	$scope.pick = function(type, code, issuer) {
+		if (type == 'base') {
+			$scope.base_code = code;
+			$scope.base_issuer = issuer;
+			$scope.base = $rootScope.gateways.getSourceById($scope.base_issuer);
+		} else {
+			$scope.counter_code = code;
+			$scope.counter_issuer = issuer;
+			$scope.counter = $rootScope.gateways.getSourceById($scope.counter_issuer);
+			if (code == 'XLM') {
+				$scope.price_precise = 2;
+				$scope.value_precise = 2;
+			} else if (code == 'BTC') {
+				$scope.price_precise = 6;
+				$scope.value_precise = 4;
+			} else {
+				$scope.price_precise = 4;
+				$scope.value_precise = 4;
+			}
+		}
 	}
 	
 	function sameAsset(code, issuer, code2, issuer2) {
