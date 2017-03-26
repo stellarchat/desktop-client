@@ -89,7 +89,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	};
 	api.fund = function(target, amount, memo_type, memo_value, callback) {
 		var self = this;
-		amount = Math.round(amount, 7);
+		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
 			var payment = StellarSdk.Operation.createAccount({
 				destination: target,
@@ -109,7 +109,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	};
 	api.sendXLM = function(target, amount, memo_type, memo_value, callback) {
 		var self = this;
-		amount = Math.round(amount, 7);
+		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
 			var payment = StellarSdk.Operation.payment({
 				destination: target,
@@ -130,7 +130,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	};
 	api.sendAsset = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
 		var self = this;
-		amount = Math.round(amount, 7);
+		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
 			var payment = StellarSdk.Operation.payment({
 				destination: target,
@@ -150,7 +150,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	api.send = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
-		amount = Math.round(amount, 7);
+		amount = round(amount, 7);
 		console.debug(target, currency, issuer, amount, memo_type, memo_value);
 		var self = this;
 		if (currency == 'XLM') {
@@ -298,7 +298,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api._offer = function(selling, buying, amount, price, callback) {
 		var self = this;
-		amount = Math.round(amount, 7);
+		amount = round(amount, 7);
 		console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
 		self.server.loadAccount(self.address).then(function(account){
 			var op = StellarSdk.Operation.manageOffer({
