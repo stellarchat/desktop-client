@@ -287,7 +287,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	api.queryOffer = function(callback) {
 		var self = this;
 		console.debug('offers', self.address);
-		self.server.offers('accounts', self.address).call().then(function(data) {
+		self.server.offers('accounts', self.address).limit(200).call().then(function(data) {
 			console.log('offers', data.records);
 			callback(null, data.records);
 		}).catch(function(err){
