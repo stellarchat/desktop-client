@@ -94,10 +94,10 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				max_depth = this.bids[this.bids.length-1].depth;
 			}
 			for (var i=0; i<this.asks.length; i++) {
-				this.asks[i].pct = Math.round(this.asks[i].depth / max_depth * 100, 2);
+				this.asks[i].pct = round(this.asks[i].depth / max_depth * 100, 2);
 			}
 			for (var i=0; i<this.bids.length; i++) {
-				this.bids[i].pct = Math.round(this.bids[i].depth / max_depth * 100, 2);
+				this.bids[i].pct = round(this.bids[i].depth / max_depth * 100, 2);
 			}
 		}
 	}
@@ -201,7 +201,9 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				$scope[type + '_fail'] = err.message;
 			} else {
 				$scope[type + '_ok'] = true;
-				$scope.refreshOffer();
+				$scope[type + '_amount'] = "";
+				$scope[type + '_price'] = "";
+				$scope[type + '_volume'] = "";
 			}
 			$scope.$apply();
 			$scope.refreshBook();
@@ -260,12 +262,4 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
-	function round(dight, howMany) {
-		if(howMany) {
-			dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
-		} else {
-			dight = Math.round(dight);
-		}	
-		return dight;
-	}
 } ]);
