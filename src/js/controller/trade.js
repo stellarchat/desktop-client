@@ -59,6 +59,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		asks : [],
 		bids : [],
 		clean : function() {
+			this.origin = null;
 			this.asks = [];
 			this.bids = [];
 		},
@@ -197,8 +198,16 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		StellarApi.offer(option, function(err, hash) {
 			$scope[type + 'ing'] = false;
 			if (err) {
-				console.error(err);
-				$scope[type + '_fail'] = err.message;
+				if (err.message) {
+					$scope[type + '_fail'] = err.message;
+				} else {
+					if (err.extras && err.extras.result_xdr) {
+						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+						$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+					} else {
+						console.error("Unhandle!!", err);
+					}
+				}
 			} else {
 				$scope[type + '_ok'] = true;
 				$scope[type + '_amount'] = "";
@@ -251,6 +260,18 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				$scope.price_precise = 4;
 				$scope.value_precise = 2;
 			}
+		}
+	}
+	$scope.flip = function() {
+		var old_base_code = $scope.base_code;
+		var old_base_issuer = $scope.base_issuer;
+		$scope.pick('base', $scope.counter_code, $scope.counter_issuer);
+		$scope.pick('counter', old_base_code, old_base_issuer);
+		if (!$scope.show_pair) {
+			$scope.book.clean();
+			$scope.refreshBook();
+			$scope.refreshOffer();
+			$scope.savePair();
 		}
 	}
 	
