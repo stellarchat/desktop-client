@@ -175,6 +175,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			break;
 		}
 	}
+	$scope.pickPrice = function(src, price) {
+		if (src == 'bid') {
+			$scope.sell_price = price;
+		} else {
+			$scope.buy_price = price;
+		}
+	}
 	
 	//option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
 	$scope.offer = function(type) {

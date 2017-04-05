@@ -186,7 +186,8 @@
 						</div>
 						
 						<div class="OfferTable__row" ng-repeat="item in book.bids"
-							style="background: linear-gradient(to left, #dcf6de {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);">
+							style="background: linear-gradient(to left, #dcf6de {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);"
+							ng-click="pickPrice('bid', item.price)">
 							<div class="OfferTable__row__item">{{item.price | number: price_precise}}</div>
 							<div class="OfferTable__row__item">{{item.amount | number: precise}}</div>
 							<div class="OfferTable__row__item">{{item.volumn | number: value_precise}}</div>
@@ -204,7 +205,8 @@
 							<div class="OfferTable__header__item" translate="depth">Depth</div>
 						</div>
 						<div class="OfferTable__row" ng-repeat="item in book.asks"
-							style="background: linear-gradient(to right, #fed6d8 {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);">
+							style="background: linear-gradient(to right, #fed6d8 {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);"
+							ng-click="pickPrice('ask', item.price)">
 							<div class="OfferTable__row__item">{{item.price | number: price_precise}}</div>
 							<div class="OfferTable__row__item">{{item.amount | number: precise}}</div>
 							<div class="OfferTable__row__item">{{item.volumn | number: value_precise}}</div>
