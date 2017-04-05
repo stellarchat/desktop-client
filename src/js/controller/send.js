@@ -11,6 +11,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 	$scope.memo_type = 'Text';
 	$scope.memo_provided;
 	$scope.sending;
+	$scope.send_done = false;
 	
 	$scope.target_error = {
 		invalid : false,
@@ -106,14 +107,27 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 	};
 	$scope.send = function() {
 		$scope.sending = true;
+		$scope.send_done = false;
+		$scope.target_error.message = '';
+		
 		StellarApi.send($scope.real_address, $scope.src_code, $scope.src_issuer, 
 				$scope.target_amount, $scope.memo_type, $scope.memo, function(err, hash){
 			$scope.sending = false;
+			
 			if (err) {
-				console.error('SendFail', err);
-				$scope.target_error.message = err.message;
+				if (err.message) {
+					$scope.target_error.message = err.message;
+				} else {
+					if (err.extras && err.extras.result_xdr) {
+						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+						$scope.target_error.message = resultXdr.result().results()[0].value().value().switch().name;
+					} else {
+						console.error("Unhandle!!", err);
+					}
+				}
 			} else {
-				$scope.target_error.message = '';
+				$scope.target_amount = 0;
+				$scope.send_done = true;
 			}
 			$rootScope.$apply();
 		});

@@ -64,6 +64,7 @@ var translate_en = {
 	invalid_domain : 'is unavailable',
 	account_loading: 'Loading account for',
 	select_asset : 'Please select an asset to send.',
+	send_done    : 'Asset successfully sent.',
 	
 	/** History **/
 	history: 'History',

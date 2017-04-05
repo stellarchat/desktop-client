@@ -99,6 +99,11 @@
 							<li translate="select_asset">Please select an asset to send.</li>
 						</ul>
 					</div>
+					<div class="s-alert s-alert--success" ng-show="send_done">
+						<ul class="AddTrust__errorList">
+							<li translate="send_done">Asset successfully sent.</li>
+						</ul>
+					</div>
 					
 					<div class="row__message" ng-show="act_loading">
 						{{'account_loading' | translate}} {{target_address}}

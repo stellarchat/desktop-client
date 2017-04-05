@@ -64,6 +64,7 @@ var translate_cn = {
 	invalid_domain : '域名无响应',
 	account_loading: '正在解析账号',
 	select_asset : '请先选择要发送的资产。',
+	send_done    : '发送成功',
 	
 	/** History **/
 	history: '历史',
