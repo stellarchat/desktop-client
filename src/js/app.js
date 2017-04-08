@@ -124,14 +124,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	
 	
 	$rootScope.balance = 88; //native asset;
-	$rootScope.lines = {
-		'CNY' : [ {
-			balance : 0.15,
-			code : "CNY",
-			issuer : "GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX",
-			limit : 1000000
-		} ]
-	}; // {CNY: [{code: 'CNY', issuer: 'xxx', balance: 200}]}
+	$rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
 	$rootScope.getBalance = function(code, issuer) {
 		if (code == 'XLM') {
 			return $rootScope.balance;
