@@ -2,8 +2,19 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	var api = {
 		address : undefined,
 		seed : undefined,
+		closeStream : undefined,
 		balances : {}
 	};
+	
+	api.logout = function() {
+		this.adress = undefined;
+		this.seed = undefined;
+		this.balances = {};
+		if (this.closeStream) {
+			this.closeStream();
+			this.closeStream = undefined;
+		}
+	}
 	
 	api.random = function() {
 		var keypair = StellarSdk.Keypair.random();
@@ -172,7 +183,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.listenStream = function() {
 		var self = this;
-		self.server.accounts().accountId(self.address).stream({
+		self.closeStream = self.server.accounts().accountId(self.address).stream({
     		onmessage: function(res){
     			if(!_.isEqual(self.balances, res.balances)) {
     				self.balances = res.balances;
