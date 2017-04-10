@@ -19,6 +19,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			this.closeTxStream();
 			this.closeTxStream = undefined;
 		}
+		orderbook.close();
 	}
 	
 	api.random = function() {
@@ -308,6 +309,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.queryBook = function(baseBuy, counterSell, callback) {
 		orderbook.get(baseBuy, counterSell, callback);
+	};
+	
+	api.listenOrderbook = function(baseBuying, counterSelling, handler) {
+		orderbook.listen(baseBuying, counterSelling, handler);
+	};
+	
+	api.closeOrderbook = function() {
+		orderbook.close();
 	};
 	
 	api.queryOffer = function(callback) {

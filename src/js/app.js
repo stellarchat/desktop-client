@@ -86,6 +86,10 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
 			  $location.path("/login");
 		  } else {
+			  if (currentRoute && currentRoute.originalPath == '/trade') {
+				  console.log('Leave trade page');
+				  StellarApi.closeOrderbook();
+			  }
 			  // check if user object exists else fetch it. This is incase of a page refresh
 			  if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
 			  if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
