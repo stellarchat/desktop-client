@@ -56,10 +56,12 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	
 	$scope.book = {
 		origin : null,
+		stream : null,
 		asks : [],
 		bids : [],
 		clean : function() {
 			this.origin = null;
+			this.stream = null;
 			this.asks = [];
 			this.bids = [];
 		},
@@ -67,6 +69,15 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			this.origin = data;
 			this.asks = JSON.parse(JSON.stringify(data.asks));
 			this.bids = JSON.parse(JSON.stringify(data.bids));
+			this.process();
+		},
+		streamUpdate : function(data) {
+			this.stream = data;
+			this.asks = JSON.parse(JSON.stringify(data.asks));
+			this.bids = JSON.parse(JSON.stringify(data.bids));
+			this.process();
+		},
+		process : function() {
 			var displayNo = 15;
 			if (this.asks.length > displayNo) {
 				this.asks = this.asks.slice(0, displayNo);
@@ -122,7 +133,22 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			$scope.$apply();
 		});
 	}
-	$scope.refreshBook();
+	//$scope.refreshBook();
+	
+	$scope.listenOrderbook = function() {
+		var base = {code: $scope.base_code, issuer: $scope.base_issuer};
+		var counter = {code: $scope.counter_code, issuer: $scope.counter_issuer};
+		
+		StellarApi.closeOrderbook();
+		StellarApi.listenOrderbook(base, counter, function(res) {
+			if(!_.isEqual($scope.book.stream, res)) {
+				$scope.book.streamUpdate(res);
+				console.warn('book stream', res);
+				$scope.$apply();
+			}
+		});
+	};
+	$scope.listenOrderbook();
 	
 	$scope.refreshingOffer = false;
 	$scope.refreshOffer = function() {
@@ -222,7 +248,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				$scope[type + '_volume'] = "";
 			}
 			$scope.$apply();
-			$scope.refreshBook();
+			//$scope.refreshBook();
 			$scope.refreshOffer();
 		});
 	}
@@ -232,7 +258,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			if (err) {
 				console.error(err);
 			} else {
-				$scope.refreshBook();
+				//$scope.refreshBook();
 				$scope.refreshOffer();
 			}
 		});
@@ -243,7 +269,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		$scope.show_pair = !$scope.show_pair;
 		if (!$scope.show_pair) {
 			$scope.book.clean();
-			$scope.refreshBook();
+			$scope.listenOrderbook();
 			$scope.refreshOffer();
 			$scope.savePair();
 		}
@@ -276,7 +302,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		$scope.pick('counter', old_base_code, old_base_issuer);
 		if (!$scope.show_pair) {
 			$scope.book.clean();
-			$scope.refreshBook();
+			$scope.listenOrderbook();
 			$scope.refreshOffer();
 			$scope.savePair();
 		}

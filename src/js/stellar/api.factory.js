@@ -2,7 +2,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	var api = {
 		address : undefined,
 		seed : undefined,
-		closeStream : undefined,
+		closeAccountStream : undefined,
+		closeTxStream : undefined,
 		balances : {}
 	};
 	
@@ -10,10 +11,15 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		this.adress = undefined;
 		this.seed = undefined;
 		this.balances = {};
-		if (this.closeStream) {
-			this.closeStream();
-			this.closeStream = undefined;
+		if (this.closeAccountStream) {
+			this.closeAccountStream();
+			this.closeAccountStream = undefined;
 		}
+		if (this.closeTxStream) {
+			this.closeTxStream();
+			this.closeTxStream = undefined;
+		}
+		orderbook.close();
 	}
 	
 	api.random = function() {
@@ -183,7 +189,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.listenStream = function() {
 		var self = this;
-		self.closeStream = self.server.accounts().accountId(self.address).stream({
+		self.closeAccountStream = self.server.accounts().accountId(self.address).stream({
     		onmessage: function(res){
     			if(!_.isEqual(self.balances, res.balances)) {
     				self.balances = res.balances;
@@ -193,6 +199,16 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     			}
     		}
     	});
+		
+		// TODO: parse the tx and do action
+		self.closeTxStream = self.server.transactions().forAccount(self.address)
+    		.cursor("now")
+	    	.stream({
+	    		onmessage: function(res) {
+	    			var tx = history.processTx(res, self.address);
+	    			console.log('tx stream', tx);
+	    		}
+	    	});
 	};
 	
 	api.updateRootBalance = function(balances) {
@@ -293,6 +309,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.queryBook = function(baseBuy, counterSell, callback) {
 		orderbook.get(baseBuy, counterSell, callback);
+	};
+	
+	api.listenOrderbook = function(baseBuying, counterSelling, handler) {
+		orderbook.listen(baseBuying, counterSelling, handler);
+	};
+	
+	api.closeOrderbook = function() {
+		orderbook.close();
 	};
 	
 	api.queryOffer = function(callback) {

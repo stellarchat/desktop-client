@@ -1,6 +1,14 @@
 myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
 	var orderbook = {
 		server : null,
+		closeBookStream : undefined
+	};
+	
+	orderbook.close = function(){
+		if (this.closeBookStream) {
+			this.closeBookStream();
+			this.closeBookStream = undefined;
+		}
 	};
 	
 	orderbook.get = function(baseBuying, counterSelling, callback) {
@@ -14,11 +22,14 @@ myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
 		});
 	};
 	
-	orderbook.listen = function(baseBuying, counterSelling) {
+	orderbook.listen = function(baseBuying, counterSelling, handler) {
+		var self = this;
 		var key = getKey(baseBuying) + '/' + getKey(counterSelling);
-		this.server.orderbook(getAsset(baseBuying), getAsset(counterSelling)).stream({
+		console.debug('listen orderbook ' + key);
+		self.closeBookStream = self.server.orderbook(getAsset(baseBuying), getAsset(counterSelling)).stream({
 			onmessage: function(res){
-				console.log('stream', key, res);
+				//console.log('stream', key, res);
+				handler(res);
 			}
 		});
 	}
