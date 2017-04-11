@@ -275,6 +275,25 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	
+	api.setOption = function(name, value, callback) {
+		var self = this;
+		var opt = {};
+		opt[name] = value
+		console.debug('set option:', name, '-', value);
+		self.server.loadAccount(self.address).then(function(account){
+			var op = StellarSdk.Operation.setOptions(opt);
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log('Option updated.', txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('Option Fail !', err);
+			callback(err, null);
+		});
+	};
+	
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);

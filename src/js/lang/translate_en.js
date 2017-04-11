@@ -115,11 +115,21 @@ var translate_en = {
 	pick_trade : 'To trade, go back to',
 	trade_page : 'trade page',
 	
-	Stellar : 'Stellar',
-	wallet : 'Wallet',
-	logout : 'Logout',
+	/** Setting & security **/
 	settings : 'Settings',
-	proxy : 'Proxy',
+	proxy    : 'Proxy',
 	public_url : 'Public Net URL',
-	save : 'Save'
+	save     : 'Save',
+	security : 'Security',
+	inflation : 'Inflation Destination',
+	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
+	inflation_done : 'Inflation Destination was set.',
+	inflation_fox  : 'Vote to RippleFox',
+		
+	Stellar : 'Stellar',
+	app_open_source  : 'This app is open source now. ',
+	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret.',
+	app_feedback     : 'You can submit the issue on github.',
+	wallet : 'Wallet',
+	logout : 'Logout'
 }

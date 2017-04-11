@@ -127,14 +127,3 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	
    }
  ]);
-
-myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory',
-	function($scope, AuthenticationFactory) {
-		$scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;
-		$scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");
-		
-	    $scope.showSec = function(flag) {
-			$scope.showSecret = flag;
-		};
-	}
-]);
