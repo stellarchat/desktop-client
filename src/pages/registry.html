@@ -23,6 +23,7 @@
           <label for="password2" translate="password_confirm">Confirm password</label>
           <input class="form-control" id="password2" name="password2" autocomplete="off" type="password" ng-model="password2" required="required" value-matches="password1"/>
           <p ng-show="registerForm.password2.$invalid && registerForm.password2.$dirty"><span translate="pwd_not_match">Passwords do not match</span></p>
+          <p ng-show="save_error"><span>{{save_error}}</span></p>
           <div ng-show=""></div>
         </div>
         

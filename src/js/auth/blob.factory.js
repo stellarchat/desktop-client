@@ -113,8 +113,8 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     var blob = this;
 
     console.log('blob persist:', blob.data);
-    fs.writeFile(this.walletfile, this.encrypt(), function(){
-      callback(null, blob);
+    fs.writeFile(this.walletfile, this.encrypt(), function(err){
+      callback(err, blob);
     });
   };
 

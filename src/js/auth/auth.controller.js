@@ -71,6 +71,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	        $scope.$apply(function() {
 	          $scope.walletfile = filename;
 	          $scope.mode = 'register_empty_wallet';
+	          $scope.save_error = '';
 	        });
 	    }, 'wallet.txt');
 	};
@@ -89,6 +90,8 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 		UserAuthFactory.register(options, function(err, blob){
 			if (err) {
 				console.error('Register failed!', err);
+				$scope.save_error = err.message;
+				$scope.$apply();
 				return;
 			}
 			$scope.password = new Array($scope.password1.length+1).join("*");
