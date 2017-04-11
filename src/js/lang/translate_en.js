@@ -116,6 +116,9 @@ var translate_en = {
 	trade_page : 'trade page',
 	
 	Stellar : 'Stellar',
+	app_open_source  : 'This app is open source now. ',
+	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret.',
+	app_feedback     : 'You can submit the issue on github.',
 	wallet : 'Wallet',
 	logout : 'Logout',
 	settings : 'Settings',

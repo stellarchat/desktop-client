@@ -116,6 +116,10 @@ var translate_cn = {
 	trade_page : '交易页面',
 	
 	Stellar : '恒星',
+	stellar_desktop_client : '恒星桌面钱包',
+	app_open_source  : '钱包开源啦！',
+	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
+	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
 	wallet : '钱包',
 	logout : '注销',
 	settings : '设置',
