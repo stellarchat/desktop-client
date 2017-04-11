@@ -24,6 +24,8 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 	};
 	$scope.target_domain;
 	$scope.real_address;
+	$scope.real_not_fund = false;
+	$scope.real_accept = "";
 	$scope.act_loading;
 	$scope.is_federation;
 	
@@ -50,6 +52,9 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 		$scope.target_error.invalid = false;
 		$scope.target_error.domain = false;
 		$scope.target_error.message = '';
+		$scope.real_not_fund = false;
+		$scope.real_accept = "";
+		$scope.send_done = false;
 		
 		var snapshot = $scope.target_address;
 		var i = snapshot.indexOf("*");
@@ -59,6 +64,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 			$scope.memo_provided = false;
 			$scope.real_address = $scope.target_address;
 			$scope.target_error.invalid = !StellarApi.isValidAddress(snapshot);
+			$scope.resolveAccountInfo();
 		} else {
 			var prestr = snapshot.substring(0, i);
 			var domain = snapshot.substring(i+1);
@@ -85,6 +91,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 							$scope.memo_provided = false;
 						}
 						console.debug(data);
+						$scope.resolveAccountInfo();
 					}
 					$scope.$apply();
 				}).catch(function(err){
@@ -105,6 +112,38 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi',
 			});
 		}
 	};
+	$scope.resolveAccountInfo = function() {
+		if (!$scope.real_address || !StellarApi.isValidAddress($scope.real_address)) {
+			return;
+		}
+		console.debug('resolve ' + $scope.real_address);
+		StellarApi.getInfo($scope.real_address, function(err, data) {
+			if (err) {
+				if (err.message == "NotFoundError") {
+					$scope.real_not_fund = true;
+					if ($scope.src_code !== 'XLM') {
+						$scope.pick('XLM', '');
+					}
+				} else {
+					console.error('resolveAccountInfo', err);
+				}
+			} else {
+				var accept = [];
+				data.balances.forEach(function(line){
+					if (line.asset_type == 'native') {
+						accept.push('XLM');
+					} else {
+						if (accept.indexOf(line.asset_code) < 0) {
+							accept.push(line.asset_code);
+						}
+					}
+				});
+				$scope.real_accept = accept.join(', ');
+			}
+			$scope.$apply(); 
+		});
+	};
+	
 	$scope.send = function() {
 		$scope.sending = true;
 		$scope.send_done = false;
