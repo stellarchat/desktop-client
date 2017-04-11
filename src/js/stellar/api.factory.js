@@ -241,7 +241,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	api.getInfo = function(address, callback) {
 		var address = address || this.address;
 		this.server.accounts().accountId(address).call().then(function(data){
-			console.log(address, data);
 			callback(null, data);
 		}).catch(function(err){
 			if (err.name == 'NotFoundError') {

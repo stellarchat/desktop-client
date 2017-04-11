@@ -65,6 +65,8 @@ var translate_en = {
 	account_loading: 'Loading account for',
 	select_asset : 'Please select an asset to send.',
 	send_done    : 'Asset successfully sent.',
+	not_funded   : 'Not funded. To crete this account, send it at least 20 lumens (XLM).',
+	can_accept   : 'The account can accept',
 	
 	/** History **/
 	history: 'History',

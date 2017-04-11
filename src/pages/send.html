@@ -108,8 +108,12 @@
 					<div class="row__message" ng-show="act_loading">
 						{{'account_loading' | translate}} {{target_address}}
 					</div>
-					<div class="row__message" style="margin-bottom: 10px;" ng-show="is_federation && real_address && !sending">
-						{{real_address}}
+					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
+						<ul class="AddTrust__errorList">
+							<li ng-show="is_federation">{{real_address}}</li>
+							<li ng-show="real_not_fund" translate="not_funded">Not funded</li>
+							<li ng-show="real_accept">{{'can_accept' | translate}} {{real_accept}}</li>
+						</ul>
 					</div>
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
 						正在发送到 {{real_address | shortaddress}}
