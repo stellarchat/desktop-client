@@ -7,16 +7,25 @@ myApp.factory('SettingFactory', function($window) {
 			return $window.localStorage['lang'] || 'cn';
 		},
 		setProxy : function(proxy) {
+			if ("undefined" == proxy) { 
+				proxy = "";
+			}
 			$window.localStorage['proxy'] = proxy;
 		},
 		getProxy : function() {
-			return $window.localStorage['proxy'];
+			return $window.localStorage['proxy'] || "";
 		},
 		setStellarUrl : function(url) {
 			$window.localStorage['stellar_url'] = url;
 		},
 		getStellarUrl : function(url) {
 			return $window.localStorage['stellar_url'] || 'https://horizon.stellar.org';
+		},
+		setFedNetwork : function(domain) {
+			$window.localStorage['fed_network'] = domain;
+		},
+		getFedNetwork : function(url) {
+			return $window.localStorage['fed_network'] || 'fed.network';
 		},
 		getTradepair : function() {
 			if ($window.localStorage['tradepair']) {
