@@ -119,6 +119,8 @@ var translate_en = {
 	settings : 'Settings',
 	proxy    : 'Proxy',
 	public_url : 'Public Net URL',
+	fed_network : 'Federation Protocol (~)',
+	fed_network_desc : 'You can use ~name instead of name*federation.domain',
 	save     : 'Save',
 	security : 'Security',
 	inflation : 'Inflation Destination',
