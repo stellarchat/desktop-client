@@ -66,11 +66,12 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 	};
 	
 	history.transactions = function(address, callback) {
+		var self = this;
 		this.server.transactions().forAccount(address).order('desc').limit("200").call().then(function(data) {
 			console.log(data);
 			var transactions = [];
 			data.records.forEach(function(record){
-				var tx = processTx(record, address);
+				var tx = self.processTx(record, address);
 				console.log(tx);
 				transactions.push(tx);
 			});
@@ -82,7 +83,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		});
 	};
 	
-	function processTx(record, address) {
+	history.processTx = function(record, address) {
 		var tx = new StellarSdk.Transaction(record.envelope_xdr);
 		var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(record.result_xdr, 'base64');
 		

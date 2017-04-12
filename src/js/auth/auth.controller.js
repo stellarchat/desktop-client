@@ -20,6 +20,11 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
 					$scope.error = 'Login failed: Wallet file or password is wrong.';
 		            return;
 		        };
+		        if (blob.data.account_id.substring(0, 1) == "r") {
+		        	console.error(blob.data.account_id);
+		        	$scope.error = 'Login failed: Wallet file is a Ripple file.';
+		        	return;
+		        }
 		        
 		        AuthenticationFactory.userBlob = JSON.stringify(blob.data);
 		        $window.sessionStorage.userBlob = AuthenticationFactory.userBlob;
@@ -71,6 +76,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	        $scope.$apply(function() {
 	          $scope.walletfile = filename;
 	          $scope.mode = 'register_empty_wallet';
+	          $scope.save_error = '';
 	        });
 	    }, 'wallet.txt');
 	};
@@ -89,6 +95,8 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 		UserAuthFactory.register(options, function(err, blob){
 			if (err) {
 				console.error('Register failed!', err);
+				$scope.save_error = err.message;
+				$scope.$apply();
 				return;
 			}
 			$scope.password = new Array($scope.password1.length+1).join("*");
@@ -124,14 +132,3 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	
    }
  ]);
-
-myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory',
-	function($scope, AuthenticationFactory) {
-		$scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;
-		$scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");
-		
-	    $scope.showSec = function(flag) {
-			$scope.showSecret = flag;
-		};
-	}
-]);

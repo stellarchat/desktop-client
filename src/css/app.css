@@ -43,6 +43,22 @@ code {
   font-size: 80%;
 }
 
+.settingPage a {
+  display: block;
+  padding: 10px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  margin: 0 0 3px;
+  background: #d1def1;
+  border-color : #c1cee7;
+}
+.settingPage a:hover,
+.settingPage a.active {
+  color: #d1def1;;
+  text-decoration: none;
+  background: #346aa9;
+}
+
 /*--------------------------------------------------
 .currency-summary {
   font-size: 18px;

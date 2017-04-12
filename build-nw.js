@@ -11,7 +11,8 @@ var nw = new NwBuilder({
 	        'src/node_modules/underscore/underscore-min.js',
 	        'src/node_modules/stellar-sdk/dist/stellar-sdk.min.js'
 	],
-	platforms: ['win64', 'osx64'],
+	platforms: ['win32', 'win64', 'osx64'],
+	flavor : 'normal',
 	version: '0.20.2'
 });
 
@@ -23,3 +24,13 @@ nw.build().then(function(){
 
 // nwjs version can refer to https://nwjs.io/version.json
 // you may need to help nw-builder to find the correct version. :)
+/*
+//version.js:177
+var version;
+for(var v in versions) {
+	if (versions[v].version === args.desiredVersion) {
+		version = versions[v];
+	}
+}
+return version ? Promise.resolve(version) : Promise.reject('Version ' + args.desiredVersion + ' not found.');
+*/

@@ -1,5 +1,5 @@
-myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook',
-                                  function($scope, $rootScope, StellarApi, StellarOrderbook) {
+myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook', 'SettingFactory',
+                                  function($scope, $rootScope, StellarApi, StellarOrderbook, SettingFactory) {
 	$scope.offers = {
 		origin : null,
 		ask : [],
@@ -37,24 +37,54 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
-	$scope.base_code = 'XLM';
-	$scope.base_issuer = '';
-	$scope.counter_code = 'CNY';
-	$scope.counter_issuer = $rootScope.gateways.data['ripplefox.com'].assets['CNY'].issuer;
-	$scope.base = $rootScope.gateways.getSourceById($scope.base_issuer);
+	var tradepair = SettingFactory.getTradepair();
+	
+	$scope.base_code   = tradepair.base_code;
+	$scope.base_issuer = tradepair.base_issuer;
+	$scope.counter_code   = tradepair.counter_code;
+	$scope.counter_issuer = tradepair.counter_issuer;
+	$scope.savePair = function() {
+		SettingFactory.setTradepair($scope.base_code, $scope.base_issuer, $scope.counter_code, $scope.counter_issuer);
+	}
+	
+	$scope.base    = $rootScope.gateways.getSourceById($scope.base_issuer);
 	$scope.counter = $rootScope.gateways.getSourceById($scope.counter_issuer);
-	$scope.precise = 4;
+	
+	$scope.precise = 2;
 	$scope.price_precise = 4;
-	$scope.value_precise = 4;
+	$scope.value_precise = 2;
 	
 	$scope.book = {
 		origin : null,
+		stream : null,
 		asks : [],
 		bids : [],
+		clean : function() {
+			this.origin = null;
+			this.stream = null;
+			this.asks = [];
+			this.bids = [];
+		},
 		update : function(data) {
 			this.origin = data;
 			this.asks = JSON.parse(JSON.stringify(data.asks));
 			this.bids = JSON.parse(JSON.stringify(data.bids));
+			this.process();
+		},
+		streamUpdate : function(data) {
+			this.stream = data;
+			this.asks = JSON.parse(JSON.stringify(data.asks));
+			this.bids = JSON.parse(JSON.stringify(data.bids));
+			this.process();
+		},
+		process : function() {
+			var displayNo = 15;
+			if (this.asks.length > displayNo) {
+				this.asks = this.asks.slice(0, displayNo);
+			}
+			if (this.bids.length > displayNo) {
+				this.bids = this.bids.slice(0, displayNo);
+			}
 			var depth = 0;
 			for (var i=0; i<this.asks.length; i++) {
 				this.asks[i].volumn = this.asks[i].amount * this.asks[i].price;
@@ -63,8 +93,9 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			}
 			depth = 0;
 			for (var i=0; i<this.bids.length; i++) {
-				this.bids[i].volumn = this.bids[i].amount * this.bids[i].price;
-				depth = depth + this.bids[i].volumn;
+				this.bids[i].volumn = this.bids[i].amount;
+				this.bids[i].amount = this.bids[i].volumn / this.bids[i].price;
+				depth = depth + parseFloat(this.bids[i].volumn);
 				this.bids[i].depth = depth;
 			}
 			var max_depth = 0;
@@ -75,17 +106,19 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				max_depth = this.bids[this.bids.length-1].depth;
 			}
 			for (var i=0; i<this.asks.length; i++) {
-				this.asks[i].pct = Math.round(this.asks[i].depth / max_depth * 100, 2);
+				this.asks[i].pct = round(this.asks[i].depth / max_depth * 100, 2);
 			}
 			for (var i=0; i<this.bids.length; i++) {
-				this.bids[i].pct = Math.round(this.bids[i].depth / max_depth * 100, 2);
+				this.bids[i].pct = round(this.bids[i].depth / max_depth * 100, 2);
 			}
 		}
 	}
 	
+	$scope.refreshingBook = false;
 	$scope.refreshBook = function() {
 		var base = {code: $scope.base_code, issuer: $scope.base_issuer};
 		var counter = {code: $scope.counter_code, issuer: $scope.counter_issuer};
+		$scope.refreshingBook = true;
 		StellarApi.queryBook(base, counter, function(err, data) {
 			if (err) {
 				
@@ -94,22 +127,41 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				if(!$scope.book.origin || !_.isEqual($scope.book.origin.asks, data.asks) || !_.isEqual($scope.book.origin.bids, data.bids)) {
 					$scope.book.update(data);
 					console.log($scope.book);
-					$scope.$apply();
 				}
 			}
+			$scope.refreshingBook = false;
+			$scope.$apply();
 		});
 	}
-	$scope.refreshBook();
+	//$scope.refreshBook();
 	
+	$scope.listenOrderbook = function() {
+		var base = {code: $scope.base_code, issuer: $scope.base_issuer};
+		var counter = {code: $scope.counter_code, issuer: $scope.counter_issuer};
+		
+		StellarApi.closeOrderbook();
+		StellarApi.listenOrderbook(base, counter, function(res) {
+			if(!_.isEqual($scope.book.stream, res)) {
+				$scope.book.streamUpdate(res);
+				console.warn('book stream', res);
+				$scope.$apply();
+			}
+		});
+	};
+	$scope.listenOrderbook();
+	
+	$scope.refreshingOffer = false;
 	$scope.refreshOffer = function() {
+		$scope.refreshingOffer = true;
 		StellarApi.queryOffer(function(err, offers){
 			if (err) {
 				
 			} else {
 				$scope.offers.update(offers);
 				console.log($scope.offers);
-				$scope.$apply();
 			}
+			$scope.refreshingOffer = false;
+			$scope.$apply();
 		});
 	}
 	$scope.refreshOffer();
@@ -149,6 +201,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			break;
 		}
 	}
+	$scope.pickPrice = function(src, price) {
+		if (src == 'bid') {
+			$scope.sell_price = price;
+		} else {
+			$scope.buy_price = price;
+		}
+	}
 	
 	//option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
 	$scope.offer = function(type) {
@@ -172,13 +231,25 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		StellarApi.offer(option, function(err, hash) {
 			$scope[type + 'ing'] = false;
 			if (err) {
-				console.error(err);
-				$scope[type + '_fail'] = err.message;
+				if (err.message) {
+					$scope[type + '_fail'] = err.message;
+				} else {
+					if (err.extras && err.extras.result_xdr) {
+						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+						$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+					} else {
+						console.error("Unhandle!!", err);
+					}
+				}
 			} else {
 				$scope[type + '_ok'] = true;
-				$scope.refreshOffer();
+				$scope[type + '_amount'] = "";
+				$scope[type + '_price'] = "";
+				$scope[type + '_volume'] = "";
 			}
 			$scope.$apply();
+			//$scope.refreshBook();
+			$scope.refreshOffer();
 		});
 	}
 	
@@ -187,6 +258,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			if (err) {
 				console.error(err);
 			} else {
+				//$scope.refreshBook();
 				$scope.refreshOffer();
 			}
 		});
@@ -196,8 +268,10 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	$scope.choosePair = function() {
 		$scope.show_pair = !$scope.show_pair;
 		if (!$scope.show_pair) {
-			$scope.refreshBook();
+			$scope.book.clean();
+			$scope.listenOrderbook();
 			$scope.refreshOffer();
+			$scope.savePair();
 		}
 	}
 	$scope.pick = function(type, code, issuer) {
@@ -213,12 +287,24 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				$scope.price_precise = 2;
 				$scope.value_precise = 2;
 			} else if (code == 'BTC') {
-				$scope.price_precise = 6;
+				$scope.price_precise = 8;
 				$scope.value_precise = 4;
 			} else {
 				$scope.price_precise = 4;
-				$scope.value_precise = 4;
+				$scope.value_precise = 2;
 			}
+		}
+	}
+	$scope.flip = function() {
+		var old_base_code = $scope.base_code;
+		var old_base_issuer = $scope.base_issuer;
+		$scope.pick('base', $scope.counter_code, $scope.counter_issuer);
+		$scope.pick('counter', old_base_code, old_base_issuer);
+		if (!$scope.show_pair) {
+			$scope.book.clean();
+			$scope.listenOrderbook();
+			$scope.refreshOffer();
+			$scope.savePair();
 		}
 	}
 	
@@ -230,12 +316,4 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
-	function round(dight, howMany) {
-		if(howMany) {
-			dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
-		} else {
-			dight = Math.round(dight);
-		}	
-		return dight;
-	}
 } ]);

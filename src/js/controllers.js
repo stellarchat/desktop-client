@@ -1,5 +1,5 @@
-myApp.controller("HeaderCtrl", ['$scope', '$location', 'UserAuthFactory',
-  function($scope, $location, UserAuthFactory) {
+myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'StellarApi',
+  function($scope, $rootScope, $location, UserAuthFactory, StellarApi) {
 
     $scope.isActive = function(route) {
       return route === $location.path();
@@ -7,6 +7,8 @@ myApp.controller("HeaderCtrl", ['$scope', '$location', 'UserAuthFactory',
 
     $scope.logout = function () {
       UserAuthFactory.logout();
+      StellarApi.logout();
+      $rootScope.reset();
     }
   }
 ]);
@@ -29,10 +31,12 @@ myApp.controller("SettingsCtrl", [ '$scope', '$location', 'SettingFactory',
                                    function($scope, $location, SettingFactory) {
 	$scope.proxy = SettingFactory.getProxy();
 	$scope.url = SettingFactory.getStellarUrl();
+	$scope.fed_network = SettingFactory.getFedNetwork();
 	
 	$scope.save = function() {
 		SettingFactory.setProxy($scope.proxy);
 		SettingFactory.setStellarUrl($scope.url);
+		SettingFactory.setFedNetwork($scope.fed_network);
 		$location.path('/');
 	};
 } ]);

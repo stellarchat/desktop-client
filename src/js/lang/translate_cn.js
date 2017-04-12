@@ -64,6 +64,9 @@ var translate_cn = {
 	invalid_domain : '域名无响应',
 	account_loading: '正在解析账号',
 	select_asset : '请先选择要发送的资产。',
+	send_done    : '发送成功',
+	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
+	can_accept   : '账号可接收',
 	
 	/** History **/
 	history: '历史',
@@ -81,6 +84,7 @@ var translate_cn = {
 	amount : '金额',
 	optional : '选填',
 	
+	/** Trade **/
 	trade : '交易',
 	sent  : '发送',
 	received : '接收',
@@ -112,11 +116,24 @@ var translate_cn = {
 	pick_trade : '回到',
 	trade_page : '交易页面',
 	
-	Stellar : '恒星',
-	wallet : '钱包',
-	logout : '注销',
+	/** Setting & security **/
 	settings : '设置',
-	proxy : '代理',
+	proxy    : '代理',
 	public_url : '恒星公网节点',
-	save : '保存'
+	fed_network : '联邦协议（~）',
+	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”',
+	save     : '保存',
+	security : '安全',
+	inflation : '通胀地址',
+	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。',
+	inflation_done : '通胀地址设置成功',
+	inflation_fox  : '投票给瑞狐',
+		
+	Stellar : '恒星',
+	stellar_desktop_client : '恒星桌面钱包',
+	app_open_source  : '钱包开源啦！',
+	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
+	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
+	wallet : '钱包',
+	logout : '注销'
 }

@@ -86,6 +86,10 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
 			  $location.path("/login");
 		  } else {
+			  if (currentRoute && currentRoute.originalPath == '/trade') {
+				  console.log('Leave trade page');
+				  StellarApi.closeOrderbook();
+			  }
 			  // check if user object exists else fetch it. This is incase of a page refresh
 			  if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
 			  if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
@@ -124,14 +128,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	
 	
 	$rootScope.balance = 88; //native asset;
-	$rootScope.lines = {
-		'CNY' : [ {
-			balance : 0.15,
-			code : "CNY",
-			issuer : "GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX",
-			limit : 1000000
-		} ]
-	}; // {CNY: [{code: 'CNY', issuer: 'xxx', balance: 200}]}
+	$rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
 	$rootScope.getBalance = function(code, issuer) {
 		if (code == 'XLM') {
 			return $rootScope.balance;
@@ -182,3 +179,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	}
 }]);
 
+function round(dight, howMany) {
+	if(howMany) {
+		dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
+	} else {
+		dight = Math.round(dight);
+	}	
+	return dight;
+}

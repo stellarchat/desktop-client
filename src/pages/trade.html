@@ -29,7 +29,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="AssetPair__separator"></div>
+						<div style="font-size: 20px;">
+							<a href="javascript:" ng-click="flip()"><span class="glyphicon glyphicon-transfer"></span></a>
+						</div>
 						<div class="AssetPair__card">
 							<div class="AssetCard AssetCard--fixed">
 								<div class="AssetCard__main">
@@ -158,7 +160,7 @@
 							<div class="OfferMaker__youHave">
 								{{'you_have' | translate}} {{getBalance(base_code, base_issuer)}} {{base_code}}
 							</div>
-							<div class="s-alert s-alert--success OfferMaker__message" ng-show="sell_ok">Offer successfully created</div>
+							<div class="s-alert s-alert--success OfferMaker__message" ng-show="sell_ok" translate="offer_success">Offer successfully created</div>
 							<div class="s-alert s-alert--error OfferMaker__message" ng-show="sell_fail">{{sell_fail}}</div>
 							<button class="s-button btn btn-success" ng-click="offer('sell')" ng-disabled="selling">{{'sell' | translate}} {{base_code}}</button>
 						</div>
@@ -169,8 +171,8 @@
 		</div>
 		<div class="island island--pb" ng-show="!show_pair">
 			<div class="island__header">{{'orderbook' | translate}}
-				<a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="working">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
+				<!-- <a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="refreshingBook">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a> -->
 			</div>
 			<div class="OfferTables island__sub">
 				<div class="island__sub__division">
@@ -184,7 +186,8 @@
 						</div>
 						
 						<div class="OfferTable__row" ng-repeat="item in book.bids"
-							style="background: linear-gradient(to left, #dcf6de {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);">
+							style="background: linear-gradient(to left, #dcf6de {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);"
+							ng-click="pickPrice('bid', item.price)">
 							<div class="OfferTable__row__item">{{item.price | number: price_precise}}</div>
 							<div class="OfferTable__row__item">{{item.amount | number: precise}}</div>
 							<div class="OfferTable__row__item">{{item.volumn | number: value_precise}}</div>
@@ -202,7 +205,8 @@
 							<div class="OfferTable__header__item" translate="depth">Depth</div>
 						</div>
 						<div class="OfferTable__row" ng-repeat="item in book.asks"
-							style="background: linear-gradient(to right, #fed6d8 {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);">
+							style="background: linear-gradient(to right, #fed6d8 {{item.pct}}%, {{$index%2==1?'#f4f4f4':'#ffffff'}} {{item.pct}}%);"
+							ng-click="pickPrice('ask', item.price)">
 							<div class="OfferTable__row__item">{{item.price | number: price_precise}}</div>
 							<div class="OfferTable__row__item">{{item.amount | number: precise}}</div>
 							<div class="OfferTable__row__item">{{item.volumn | number: value_precise}}</div>
@@ -216,7 +220,7 @@
 
 		<div class="island" ng-show="!show_pair">
 			<div class="island__header">{{'manager_offer' | translate}}
-				<a class="btn btn-success btn-sm" ng-click="refreshOffer()" ng-disabled="working">
+				<a class="btn btn-success btn-sm" ng-click="refreshOffer()" ng-disabled="refreshingOffer">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
 			<div class="island--pb">
@@ -226,12 +230,12 @@
 						<table class="ManageOffers__table"><tbody>
 							<tr class="ManageOffers__table__header">
 								<td class="ManageOffers__table__header__item" translate="price">Price</td>
-								<td class="ManageOffers__table__header__item">XLM</td>
-								<td class="ManageOffers__table__header__item">CNY</td>
+								<td class="ManageOffers__table__header__item">{{base_code}}</td>
+								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
 							<tr class="ManageOffers__table__row" ng-repeat="item in offers.bid">
-								<td class="ManageOffers__table__row__item">{{item.price | number: precise}}</td>
+								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
@@ -245,12 +249,12 @@
 						<table class="ManageOffers__table"><tbody>
 							<tr class="ManageOffers__table__header">
 								<td class="ManageOffers__table__header__item" translate="price">Price</td>
-								<td class="ManageOffers__table__header__item">XLM</td>
-								<td class="ManageOffers__table__header__item">CNY</td>
+								<td class="ManageOffers__table__header__item">{{base_code}}</td>
+								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
 							<tr class="ManageOffers__table__row" ng-repeat="item in offers.ask">
-								<td class="ManageOffers__table__row__item">{{item.price | number: precise}}</td>
+								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">

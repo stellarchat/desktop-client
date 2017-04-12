@@ -1,4 +1,4 @@
-<section class="col-xs-12 content" ng-controller="RegisterCtrl">
+<section class="col-xs-12 content">
   <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" ng-show="mode=='register_new_account'">
     <div class="auth-form-wrapper">
       <h2 translate="create_new_account">Create new account</h2>
@@ -23,6 +23,7 @@
           <label for="password2" translate="password_confirm">Confirm password</label>
           <input class="form-control" id="password2" name="password2" autocomplete="off" type="password" ng-model="password2" required="required" value-matches="password1"/>
           <p ng-show="registerForm.password2.$invalid && registerForm.password2.$dirty"><span translate="pwd_not_match">Passwords do not match</span></p>
+          <p ng-show="save_error"><span>{{save_error}}</span></p>
           <div ng-show=""></div>
         </div>
         
