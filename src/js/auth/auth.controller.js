@@ -20,6 +20,11 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
 					$scope.error = 'Login failed: Wallet file or password is wrong.';
 		            return;
 		        };
+		        if (blob.data.account_id.substring(0, 1) == "r") {
+		        	console.error(blob.data.account_id);
+		        	$scope.error = 'Login failed: Wallet file is a Ripple file.';
+		        	return;
+		        }
 		        
 		        AuthenticationFactory.userBlob = JSON.stringify(blob.data);
 		        $window.sessionStorage.userBlob = AuthenticationFactory.userBlob;

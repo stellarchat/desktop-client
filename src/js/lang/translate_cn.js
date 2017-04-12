@@ -121,7 +121,7 @@ var translate_cn = {
 	proxy    : '代理',
 	public_url : '恒星公网节点',
 	fed_network : '联邦协议（~）',
-	fed_network_desc : '你可以用~名字来代替 名字*联邦.域名',
+	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”',
 	save     : '保存',
 	security : '安全',
 	inflation : '通胀地址',
