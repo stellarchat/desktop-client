@@ -14,7 +14,7 @@
 	<div class="row" style="margin-bottom: 20px;">
 		<div class="col-xs-12 col-md-10 col-md-offset-1">
 			<label translate="fed_network">Federation Name Default Provider(~)</label>
-			<p translate="fed_network_desc">You can use ~name instead of name*default.domain</p>
+			<p>{{ 'fed_network_desc' | translate}} <span ng-show="fed_name">{{'you_name_is' | translate}} <strong>~{{fed_name}}</strong></span></p>
 			<input class="form-control" type="text" ng-model="fed_network" placeholder="fed.network" />
 		</div>
 	</div>
