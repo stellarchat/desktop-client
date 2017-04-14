@@ -99,7 +99,8 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 					if (snapshot !== $scope.target_address) {
 						return;
 					}
-					$scope.target_error.message = err.message;
+					$scope.real_address = '';
+					$scope.target_error.message = err.detail || err.message;
 					$scope.act_loading = false;
 					$scope.$apply();
 				});
