@@ -1,5 +1,5 @@
-myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'StellarApi',
-  function($scope, $rootScope, $location, UserAuthFactory, StellarApi) {
+myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'SettingFactory', 'StellarApi',
+  function($scope, $rootScope, $location, UserAuthFactory, SettingFactory, StellarApi) {
 
     $scope.isActive = function(route) {
       return route === $location.path();
@@ -10,6 +10,19 @@ myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFa
       StellarApi.logout();
       $rootScope.reset();
     }
+    
+    $scope.fed_name = "";
+	$scope.resolveFed = function() {
+		StellarApi.getFedName(SettingFactory.getFedNetwork(), $rootScope.address, function(err, name){
+			if (err) {
+				console.error(err);
+			} else {
+				$scope.fed_name = name;
+				$scope.$apply();
+			}
+		});
+	};
+	$scope.resolveFed();
   }
 ]);
 
@@ -42,18 +55,13 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
 	
 	$scope.fed_name = "";
 	$scope.resolveFed = function() {
-		StellarApi.federationServer($scope.fed_network).then(function(server){
-			server.resolveAccountId($rootScope.address).then(function(data){
-				if(data.stellar_address) {
-					var index = data.stellar_address.indexOf("*");
-					$scope.fed_name = data.stellar_address.substring(0, index);
-					$scope.$apply();
-				}
-			}).catch(function(err){
+		StellarApi.getFedName($scope.fed_network, $rootScope.address, function(err, name){
+			if (err) {
 				console.error(err);
-			});
-		}).catch(function(err){
-			console.error(err);
+			} else {
+				$scope.fed_name = name;
+				$scope.$apply();
+			}
 		});
 	};
 	$scope.resolveFed();
