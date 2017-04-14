@@ -118,11 +118,15 @@ var translate_cn = {
 	
 	/** Setting & security **/
 	settings : '设置',
+	network  : '网络',
 	proxy    : '代理',
 	public_url : '恒星公网节点',
-	fed_network : '联邦协议（~）',
+	fed_protocol: '联邦协议',
+	fed_network : '名称服务（~）',
 	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”。',
 	you_name_is : '你的名称是',
+	fed_ripple  : 'Ripple服务',
+	fed_ripple_desc : '当你输入Ripple地址时，将自动用以下域名进行解析。',
 	save     : '保存',
 	security : '安全',
 	inflation : '通胀地址',

@@ -117,11 +117,15 @@ var translate_en = {
 	
 	/** Setting & security **/
 	settings : 'Settings',
+	network  : 'Network',
 	proxy    : 'Proxy',
 	public_url : 'Public Net URL',
-	fed_network : 'Federation Protocol (~)',
+	fed_protocol: 'Federation Protocol',
+	fed_network : 'Name Service (~)',
 	fed_network_desc : 'You can use ~name instead of name*federation.domain.',
 	you_name_is : 'Your name is',
+	fed_ripple  : 'Ripple Service',
+	fed_ripple_desc : 'When you enter a Ripple address, it will use below domain to parse.',
 	save     : 'Save',
 	security : 'Security',
 	inflation : 'Inflation Destination',
