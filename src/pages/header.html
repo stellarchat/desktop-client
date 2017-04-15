@@ -28,7 +28,13 @@
 	        <li ng-class="{active:isActive('/trust')}"><a href="javascript:" ng-click="goTo('/trust')">{{'trust' | translate}}</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="javascript:"  ng-click="goTo('/security')" title="{{address}}"><span class="glyphicon glyphicon-user"></span> {{address | shortaddress}}</a></li>
+	        <li>
+	        	<a href="javascript:"  ng-click="goTo('/security')" title="{{address}}">
+	        		<span class="glyphicon glyphicon-user"></span>
+	        		<span ng-hide="fed_name">{{address | shortaddress}}</span>
+	        		<span ng-show="fed_name">~{{fed_name}}</span>
+	        	</a>
+	        </li>
 	        <li><a href="javascript:"  ng-click="goTo('/settings')"><span class="glyphicon glyphicon-cog"></span> {{'settings' | translate}}</a></li>
 	        <li><a href="javascript:" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> {{'logout' | translate}}</a></li>
 	      </ul>

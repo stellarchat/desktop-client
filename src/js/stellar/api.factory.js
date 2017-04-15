@@ -416,6 +416,22 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	
+	api.getFedName = function(domain, address, callback) {
+		this.federationServer(domain).then(function(server){
+			server.resolveAccountId(address).then(function(data){
+				if(data.stellar_address) {
+					var index = data.stellar_address.indexOf("*");
+					var fed_name = data.stellar_address.substring(0, index);
+					return callback(null, fed_name);
+				}
+			}).catch(function(err){
+				return callback(err);
+			});
+		}).catch(function(err){
+			return callback(err);
+		});
+	}
+	
 	function getAsset(code, issuer) {
 		if (typeof code == 'object') {
 			issuer = code.issuer;

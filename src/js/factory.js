@@ -21,12 +21,26 @@ myApp.factory('SettingFactory', function($window) {
 		getStellarUrl : function(url) {
 			return $window.localStorage['stellar_url'] || 'https://horizon.stellar.org';
 		},
+		
 		setFedNetwork : function(domain) {
 			$window.localStorage['fed_network'] = domain;
 		},
 		getFedNetwork : function(url) {
 			return $window.localStorage['fed_network'] || 'fed.network';
 		},
+		setFedRipple : function(domain) {
+			$window.localStorage['fed_ripple'] = domain;
+		},
+		getFedRipple : function(url) {
+			return $window.localStorage['fed_ripple'] || 'ripplefox.com';
+		},
+		setFedBitcoin : function(domain) {
+			$window.localStorage['fed_bitcoin'] = domain;
+		},
+		getFedBitcoin : function(url) {
+			return $window.localStorage['fed_bitcoin'] || 'naobtc.com';
+		},
+		
 		getTradepair : function() {
 			if ($window.localStorage['tradepair']) {
 				return JSON.parse($window.localStorage['tradepair']);

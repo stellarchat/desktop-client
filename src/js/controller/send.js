@@ -59,7 +59,9 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		var snapshot = $scope.target_address;
 		var i = snapshot.indexOf("*");
 		var isFedNetwork = (snapshot.indexOf("~") == 0);
-		if (i<0 && !isFedNetwork) {
+		var isRipple = ripple.UInt160.is_valid(snapshot);
+		var isBitcoin = !isNaN(ripple.Base.decode_check([0, 5], snapshot, 'bitcoin'));
+		if (i<0 && !isFedNetwork && !isRipple && !isBitcoin) {
 			$scope.act_loading = false;
 			$scope.is_federation = false;
 			$scope.memo_provided = false;
@@ -67,8 +69,26 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			$scope.target_error.invalid = !StellarApi.isValidAddress(snapshot);
 			$scope.resolveAccountInfo();
 		} else {
-			var prestr = isFedNetwork ? snapshot.substring(1) : snapshot.substring(0, i);
-			var domain = isFedNetwork ? SettingFactory.getFedNetwork() : snapshot.substring(i+1);
+			var prestr;
+			var domain;
+			
+			if (i<0) {
+				if (isFedNetwork) {
+					prestr = snapshot.substring(1);
+					domain = SettingFactory.getFedNetwork();
+				}
+				if (isRipple) {
+					prestr = snapshot;
+					domain = SettingFactory.getFedRipple();
+				}
+				if (isBitcoin) {
+					prestr = snapshot;
+					domain = SettingFactory.getFedBitcoin();
+				}
+			} else {
+				prestr = snapshot.substring(0, i);
+				domain = snapshot.substring(i+1);
+			}
 			
 			$scope.target_domain = domain;
 			$scope.act_loading = true;
