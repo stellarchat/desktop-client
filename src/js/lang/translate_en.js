@@ -136,9 +136,10 @@ var translate_en = {
 	inflation_fox  : 'Vote to RippleFox',
 		
 	Stellar : 'Stellar',
-	app_open_source  : 'This app is open source now. ',
-	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret.',
-	app_feedback     : 'You can submit the issue on github.',
+	stellar_desktop_client : 'Stellar Desktop Client',
+	app_open_source  : 'This app is open source now.',
+	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret carefully.',
+	app_feedback     : 'You can submit a issue on github if any problem.',
 	wallet : 'Wallet',
 	logout : 'Logout'
 }
