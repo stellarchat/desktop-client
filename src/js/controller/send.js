@@ -60,7 +60,8 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		var i = snapshot.indexOf("*");
 		var isFedNetwork = (snapshot.indexOf("~") == 0);
 		var isRipple = ripple.UInt160.is_valid(snapshot);
-		if (i<0 && !isFedNetwork && !isRipple) {
+		var isBitcoin = !isNaN(ripple.Base.decode_check([0, 5], snapshot, 'bitcoin'));
+		if (i<0 && !isFedNetwork && !isRipple && !isBitcoin) {
 			$scope.act_loading = false;
 			$scope.is_federation = false;
 			$scope.memo_provided = false;
@@ -79,6 +80,10 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 				if (isRipple) {
 					prestr = snapshot;
 					domain = SettingFactory.getFedRipple();
+				}
+				if (isBitcoin) {
+					prestr = snapshot;
+					domain = SettingFactory.getFedBitcoin();
 				}
 			} else {
 				prestr = snapshot.substring(0, i);

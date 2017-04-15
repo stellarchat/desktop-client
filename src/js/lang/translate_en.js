@@ -126,6 +126,8 @@ var translate_en = {
 	you_name_is : 'Your name is',
 	fed_ripple  : 'Ripple Service',
 	fed_ripple_desc : 'When you enter a Ripple address, it will use below domain to parse.',
+	fed_bitcoin  : 'Bitcoin Service',
+	fed_bitcoin_desc : 'When you enter a Bitcoin address, it will use below domain to parse.',
 	save     : 'Save',
 	security : 'Security',
 	inflation : 'Inflation Destination',

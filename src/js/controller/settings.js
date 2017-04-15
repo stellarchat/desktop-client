@@ -11,7 +11,8 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
 	$scope.proxy = SettingFactory.getProxy();
 	$scope.url = SettingFactory.getStellarUrl();
 	$scope.fed_network = SettingFactory.getFedNetwork();
-	$scope.fed_ripple = SettingFactory.getFedRipple();
+	$scope.fed_ripple  = SettingFactory.getFedRipple();
+	$scope.fed_bitcoin = SettingFactory.getFedBitcoin();
 	$scope.save = function(mode) {
 		if (mode == 'network') {
 			SettingFactory.setProxy($scope.proxy);
@@ -20,7 +21,9 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
 		if (mode == 'federation') {
 			SettingFactory.setFedNetwork($scope.fed_network);
 			SettingFactory.setFedRipple($scope.fed_ripple);
+			SettingFactory.setFedBitcoin($scope.fed_bitcoin);
 		}
+		
 		$location.path('/');
 	};
 	
