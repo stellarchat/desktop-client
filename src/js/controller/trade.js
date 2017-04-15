@@ -53,6 +53,29 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	$scope.precise = 2;
 	$scope.price_precise = 4;
 	$scope.value_precise = 2;
+	$scope.precise_jutify = function() {
+		if ($scope.base_code == 'BTC') {
+			$scope.precise = 4;
+		} else {
+			$scope.precise = 2;
+		}
+		
+		if ($scope.counter_code == 'XLM') {
+			$scope.price_precise = 2;
+			$scope.value_precise = 2;
+		} else if ($scope.counter_code == 'BTC') {
+			$scope.price_precise = 8;
+			$scope.value_precise = 4;
+		} else {
+			if ($scope.base_code == 'BTC') {
+				$scope.price_precise = 2;
+			} else {
+				$scope.price_precise = 4;
+			}
+			$scope.value_precise = 2;
+		}
+	}
+	$scope.precise_jutify();
 	
 	$scope.book = {
 		origin : null,
@@ -283,17 +306,8 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			$scope.counter_code = code;
 			$scope.counter_issuer = issuer;
 			$scope.counter = $rootScope.gateways.getSourceById($scope.counter_issuer);
-			if (code == 'XLM') {
-				$scope.price_precise = 2;
-				$scope.value_precise = 2;
-			} else if (code == 'BTC') {
-				$scope.price_precise = 8;
-				$scope.value_precise = 4;
-			} else {
-				$scope.price_precise = 4;
-				$scope.value_precise = 2;
-			}
 		}
+		$scope.precise_jutify();
 	}
 	$scope.flip = function() {
 		var old_base_code = $scope.base_code;
