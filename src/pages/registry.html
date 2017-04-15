@@ -43,7 +43,7 @@
       <form name="useSecretKey" ng-submit="submitSecretKeyForm()">
         <div class="form-group" ng-class="{'field-error': registerForm.secret.$error.masterKey && registerForm.secret.$dirty}">
           <label for="masterkey" translate="enter_secret">Enter your secret key</label>
-          <input class="form-control" id="secretKey" type="text" name="secretKey" ng-model="secretKey" master-key="master-key" required="required"/>
+          <input class="form-control" id="secretKey" type="text" name="secretKey" ng-model="secretKey" master-key="master-key" required="required" autocomplete="off"/>
           <p ng-show="useSecretKey.secretKey.$error.masterKey && useSecretKey.secretKey.$dirty"><span class="field-error" translate="invalid_secret">Secret is invalid</span></p>
         </div>
         <div class="submit-btn-container">
