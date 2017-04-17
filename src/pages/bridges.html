@@ -1,0 +1,31 @@
+<section class="col-xs-12 content">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header" translate="">Depositing or withdrawing coins</div>
+			<div class="island__paddedContent">
+				<p>
+					If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.<br>
+					You'll find a selection of service providers in the tabs below. Start by choosing a provider.
+					
+					{{'' | translate}}<br>{{'' | translate}}
+				</p>
+			</div>
+			<div class="AddTrustFromDirectory">
+				<div ng-repeat="(name, gateway) in gateways.getAllSources()">
+					<div class="row" ng-repeat="(code, asset) in gateway.assets">
+						<div class="row__fixedAsset">
+							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
+								code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
+						</div>
+						<div class="row__shareOption">
+							<button class="s-button btn btn-danger" ng-show="hasLine(asset.code, asset.issuer) && !hasBalance(asset.code, asset.issuer)" ng-click="delTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_remove' | translate}}</button>
+							<button class="s-button btn btn-warning" ng-show="hasLine(asset.code, asset.issuer) && hasBalance(asset.code, asset.issuer)" ng-disabled="true">{{'trust_remove_desc' | translate}}</button>
+							<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>

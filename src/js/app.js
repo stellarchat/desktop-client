@@ -68,6 +68,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/bridges', {
+		templateUrl : 'pages/bridges.html',
+		controller : 'BridgesCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/settings', {
 		templateUrl : 'pages/settings.html',
 		controller : 'SettingsCtrl',

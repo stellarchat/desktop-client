@@ -33,7 +33,7 @@
 				<p translate="fed_desc">You can add trust using the federation url.</p>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="fed_url">Federation URL</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" 
+					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model-options="{debounce:800}"
 						ng-model="fed_url" ng-change="resolve()" placeholder="{{'example' | translate}}: ripplefox.com"></label>
 			</div>
 			<div class="row" ng-show="fed_error">
