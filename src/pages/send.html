@@ -54,7 +54,7 @@
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
-						ng-model="target_address" ng-change="resolve()"
+						ng-model="target_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
 						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX">
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
