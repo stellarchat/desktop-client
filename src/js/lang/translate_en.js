@@ -117,10 +117,17 @@ var translate_en = {
 	
 	/** Setting & security **/
 	settings : 'Settings',
+	network  : 'Network',
 	proxy    : 'Proxy',
 	public_url : 'Public Net URL',
-	fed_network : 'Federation Protocol (~)',
-	fed_network_desc : 'You can use ~name instead of name*federation.domain',
+	fed_protocol: 'Federation Protocol',
+	fed_network : 'Name Service (~)',
+	fed_network_desc : 'You can use ~name instead of name*federation.domain.',
+	you_name_is : 'Your name is',
+	fed_ripple  : 'Ripple Service',
+	fed_ripple_desc : 'When you enter a Ripple address, it will use below domain to parse.',
+	fed_bitcoin  : 'Bitcoin Service',
+	fed_bitcoin_desc : 'When you enter a Bitcoin address, it will use below domain to parse.',
 	save     : 'Save',
 	security : 'Security',
 	inflation : 'Inflation Destination',
@@ -129,9 +136,10 @@ var translate_en = {
 	inflation_fox  : 'Vote to RippleFox',
 		
 	Stellar : 'Stellar',
-	app_open_source  : 'This app is open source now. ',
-	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret.',
-	app_feedback     : 'You can submit the issue on github.',
+	stellar_desktop_client : 'Stellar Desktop Client',
+	app_open_source  : 'This app is open source now.',
+	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret carefully.',
+	app_feedback     : 'You can submit a issue on github if any problem.',
 	wallet : 'Wallet',
 	logout : 'Logout'
 }

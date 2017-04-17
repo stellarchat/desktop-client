@@ -1,5 +1,5 @@
-myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'StellarApi',
-  function($scope, $rootScope, $location, UserAuthFactory, StellarApi) {
+myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'SettingFactory', 'StellarApi',
+  function($scope, $rootScope, $location, UserAuthFactory, SettingFactory, StellarApi) {
 
     $scope.isActive = function(route) {
       return route === $location.path();
@@ -26,18 +26,4 @@ myApp.controller("HomeCtrl", ['$scope',
     $scope.name = "Home Controller";
   }
 ]);
-
-myApp.controller("SettingsCtrl", [ '$scope', '$location', 'SettingFactory', 
-                                   function($scope, $location, SettingFactory) {
-	$scope.proxy = SettingFactory.getProxy();
-	$scope.url = SettingFactory.getStellarUrl();
-	$scope.fed_network = SettingFactory.getFedNetwork();
-	
-	$scope.save = function() {
-		SettingFactory.setProxy($scope.proxy);
-		SettingFactory.setStellarUrl($scope.url);
-		SettingFactory.setFedNetwork($scope.fed_network);
-		$location.path('/');
-	};
-} ]);
 

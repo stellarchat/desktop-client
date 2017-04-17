@@ -116,6 +116,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	    	  var data = JSON.parse(AuthenticationFactory.userBlob);
 	    	  console.log('$blobUpdate', data);
 	    	  $rootScope.address = data.account_id;
+	    	  $rootScope.resolveFed();
 	    	  StellarApi.setAccount(data.account_id, data.masterkey);
 	    	  StellarApi.listenStream();
 	    	  StellarApi.queryAccount();
@@ -136,6 +137,17 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
 		}
 	}
+	$rootScope.fed_name = "";
+	$rootScope.resolveFed = function() {
+		StellarApi.getFedName(SettingFactory.getFedNetwork(), $rootScope.address, function(err, name){
+			if (err) {
+				console.error(err);
+			} else {
+				$rootScope.fed_name = name;
+				$rootScope.$apply();
+			}
+		});
+	};
 	
 	//the default gateway list
 	$rootScope.gateways = gateways;
