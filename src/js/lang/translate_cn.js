@@ -135,6 +135,15 @@ var translate_cn = {
 	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。',
 	inflation_done : '通胀地址设置成功',
 	inflation_fox  : '投票给瑞狐',
+	
+	/** Deposit & withdrawl **/
+	deposit_withdraw : '充提',
+	deposit  : '充值',
+	withdraw : '提现',
+	dw_coin  : '充值和提现',
+	dw_desc_line1 : '如果你要充值或提现法币和其他链上的币，你需要挑选一个锚点服务商。',
+	dw_desc_line2 : '你可以从下面的下拉框里选择一个锚点。它们是我们从社区挑选并实现了加强版联邦协议的锚点。',
+	anchor : '锚点',
 		
 	Stellar : '恒星',
 	stellar_desktop_client : '恒星桌面钱包',

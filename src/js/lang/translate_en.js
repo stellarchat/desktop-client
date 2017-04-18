@@ -134,6 +134,15 @@ var translate_en = {
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
 	inflation_fox  : 'Vote to RippleFox',
+	
+	/** Deposit & withdrawl **/
+	deposit_withdraw : 'Deposit/Withdraw',
+	deposit  : 'Deposit',
+	withdraw : 'Withdraw',
+	dw_coin  : 'Depositing or withdrawing coins',
+	dw_desc_line1 : 'If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.',
+	dw_desc_line2 : 'You\'ll find a selection of service providers in the tabs below. Start by choosing a provider. ',
+	anchor : 'Anchor',
 		
 	Stellar : 'Stellar',
 	stellar_desktop_client : 'Stellar Desktop Client',

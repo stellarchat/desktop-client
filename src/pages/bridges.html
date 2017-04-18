@@ -1,0 +1,50 @@
+<section class="col-xs-12 content">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header" translate="dw_coin">Depositing or withdrawing coins</div>
+			<div class="island__paddedContent">
+				<p>
+					{{'dw_desc_line1' | translate}}<br>{{'dw_desc_line2' | translate}}
+				</p>
+				<label class="s-inputGroup AddTrust__inputGroup"><span translate="anchor">Anchor</span></label>
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="display: flex; align-items: center;">
+						<div class="AssetCard__main" style="margin-right: 8px;">
+							<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor_logo}}"></div>
+							<div class="AssetCard__content"><span class="AssetCard__code">{{anchor}}</span></div>
+						</div>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						<li role="presentation" ng-repeat="(name, anchor) in bridges">
+							<a role="menuitem" tabindex="-1" href="javascript:" ng-click="changeBridge(anchor.name)">
+								<div class="AssetCard__main">
+									<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor.logo}}"></div>
+									<div class="AssetCard__content"><span class="AssetCard__code">{{anchor.name}}</span></div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="AddTrustFromDirectory">
+				<div class="row">
+					充值
+				</div>
+				<div class="row" ng-repeat="(code, info) in deposit">
+					<div class="row__shareOption">
+						{{code}}
+					</div>
+					<div class="row__shareOption">
+						{{info.deposit_info}}<br>
+						{{info.extra_info}}
+					</div>
+				</div>
+				<div class="row">
+					提现(开发中)
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
