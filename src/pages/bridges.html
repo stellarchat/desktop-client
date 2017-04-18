@@ -1,28 +1,38 @@
 <section class="col-xs-12 content">
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
-			<div class="island__header" translate="">Depositing or withdrawing coins</div>
+			<div class="island__header" translate="dw_coin">Depositing or withdrawing coins</div>
 			<div class="island__paddedContent">
 				<p>
-					If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.<br>
-					You'll find a selection of service providers in the tabs below. Start by choosing a provider.
-					
-					{{'' | translate}}<br>{{'' | translate}}
+					{{'dw_desc_line1' | translate}}<br>{{'dw_desc_line2' | translate}}
 				</p>
+				<label class="s-inputGroup AddTrust__inputGroup"><span translate="anchor">Anchor</span></label>
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="display: flex; align-items: center;">
+						<div class="AssetCard__main" style="margin-right: 8px;">
+							<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor_logo}}"></div>
+							<div class="AssetCard__content"><span class="AssetCard__code">{{anchor}}</span></div>
+						</div>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						<li role="presentation" ng-repeat="(name, anchor) in bridges">
+							<a role="menuitem" tabindex="-1" href="javascript:" ng-click="changeBridge(anchor.name)">
+								<div class="AssetCard__main">
+									<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor.logo}}"></div>
+									<div class="AssetCard__content"><span class="AssetCard__code">{{anchor.name}}</span></div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div class="AddTrustFromDirectory">
-				<div ng-repeat="(name, gateway) in gateways.getAllSources()">
-					<div class="row" ng-repeat="(code, asset) in gateway.assets">
-						<div class="row__fixedAsset">
-							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
-								code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
-						</div>
-						<div class="row__shareOption">
-							<button class="s-button btn btn-danger" ng-show="hasLine(asset.code, asset.issuer) && !hasBalance(asset.code, asset.issuer)" ng-click="delTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_remove' | translate}}</button>
-							<button class="s-button btn btn-warning" ng-show="hasLine(asset.code, asset.issuer) && hasBalance(asset.code, asset.issuer)" ng-disabled="true">{{'trust_remove_desc' | translate}}</button>
-							<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
-						</div>
-					</div>
+				<div class="row">
+					充值
+				</div>
+				<div class="row">
+					提现
 				</div>
 			</div>
 		</div>

@@ -3,6 +3,7 @@ var gateways = {
 		'ripplefox.com' : {
 			name : 'ripplefox.com',
 			website : 'https://ripplefox.com/anchor/',
+			deposit_api : true,
 			assets : { 
 				'CNY' : {code : 'CNY', issuer : 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'},
 			},
@@ -11,6 +12,7 @@ var gateways = {
 		'naobtc.com' : {
 			name : 'naobtc.com',
 			website : 'https://naobtc.com/',
+			deposit_api : true,
 			assets : {
 				'BTC' : {code : 'BTC', issuer : 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH'},
 			},
