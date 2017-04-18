@@ -3,6 +3,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	$scope.bridges = {};
 	$scope.anchor = SettingFactory.getBridgeService();
 	$scope.anchor_logo;
+	$scope.anchor_withdraw;
 	$scope.init = function(){
 		var anchors = $rootScope.gateways.getAllSources();
 		for (var name in anchors) {
@@ -12,6 +13,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			}
 			if (name == $scope.anchor) {
 				$scope.anchor_logo = anchor.logo;
+				$scope.anchor_withdraw = anchor.withdraw_info;
+				if (SettingFactory.getLang() == 'cn') {
+					$scope.anchor_withdraw = anchor.withdraw_info_cn;
+				}
 			}
 		}
 	};
@@ -47,8 +52,8 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		}).then(function(res) {
 			$scope.deposit[code].deposit_info = res.data.deposit_info;
 			$scope.deposit[code].extra_info = res.data.extra_info;
-			if (res.data.extra_info_cn) {
-				$scope.deposit[code].extra_info_cn = res.data.extra_info_cn;
+			if (res.data.extra_info_cn && SettingFactory.getLang() == 'cn') {
+				$scope.deposit[code].extra_info = res.data.extra_info_cn;
 			}
 		}).catch(function(err) {
 			console.error(err);
@@ -59,6 +64,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	    SettingFactory.setBridgeService(name);
 	    $scope.anchor = name;
 	    $scope.anchor_logo = $scope.bridges[name].logo;
+	    $scope.anchor_withdraw = $scope.bridges[name].withdraw_info;
+		if (SettingFactory.getLang() == 'cn') {
+			$scope.anchor_withdraw = $scope.bridges[name].withdraw_info_cn;
+		}
 	    $scope.resolve();
 	};
 	

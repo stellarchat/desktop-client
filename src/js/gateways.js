@@ -13,6 +13,8 @@ var gateways = {
 			name : 'naobtc.com',
 			website : 'https://naobtc.com/',
 			deposit_api : true,
+			withdraw_info : 'Just input 1BTCAddressYouProvided*naobtc.com in the send page. You can just input the bitcoin address if naobtc.com is the default bitcoin service.',
+			withdraw_info_cn : '在发送页面输入“1BTCAddressYouProvided*naobtc.com”即可。如果naobtc.com是默认的比特服务，只要输入比特地址即可。',
 			assets : {
 				'BTC' : {code : 'BTC', issuer : 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH'},
 			},

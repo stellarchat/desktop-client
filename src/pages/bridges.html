@@ -27,22 +27,26 @@
 					</ul>
 				</div>
 			</div>
-			<div class="AddTrustFromDirectory">
-				<div class="row">
-					充值
+		</div>
+		<div class="island">
+			<div class="island__header" translate="deposit">Deposit</div>
+			<div class="row" ng-repeat="(code, info) in deposit">
+				<div class="row_bridge">
+					<span style="margin-right: 8px;"><strong>{{code}}</strong></span>
 				</div>
-				<div class="row" ng-repeat="(code, info) in deposit">
-					<div class="row__shareOption">
-						{{code}}
-					</div>
-					<div class="row__shareOption">
-						{{info.deposit_info}}<br>
-						{{info.extra_info}}
-					</div>
+				<div class="row_bridge" style="flex: 1;">
+					<strong>{{info.deposit_info}}</strong>
 				</div>
-				<div class="row">
-					提现(开发中)
+				<div class="row_bridge" style="flex: 1;">
+					{{info.extra_info}}
 				</div>
+			</div>
+		</div>
+		
+		<div class="island">
+			<div class="island__header" translate="withdraw">Withdraw</div>
+			<div class="row">
+				{{anchor_withdraw}}
 			</div>
 		</div>
 	</div>
