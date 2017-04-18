@@ -31,8 +31,17 @@
 				<div class="row">
 					充值
 				</div>
+				<div class="row" ng-repeat="(code, info) in deposit">
+					<div class="row__shareOption">
+						{{code}}
+					</div>
+					<div class="row__shareOption">
+						{{info.deposit_info}}<br>
+						{{info.extra_info}}
+					</div>
+				</div>
 				<div class="row">
-					提现
+					提现(开发中)
 				</div>
 			</div>
 		</div>
