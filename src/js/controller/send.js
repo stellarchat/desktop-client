@@ -120,7 +120,11 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 						return;
 					}
 					$scope.real_address = '';
-					$scope.target_error.message = err.detail || err.message;
+					if (typeof err == "string") {
+						$scope.target_error.message = err;
+					} else {
+						$scope.target_error.message = err.detail || err.message;
+					}
 					$scope.act_loading = false;
 					$scope.$apply();
 				});
