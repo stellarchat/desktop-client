@@ -68,6 +68,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		if (SettingFactory.getLang() == 'cn') {
 			$scope.anchor_withdraw = $scope.bridges[name].withdraw_info_cn;
 		}
+		$scope.deposit = {};
 	    $scope.resolve();
 	};
 	
