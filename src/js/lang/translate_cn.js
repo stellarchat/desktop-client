@@ -144,6 +144,7 @@ var translate_cn = {
 	dw_desc_line1 : '如果你要充值或提现法币和其他链上的币，你需要挑选一个锚点服务商。',
 	dw_desc_line2 : '你可以从下面的下拉框里选择一个锚点。它们是我们从社区挑选并实现了加强版联邦协议的锚点。',
 	anchor : '锚点',
+	no_trust : '请先授信此资产',
 		
 	Stellar : '恒星',
 	stellar_desktop_client : '恒星桌面钱包',
