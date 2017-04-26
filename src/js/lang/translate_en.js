@@ -143,6 +143,7 @@ var translate_en = {
 	dw_desc_line1 : 'If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.',
 	dw_desc_line2 : 'You\'ll find a selection of service providers in the tabs below. Start by choosing a provider. ',
 	anchor : 'Anchor',
+	no_trust : 'Please create the trust line first.',
 		
 	Stellar : 'Stellar',
 	stellar_desktop_client : 'Stellar Desktop Client',

@@ -34,11 +34,14 @@
 				<div class="row_bridge">
 					<span style="margin-right: 8px;"><strong>{{code}}</strong></span>
 				</div>
-				<div class="row_bridge" style="flex: 1;">
+				<div class="row_bridge" style="flex: 1;" ng-hide="info.no_trust">
 					<strong>{{info.deposit_info}}</strong>
 				</div>
-				<div class="row_bridge" style="flex: 1;">
+				<div class="row_bridge" style="flex: 1;" ng-hide="info.no_trust">
 					{{info.extra_info}}
+				</div>
+				<div class="row_bridge row__message--error" style="flex: 1;" ng-show="info.no_trust">
+					<strong translate="no_trust">Please create the trust line first.</strong>
 				</div>
 			</div>
 		</div>

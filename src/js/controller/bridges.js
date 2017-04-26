@@ -34,7 +34,11 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				$scope.deposit[asset.code] = {
 					issuer : asset.issuer
 				};
-				$scope.resolveDeposit(deposit_api, asset.code);
+				if ($scope.hasLine(asset.code, asset.issuer)) {
+					$scope.resolveDeposit(deposit_api, asset.code);
+				} else {
+					$scope.deposit[asset.code].no_trust = true;
+				}
 			});
 			$scope.$apply();
 		}).catch(function(err){
@@ -72,5 +76,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	    $scope.resolve();
 	};
 	
-	
+	$scope.hasLine = function(code, issuer) {
+		if (!$rootScope.lines[code] || !$rootScope.lines[code][issuer]) {
+			return false;
+		}
+		return $rootScope.lines[code][issuer].limit > 0;
+	};
 } ]);
