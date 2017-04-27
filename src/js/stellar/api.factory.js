@@ -4,13 +4,19 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		seed : undefined,
 		closeAccountStream : undefined,
 		closeTxStream : undefined,
-		balances : {}
+		balances : {},
+		seq : {
+			snapshot : "",
+			time : new Date()
+		}
 	};
 	
 	api.logout = function() {
 		this.adress = undefined;
 		this.seed = undefined;
 		this.balances = {};
+		this.seq.snapshot = "";
+		this.seq.time = new Date();
 		if (this.closeAccountStream) {
 			this.closeAccountStream();
 			this.closeAccountStream = undefined;
@@ -20,6 +26,21 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			this.closeTxStream = undefined;
 		}
 		orderbook.close();
+	}
+	
+	api.updateSeq = function(account) {
+		var self = this;
+		var now = new Date();
+		if (now - self.seq.time > 5000) {
+			self.seq.snapshot = account.sequence;
+		} else {
+			if (account.sequence <= self.seq.snapshot) {
+				account.incrementSequenceNumber();
+				console.debug('Sequence: ' + self.seq.snapshot + ' -> ' + account.sequence);
+				self.seq.snapshot = account.sequence;
+			}
+		}
+		self.seq.time = now;
 	}
 	
 	api.random = function() {
@@ -108,6 +129,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var self = this;
 		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var payment = StellarSdk.Operation.createAccount({
 				destination: target,
 				startingBalance: amount.toString()
@@ -128,6 +150,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var self = this;
 		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var payment = StellarSdk.Operation.payment({
 				destination: target,
 				asset: StellarSdk.Asset.native(),
@@ -149,6 +172,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var self = this;
 		amount = round(amount, 7);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var payment = StellarSdk.Operation.payment({
 				destination: target,
 				asset: new StellarSdk.Asset(currency, issuer),
@@ -258,6 +282,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var asset = new StellarSdk.Asset(code, issuer);
 		console.debug('Turst asset', asset, limit);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var op = StellarSdk.Operation.changeTrust({
 				asset: asset,
 				limit: limit.toString()
@@ -281,6 +306,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		opt[name] = value
 		console.debug('set option:', name, '-', value);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var op = StellarSdk.Operation.setOptions(opt);
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
 	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
@@ -354,6 +380,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		amount = round(amount, 7);
 		console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var op = StellarSdk.Operation.manageOffer({
 				selling: selling,
 				buying: buying,
@@ -397,6 +424,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var self = this;
 		console.debug('Cancel Offer', offer_id);
 		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
 			var op = StellarSdk.Operation.manageOffer({
 				selling: StellarSdk.Asset.native(),
 				buying: new StellarSdk.Asset('DUMMY', account.accountId()),
