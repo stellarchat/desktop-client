@@ -61,6 +61,13 @@ myApp.factory('SettingFactory', function($window) {
 				counter_issuer : counter_issuer
 			}
 			$window.localStorage['tradepair'] = JSON.stringify(trade_pair);
+		},
+		
+		getBridgeService : function() {
+			return $window.localStorage['bridge_service'] || 'ripplefox.com';
+		},
+		setBridgeService : function(anchor_name) {
+			$window.localStorage['bridge_service'] = anchor_name;
 		}
 	};
 });

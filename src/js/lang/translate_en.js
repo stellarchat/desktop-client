@@ -45,7 +45,7 @@ var translate_en = {
 	trust_removeing : 'Removing...',
 	trust_add : 'Create trust line for',
 	fed_add : 'Add trust via federation',
-	fed_desc: 'You can add trust using the federation url.',
+	fed_desc: 'You can add trust using the federation URL.',
 	fed_url : 'Federation URL',
 	fed_unable : 'Unable to find currencies for',
 	fed_loading: 'Loading currencies for',
@@ -57,8 +57,8 @@ var translate_en = {
 	/** send **/
 	send : 'Send',
 	send_pick : 'Choose asset to send',
-	send_desc : 'Currently we only support to send asset directly.',
-	send_note : 'Note: The target address should also trust the asset you send.',
+	send_desc : 'Currently we only support sending assets directly.',
+	send_note : 'Note: The target address must also trust the asset you are sending.',
 	recipient : 'Recipient',
 	memo: 'Memo',
 	invalid_domain : 'is unavailable',
@@ -134,12 +134,22 @@ var translate_en = {
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
 	inflation_fox  : 'Vote to RippleFox',
+	
+	/** Deposit & withdrawl **/
+	deposit_withdraw : 'Deposit/Withdraw',
+	deposit  : 'Deposit',
+	withdraw : 'Withdraw',
+	dw_coin  : 'Depositing or withdrawing coins',
+	dw_desc_line1 : 'If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.',
+	dw_desc_line2 : 'You\'ll find a selection of service providers in the tabs below. Start by choosing a provider. ',
+	anchor : 'Anchor',
+	no_trust : 'Please create the trust line first.',
 		
 	Stellar : 'Stellar',
 	stellar_desktop_client : 'Stellar Desktop Client',
 	app_open_source  : 'This app is open source now.',
 	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret carefully.',
-	app_feedback     : 'You can submit a issue on github if any problem.',
+	app_feedback     : 'You can submit an issue on github if there are any problems.',
 	wallet : 'Wallet',
 	logout : 'Logout'
 }

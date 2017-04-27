@@ -64,6 +64,14 @@ code {
   background: #346aa9;
 }
 
+.row_bridge {
+	display: flex;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	flex: 0;
+}
+
 /*--------------------------------------------------
 .currency-summary {
   font-size: 18px;
