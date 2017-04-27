@@ -15,7 +15,7 @@
 ## build
 
 - Run `npm install`
-- You need to create a softlink under the src folder. You can run `ln -s ../node_modules ./node_modules`
+- You need to create a softlink under the src folder. You can run `ln -s ../node_modules ./node_modules`. In windows, you can run `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
 - Run `nw src` or Run `node build-nw.js`
 
 
@@ -36,5 +36,5 @@
 ## 运行
 
 - 安装各种依赖包 `npm install`
-- 你还要建一个文件夹的软链接，这样src文件夹也能看到外面的node_modules， 在src下面跑一下 `ln -s ../node_modules ./node_modules`
+- 你还要建一个文件夹的软链接，这样src文件夹也能看到外面的node_modules。 在src下面跑一下 `ln -s ../node_modules ./node_modules`。如果在windows上，运行 `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
 - 开发可以在安装好nwjs后运行 `nw src`，编译就直接跑  `node build-nw.js`

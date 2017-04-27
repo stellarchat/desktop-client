@@ -143,7 +143,6 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
 		}
 	}
-	$rootScope.fed_name = "";
 	$rootScope.resolveFed = function() {
 		StellarApi.getFedName(SettingFactory.getFedNetwork(), $rootScope.address, function(err, name){
 			if (err) {
@@ -161,6 +160,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	reset();
 	function reset() {
 		console.warn('reset');
+		$rootScope.fed_name = "";
 		$rootScope.address = 'undefined';
 		$rootScope.lines = {};
 		$rootScope.balance = 0;

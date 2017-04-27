@@ -234,12 +234,13 @@
 								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
-							<tr class="ManageOffers__table__row" ng-repeat="item in offers.bid">
+							<tr class="ManageOffers__table__row" ng-repeat="(id, item) in offers.bid">
 								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id)" translate="offer_cancel">Cancel</a>
+									<a href="javascript:" ng-click="cancel(item.id, 'bid')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
 						</tbody></table>
@@ -253,12 +254,13 @@
 								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
-							<tr class="ManageOffers__table__row" ng-repeat="item in offers.ask">
+							<tr class="ManageOffers__table__row" ng-repeat="(id, item) in offers.ask">
 								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id)" translate="offer_cancel">Cancel</a>
+									<a href="javascript:" ng-click="cancel(item.id, 'ask')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
 						</tbody></table>
