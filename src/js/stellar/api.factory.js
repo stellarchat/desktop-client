@@ -31,15 +31,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	api.updateSeq = function(account) {
 		var self = this;
 		var now = new Date();
-		if (now - self.seq.time > 5000) {
-			self.seq.snapshot = account.sequence;
-		} else {
-			if (account.sequence <= self.seq.snapshot) {
+		// In the same ledger
+		if (now - self.seq.time < 5000) {
+			for (;account.sequence <= self.seq.snapshot;) {
 				account.incrementSequenceNumber();
 				console.debug('Sequence: ' + self.seq.snapshot + ' -> ' + account.sequence);
-				self.seq.snapshot = account.sequence;
 			}
 		}
+		self.seq.snapshot = account.sequence;
 		self.seq.time = now;
 	}
 	
