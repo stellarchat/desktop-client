@@ -75,6 +75,8 @@ var translate_cn = {
 	latest_payments : '最近的收付记录',
 	latest_trades : '最近的所有操作',
 	you : '你',
+	account_id : '账号',
+	operation  : '操作',
 	
 	choose : '选择',
 	example : '示例',
