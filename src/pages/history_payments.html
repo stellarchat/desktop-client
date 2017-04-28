@@ -23,10 +23,10 @@
             		</thead>
             		<tbody>
             			<tr class="HistoryTable-row" ng-repeat="tx in payments">
-            				<td class="address">{{tx.counterparty}}</td>
+            				<td class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">~{{tx.nick}}</span></td>
 	            			<td class="amount">
-								<span class="debit" ng-if="!tx.isInbound"><span class="amount-sign">-</span>{{tx.amount}}</span>
-                           		<span class="credit" ng-if="tx.isInbound"><span class="amount-sign">+</span>{{tx.amount}}</span>
+								<span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
+                           		<span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
                            		<strong>{{tx.asset.code}}</strong>
 							</td>
 	            			<td>{{tx.id}}<br>{{tx.type}}</td>

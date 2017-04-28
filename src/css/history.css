@@ -39,7 +39,9 @@
 	word-break: break-all;
 }
 
-
+.HistoryTable-row .bold {
+	font-weight: bold; 
+}
 
 
 .feed {
