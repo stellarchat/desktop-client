@@ -75,6 +75,8 @@ var translate_en = {
 	latest_payments : 'Latest Payments',
 	latest_trades : 'Latest Transactions',
 	you: 'You',
+	account_id : 'Account ID',
+	operation  : 'Operation',
 	
 	choose : 'Choose',
 	example : 'example',
