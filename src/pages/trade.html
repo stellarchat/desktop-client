@@ -68,10 +68,16 @@
 									website="{{native.website}}" code="XLM" address=""></gateway>
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick('base', 'XLM', '')" translate="as_base">As Base Asset</button>
+							<button class="s-button btn btn-success"
+								ng-click="pick('base', 'XLM', '')"
+								ng-disabled="isBase('XLM', '')"
+								translate="as_base">As Base Asset</button>
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick('counter', 'XLM', '')" translate="as_counter">As Counter Asset</button>
+							<button class="s-button btn btn-success"
+								ng-click="pick('counter', 'XLM', '')"
+								ng-disabled="isCounter('XLM', '')"
+								translate="as_counter">As Counter Asset</button>
 						</div>
 					</div>
 					<div ng-repeat="(code, sublines) in lines">
@@ -81,10 +87,16 @@
 										website="{{gateway.website}}" code="{{line.code}}" address="{{line.issuer}}"></gateway>
 							</div>
 							<div class="row__shareOption">
-								<button class="s-button btn btn-success" ng-click="pick('base', line.code, line.issuer)" translate="as_base">As Base Asset</button>
+								<button class="s-button btn btn-success"
+									ng-click="pick('base', line.code, line.issuer)"
+									ng-disabled="isBase(line.code, line.issuer)"
+									translate="as_base">As Base Asset</button>
 							</div>
 							<div class="row__shareOption">
-								<button class="s-button btn btn-success" ng-click="pick('counter', line.code, line.issuer)" translate="as_counter">As Counter Asset</button>
+								<button class="s-button btn btn-success"
+									ng-click="pick('counter', line.code, line.issuer)"
+									ng-disabled="isCounter(line.code, line.issuer)"
+									translate="as_counter">As Counter Asset</button>
 							</div>
 						</div>
 					</div>
