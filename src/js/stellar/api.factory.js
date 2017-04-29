@@ -259,6 +259,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		console.log('lines', lines);
 		$scope.balance = native;
 		$scope.lines = lines;
+		$scope.$broadcast("balanceChange");
 	}
 	
 	api.getInfo = function(address, callback) {
