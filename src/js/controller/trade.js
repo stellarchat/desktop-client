@@ -327,6 +327,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
+	$scope.isBase = function(code, issue) {
+		return sameAsset(code, issue, $scope.base_code, $scope.base_issuer);
+	}
+	$scope.isCounter = function(code, issue) {
+		return sameAsset(code, issue, $scope.counter_code, $scope.counter_issuer);
+	}
+	
 	function sameAsset(code, issuer, code2, issuer2) {
 		if (code == 'XLM') {
 			return code == code2;

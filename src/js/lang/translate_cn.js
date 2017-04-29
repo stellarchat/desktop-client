@@ -34,6 +34,7 @@ var translate_cn = {
 	
 	/** Balance & Trust **/
 	balance : '余额',
+	estimated : '资产折合：',
 	trust : '授信',
 	asset : '资产',
 	trust_limit : '授信额度',
