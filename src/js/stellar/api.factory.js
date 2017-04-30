@@ -5,6 +5,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		closeAccountStream : undefined,
 		closeTxStream : undefined,
 		balances : {},
+		subentry : 0,
 		seq : {
 			snapshot : "",
 			time : new Date()
@@ -15,6 +16,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		this.adress = undefined;
 		this.seed = undefined;
 		this.balances = {};
+		this.subentry = 0;
 		this.seq.snapshot = "";
 		this.seq.time = new Date();
 		if (this.closeAccountStream) {
@@ -214,11 +216,17 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var self = this;
 		self.closeAccountStream = self.server.accounts().accountId(self.address).stream({
     		onmessage: function(res){
+    			if (self.subentry !== res.subentry_count) {
+    				console.debug('subentry: ' + self.subentry + ' -> ' + res.subentry_count);
+    				self.subentry = res.subentry_count;
+    				$scope.reserve = self.subentry * 10 + 20;
+    				$scope.$apply();
+    			}
     			if(!_.isEqual(self.balances, res.balances)) {
+    				console.debug('balances: ', self.balances, res.balances);
     				self.balances = res.balances;
     				self.updateRootBalance();
     				$scope.$apply();
-    				console.warn('balance', self.balances, res);
     			}
     		}
     	});
@@ -329,6 +337,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				return;
 			}
 			self.balances = data.balances;
+			self.subentry = data.subentry_count;
+			$scope.reserve = self.subentry * 10 + 20;
 			self.updateRootBalance();
 			$scope.$apply();
 			if (callback) { callback(); }

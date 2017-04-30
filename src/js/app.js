@@ -134,7 +134,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	};
 	
 	
-	$rootScope.balance = 88; //native asset;
+	$rootScope.balance = 0; //native asset;
+	$rootScope.reserve = 0;
 	$rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
 	$rootScope.getBalance = function(code, issuer) {
 		if (code == 'XLM') {
@@ -164,6 +165,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		$rootScope.address = 'undefined';
 		$rootScope.lines = {};
 		$rootScope.balance = 0;
+		$rootScope.reserve = 0;
 		
 		$rootScope.offers = {};
 		$rootScope.events = [];

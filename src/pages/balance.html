@@ -21,7 +21,10 @@
 							<gateway name="{{native.name}}" logo="{{native.logo}}"
 								website="{{native.website}}" code="XLM" address=""></gateway>
 						</td>
-						<td class="BalancesTable__row__amount"><span>{{balance | number : 3}} </span></td>
+						<td class="BalancesTable__row__amount">
+							<span>{{balance | number : 3}}</span><br>
+							<span class="BalancesTable__row__removeLink">({{'reserve' | translate}} {{reserve | number : 3}})</span>
+						</td>
 						<td></td>
 					</tr>
 				</tbody>
