@@ -44,7 +44,6 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi',
 			} else {
 				if (data.bids && data.bids[0]) {
 					$scope.price[code + '.' + issuer] = parseFloat(data.bids[0].price);
-					console.debug('Price ' + code + '.' + issuer, $scope.price[code + '.' + issuer]);
 				}
 			}
 			callback();
@@ -78,6 +77,5 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi',
 	
 	$scope.$on("balanceChange", function() {
 		$scope.estimate();
-		console.debug('balanceChange', $scope.estimated_value);
 	});
 } ]);
