@@ -1,0 +1,49 @@
+.bridge a {
+	text-decoration: none;
+}
+
+.brdige_card {
+	background: #f4f4f5;
+	border-radius: 3px;
+	display: flex;
+	padding: 8px 16px 8px 8px;
+	height: 64px;
+	align-items: center;
+	border: 1px solid #dedfe0;
+	margin-right: 18px;
+}
+
+.brdige_card_logo {
+	width: 50px;
+	height: 50px;
+	flex: 0 0 auto;
+	margin-right: 16px;
+	border-radius: 3px;
+}
+
+.brdige_card_logo_image {
+	width: 50px;
+	height: 50px;
+	margin: 0;
+	display: block;
+	border-radius: 3px;
+}
+
+.brdige_card_content {
+	overflow: hidden;
+}
+
+.brdige_card_code {
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 24px;
+	margin-right: 8px;
+}
+
+.island .active {
+    background: #057EEF;
+    border: 1px solid #057EEF;
+    color: rgba(255,255,255,1);
+    box-shadow: 2px 7px 30px rgba(0,0,0,.4);
+    transition: none;
+}

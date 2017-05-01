@@ -82,4 +82,65 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		}
 		return $rootScope.lines[code][issuer].limit > 0;
 	};
+	
+	// a special case for CNY.ripplefox anchor
+	$scope.service = 'alipay';
+	$scope.isActive = function(type) {
+		return $scope.service == type;
+	}
+	$scope.changeService = function(type) {
+		if ($scope.service !== type) {
+			$scope.service = type;
+			$scope.resolveService();
+		}
+	}
+	
+	$scope.resolveService = function() {
+		console.debug('resolve', $scope.service);
+		var prestr = $scope.service;
+		var domain = "ripplefox.com";
+		$scope.service_loading = true;
+		StellarApi.federationServer(domain).then(function(server){
+			server.resolveAddress(prestr).then(function(data){
+				console.debug(prestr, data);
+				if (data.error) {
+					$scope.service_error = data.detail || data.error;
+				} else {
+					$scope.service_error = '';
+					$scope.real_address = data.account_id;
+					$scope.extra_fields = data.extra_fields;
+					if (data.memo) {
+						$scope.memo = data.memo.toString();
+						$scope.memo_type = data.memo_type;
+						$scope.memo_provided = true;
+					} else {
+						$scope.memo = '';
+						$scope.memo_provided = false;
+					}
+					console.debug(data);
+				}
+				$scope.service_loading = false;
+				$scope.$apply();
+			}).catch(function(err){
+				if (prestr !== $scope.service) {
+					return;
+				}
+				$scope.real_address = '';
+				if (typeof err == "string") {
+					$scope.service_error = err;
+				} else {
+					$scope.service_error = err.detail || err.message;
+				}
+				$scope.service_loading = false;
+				$scope.$apply();
+			});
+		}).catch(function(err){
+			if (prestr !== $scope.service) {
+				return;
+			}
+			$scope.service_loading = false;
+			$scope.$apply();
+		});
+	};
+	$scope.resolveService();
 } ]);
