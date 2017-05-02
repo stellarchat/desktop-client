@@ -28,8 +28,8 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			console.debug(stellarToml);
 			var currencies = stellarToml.CURRENCIES;
 			var deposit_api = stellarToml.DEPOSIT_SERVER;
+			$scope.fed = new StellarSdk.FederationServer(stellarToml.FEDERATION_SERVER, $scope.anchor, {});
 			if (!deposit_api) { return; }
-			
 			currencies.forEach(function(asset){
 				$scope.deposit[asset.code] = {
 					issuer : asset.issuer
@@ -41,6 +41,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				}
 			});
 			$scope.$apply();
+			
+			if ($scope.anchor == 'ripplefox.com') {
+				$scope.resolveService();
+			}
 		}).catch(function(err){
 			console.error(err); 
 		});
@@ -95,13 +99,19 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		}
 	}
 	
+	$scope.service_fed = "";
+	$scope.service_currency = "CNY"; //{"code":"CNY","issuer":"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"};
 	$scope.resolveService = function() {
 		console.debug('resolve', $scope.service);
 		var prestr = $scope.service;
 		var domain = "ripplefox.com";
+		$scope.extra_fields = [];
+		$scope.mulipleAsset = false;
+		$scope.service_error = '';
 		$scope.service_loading = true;
-		StellarApi.federationServer(domain).then(function(server){
-			server.resolveAddress(prestr).then(function(data){
+		//StellarApi.federationServer(domain).then(function(server){
+			//console.log(server);
+		$scope.fed.resolveAddress(prestr).then(function(data){
 				console.debug(prestr, data);
 				if (data.error) {
 					$scope.service_error = data.detail || data.error;
@@ -109,6 +119,8 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 					$scope.service_error = '';
 					$scope.real_address = data.account_id;
 					$scope.extra_fields = data.extra_fields;
+					$scope.extra_assets = [{code:'CNY', issuer:"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"}, {code:'XLM', issuer:""}];
+					$scope.mulipleAsset = $scope.extra_assets.length > 1;
 					if (data.memo) {
 						$scope.memo = data.memo.toString();
 						$scope.memo_type = data.memo_type;
@@ -134,13 +146,13 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				$scope.service_loading = false;
 				$scope.$apply();
 			});
-		}).catch(function(err){
-			if (prestr !== $scope.service) {
-				return;
-			}
-			$scope.service_loading = false;
-			$scope.$apply();
-		});
+//		}).catch(function(err){
+//			if (prestr !== $scope.service) {
+//				return;
+//			}
+//			$scope.service_loading = false;
+//			$scope.$apply();
+//		});
 	};
-	$scope.resolveService();
+	
 } ]);

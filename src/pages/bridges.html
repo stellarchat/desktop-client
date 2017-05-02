@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		
-		<div class="island" ng-hide="true">
+		<div class="island" ng-hide="false">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row bridge">
 				<a href="javascript:" ng-click="changeService('alipay')">
@@ -71,22 +71,55 @@
 			</div>
 			
 			<div class="island__paddedContent">
-				<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row form-group">
-				  <div ng-switch-when="text" class="col-xs-12 col-sm-6 col-md-5">
-				    <label ng-bind="field.label"></label>
-				    <p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-				    <input type="text" ng-model="field.value" ng-required="{{field.required}}" class="form-control"/>
-				  </div>
-				  <div ng-switch-when="select" class="col-xs-12 col-sm-6 col-md-5">
-				    <label ng-bind="field.label"></label>
-				    <p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-				    <select type="text" ng-model="field.value" ng-required="{{field.required}}" class="form-control">
-				      <option ng-repeat="option in field.options" ng-bind="option.label" value="{{option.value}}" ng-selected="option.selected" ng-disabled="option.disabled"></option>
-				    </select>
-				  </div>
+				<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
+					<div ng-switch-when="label" class="col-xs-12 col-md-10">
+						<label ng-bind="field.label"></label>
+						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+					</div>
+					<div ng-switch-when="text" class="col-xs-12 col-md-10">
+						<label ng-bind="field.label"></label>
+						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+						<input type="text" ng-model="field.value" ng-required="{{field.required}}" class="form-control" />
+					</div>
+					<div ng-switch-when="select" class="col-xs-12 col-md-10">
+						<label ng-bind="field.label"></label>
+						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+						<select type="text" ng-model="field.value"
+							ng-required="{{field.required}}" class="form-control">
+							<option ng-repeat="option in field.options"
+								ng-bind="option.label" value="{{option.value}}"
+								ng-selected="option.selected" ng-disabled="option.disabled"></option>
+						</select>
+					</div>
+				</div>
+				<div class="row form-group brdige_card_code" ng-show="service_loading">
+					<label><i class="fa fa-spinner fa-pulse"></i> 正在解析</label>
+				</div>
+				<div class="form-group service_alert" ng-show="service_error">
+					<div>{{service_error}}</div>
 				</div>
 				<div class="row form-group">
-					<label for="send_amount">对方将收到</label>
+					<div class="col-xs-12 col-sm-6 col-md-5">
+						<label>对方将收到</label>
+						<div class="amount-wrap">
+							<input type="number" autocomplete="off" placeholder="0.00"
+								class="input amount-big form-control"
+								ng-model="service_amount"
+								required="true">
+							<select class="select currency"
+								ng-model="service_currency"
+								ng-disabled = "!mulipleAsset"
+								ng-class="{ 'disabled': extra_assets.length == 1}" required="">
+								<!-- ng-options="asset.code for asset in extra_assets"> -->
+								
+								<option value="{{asset.code}}" ng-repeat="asset in extra_assets" ng-selected="service_currency == asset.code">{{asset.code}}</option>
+							</select>
+						</div>
+					</div>
+					
+					
+
+
 					<!-- ngIf: !send.currency_force -->
 					<!-- ngIf: send.currency_force -->
 					<div ng-if="send.currency_force" class="row ng-scope">
@@ -107,17 +140,6 @@
 					<!-- end ngIf: send.currency_force -->
 					<div rp-errors="send_amount_currency" class="errorGroup">
 						<!-- rpErrorOn: rpRestrictCurrencies -->
-					</div>
-					<div rp-errors="send_amount" class="errorGroup">
-						<!-- rpErrorOn: required -->
-						<!-- rpErrorOn: rpAmount -->
-						<!-- rpErrorOn: rpAmountPositive -->
-						<!-- rpErrorOn: rpMaxAmount -->
-						<div
-							ng-show="send.recipient_info.disallow_xrp &amp;&amp; send.currency_code=='XRP'"
-							class="error ng-hide">对方不接受 XRP 付款。你确定要给他发送 XRP吗？</div>
-						<div ng-show="send.trust_limit" class="notice ng-binding ng-hide">zfb@rip…
-							对你有 n/a . 的信任额度</div>
 					</div>
 				</div>
 

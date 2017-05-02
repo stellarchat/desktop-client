@@ -47,3 +47,90 @@
     box-shadow: 2px 7px 30px rgba(0,0,0,.4);
     transition: none;
 }
+
+.service_alert {
+    border: 1px solid #d12;
+    background: #f8cfd3;
+    display: block;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.amount-wrap, .input, .rc-list li, .rc-list li a, .rc-list-menu li, ul.wallets-list li
+	{
+	position: relative
+}
+
+.input.amount-big {
+	font-size: 32px;
+	font-weight: 400;
+	padding-right: 130px;
+	margin-bottom: 0;
+	height: 60px;
+}
+
+select.select {
+	background: url(../img/arrow-down-blue.png) 95% no-repeat;
+	padding: 10px 30px 10px 10px;
+	font-size: 16px;
+	border: none;
+	font-weight: 400;
+	outline: 0;
+	line-height: auto;
+	cursor: pointer;
+	border-radius: 5px;
+	color: #057EEF;
+	-moz-appearance: none;
+	appearance: none;
+	background-size: 20px 11px;
+	background-color: rgba(255, 255, 255, 0)
+}
+
+select.select:hover {
+	background-color: #e6e6e6
+}
+
+select.select.currency {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding-right: 50px;
+	background-position: 80%;
+	padding-left: 30px;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-border-top-left-radius: 0;
+	-moz-border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	z-index: 2;
+	height: 100%;
+	font-size: 20px;
+	font-weight: 600;
+	border: 2px solid rgba(5, 126, 239, 0)
+}
+
+select.select.currency.disabled {
+	background-image: none;
+	cursor: default;
+	padding-right: 30px
+}
+
+select.select.currency.disabled:hover {
+	background-color: rgba(255, 255, 255, 0)
+}
+
+select.select option {
+	background-color: rgba(255, 255, 255, .9);
+	color: #666;
+	padding: 3px 6px
+}
+
+select.select option:hover {
+	background-color: #00AFEF
+}
+
+.input, select.select {
+	-webkit-appearance: none
+}
