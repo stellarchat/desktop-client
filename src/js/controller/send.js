@@ -78,27 +78,23 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 				server.resolveAddress(prestr).then(function(data){
 					console.debug(prestr, data);
 					$scope.act_loading = false;
-					if (data.error) {
-						$scope.target_error.message = data.detail || data.error;
+					$scope.target_error.message = '';
+					$scope.real_address = data.account_id;
+					if (data.memo) {
+						$scope.memo = data.memo.toString();
+						$scope.memo_type = data.memo_type;
+						$scope.memo_provided = true;
 					} else {
-						$scope.target_error.message = '';
-						$scope.real_address = data.account_id;
-						if (data.memo) {
-							$scope.memo = data.memo.toString();
-							$scope.memo_type = data.memo_type;
-							$scope.memo_provided = true;
-						} else {
-							$scope.memo = '';
-							$scope.memo_provided = false;
-						}
-						console.debug(data);
-						$scope.resolveAccountInfo();
+						$scope.memo = '';
+						$scope.memo_provided = false;
 					}
+					$scope.resolveAccountInfo();
 					$scope.$apply();
 				}).catch(function(err){
 					if (snapshot !== $scope.target_address) {
 						return;
 					}
+					console.debug(prestr, err);
 					$scope.real_address = '';
 					if (typeof err == "string") {
 						$scope.target_error.message = err;
