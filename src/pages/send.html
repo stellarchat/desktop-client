@@ -106,7 +106,7 @@
 					</div>
 					
 					<div class="row__message" ng-show="act_loading">
-						{{'account_loading' | translate}} {{target_address}}
+						<i class="fa fa-spinner fa-pulse"></i> {{'account_loading' | translate}} {{target_address}}
 					</div>
 					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
 						<ul class="AddTrust__errorList">
