@@ -24,10 +24,13 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	
 	$scope.deposit = {};
 	$scope.resolve = function(){
+		$scope.fed_url = "";
+		$scope.fed = undefined;
 		StellarSdk.StellarTomlResolver.resolve($scope.anchor).then(function(stellarToml) {
 			console.debug(stellarToml);
 			var currencies = stellarToml.CURRENCIES;
 			var deposit_api = stellarToml.DEPOSIT_SERVER;
+			$scope.fed_url = stellarToml.FEDERATION_SERVER;
 			$scope.fed = new StellarSdk.FederationServer(stellarToml.FEDERATION_SERVER, $scope.anchor, {});
 			if (!deposit_api) { return; }
 			currencies.forEach(function(asset){
@@ -40,11 +43,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 					$scope.deposit[asset.code].no_trust = true;
 				}
 			});
-			$scope.$apply();
-			
 			if ($scope.anchor == 'ripplefox.com') {
 				$scope.resolveService();
 			}
+			$scope.$apply();
 		}).catch(function(err){
 			console.error(err); 
 		});
@@ -99,28 +101,36 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		}
 	}
 	
-	$scope.service_fed = "";
-	$scope.service_currency = "CNY"; //{"code":"CNY","issuer":"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"};
+	$scope.resetService = function(){
+		$scope.account_id = "";
+		$scope.extra_fields = [];
+		$scope.extra_assets = [];
+		$scope.mulipleAsset = false;
+		
+		$scope.service_error = "";
+		$scope.service_currency = "";
+		$scope.asset = {};
+		$scope.quote_error = "";
+	}
+	
 	$scope.resolveService = function() {
 		console.debug('resolve', $scope.service);
 		var prestr = $scope.service;
 		var domain = "ripplefox.com";
-		$scope.extra_fields = [];
-		$scope.mulipleAsset = false;
-		$scope.service_error = '';
+		$scope.resetService();
 		$scope.service_loading = true;
-		//StellarApi.federationServer(domain).then(function(server){
-			//console.log(server);
+		
 		$scope.fed.resolveAddress(prestr).then(function(data){
 				console.debug(prestr, data);
 				if (data.error) {
 					$scope.service_error = data.detail || data.error;
 				} else {
-					$scope.service_error = '';
-					$scope.real_address = data.account_id;
+					$scope.account_id = data.account_id;
 					$scope.extra_fields = data.extra_fields;
 					$scope.extra_assets = [{code:'CNY', issuer:"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"}, {code:'XLM', issuer:""}];
 					$scope.mulipleAsset = $scope.extra_assets.length > 1;
+					$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
+					
 					if (data.memo) {
 						$scope.memo = data.memo.toString();
 						$scope.memo_type = data.memo_type;
@@ -155,4 +165,80 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 //		});
 	};
 	
+	$scope.$watch('service_currency', function () {
+      console.debug($scope.service_currency);
+      $scope.quote();
+    }, true);
+
+    $scope.$watch('service_amount', function () {
+    	 console.debug($scope.service_amount);
+    	 $scope.quote();
+    }, true);
+
+    $scope.$watch('extra_fields', function () {
+    	console.debug($scope.extra_fields);
+    	$scope.quote();
+    }, true);
+    
+    $scope.quote_data;
+    $scope.quote = function() {
+    	if (!$scope.serviceForm.$valid || !$scope.service_amount) {
+    		return;
+    	}
+    	
+    	var arr = $scope.service_currency.split(".");
+    	var data = {
+			type: "quote",
+			amount       : $scope.service_amount,
+			asset_code   : arr[0],
+			asset_issuer : arr[1],
+			account_id   : $scope.account_id,
+			address      : $rootScope.address
+        };
+    	$scope.extra_fields.forEach(function(field){
+    		if (field.name) {
+    			data[field.name] = field.value;
+    		}
+    	});
+    	
+    	var snapshot = JSON.stringify(data);
+    	$scope.quote_data = snapshot;
+    	
+    	$scope.asset = {};
+    	$scope.quote_error = "";
+    	$scope.quote_loading = true;
+		$http({
+			method: 'GET',
+			url: $scope.fed_url,
+			params: data
+		}).then(function(res) {
+			if (snapshot !== $scope.quote_data) {
+				return;
+			}
+			$scope.asset.amount = res.data.amount;
+			$scope.asset.code   = res.data.asset.code;
+			$scope.asset.issuer = res.data.asset.issuer;
+			var gateway = $rootScope.gateways.getSourceById($scope.asset.issuer);
+			$scope.asset.logo = gateway.logo;
+			$scope.asset.issuer_name = gateway.name;
+			
+			$scope.quote_loading = false;
+			console.debug(res.data);
+		}).catch(function(err) {
+			if (snapshot !== $scope.quote_data) {
+				return;
+			}
+			console.debug(err);
+			if (typeof err == "string") {
+				$scope.quote_error = err;
+			} else {
+				if (err.data && err.data.detail) {
+					$scope.quote_error = err.data.detail;
+				} else {
+					$scope.quote_error = err.message;
+				}
+			}
+			$scope.quote_loading = false;
+		});
+    }
 } ]);

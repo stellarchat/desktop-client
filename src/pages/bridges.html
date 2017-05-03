@@ -68,81 +68,95 @@
 						<div class="brdige_card_content"><span class="brdige_card_code">Bank</span></div>
 					</div>
 				</a>
+				<a href="javascript:" ng-click="changeService('ripple')">
+					<div ng-class="{brdige_card:true, active:isActive('ripple')}">
+						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
+						<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
+					</div>
+				</a>
 			</div>
 			
-			<div class="island__paddedContent">
-				<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
-					<div ng-switch-when="label" class="col-xs-12 col-md-10">
-						<label ng-bind="field.label"></label>
-						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-					</div>
-					<div ng-switch-when="text" class="col-xs-12 col-md-10">
-						<label ng-bind="field.label"></label>
-						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-						<input type="text" ng-model="field.value" ng-required="{{field.required}}" class="form-control" />
-					</div>
-					<div ng-switch-when="select" class="col-xs-12 col-md-10">
-						<label ng-bind="field.label"></label>
-						<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-						<select type="text" ng-model="field.value"
-							ng-required="{{field.required}}" class="form-control">
-							<option ng-repeat="option in field.options"
-								ng-bind="option.label" value="{{option.value}}"
-								ng-selected="option.selected" ng-disabled="option.disabled"></option>
-						</select>
-					</div>
-				</div>
-				<div class="row form-group brdige_card_code" ng-show="service_loading">
-					<label><i class="fa fa-spinner fa-pulse"></i> 正在解析</label>
-				</div>
-				<div class="form-group service_alert" ng-show="service_error">
-					<div>{{service_error}}</div>
-				</div>
-				<div class="row form-group">
-					<div class="col-xs-12 col-sm-6 col-md-5">
-						<label>对方将收到</label>
-						<div class="amount-wrap">
-							<input type="number" autocomplete="off" placeholder="0.00"
-								class="input amount-big form-control"
-								ng-model="service_amount"
-								required="true">
-							<select class="select currency"
-								ng-model="service_currency"
-								ng-disabled = "!mulipleAsset"
-								ng-class="{ 'disabled': extra_assets.length == 1}" required="">
-								<!-- ng-options="asset.code for asset in extra_assets"> -->
-								
-								<option value="{{asset.code}}" ng-repeat="asset in extra_assets" ng-selected="service_currency == asset.code">{{asset.code}}</option>
+			<form id="serviceForm" name="serviceForm" role="form">
+				<div class="island__paddedContent">
+					<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
+						<div ng-switch-when="label" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+						</div>
+						<div ng-switch-when="text" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+							<p>{{field}}</p>
+							<input type="text" 
+								ng-model="field.value" 
+								ng-model-options="{debounce:800}" 
+								ng-required="{{field.required}}" class="form-control" />
+						</div>
+						<div ng-switch-when="select" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+							<select type="text" ng-model="field.value"
+								ng-required="{{field.required}}" class="form-control">
+								<option ng-repeat="option in field.options"
+									ng-bind="option.label" value="{{option.value}}"
+									ng-selected="option.selected" ng-disabled="option.disabled"></option>
 							</select>
 						</div>
 					</div>
-					
-					
-
-
-					<!-- ngIf: !send.currency_force -->
-					<!-- ngIf: send.currency_force -->
-					<div ng-if="send.currency_force" class="row ng-scope">
-						<div
-							class="col-xs-12 col-sm-6 col-md-3 input-group currency_force">
-							<input id="send_amount" name="send_amount" ng-model="send.amount"
-								required="required" ng-disabled="!!send.force_amount"
-								rp-autofill="$routeParams.amount"
-								rp-autofill-amount="rp-autofill-amount" rp-amount="rp-amount"
-								rp-amount-positive="rp-amount-positive"
-								rp-amount-xrp-limit="rp-amount-xrp-limit"
-								rp-amount-xrp-limit-currency="CNY"
-								class="form-control ng-pristine ng-invalid ng-invalid-required ng-invalid-rp-amount ng-invalid-rp-amount-positive ng-valid-rp-amount-xrp-limit"
-								type="text"><span ng-bind="send.currency_force"
-								class="input-group-addon ng-binding">CNY</span>
+					<div class="row form-group brdige_card_code" ng-show="service_loading">
+						<label><i class="fa fa-spinner fa-pulse"></i> 正在解析</label>
+					</div>
+					<div class="form-group service_alert" ng-show="service_error">
+						<div>{{service_error}}</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-xs-12 col-sm-6 col-md-5">
+							<label>对方将收到</label>
+							<div class="amount-wrap">
+								<input type="number" autocomplete="off" placeholder="0.00"
+									class="input amount-big form-control"
+									ng-model="service_amount" 
+									ng-model-options="{debounce:800}"
+									required="true">
+								<select class="select currency"
+									ng-model="service_currency"
+									ng-change="updateAsset()"
+									ng-disabled = "!mulipleAsset"
+									ng-class="{'disabled': !mulipleAsset}" required="">
+									<option value="{{asset.code}}.{{asset.issuer}}" 
+										ng-repeat="asset in extra_assets" 
+										ng-selected="service_currency == (asset.code + '.' + asset.issuer)">{{asset.code}}</option>
+								</select>
+							</div>
 						</div>
 					</div>
-					<!-- end ngIf: send.currency_force -->
-					<div rp-errors="send_amount_currency" class="errorGroup">
-						<!-- rpErrorOn: rpRestrictCurrencies -->
-					</div>
+				</form>
+				
+				<div class="form-group service_alert" ng-show="!serviceForm.$valid">
+					<div>Form is invalid</div>
+				</div>
+				<div class="form-group service_alert" ng-show="quote_error">
+					<div>{{quote_error}}</div>
 				</div>
 
+				<div class="island__paddedContent">
+					<label style="width:100%">你可以发送</label>
+					<div class="btn-group-pretty">
+						<label class="btn active"> 
+							<span class="tick"></span>
+							<span class="amount">{{asset.amount | number : 3}}</span>
+							<div class="btn_card">
+								<img class="btn_card_logo" data-ng-src="{{asset.logo}}">
+								<span class="title">{{asset.code}}</span>
+								<span class="subtitle">{{asset.issuer_name}}</span>
+							</div>
+						</label>
+					</div>
+					<button class="s-button btn btn-success" 
+						ng-show="true" 
+						ng-click="send()" 
+						ng-disabled="false">{{'send' | translate}} {{asset.code}}</button>
+				</div>
 			</div>
 		</div>
 	</div>
