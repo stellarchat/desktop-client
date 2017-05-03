@@ -46,14 +46,14 @@
 			</div>
 		</div>
 		
-		<div class="island">
+		<div class="island" ng-hide="anchor == 'ripplefox.com'">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row">
 				{{anchor_withdraw}}
 			</div>
 		</div>
 		
-		<div class="island" ng-hide="false">
+		<div class="island" ng-show="anchor == 'ripplefox.com'">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row bridge">
 				<a href="javascript:" ng-click="changeService('alipay')">
@@ -76,8 +76,8 @@
 				</a>
 			</div>
 			
-			<form id="serviceForm" name="serviceForm" role="form">
-				<div class="island__paddedContent">
+			<div class="island__paddedContent">
+				<form id="serviceForm" name="serviceForm" role="form">
 					<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
 						<div ng-switch-when="label" class="col-xs-12 col-md-10">
 							<label ng-bind="field.label"></label>
@@ -86,7 +86,6 @@
 						<div ng-switch-when="text" class="col-xs-12 col-md-10">
 							<label ng-bind="field.label"></label>
 							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-							<p>{{field}}</p>
 							<input type="text" 
 								ng-model="field.value" 
 								ng-model-options="{debounce:800}" 
@@ -109,7 +108,7 @@
 					<div class="form-group service_alert" ng-show="service_error">
 						<div>{{service_error}}</div>
 					</div>
-					<div class="row form-group">
+					<div class="row form-group" ng-show="service_currency">
 						<div class="col-xs-12 col-sm-6 col-md-5">
 							<label>对方将收到</label>
 							<div class="amount-wrap">
@@ -132,32 +131,37 @@
 					</div>
 				</form>
 				
-				<div class="form-group service_alert" ng-show="!serviceForm.$valid">
-					<div>Form is invalid</div>
+				<div class="form-group service_alert" ng-show="!serviceForm.$valid && service_currency">
+					<div>Please fill the form correctly.</div>
 				</div>
 				<div class="form-group service_alert" ng-show="quote_error">
 					<div>{{quote_error}}</div>
 				</div>
-
-				<div class="island__paddedContent">
-					<label style="width:100%">你可以发送</label>
-					<div class="btn-group-pretty">
-						<label class="btn active"> 
-							<span class="tick"></span>
-							<span class="amount">{{asset.amount | number : 3}}</span>
-							<div class="btn_card">
-								<img class="btn_card_logo" data-ng-src="{{asset.logo}}">
-								<span class="title">{{asset.code}}</span>
-								<span class="subtitle">{{asset.issuer_name}}</span>
-							</div>
-						</label>
-					</div>
-					<button class="s-button btn btn-success" 
-						ng-show="true" 
-						ng-click="send()" 
-						ng-disabled="false">{{'send' | translate}} {{asset.code}}</button>
+			
+				<div class="row form-group brdige_card_code" ng-show="quote_loading">
+					<label><i class="fa fa-spinner fa-pulse"></i>正在解析</label>
 				</div>
 			</div>
+			
+			<div class="island__paddedContent" ng-show="asset.amount">
+				<label style="width:100%">你可以发送</label>
+				<div class="btn-group-pretty">
+					<label class="btn active"> 
+						<span class="tick"></span>
+						<span class="amount">{{asset.amount | number : 3}}</span>
+						<div class="btn_card">
+							<img class="btn_card_logo" data-ng-src="{{asset.logo}}">
+							<span class="title">{{asset.code}}</span>
+							<span class="subtitle">{{asset.issuer_name}}</span>
+						</div>
+					</label>
+				</div>
+				<button class="s-button btn btn-success" 
+					ng-show="true" 
+					ng-click="send()" 
+					ng-disabled="false">{{'send' | translate}} {{asset.code}}</button>
+			</div>
+			
 		</div>
 	</div>
 

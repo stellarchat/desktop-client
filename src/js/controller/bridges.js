@@ -121,62 +121,52 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		$scope.service_loading = true;
 		
 		$scope.fed.resolveAddress(prestr).then(function(data){
-				console.debug(prestr, data);
-				if (data.error) {
-					$scope.service_error = data.detail || data.error;
+			console.debug(prestr, data);
+			if (data.error) {
+				$scope.service_error = data.detail || data.error;
+			} else {
+				$scope.account_id = data.account_id;
+				$scope.extra_fields = data.extra_fields;
+				$scope.extra_assets = [{code:'CNY', issuer:"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"}, {code:'XLM', issuer:""}];
+				$scope.mulipleAsset = $scope.extra_assets.length > 1;
+				$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
+				
+				if (data.memo) {
+					$scope.memo = data.memo.toString();
+					$scope.memo_type = data.memo_type;
+					$scope.memo_provided = true;
 				} else {
-					$scope.account_id = data.account_id;
-					$scope.extra_fields = data.extra_fields;
-					$scope.extra_assets = [{code:'CNY', issuer:"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"}, {code:'XLM', issuer:""}];
-					$scope.mulipleAsset = $scope.extra_assets.length > 1;
-					$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
-					
-					if (data.memo) {
-						$scope.memo = data.memo.toString();
-						$scope.memo_type = data.memo_type;
-						$scope.memo_provided = true;
-					} else {
-						$scope.memo = '';
-						$scope.memo_provided = false;
-					}
-					console.debug(data);
+					$scope.memo = '';
+					$scope.memo_provided = false;
 				}
-				$scope.service_loading = false;
-				$scope.$apply();
-			}).catch(function(err){
-				if (prestr !== $scope.service) {
-					return;
-				}
-				$scope.real_address = '';
-				if (typeof err == "string") {
-					$scope.service_error = err;
-				} else {
-					$scope.service_error = err.detail || err.message;
-				}
-				$scope.service_loading = false;
-				$scope.$apply();
-			});
-//		}).catch(function(err){
-//			if (prestr !== $scope.service) {
-//				return;
-//			}
-//			$scope.service_loading = false;
-//			$scope.$apply();
-//		});
+				console.debug(data);
+			}
+			$scope.service_loading = false;
+			$scope.$apply();
+		}).catch(function(err){
+			if (prestr !== $scope.service) {
+				return;
+			}
+			$scope.real_address = '';
+			if (typeof err == "string") {
+				$scope.service_error = err;
+			} else {
+				$scope.service_error = err.detail || err.message;
+			}
+			$scope.service_loading = false;
+			$scope.$apply();
+		});
 	};
 	
 	$scope.$watch('service_currency', function () {
-      console.debug($scope.service_currency);
       $scope.quote();
     }, true);
 
     $scope.$watch('service_amount', function () {
-    	 console.debug($scope.service_amount);
     	 $scope.quote();
     }, true);
 
     $scope.$watch('extra_fields', function () {
-    	console.debug($scope.extra_fields);
     	$scope.quote();
     }, true);
     

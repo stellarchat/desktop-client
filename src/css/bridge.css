@@ -141,7 +141,7 @@ select.select option:hover {
 
 .btn-group-pretty .btn {
 	margin: 0 10px 10px;
-	padding: 10px 0;
+	padding: 10px;
 	border-radius: 5px;
 	position: relative;
 	border: 1px solid rgba(206, 209, 224, .5);
@@ -153,15 +153,15 @@ select.select option:hover {
 	border: 1px solid #057EEF;
 	color: rgba(255, 255, 255, 1);
 	box-shadow: 2px 7px 30px rgba(0, 0, 0, .4);
-	transition: none
+	transition: none;
+	cursor: default;
 }
 
 .btn-group-pretty .btn span.title {
-	display: block;
-	text-align: center;
 	color: rgba(88, 92, 106, 1);
-	font-size: 26px;
-	font-weight: 600
+	font-weight: 700;
+    font-size: 28px;
+    line-height: 24px;
 }
 
 .btn-group-pretty .btn.active span.title {
@@ -170,9 +170,10 @@ select.select option:hover {
 
 .btn-group-pretty .btn span.subtitle {
 	width: 100%;
-	text-align: center;
 	color: rgba(88, 92, 106, .8);
-	font-size: 14px;
+	font-size: 21px;
+    line-height: 24px;
+	
 }
 
 .btn-group-pretty .btn.active span.subtitle {
@@ -181,7 +182,7 @@ select.select option:hover {
 
 .btn-group-pretty .btn span {
     text-align: left;
-    padding: 0 10px;
+    padding-right: 10px;
 }
 
 .btn-group-pretty .btn span.amount {
@@ -220,7 +221,7 @@ select.select option:hover {
 
 .btn-group-pretty .btn_card {
 	display: flex;
-	width : 256px;
+	min-width : 256px;
 	align-items: center;
 	margin-right: 10px;
 	margin-left: 10px;
