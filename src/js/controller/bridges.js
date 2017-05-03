@@ -127,7 +127,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			} else {
 				$scope.account_id = data.account_id;
 				$scope.extra_fields = data.extra_fields;
-				$scope.extra_assets = [{code:'CNY', issuer:"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"}, {code:'XLM', issuer:""}];
+				$scope.extra_assets = data.asset;
 				$scope.mulipleAsset = $scope.extra_assets.length > 1;
 				$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
 				
@@ -172,6 +172,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
     
     $scope.quote_data;
     $scope.quote = function() {
+    	$scope.asset = {};
     	if (!$scope.serviceForm.$valid || !$scope.service_amount) {
     		return;
     	}
@@ -194,7 +195,6 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
     	var snapshot = JSON.stringify(data);
     	$scope.quote_data = snapshot;
     	
-    	$scope.asset = {};
     	$scope.quote_error = "";
     	$scope.quote_loading = true;
 		$http({
@@ -208,6 +208,10 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			$scope.asset.amount = res.data.amount;
 			$scope.asset.code   = res.data.asset.code;
 			$scope.asset.issuer = res.data.asset.issuer;
+			$scope.memo        = res.data.memo;
+			$scope.memo_type   = res.data.memo_type;
+			$scope.destination = res.data.account_id;
+			
 			var gateway = $rootScope.gateways.getSourceById($scope.asset.issuer);
 			$scope.asset.logo = gateway.logo;
 			$scope.asset.issuer_name = gateway.name;
@@ -230,5 +234,31 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			}
 			$scope.quote_loading = false;
 		});
-    }
+    };
+    
+    $scope.send = function() {
+		$scope.sending = true;
+		$scope.send_done = false;
+		$scope.send_error = '';
+		
+		StellarApi.send($scope.destination, $scope.asset.code, $scope.asset.issuer, 
+				$scope.asset.amount, $scope.memo_type, $scope.memo, function(err, hash){
+			$scope.sending = false;
+			if (err) {
+				if (err.message) {
+					$scope.send_error = err.message;
+				} else {
+					if (err.extras && err.extras.result_xdr) {
+						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+						$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
+					} else {
+						console.error("Unhandle!!", err);
+					}
+				}
+			} else {
+				$scope.send_done = true;
+			}
+			$rootScope.$apply();
+		});
+	};
 } ]);

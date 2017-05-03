@@ -57,6 +57,15 @@
     border-radius: 3px;
 }
 
+.service_success {
+    border: 1px solid #383;
+    display: block;
+    background: #d6e7d6;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
 .amount-wrap, .input, .rc-list li, .rc-list li a, .rc-list-menu li, ul.wallets-list li
 	{
 	position: relative

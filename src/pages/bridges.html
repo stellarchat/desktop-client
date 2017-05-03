@@ -157,9 +157,18 @@
 					</label>
 				</div>
 				<button class="s-button btn btn-success" 
-					ng-show="true" 
 					ng-click="send()" 
-					ng-disabled="false">{{'send' | translate}} {{asset.code}}</button>
+					ng-disabled="sending">{{'send' | translate}} {{asset.code}}</button>
+			</div>
+			<div class="island__paddedContent">
+				<div class="service_alert" ng-show="send_error">
+					<div>{{send_error}}</div>
+				</div>
+				
+				<div class="service_success" ng-show="send_done">
+					<div translate="send_done">Asset successfully sent.</div>
+				</div>
+				
 			</div>
 			
 		</div>
