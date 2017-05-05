@@ -54,7 +54,7 @@
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
-						ng-model="target_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
+						ng-model="input_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
 						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX">
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
@@ -82,7 +82,7 @@
 			<div>
 				<div class="island__separator"></div>
 				<div class="AddTrust__confirmation">
-					<div class="s-alert s-alert--alert" ng-show="target_address && target_error.hasError()">
+					<div class="s-alert s-alert--alert" ng-show="input_address && target_error.hasError()">
 						<ul class="AddTrust__errorList">
 							<li translate="invalid_account" ng-show="target_error.invalid">Account is invalid</li>
 							<li ng-show="target_error.domain">{{target_domain}} {{'invalid_domain' | translate}}</li>
@@ -106,7 +106,7 @@
 					</div>
 					
 					<div class="row__message" ng-show="act_loading">
-						{{'account_loading' | translate}} {{target_address}}
+						<i class="fa fa-spinner fa-pulse"></i> {{'account_loading' | translate}} {{input_address}}
 					</div>
 					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
 						<ul class="AddTrust__errorList">
@@ -116,7 +116,7 @@
 						</ul>
 					</div>
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
-						正在发送到 {{real_address | shortaddress}}
+						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
 					
 					<div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">

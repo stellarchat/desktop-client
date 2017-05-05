@@ -5,7 +5,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.src_name;
 	$scope.src_logo;
 	$scope.src_website;
-	$scope.target_address;
+	$scope.input_address;
 	$scope.target_amount;
 	$scope.memo;
 	$scope.memo_type = 'Text';
@@ -56,39 +56,20 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		$scope.real_accept = "";
 		$scope.send_done = false;
 		
-		var snapshot = $scope.target_address;
+		$scope.full_address = autoCompleteURL($scope.input_address);
+		var snapshot = $scope.full_address;
 		var i = snapshot.indexOf("*");
-		var isFedNetwork = (snapshot.indexOf("~") == 0);
-		var isRipple = ripple.UInt160.is_valid(snapshot);
-		var isBitcoin = !isNaN(ripple.Base.decode_check([0, 5], snapshot, 'bitcoin'));
-		if (i<0 && !isFedNetwork && !isRipple && !isBitcoin) {
+		if (i<0) {
 			$scope.act_loading = false;
 			$scope.is_federation = false;
 			$scope.memo_provided = false;
-			$scope.real_address = $scope.target_address;
+			$scope.real_address = $scope.full_address;
 			$scope.target_error.invalid = !StellarApi.isValidAddress(snapshot);
 			$scope.resolveAccountInfo();
 		} else {
-			var prestr;
-			var domain;
-			
-			if (i<0) {
-				if (isFedNetwork) {
-					prestr = snapshot.substring(1);
-					domain = SettingFactory.getFedNetwork();
-				}
-				if (isRipple) {
-					prestr = snapshot;
-					domain = SettingFactory.getFedRipple();
-				}
-				if (isBitcoin) {
-					prestr = snapshot;
-					domain = SettingFactory.getFedBitcoin();
-				}
-			} else {
-				prestr = snapshot.substring(0, i);
-				domain = snapshot.substring(i+1);
-			}
+			console.debug('resolve', snapshot);
+			var prestr = snapshot.substring(0, i);
+			var domain = snapshot.substring(i+1);
 			
 			$scope.target_domain = domain;
 			$scope.act_loading = true;
@@ -98,27 +79,23 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 				server.resolveAddress(prestr).then(function(data){
 					console.debug(prestr, data);
 					$scope.act_loading = false;
-					if (data.error) {
-						$scope.target_error.message = data.detail || data.error;
+					$scope.target_error.message = '';
+					$scope.real_address = data.account_id;
+					if (data.memo) {
+						$scope.memo = data.memo.toString();
+						$scope.memo_type = data.memo_type;
+						$scope.memo_provided = true;
 					} else {
-						$scope.target_error.message = '';
-						$scope.real_address = data.account_id;
-						if (data.memo) {
-							$scope.memo = data.memo.toString();
-							$scope.memo_type = data.memo_type;
-							$scope.memo_provided = true;
-						} else {
-							$scope.memo = '';
-							$scope.memo_provided = false;
-						}
-						console.debug(data);
-						$scope.resolveAccountInfo();
+						$scope.memo = '';
+						$scope.memo_provided = false;
 					}
+					$scope.resolveAccountInfo();
 					$scope.$apply();
 				}).catch(function(err){
-					if (snapshot !== $scope.target_address) {
+					if (snapshot !== $scope.full_address) {
 						return;
 					}
+					console.debug(prestr, err);
 					$scope.real_address = '';
 					if (typeof err == "string") {
 						$scope.target_error.message = err;
@@ -129,7 +106,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 					$scope.$apply();
 				});
 			}).catch(function(err){
-				if (snapshot !== $scope.target_address) {
+				if (snapshot !== $scope.full_address) {
 					return;
 				}
 				$scope.target_error.domain = true;
@@ -197,4 +174,21 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			$rootScope.$apply();
 		});
 	};
+	
+	function autoCompleteURL(address) {
+		if (address.indexOf("*") >=0) {
+			return address;
+		}
+		if (address.indexOf("~") == 0) {
+			return address.substring(1) + "*" + SettingFactory.getFedNetwork();
+		}
+		if (ripple.UInt160.is_valid(address)) {
+			return address + "*" + SettingFactory.getFedRipple();
+		}
+		if (!isNaN(ripple.Base.decode_check([0, 5], address, 'bitcoin'))) {
+			return address + "*" + SettingFactory.getFedBitcoin();
+		}
+		return address;		
+	};
 } ]);
+

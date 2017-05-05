@@ -4,6 +4,7 @@ var nw = new NwBuilder({
 	        '!src/node_modules/**/**',
 	        'src/node_modules/sjcl/**/**',
 	        'src/node_modules/bootstrap/dist/**/**',
+	        'src/node_modules/font-awesome/**/**',
 	        'src/node_modules/jquery/dist/jquery.min.js',
 	        'src/node_modules/angular/angular.min.js',
 	        'src/node_modules/angular-route/angular-route.min.js',
