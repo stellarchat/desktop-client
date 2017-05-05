@@ -5,7 +5,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.src_name;
 	$scope.src_logo;
 	$scope.src_website;
-	$scope.target_address;
+	$scope.input_address;
 	$scope.target_amount;
 	$scope.memo;
 	$scope.memo_type = 'Text';
@@ -56,13 +56,14 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		$scope.real_accept = "";
 		$scope.send_done = false;
 		
-		var snapshot = autoCompleteURL($scope.target_address);
+		$scope.full_address = autoCompleteURL($scope.input_address);
+		var snapshot = $scope.full_address;
 		var i = snapshot.indexOf("*");
 		if (i<0) {
 			$scope.act_loading = false;
 			$scope.is_federation = false;
 			$scope.memo_provided = false;
-			$scope.real_address = $scope.target_address;
+			$scope.real_address = $scope.full_address;
 			$scope.target_error.invalid = !StellarApi.isValidAddress(snapshot);
 			$scope.resolveAccountInfo();
 		} else {
@@ -91,7 +92,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 					$scope.resolveAccountInfo();
 					$scope.$apply();
 				}).catch(function(err){
-					if (snapshot !== $scope.target_address) {
+					if (snapshot !== $scope.full_address) {
 						return;
 					}
 					console.debug(prestr, err);
@@ -105,7 +106,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 					$scope.$apply();
 				});
 			}).catch(function(err){
-				if (snapshot !== $scope.target_address) {
+				if (snapshot !== $scope.full_address) {
 					return;
 				}
 				$scope.target_error.domain = true;
@@ -190,3 +191,4 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		return address;		
 	};
 } ]);
+

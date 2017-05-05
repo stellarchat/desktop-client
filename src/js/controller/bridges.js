@@ -109,6 +109,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		
 		$scope.service_error = "";
 		$scope.service_currency = "";
+		$scope.send = [];
 		$scope.asset = {};
 		$scope.quote_error = "";
 	}
@@ -127,7 +128,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			} else {
 				$scope.account_id = data.account_id;
 				$scope.extra_fields = data.extra_fields;
-				$scope.extra_assets = data.asset;
+				$scope.extra_assets = data.assets;
 				$scope.mulipleAsset = $scope.extra_assets.length > 1;
 				$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
 				
@@ -205,9 +206,8 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			if (snapshot !== $scope.quote_data) {
 				return;
 			}
-			$scope.asset.amount = res.data.amount;
-			$scope.asset.code   = res.data.asset.code;
-			$scope.asset.issuer = res.data.asset.issuer;
+			$scope.send = res.data.send;
+			$scope.asset = $scope.send[0];
 			$scope.memo        = res.data.memo;
 			$scope.memo_type   = res.data.memo_type;
 			$scope.destination = res.data.account_id;
