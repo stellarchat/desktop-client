@@ -59,13 +59,13 @@
 				<a href="javascript:" ng-click="changeService('alipay')">
 					<div ng-class="{brdige_card:true, active:isActive('alipay')}">
 						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/alipay.png"></div>
-						<div class="brdige_card_content"><span class="brdige_card_code">Alipay</span></div>
+						<div class="brdige_card_content"><span class="brdige_card_code" translate="alipay">Alipay</span></div>
 					</div>
 				</a>
 				<a href="javascript:" ng-click="changeService('bank')">
 					<div ng-class="{brdige_card:true, active:isActive('bank')}">
 						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/unionpay.png"></div>
-						<div class="brdige_card_content"><span class="brdige_card_code">Bank</span></div>
+						<div class="brdige_card_content"><span class="brdige_card_code" translate="bank_card">Bank</span></div>
 					</div>
 				</a>
 				<!-- <a href="javascript:" ng-click="changeService('ripple')">
@@ -103,14 +103,14 @@
 						</div>
 					</div>
 					<div class="row form-group brdige_card_code" ng-show="service_loading">
-						<label><i class="fa fa-spinner fa-pulse"></i> 正在解析</label>
+						<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
 					</div>
 					<div class="form-group service_alert" ng-show="service_error">
 						<div>{{service_error}}</div>
 					</div>
 					<div class="row form-group" ng-show="service_currency">
 						<div class="col-xs-12 col-sm-6 col-md-5">
-							<label>对方将收到</label>
+							<label translate="will_recv">Recipient will receive</label>
 							<div class="amount-wrap">
 								<input type="number" autocomplete="off" placeholder="0.00"
 									class="input amount-big form-control"
@@ -132,19 +132,19 @@
 				</form>
 				
 				<div class="form-group service_alert" ng-show="!serviceForm.$valid && service_currency">
-					<div>Please fill the form correctly.</div>
+					<div translate="fill_form">Please fill the form correctly.</div>
 				</div>
 				<div class="form-group service_alert" ng-show="quote_error">
 					<div>{{quote_error}}</div>
 				</div>
 			
 				<div class="row form-group brdige_card_code" ng-show="quote_loading">
-					<label><i class="fa fa-spinner fa-pulse"></i>正在解析</label>
+					<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
 				</div>
 			</div>
 			
 			<div class="island__paddedContent" ng-show="asset.amount">
-				<label style="width:100%">你可以发送</label>
+				<label style="width:100%" translate="can_send">You can send</label>
 				<div class="btn-group-pretty">
 					<label class="btn active"> 
 						<span class="tick"></span>
@@ -157,7 +157,7 @@
 					</label>
 				</div>
 				<button class="s-button btn btn-success" 
-					ng-click="send()" 
+					ng-click="send_asset()" 
 					ng-disabled="sending">{{'send' | translate}} {{asset.code}}</button>
 			</div>
 			<div class="island__paddedContent">

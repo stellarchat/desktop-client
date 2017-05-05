@@ -116,7 +116,7 @@
 						</ul>
 					</div>
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
-						正在发送到 {{real_address | shortaddress}}
+						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
 					
 					<div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">

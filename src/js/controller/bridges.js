@@ -108,10 +108,13 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		$scope.mulipleAsset = false;
 		
 		$scope.service_error = "";
+		$scope.service_amount = 0;
 		$scope.service_currency = "";
 		$scope.send = [];
 		$scope.asset = {};
 		$scope.quote_error = "";
+		$scope.send_done = false;
+		$scope.send_error = '';
 	}
 	
 	$scope.resolveService = function() {
@@ -140,7 +143,6 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 					$scope.memo = '';
 					$scope.memo_provided = false;
 				}
-				console.debug(data);
 			}
 			$scope.service_loading = false;
 			$scope.$apply();
@@ -236,7 +238,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		});
     };
     
-    $scope.send = function() {
+    $scope.send_asset = function() {
 		$scope.sending = true;
 		$scope.send_done = false;
 		$scope.send_error = '';
@@ -256,6 +258,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 					}
 				}
 			} else {
+				$scope.service_amount = 0;
 				$scope.send_done = true;
 			}
 			$rootScope.$apply();
