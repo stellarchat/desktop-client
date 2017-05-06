@@ -74,7 +74,13 @@ Response:
 
  Request:
 
-``` type=quote&account_id=alipay&address=GCCZTDAVNXOGESPKQSH5U63LO6CLPF2VUYV7ESO2UHVJ454A47F57LXQ&alipayAccount=alice@stellar.org&alipayUser=Jed&email=alice@stellar.org&amount=1&asset_code=CNY&asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
+```
+type=quote
+&account_id=alipay
+&address=GCCZTDAVNXOGESPKQSH5U63LO6CLPF2VUYV7ESO2UHVJ454A47F57LXQ
+&asset_code=CNY&asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
+&alipayAccount=alice@stellar.org&alipayUser=Jed&email=alice@stellar.org
+&amount=1
  ```
  
  Response:
