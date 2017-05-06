@@ -72,4 +72,24 @@ Response:
 
 ### Step 2, quote response with send
 
+ Request:
+
+``` type=quote&account_id=alipay&address=GCCZTDAVNXOGESPKQSH5U63LO6CLPF2VUYV7ESO2UHVJ454A47F57LXQ&alipayAccount=alice@stellar.org&alipayUser=Jed&email=alice@stellar.org&amount=1&asset_code=CNY&asset_issuer=GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX
+ ```
+ 
+ Response:
+
+```js
+{
+	"stellar_address":"alipay*ripplefox.com",
+	"account_id":"GAAQVUICYDKE3GIQIEF7WFFJ2SQ2DQWBQ7PM4NXYGPFTCJ4N3P465CNY",
+	"memo_type":"text",
+	"memo":"50144586A194052",
+	"send":[{
+		"amount":3,
+		"code":"CNY",
+		"issuer":"GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"
+	}]
+}
+ ```
  
