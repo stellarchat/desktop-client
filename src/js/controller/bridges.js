@@ -1,9 +1,11 @@
 myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi', '$http', 
                                    function($scope, $rootScope, $location, SettingFactory, StellarApi, $http) {
 	$scope.bridges = {};
+	$scope.anchor;
 	$scope.anchor_name = SettingFactory.getBridgeService();
 	$scope.anchor_logo;
 	$scope.anchor_withdraw;
+	$scope.service;
 	$scope.init = function(){
 		var anchors = $rootScope.gateways.getAllSources();
 		for (var name in anchors) {
@@ -12,8 +14,12 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				$scope.bridges[name] = anchor;
 			}
 			if (name == $scope.anchor_name) {
+				$scope.anchor = anchor;
 				$scope.anchor_logo = anchor.logo;
 				$scope.anchor_withdraw = anchor.withdraw_info;
+				if (anchor.service) {
+					$scope.service = anchor.service[0].name;
+				}
 				if (SettingFactory.getLang() == 'cn') {
 					$scope.anchor_withdraw = anchor.withdraw_info_cn;
 				}
@@ -43,7 +49,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 					$scope.deposit[asset.code].no_trust = true;
 				}
 			});
-			if ($scope.anchor_name == 'ripplefox.com') {
+			if ($scope.service) {
 				$scope.resolveService();
 			}
 			$scope.$apply();
@@ -72,9 +78,13 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	
 	$scope.changeBridge = function(name) {
 	    SettingFactory.setBridgeService(name);
-	    $scope.anchor_name = name;
-	    $scope.anchor_logo = $scope.bridges[name].logo;
-	    $scope.anchor_withdraw = $scope.bridges[name].withdraw_info;
+	    $scope.anchor = $scope.bridges[name];
+	    $scope.anchor_name = $scope.anchor.name;
+	    $scope.anchor_logo = $scope.anchor.logo;
+	    $scope.anchor_withdraw = $scope.anchor.withdraw_info;
+	    if ($scope.anchor.service) {
+			$scope.service = $scope.anchor.service[0].name;
+		}
 		if (SettingFactory.getLang() == 'cn') {
 			$scope.anchor_withdraw = $scope.bridges[name].withdraw_info_cn;
 		}
@@ -90,7 +100,6 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	};
 	
 	// a special case for CNY.ripplefox anchor
-	$scope.service = 'alipay';
 	$scope.isActive = function(type) {
 		return $scope.service == type;
 	}
@@ -120,7 +129,6 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	$scope.resolveService = function() {
 		console.debug('resolve', $scope.service);
 		var prestr = $scope.service;
-		var domain = "ripplefox.com";
 		$scope.resetService();
 		$scope.service_loading = true;
 		
