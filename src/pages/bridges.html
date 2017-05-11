@@ -11,7 +11,7 @@
 					<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="display: flex; align-items: center;">
 						<div class="brdige_card" style="margin-right: 8px;">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" data-ng-src="{{anchor_logo}}"></div>
-							<div class="brdige_card_content"><span class="brdige_card_code">{{anchor}}</span></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">{{anchor_name}}</span></div>
 						</div>
 						<span class="caret"></span>
 					</button>
@@ -46,14 +46,14 @@
 			</div>
 		</div>
 		
-		<div class="island" ng-hide="anchor == 'ripplefox.com'">
+		<div class="island" ng-hide="anchor_name == 'ripplefox.com'">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row">
 				{{anchor_withdraw}}
 			</div>
 		</div>
 		
-		<div class="island" ng-show="anchor == 'ripplefox.com'">
+		<div class="island" ng-show="anchor_name == 'ripplefox.com'">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row bridge">
 				<a href="javascript:" ng-click="changeService('alipay')">
