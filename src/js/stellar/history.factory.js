@@ -65,18 +65,32 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		});
 	};
 	
-	history.transactions = function(address, callback) {
+	history.transactions = function(addressOrPage, callback) {
 		var self = this;
-		this.server.transactions().forAccount(address).order('desc').limit("200").call().then(function(data) {
-			console.log(data);
+		var page;
+		var address;
+		if ('string' === typeof addressOrPage) {
+			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("200").call();
+			address = addressOrPage;
+		} else {
+			page = addressOrPage;
+			address = page.address;
+		}
+		page.then(function(page) {
+			console.log(page);
 			var transactions = [];
-			data.records.forEach(function(record){
+			page.records.forEach(function(record){
 				var tx = self.processTx(record, address);
 				console.log(tx);
 				transactions.push(tx);
 			});
 			
-			callback(null, transactions);
+			var nextPage = null;
+			if (page.records.length >= 200) {
+				nextPage = page.next();
+				nextPage.address = address;
+			}
+			callback(null, transactions, nextPage);
 		}).catch(function(err){
 			console.error('Transactions Fail !', err);
 			callback(err, null);

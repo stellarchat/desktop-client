@@ -80,6 +80,9 @@ var translate_cn = {
 	you : '你',
 	account_id : '账号',
 	operation  : '操作',
+	loading   : '载入中...',
+	load_more : '载入更多',
+	no_more   : '没有更多的交易了',
 	
 	choose : '选择',
 	example : '示例',

@@ -49,22 +49,44 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
 myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi', 
                                    function($scope, $rootScope, StellarApi) {
  	$scope.trades = [];
+ 	$scope.next = undefined;
  	
- 	$scope.working = false;
+ 	$scope.loading = false;
  	$scope.refresh = function() {
- 		if ($scope.working) { return; }
- 		StellarApi.queryTransactions(function(err, trades){
+ 		if ($scope.loading) { return; }
+ 		$scope.loading = true;
+ 		$scope.trades = [];
+ 		$scope.next = undefined;
+ 		
+ 		StellarApi.queryTransactions(function(err, trades, nextPage){
+ 			$scope.loading = false;
  			if (err) {
  				$scope.error_msg = err.message;
  			} else {
  				$scope.error_msg = "";
  				$scope.trades = trades;
+ 				$scope.next = nextPage;
  			}
- 			$scope.working = false;
  			$scope.$apply();
  		});
- 		$scope.working = true;
  	};
- 	
  	$scope.refresh();
+ 	
+ 	$scope.load_more = function() {
+ 		if ($scope.loading) { return; }
+ 		$scope.loading = true;
+ 		StellarApi.queryTransactionsNext($scope.next, function(err, trades, nextPage){
+ 			$scope.loading = false;
+ 			if (err) {
+ 				$scope.error_msg = err.message;
+ 			} else {
+ 				$scope.error_msg = "";
+ 				trades.forEach(function(item){
+ 					$scope.trades.push(item);
+ 				});
+ 				$scope.next = nextPage;
+ 			}
+ 			$scope.$apply();
+ 		});
+ 	};
  } ]);

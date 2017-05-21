@@ -78,6 +78,24 @@
 	vertical-align: middle;
 }
 
+.txfoot {
+	padding: 10px;
+	margin: 0;
+	clear: both;
+	background: #f2f2f2;
+	text-align: center;
+}
+
+.txfoot a {
+  color: #000;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.txfoot a:hover {
+  background: #f4f4f4;
+}
+
 .txamount {
 	text-align: right;
 }
