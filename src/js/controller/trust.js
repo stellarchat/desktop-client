@@ -65,8 +65,17 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		var code = code || $scope.manual_code;
 		var issuer = issuer || $scope.manual_issuer;
 		$scope.setChanging(code, issuer, true);
+		$scope.trust_error = "";
 		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
 			$scope.setChanging(code, issuer, false);
+			if (err) {
+				if (err.extras && err.extras.result_xdr) {
+					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
+				} else {
+					$scope.trust_error = err.detail || err.message;
+				}
+			}
 			$rootScope.$apply();
 		});
 	};
@@ -74,8 +83,17 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		var code = code || $scope.manual_code;
 		var issuer = issuer || $scope.manual_issuer;
 		$scope.setChanging(code, issuer, true);
+		$scope.trust_error = "";
 		StellarApi.changeTrust(code, issuer, "0", function(err, data){
 			$scope.setChanging(code, issuer, false);
+			if (err) {
+				if (err.extras && err.extras.result_xdr) {
+					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
+				} else {
+					$scope.trust_error = err.detail || err.message;
+				}
+			}
 			$rootScope.$apply();
 		});
 	};
