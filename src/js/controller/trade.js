@@ -277,12 +277,19 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	}
 	
 	$scope.cancel = function(offer_id, type) {
+		var offer = {id: offer_id};
 		if (type === 'bid') {
 			$scope.offers.bid[offer_id].canceling = true;
+			offer.price = $scope.offers.bid[offer_id].price;
+			offer.selling = getAsset($scope.counter_code, $scope.counter_issuer);
+			offer.buying  = getAsset($scope.base_code, $scope.base_issuer);
 		} else {
 			$scope.offers.ask[offer_id].canceling = true;
+			offer.price = $scope.offers.ask[offer_id].price;
+			offer.selling = getAsset($scope.base_code, $scope.base_issuer);
+			offer.buying  = getAsset($scope.counter_code, $scope.counter_issuer);
 		}
-		StellarApi.cancel(offer_id, function(err, hash){
+		StellarApi.cancel(offer, function(err, hash){
 			if (err) {
 				console.error(err);
 			} else {
@@ -342,4 +349,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
+	function getAsset(code, issuer) {
+		return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer); 
+	}
 } ]);
