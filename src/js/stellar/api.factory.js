@@ -361,6 +361,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		history.transactions(this.address, callback);
 	};
 	
+	api.queryTransactionsNext = function(page, callback) {
+		console.debug('loop transactions');
+		history.transactions(page, callback);
+	};
+	
 	api.queryBook = function(baseBuy, counterSell, callback) {
 		orderbook.get(baseBuy, counterSell, callback);
 	};

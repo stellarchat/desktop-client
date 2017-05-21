@@ -80,6 +80,9 @@ var translate_en = {
 	you: 'You',
 	account_id : 'Account ID',
 	operation  : 'Operation',
+	loading   : 'Loading...',
+	load_more : 'Load more',
+	no_more   : 'No more transactions left',
 	
 	choose : 'Choose',
 	example : 'example',
