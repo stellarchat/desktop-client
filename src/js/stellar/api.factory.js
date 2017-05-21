@@ -435,16 +435,28 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		self._offer(selling, buying, selling_amount, selling_price, callback);
 	};
 	
-	api.cancel = function(offer_id, callback) {
+	api.cancel = function(offer, callback) {
 		var self = this;
+		var selling, buying, price, offer_id;
+		if (typeof offer === 'object') {
+			selling = offer.selling;
+			buying  = offer.buying;
+			price   = offer.price;
+			offer_id = offer.id;
+		} else {
+			selling = StellarSdk.Asset.native();
+			buying  = new StellarSdk.Asset('DUMMY', account.accountId());
+			price   = "1";
+			offer_id = offer;
+		}
 		console.debug('Cancel Offer', offer_id);
 		self.server.loadAccount(self.address).then(function(account){
 			self.updateSeq(account);
 			var op = StellarSdk.Operation.manageOffer({
-				selling: StellarSdk.Asset.native(),
-				buying: new StellarSdk.Asset('DUMMY', account.accountId()),
+				selling: selling,
+				buying: buying,
 				amount: "0",
-				price : "1",
+				price : price,
 				offerId : offer_id
 	        });
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
