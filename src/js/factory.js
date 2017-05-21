@@ -4,7 +4,7 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['lang'] = lang;
 		},
 		getLang : function() {
-			return $window.localStorage['lang'] || 'cn';
+			return $window.localStorage['lang'] || 'en';
 		},
 		setProxy : function(proxy) {
 			if ("undefined" == proxy) { 
@@ -19,7 +19,10 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['stellar_url'] = url;
 		},
 		getStellarUrl : function(url) {
-			return $window.localStorage['stellar_url'] || 'https://horizon.stellar.org';
+			if ($window.localStorage['stellar_url']) {
+				return $window.localStorage['stellar_url'];
+			}
+			return this.getLang() == 'cn' ? "https://api.chinastellar.com" : 'https://horizon.stellar.org';
 		},
 		
 		setFedNetwork : function(domain) {
