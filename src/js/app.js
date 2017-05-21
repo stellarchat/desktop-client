@@ -189,6 +189,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	}
 	
 	$translate.use(SettingFactory.getLang());
+	console.debug('Use ' + SettingFactory.getStellarUrl());
 	StellarApi.setServer(SettingFactory.getStellarUrl());
 	if (SettingFactory.getProxy()) {
 		try {

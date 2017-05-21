@@ -19,7 +19,11 @@
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
 					<label translate="public_url">Public Net URL</label> 
-					<input class="form-control" type="text" ng-model="url" placeholder="https://horizon.stellar.org" />
+					<input class="form-control" type="text" ng-model="url" placeholder="https://horizon.stellar.org" list="nodes"/>
+					<datalist id="nodes">
+						<option value="https://horizon.stellar.org">
+						<option value="https://api.chinastellar.com">
+					</datalist> 
 				</div>
 			</div>
 			<div class="row">

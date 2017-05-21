@@ -128,7 +128,7 @@ var translate_en = {
 	settings : 'Settings',
 	network  : 'Network',
 	proxy    : 'Proxy',
-	public_url : 'Public Net URL',
+	public_url : 'Public Net URL (Restart needed for updates to take effect)',
 	fed_protocol: 'Federation Protocol',
 	fed_network : 'Name Service (~)',
 	fed_network_desc : 'You can use ~name instead of name*federation.domain.',

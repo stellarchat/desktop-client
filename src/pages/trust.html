@@ -8,19 +8,24 @@
 					{{'trust_src' | translate}}<br>{{'trust_note' | translate}}
 				</p>
 			</div>
-			<div class="AddTrustFromDirectory">
-				<div ng-repeat="(name, gateway) in gateways.getAllSources()">
-					<div class="row" ng-repeat="(code, asset) in gateway.assets">
-						<div class="row__fixedAsset">
-							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
-								code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
-						</div>
-						<div class="row__shareOption">
-							<button class="s-button btn btn-danger" ng-show="hasLine(asset.code, asset.issuer) && !hasBalance(asset.code, asset.issuer)" ng-click="delTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_remove' | translate}}</button>
-							<button class="s-button btn btn-warning" ng-show="hasLine(asset.code, asset.issuer) && hasBalance(asset.code, asset.issuer)" ng-disabled="true">{{'trust_remove_desc' | translate}}</button>
-							<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
-						</div>
+			
+			<div ng-repeat="(name, gateway) in gateways.getAllSources()">
+				<div class="row" ng-repeat="(code, asset) in gateway.assets">
+					<div class="row__fixedAsset">
+						<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
+							code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
 					</div>
+					<div class="row__shareOption">
+						<button class="s-button btn btn-danger" ng-show="hasLine(asset.code, asset.issuer) && !hasBalance(asset.code, asset.issuer)" ng-click="delTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_remove' | translate}}</button>
+						<button class="s-button btn btn-warning" ng-show="hasLine(asset.code, asset.issuer) && hasBalance(asset.code, asset.issuer)" ng-disabled="true">{{'trust_remove_desc' | translate}}</button>
+						<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
+					</div>
+				</div>
+			</div>
+				
+			<div class="island__paddedContent" ng-show="trust_error">
+				<div class="s-alert s-alert--alert">
+					{{trust_error}}
 				</div>
 			</div>
 		</div>
@@ -58,7 +63,7 @@
 					<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
 				</div>
 			</div>
-
+			
 		</div>
 	</div>
 
