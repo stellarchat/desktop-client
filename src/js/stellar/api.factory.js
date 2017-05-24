@@ -441,7 +441,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		if (typeof offer === 'object') {
 			selling = offer.selling;
 			buying  = offer.buying;
-			price   = offer.price;
+			price   = round(offer.price, 7);
 			offer_id = offer.id;
 		} else {
 			selling = StellarSdk.Asset.native();

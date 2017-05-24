@@ -91,7 +91,7 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
 					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
 				} else {
-					$scope.trust_error = err.detail || err.message;
+					$scope.trust_error = err.detail || err.message || err;
 				}
 			}
 			$rootScope.$apply();
