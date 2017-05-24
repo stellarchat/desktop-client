@@ -289,13 +289,17 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 			offer.selling = getAsset($scope.base_code, $scope.base_issuer);
 			offer.buying  = getAsset($scope.counter_code, $scope.counter_issuer);
 		}
+		$scope.cancel_error = "";
 		StellarApi.cancel(offer, function(err, hash){
 			if (err) {
-				console.error(err);
-			} else {
-				//$scope.refreshBook();
-				$scope.refreshOffer();
+				if (err.extras && err.extras.result_xdr) {
+					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+					$scope.cancel_error = resultXdr.result().results()[0].value().value().switch().name;
+				} else {
+					$scope.cancel_error = err.detail || err.message || err;
+				}
 			}
+			$scope.refreshOffer();
 		});
 	}
 	

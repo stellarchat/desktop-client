@@ -183,8 +183,8 @@
 		</div>
 		<div class="island island--pb" ng-show="!show_pair">
 			<div class="island__header">{{'orderbook' | translate}}
-				<!-- <a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="refreshingBook">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a> -->
+				<a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="refreshingBook">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
 			<div class="OfferTables island__sub">
 				<div class="island__sub__division">
@@ -279,6 +279,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="s-alert s-alert--error OfferMaker__message" ng-show="cancel_error">{{cancel_error}}</div>
 		</div>
 
 	</div>
