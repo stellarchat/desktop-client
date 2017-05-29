@@ -26,6 +26,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.real_address;
 	$scope.real_not_fund = false;
 	$scope.real_accept = "";
+	$scope.real_lines = [];
 	$scope.act_loading;
 	$scope.is_federation;
 	
@@ -48,12 +49,20 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		$scope.src_logo = gateway.logo;
 		$scope.src_website = gateway.website;
 	};
+	$scope.isLine = function(code, issuer) {
+		if (code == 'XLM') {
+			return code == $scope.src_code;
+		} else {
+			return code == $scope.src_code && issuer == $scope.src_issuer;
+		}
+	}
 	$scope.resolve = function() {
 		$scope.target_error.invalid = false;
 		$scope.target_error.domain = false;
 		$scope.target_error.message = '';
 		$scope.real_not_fund = false;
 		$scope.real_accept = "";
+		$scope.real_lines = [];
 		$scope.send_done = false;
 		
 		$scope.full_address = autoCompleteURL($scope.input_address);
@@ -124,6 +133,14 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			if (err) {
 				if (err.message == "NotFoundError") {
 					$scope.real_not_fund = true;
+					var gateway = $rootScope.gateways.getSourceById('');
+					$scope.real_lines.unshift({
+						code   : 'XLM',
+						issuer : '',
+						name   : gateway.name,
+						logo   : gateway.logo
+					});
+					
 					if ($scope.src_code !== 'XLM') {
 						$scope.pick('XLM', '');
 					}
@@ -132,14 +149,29 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 				}
 			} else {
 				var accept = [];
+				var code, issuer, name, logo;
 				data.balances.forEach(function(line){
 					if (line.asset_type == 'native') {
 						accept.push('XLM');
+						code = 'XLM';
+						issuer = '';
 					} else {
 						if (accept.indexOf(line.asset_code) < 0) {
 							accept.push(line.asset_code);
 						}
+						code = line.asset_code;
+						issuer = line.asset_issuer;
 					}
+					
+					var gateway = $rootScope.gateways.getSourceById(issuer);
+					name = gateway.name;
+					logo = gateway.logo;
+					$scope.real_lines.unshift({
+						code   : code,
+						issuer : issuer,
+						name   : name,
+						logo   : logo
+					});
 				});
 				$scope.real_accept = accept.join(', ');
 			}

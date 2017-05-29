@@ -16,7 +16,8 @@
 						{{balance | number : 7}}
 					</div>
 					<div class="row__shareOption">
-						<button class="s-button btn btn-success" ng-click="pick('XLM', '')">
+						<button class="s-button btn btn-success" 
+							ng-click="pick('XLM', '')">
 							{{'choose' | translate}} XLM</button>
 					</div>
 				</div>
@@ -30,7 +31,8 @@
 							{{line.balance | number : 7}}
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick(line.code, line.issuer)">
+							<button class="s-button btn btn-success" 
+								ng-click="pick(line.code, line.issuer)">
 								{{'choose' | translate}} {{line.code}}</button>
 						</div>
 					</div>
@@ -59,7 +61,7 @@
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="target_amount"
+					<input type="number" autocomplete="off" class="s-inputGroup__item S-flexItem-share" ng-model="target_amount"
 						placeholder="{{'example' | translate}}: 100.25">
 				</label>
 
@@ -119,7 +121,7 @@
 						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
 					
-					<div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">
+					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">
 						<div class="AssetCard AssetCard--fixed">
 							<div class="AssetCard__main">
 								<div class="AssetCard__logo">
@@ -133,7 +135,22 @@
 								</div>
 							</div>
 						</div>
+					</div> -->
+					
+					<div class="btn-group-pretty" ng-show="target_amount">
+						<label ng-class="{btn:true, active: isLine(line.code, line.issuer)}"
+							ng-click="pick(line.code, line.issuer)"
+							ng-repeat="line in real_lines"> 
+							<span class="tick"></span>
+							<span class="amount">{{target_amount | number : 4}}</span>
+							<div class="btn_card">
+								<img class="btn_card_logo" data-ng-src="{{line.logo}}">
+								<span class="title">{{line.code}}</span>
+								<span class="subtitle">{{line.name}}</span>
+							</div>
+						</label>
 					</div>
+				
 					<button class="s-button btn btn-success" 
 						ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))" 
 						ng-click="send()" 
