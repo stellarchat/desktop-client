@@ -1,10 +1,6 @@
 myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory',
                               function($scope, $rootScope, StellarApi, SettingFactory) {
-	$scope.src_code;
-	$scope.src_issuer;
-	$scope.src_name;
-	$scope.src_logo;
-	$scope.src_website;
+	$scope.asset = {};
 	$scope.input_address;
 	$scope.target_amount;
 	$scope.memo;
@@ -42,18 +38,18 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		return !$scope.target_error.memo;
 	};
 	$scope.pick = function(code, issuer) {
-		$scope.src_code = code;
-		$scope.src_issuer = issuer;
+		$scope.asset.code = code;
+		$scope.asset.issuer = issuer;
 		var gateway = $rootScope.gateways.getSourceById(issuer);
-		$scope.src_name = gateway.name;
-		$scope.src_logo = gateway.logo;
-		$scope.src_website = gateway.website;
+		$scope.asset.name = gateway.name;
+		$scope.asset.logo = gateway.logo;
+		$scope.asset.website = gateway.website;
 	};
 	$scope.isLine = function(code, issuer) {
 		if (code == 'XLM') {
-			return code == $scope.src_code;
+			return code == $scope.asset.code;
 		} else {
-			return code == $scope.src_code && issuer == $scope.src_issuer;
+			return code == $scope.asset.code && issuer == $scope.asset.issuer;
 		}
 	}
 	$scope.resolve = function() {
@@ -141,7 +137,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 						logo   : gateway.logo
 					});
 					
-					if ($scope.src_code !== 'XLM') {
+					if ($scope.asset.code !== 'XLM') {
 						$scope.pick('XLM', '');
 					}
 				} else {
@@ -184,7 +180,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		$scope.send_done = false;
 		$scope.target_error.message = '';
 		
-		StellarApi.send($scope.real_address, $scope.src_code, $scope.src_issuer, 
+		StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer, 
 				$scope.target_amount, $scope.memo_type, $scope.memo, function(err, hash){
 			$scope.sending = false;
 			

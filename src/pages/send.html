@@ -45,14 +45,6 @@
 		<div class="island">
 			<div class="island__header" translate="send">Send</div>
 			<div class="island__paddedContent">
-				<label class="s-inputGroup AddTrust__inputGroup" ng-hide="true">
-					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="asset_code">Asset Code</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="src_code">
-				</label>
-				<label class="s-inputGroup AddTrust__inputGroup" ng-hide="true">
-					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="issuer_id">Issuer Account ID</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="src_issuer">
-				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
@@ -96,7 +88,7 @@
 							<li>{{'memo_invaid' | translate}} {{target_error.memo}}</li>
 						</ul>
 					</div>
-					<div class="s-alert s-alert--alert" ng-hide="src_code">
+					<div class="s-alert s-alert--alert" ng-hide="asset.code">
 						<ul class="AddTrust__errorList">
 							<li translate="select_asset">Please select an asset to send.</li>
 						</ul>
@@ -121,17 +113,17 @@
 						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
 					
-					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">
+					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="asset.code">
 						<div class="AssetCard AssetCard--fixed">
 							<div class="AssetCard__main">
 								<div class="AssetCard__logo">
-									<img class="AssetCard__logo__image" data-ng-src="{{src_logo}}">
+									<img class="AssetCard__logo__image" data-ng-src="{{asset.logo}}">
 								</div>
 								<div class="AssetCard__content">
 									<div class="AssetCard__header">
-										<span class="AssetCard__code">{{src_code}}</span>{{src_name}}
+										<span class="AssetCard__code">{{asset.code}}</span>{{asset.name}}
 									</div>
-									<p class="AssetCard__issuerAccountId">{{src_issuer | shortaddress}}</p>
+									<p class="AssetCard__issuerAccountId">{{asset.issuer | shortaddress}}</p>
 								</div>
 							</div>
 						</div>
@@ -152,7 +144,7 @@
 					</div>
 				
 					<button class="s-button btn btn-success" 
-						ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))" 
+						ng-show="asset.code" 
 						ng-click="send()" 
 						ng-disabled="!target_amount || !isValidAddress(real_address) || sending">{{'send' | translate}} {{src_code}}</button>
 				</div>
