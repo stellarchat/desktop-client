@@ -142,6 +142,9 @@ var translate_en = {
 	inflation : 'Inflation Destination',
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
+	inflation_options      : 'Other options',
+	inflation_options_desc : 'You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.',
+	inflation_pool : 'Vote to xlmpool.com',
 	inflation_fox  : 'Vote to RippleFox',
 	
 	/** Deposit & withdrawl **/
