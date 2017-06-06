@@ -141,8 +141,11 @@ var translate_cn = {
 	save     : '保存',
 	security : '安全',
 	inflation : '通胀地址',
-	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。',
+	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。1万个XLM每周约得到2个XLM。',
 	inflation_done : '通胀地址设置成功',
+	inflation_options      : '其它选择',
+	inflation_options_desc : '你可以加入xlmpool.com来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
+	inflation_pool  : '加入xlmpool通胀池',
 	inflation_fox  : '投票给瑞狐',
 	
 	/** Deposit & withdrawl **/

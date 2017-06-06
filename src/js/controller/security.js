@@ -67,6 +67,10 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 			$scope.inflation = 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX';
 			$scope.setInflation();
 		}
+		$scope.setInflationPool = function() {
+			$scope.inflation = 'GA3FUYFOPWZ25YXTCA73RK2UGONHCO27OHQRSGV3VCE67UEPEFEDCOPA';
+			$scope.setInflation();
+		}
 		
 		$scope.refresh();
 	}

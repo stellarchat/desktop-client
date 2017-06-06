@@ -41,7 +41,7 @@
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
 					<label translate="inflation">Inflaction Destination</label> 
-					<input class="form-control" type="text" ng-model="inflation" placeholder="GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX" />
+					<input class="form-control" type="text" ng-model="inflation" />
 				</div>
 			</div>
 			<div class="s-alert s-alert--alert row__message" ng-show="inflation_error">
@@ -50,10 +50,20 @@
 			<div class="s-alert s-alert--success row__message" ng-show="inflation_done" translate="inflation_done">
 				Inflation Destination was set.
 			</div>
-			<div class="row">
+			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
 						ng-click="setInflation()" translate="save">Save</a>
+				</div>
+			</div>
+			
+			<label translate="inflation_options">Other options</label>
+			<p class="hint" translate="inflation_options_desc">You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.</p>
+			
+			<div class="row">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationPool()" translate="inflation_pool">Vote to xlmpool.com/</a>
 				</div>
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
