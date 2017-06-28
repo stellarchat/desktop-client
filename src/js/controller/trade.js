@@ -4,8 +4,10 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		origin : null,
 		ask : {},
 		bid : {},
+		all : {},
 		update : function(data) {
 			this.origin = data;
+			this.all = {};
 			this.ask = {};
 			this.bid = {};
 			for (var i=0; i<data.length; i++) {
@@ -14,6 +16,16 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				var buy_issuer = buy_code == 'XLM' ? '' : offer.buying.asset_issuer;
 				var sell_code = offer.selling.asset_type == 'native' ? 'XLM' : offer.selling.asset_code;
 				var sell_issuer = sell_code == 'XLM' ? '' : offer.selling.asset_issuer;
+				
+				this.all[offer.id] = {
+					id : offer.id,
+					buy_code   : buy_code,
+					buy_issuer : buy_issuer,
+					sell_code  : sell_code,
+					sell_issuer : sell_issuer,
+					amount : parseFloat(offer.amount),
+					price  : parseFloat(offer.price) 
+				};
 				
 				if (sameAsset(sell_code, sell_issuer, $scope.base_code, $scope.base_issuer)
 						&& sameAsset(buy_code, buy_issuer, $scope.counter_code, $scope.counter_issuer)) {
@@ -278,16 +290,25 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 	
 	$scope.cancel = function(offer_id, type) {
 		var offer = {id: offer_id};
+		
+		$scope.offers.all[offer_id].canceling = true;
 		if (type === 'bid') {
 			$scope.offers.bid[offer_id].canceling = true;
 			offer.price = $scope.offers.bid[offer_id].price;
 			offer.selling = getAsset($scope.counter_code, $scope.counter_issuer);
 			offer.buying  = getAsset($scope.base_code, $scope.base_issuer);
-		} else {
+		} else if (type === 'ask') {
 			$scope.offers.ask[offer_id].canceling = true;
 			offer.price = $scope.offers.ask[offer_id].price;
 			offer.selling = getAsset($scope.base_code, $scope.base_issuer);
 			offer.buying  = getAsset($scope.counter_code, $scope.counter_issuer);
+		} else {
+			// type === 'all'
+			if ($scope.offers.bid[offer_id]) { $scope.offers.bid[offer_id].canceling = true; }
+			if ($scope.offers.ask[offer_id]) { $scope.offers.ask[offer_id].canceling = true; }
+			offer.price = $scope.offers.all[offer_id].price;
+			offer.selling = getAsset($scope.offers.all[offer_id].sell_code, $scope.offers.all[offer_id].sell_issuer);
+			offer.buying  = getAsset($scope.offers.all[offer_id].buy_code, $scope.offers.all[offer_id].buy_issuer);
 		}
 		$scope.cancel_error = "";
 		StellarApi.cancel(offer, function(err, hash){

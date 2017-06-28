@@ -123,6 +123,9 @@ var translate_en = {
 	trade_pair : 'your trade pair',
 	pick_trade : 'To trade, go back to',
 	trade_page : 'trade page',
+	advanced   : 'Advanced',
+	buying     : 'Buying',
+	selling    : 'Selling',
 	
 	/** Setting & security **/
 	settings : 'Settings',

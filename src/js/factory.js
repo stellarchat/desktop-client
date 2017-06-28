@@ -4,7 +4,15 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['lang'] = lang;
 		},
 		getLang : function() {
-			return $window.localStorage['lang'] || 'en';
+			if ($window.localStorage['lang']) {
+				return $window.localStorage['lang'];
+			} else {
+				if (nw.global.navigator.language.indexOf('zh') >= 0) {
+					return 'cn';
+				} else {
+					return 'en';
+				}
+			}
 		},
 		setProxy : function(proxy) {
 			if ("undefined" == proxy) { 

@@ -199,6 +199,11 @@ a.AssetPairRow:hover .AssetPair__separator {
   font-size: 16px;
 }
 
+.ManageOffers__table .issuer {
+  font-size: 11px;
+  color: #b3b3b3;
+}
+
 .ManageOffers__table__header {
 	background: #f4f4f5;
 	font-weight: bold;
@@ -208,6 +213,11 @@ a.AssetPairRow:hover .AssetPair__separator {
 .ManageOffers__table__header__item {
 	padding: 4px 8px 4px 2px;
 	text-align: right;
+}
+
+.ManageOffers__table__header__left {
+	padding: 4px 8px 4px 12px;
+	text-align: left;
 }
 
 .ManageOffers__table__row {
@@ -221,6 +231,12 @@ a.AssetPairRow:hover .AssetPair__separator {
 .ManageOffers__table__row__item {
 	padding: 4px 8px 4px 2px;
 	text-align: right;
+	font-family: 'Ubuntu Mono';
+}
+
+.ManageOffers__table__row__left {
+	padding: 4px 8px 4px 12px;
+	text-align: left;
 	font-family: 'Ubuntu Mono';
 }
 
