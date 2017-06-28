@@ -124,6 +124,9 @@ var translate_cn = {
 	trade_pair : '交易对',
 	pick_trade : '回到',
 	trade_page : '交易页面',
+	advanced   : '高级',
+	buying     : '买入',
+	selling    : '卖出',
 	
 	/** Setting & security **/
 	settings : '设置',
