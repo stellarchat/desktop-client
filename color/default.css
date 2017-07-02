@@ -1,0 +1,57 @@
+/*
+#1 color = #4ACCD1;
+#2 color = #3fbbc0;
+*/
+
+a:hover,
+a:focus {
+    color: #4ACCD1;
+}
+
+.circled {
+	background: #4ACCD1;
+}
+
+.con1 > div, .con2 > div, .con3 > div { 
+	background-color: #4ACCD1;
+}
+
+.scrollup:hover {
+	background: #4ACCD1;
+}
+
+
+/* button */
+.btn-skin {
+  background-color: #4ACCD1;
+  border-color: #4ACCD1;
+}
+
+
+/* menu */
+
+.navbar-custom ul.nav ul.dropdown-menu li a:hover {
+	color: #3fbbc0;
+}
+.navbar-custom.top-nav-collapse .nav li a:hover,
+.navbar-custom .nav li a:hover,
+.navbar-custom .nav li.active a,.navbar-custom.top-nav-collapse .nav li.active a  {
+    color: #3fbbc0;
+}
+
+
+
+.bg-skin {
+	background: #4ACCD1;
+}
+
+.highlight-color {
+	background-color: #4ACCD1;
+}
+.color {
+	color: #4ACCD1;
+}
+
+.form-control:focus {
+  border-color: #3fbbc0;
+}
