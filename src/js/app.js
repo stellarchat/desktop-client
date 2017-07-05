@@ -50,6 +50,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/convert', {
+		templateUrl : 'pages/convert.html',
+		controller : 'ConvertCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/hist_payments', {
 		templateUrl : 'pages/history_payments.html',
 		controller : 'PaymentsCtrl',

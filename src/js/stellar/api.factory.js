@@ -1,4 +1,5 @@
-myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', function($scope, history, orderbook) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 
+		function($scope, history, orderbook, path) {
 	var api = {
 		address : undefined,
 		seed : undefined,
@@ -28,6 +29,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			this.closeTxStream = undefined;
 		}
 		orderbook.close();
+		path.close();
 	}
 	
 	api.updateSeq = function(account) {
@@ -74,6 +76,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		this.server = new StellarSdk.Server(url);
 		history.server = this.server;
 		orderbook.server = this.server;
+		path.server = this.server;
 	};
 	api.setAccount = function(address, seed) {
 		this.address = address;
@@ -210,6 +213,38 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		} else {
 			self.sendAsset(target, currency, issuer, amount, memo_type, memo_value, callback);
 		}
+	};
+	
+	api.convert = function(alt, callback) {
+		var self = this;
+		console.debug(alt.origin.source_amount + '/' + alt.src_code + ' -> ' + alt.origin.destination_amount + '/' + alt.dst_code);
+		var path = alt.origin.path.map(function(item){
+			if (item.asset_type == 'native') {
+				return new StellarSdk.Asset.native();
+			} else {
+				return new StellarSdk.Asset(item.asset_code, item.asset_issuer);
+			}
+		});
+		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
+			var pathPayment = StellarSdk.Operation.pathPayment({
+				destination: self.address,
+				sendAsset  : getAsset(alt.src_code, alt.src_issuer),
+				sendMax    : alt.origin.source_amount,
+				destAsset  : getAsset(alt.dst_code, alt.dst_issuer),
+				destAmount : alt.origin.destination_amount,
+				path       : path
+	        });
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log('Send Asset done.', txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('Send Fail !', err);
+			callback(err, null);
+		});
 	};
 	
 	api.listenStream = function() {
@@ -376,6 +411,18 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.closeOrderbook = function() {
 		orderbook.close();
+	};
+	
+	api.queryPath = function(src, dest, code, issuer, amount, callback) {
+		path.get(src, dest, code, issuer, amount, callback);
+	};
+	
+	api.listenPath = function(src, dest, code, issuer, amount, handler) {
+		path.listen(src, dest, code, issuer, amount, handler);
+	};
+	
+	api.closePath = function() {
+		path.close();
 	};
 	
 	api.queryOffer = function(callback) {

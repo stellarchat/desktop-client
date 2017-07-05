@@ -24,7 +24,14 @@
 	            <li><a href="javascript:" ng-click="goTo('/hist_trades')">{{'trades' | translate}}</a></li>
 	          </ul>
 	        </li>
-	        <li ng-class="{active:isActive('/trade')}"><a href="javascript:" ng-click="goTo('/trade')">{{'trade' | translate}}</a></li>
+	        <li class="dropdown">
+	          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">{{'trade' | translate}} <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="javascript:" ng-click="goTo('/trade')">{{'normal' | translate}}</a></li>
+	            <li><a href="javascript:" ng-click="goTo('/convert')">{{'convert' | translate}}</a></li>
+	          </ul>
+	        </li>
+	        
 	        <li ng-class="{active:isActive('/balance')}"><a href="javascript:" ng-click="goTo('/balance')">{{'balance' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/send')}"><a href="javascript:" ng-click="goTo('/send')">{{'send' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/trust')}"><a href="javascript:" ng-click="goTo('/trust')">{{'trust' | translate}}</a></li>

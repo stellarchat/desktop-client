@@ -1,0 +1,72 @@
+<section class="col-xs-12 content" ng-controller="ConvertCtrl">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header" translate="convert_title">Convert one currency into another</div>
+			<div class="row form-group">
+				<div class="col-xs-12 col-sm-6 col-md-5">
+					<label translate="receive">Receive</label>
+					<div class="amount-wrap">
+						<input type="number" autocomplete="off" placeholder="0.00"
+							class="input amount-big form-control"
+							ng-model="dst_amount" 
+							ng-model-options="{debounce:800}"
+							ng-change="updatePath()"
+							required="true">
+						<select class="select currency"
+							ng-model="dst_currency"
+							ng-change="updatePath()"
+							ng-disabled = "false"
+							ng-class="{'disabled': !mulipleAsset}" required="">
+							<option value="{{line.code}}.{{line.issuer}}" 
+								ng-repeat="line in send" 
+								ng-selected="dst_currency == (line.code + '.' + line.issuer)">{{line.code}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row form-group" ng-hide="send_done">
+				<div class="row__message" ng-show="finding">
+					<i class="fa fa-spinner fa-pulse"></i> {{'calculating' | translate}}...
+				</div>
+				<div class="row__message" ng-show="!finding && !objKeyLength(paths) && !send_done">
+					{{ 'convert_input' | translate}}
+				</div>
+				<div class="btn-group-pretty">
+					<label ng-class="{btn:true, active: isLine(alt.src_code, alt.src_issuer)}"
+						ng-click="pick(alt.src_code, alt.src_issuer)"
+						ng-repeat="(key, alt) in paths"> 
+						<span class="tick"></span>
+						<span class="amount">{{alt.src_amount | number : alt.precise}}</span>
+						<div class="btn_card">
+							<img class="btn_card_logo" data-ng-src="{{alt.src_logo}}">
+							<span class="title">{{alt.src_code}}</span>
+							<span class="subtitle">{{alt.src_name}}</span>
+						</div>
+					</label>
+				</div>
+			</div>
+			
+			<div class="row form-group" ng-show="!finding && objKeyLength(paths)">
+				<button class="s-button btn btn-success" 
+					ng-click="send_asset()" 
+					ng-disabled="!asset.src_code || sending">
+						{{'send' | translate}} {{asset.src_code}} <span ng-show="asset.src_code">({{asset.price | number : asset.precise}} {{asset.dst_code}}/{{asset.src_code}})</span>
+				</button>
+			</div>
+			
+			<div class="island__paddedContent">
+				<div class="service_alert" ng-show="send_error">
+					<div>{{send_error}}</div>
+				</div>
+				
+				<div class="service_success" ng-show="send_done">
+					<div translate="send_done">Asset successfully sent.</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	</group>
+</section>

@@ -41,7 +41,7 @@ var translate_en = {
 	trust_limit : 'Trust Limit',
 	add_trust : 'Add trust from known anchors',
 	trust_src : 'This is a list of anchors from the Stellar community.',
-	trust_note: 'Note: We does NOT endorse any of these anchors.',
+	trust_note: 'Note: We do NOT endorse any of these anchors.',
 	trust_remove : 'Remove trust line',
 	trust_remove_desc : 'Trust is removable when balance is 0',
 	trust_removeing : 'Removing...',
@@ -71,6 +71,13 @@ var translate_en = {
 	not_funded   : 'Not funded. To crete this account, send it at least 20 lumens (XLM).',
 	can_accept   : 'The account can accept',
 	
+	/** Convert **/
+	convert       : 'Convert',
+	convert_title : 'Convert one currency into another',
+	convert_input : 'Please enter the conversion details.',
+	receive       : 'Receive',
+	calculating   : 'Calculating',
+	
 	/** History **/
 	history: 'History',
 	payments: 'Payments',
@@ -93,6 +100,7 @@ var translate_en = {
 	optional : 'Optional',
 	
 	trade : 'Trade',
+	normal: 'Normal',
 	sent  : 'Sent',
 	received : 'Received',
 	created : 'Created',
