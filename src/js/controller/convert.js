@@ -88,7 +88,11 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
 				} else {
 					if (err.extras && err.extras.result_xdr) {
 						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
+						if (resultXdr.result().results()) {
+							$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							$scope.send_error = resultXdr.result().switch().name;
+						}
 					} else {
 						console.error("Unhandle!!", err);
 					}
