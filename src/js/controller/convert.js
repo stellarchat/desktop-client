@@ -1,0 +1,106 @@
+myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', '$http',
+                              function($scope, $rootScope, StellarApi, SettingFactory, $http) {
+	$scope.send = [];
+	$scope.dst_amount = 0;
+	$scope.dst_currency = '';
+	$scope.init = function(){
+		$scope.send.push({code: 'XLM', issuer: ''});
+		for (var code in $rootScope.lines) {
+			for(var issuer in $rootScope.lines[code]) {
+				$scope.send.push({code: code, issuer: issuer});
+			}
+		}
+		$scope.dst_currency = $scope.send[0].code + "." + $scope.send[0].issuer;
+	}
+	$scope.init();
+	
+	$scope.asset = {};
+	$scope.pick = function(code, issuer) {
+		$scope.asset = $scope.paths[code + '.' + issuer];
+	};
+	$scope.isLine = function(code, issuer) {
+		if (code == 'XLM') {
+			return code == $scope.asset.src_code;
+		} else {
+			return code == $scope.asset.src_code && issuer == $scope.asset.src_issuer;
+		}
+	}
+	
+	$scope.paths = {};
+	$scope.finding = false;
+	$scope.updatePath = function() {
+		var arr = $scope.dst_currency.split(".");
+		var amount = $scope.dst_amount;
+		
+		$scope.paths = {};
+		$scope.asset = {};
+		$scope.finding = true;
+		$scope.send_done = false;
+		StellarApi.queryPath($rootScope.address, $rootScope.address, arr[0], arr[1], amount, function(err, data){
+			$scope.finding = false;
+			if (err) {
+				if (typeof err == "string") {
+					$scope.send_error = err;
+				} else {
+					$scope.send_error = err.detail || err.message;
+				}
+			} else {
+				data.records.forEach(function(item){
+					var alt = {
+						origin: item,
+						dst_code   : item.destination_asset_type == 'native' ? 'XLM' : item.destination_asset_code,
+						dst_issuer : item.destination_asset_type == 'native' ? '' : item.destination_asset_issuer,
+						src_amount : parseFloat(item.source_amount),
+						src_code   : item.source_asset_type == 'native' ? 'XLM' : item.source_asset_code,
+						src_issuer : item.source_asset_type == 'native' ? '' : item.source_asset_issuer,
+					};
+					alt.precise = alt.src_code == 'BTC' ? 6 : 3;
+					alt.price = alt.src_amount / item.destination_amount;
+					
+					var gateway = $rootScope.gateways.getSourceById(alt.src_issuer);
+					alt.src_logo = gateway.logo;
+					alt.src_name = gateway.name;
+					
+					if (alt.src_amount > 0) {
+						$scope.paths[alt.src_code + '.' + alt.src_issuer] = alt;
+					}
+				});
+			}
+			$scope.$apply();
+		});
+	};
+	
+	$scope.sending;
+	$scope.send_done = false;
+	$scope.send_error = '';
+	
+	$scope.send_asset = function() {
+		$scope.sending = true;
+		$scope.send_done = false;
+		$scope.send_error = '';
+		
+		StellarApi.convert($scope.asset, function(err, hash){
+			$scope.sending = false;
+			
+			if (err) {
+				if (err.message) {
+					$scope.send_error = err.message;
+				} else {
+					if (err.extras && err.extras.result_xdr) {
+						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+						$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
+					} else {
+						console.error("Unhandle!!", err);
+					}
+				}
+			} else {
+				$scope.dst_amount = 0;
+				$scope.paths = {};
+				$scope.asset = {};
+				$scope.send_done = true;
+			}
+			$rootScope.$apply();
+		});
+	};
+} ]);
+

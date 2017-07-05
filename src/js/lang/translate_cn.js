@@ -71,6 +71,13 @@ var translate_cn = {
 	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
 	can_accept   : '账号可接收',
 	
+	/** Convert **/
+	convert       : '兑换',
+	convert_title : '把一种货币转换成另一种',
+	convert_input : '请输入兑换的具体信息。',
+	receive       : '接收',
+	calculating   : '计算中',
+	
 	/** History **/
 	history: '历史',
 	payments: '转账',
@@ -94,6 +101,7 @@ var translate_cn = {
 	
 	/** Trade **/
 	trade : '交易',
+	normal: '标准',
 	sent  : '发送',
 	received : '接收',
 	created : '创建',
