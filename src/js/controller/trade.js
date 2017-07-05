@@ -271,7 +271,11 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				} else {
 					if (err.extras && err.extras.result_xdr) {
 						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+						if (resultXdr.result().results()) {
+							$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							$scope[type + '_fail'] = resultXdr.result().switch().name;
+						}
 					} else {
 						console.error("Unhandle!!", err);
 					}
