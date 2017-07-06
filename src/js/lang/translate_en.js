@@ -159,6 +159,9 @@ var translate_en = {
 	inflation_options_desc : 'You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.',
 	inflation_pool : 'Vote to xlmpool.com',
 	inflation_fox  : 'Vote to RippleFox',
+	home_domain : 'Home Domain',
+	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
+	domain_done : 'Home Domain was set.',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : 'Deposit/Withdraw',

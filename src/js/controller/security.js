@@ -15,31 +15,33 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 			$scope.showSecret = flag;
 		};
 		
-		
-		$scope.inflation = '';
-		$scope.inflation_working = false;
-		$scope.inflation_error = '';
-		$scope.inflation_done = false;
+		$scope.network_error;
 		$scope.refresh = function() {
 			StellarApi.getInfo(null, function(err, data) {
 				if (err) {
 					if (err.message) {
-						$scope.inflation_error = err.message;
+						$scope.network_error = err.message;
 					} else {
 						if (err.extras && err.extras.result_xdr) {
 							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.inflation_error = resultXdr.result().results()[0].value().value().switch().name;
+							$scope.network_error = resultXdr.result().results()[0].value().value().switch().name;
 						} else {
 							console.error("Unhandle!!", err);
 						}
 					}
 				} else {
 					$scope.inflation = data.inflation_destination;
+					$scope.domain = data.home_domain;
 					$scope.$apply();
 				}
 			});
 		};
+		$scope.refresh();
 		
+		$scope.inflation = '';
+		$scope.inflation_working = false;
+		$scope.inflation_error = '';
+		$scope.inflation_done = false;
 		$scope.setInflation = function() {
 			$scope.inflation_error = '';
 			$scope.inflation_done = false;
@@ -72,6 +74,32 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 			$scope.setInflation();
 		}
 		
-		$scope.refresh();
+		$scope.domain = '';
+		$scope.domain_working = false;
+		$scope.domain_error = '';
+		$scope.domain_done = false;
+		$scope.setDomain = function() {
+			$scope.domain_error = '';
+			$scope.domain_done = false;
+			$scope.domain_working = true;
+			StellarApi.setOption('homeDomain', $scope.domain, function(err, hash){
+				$scope.domain_working = false;
+				if (err) {
+					if (err.message) {
+						$scope.domain_error = err.message;
+					} else {
+						if (err.extras && err.extras.result_xdr) {
+							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+							$scope.domain_error = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							console.error("Unhandle!!", err);
+						}
+					}
+				} else {
+					$scope.domain_done = true;
+				}
+				$scope.$apply();
+			});
+		};
 	}
 ]);

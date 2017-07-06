@@ -160,6 +160,9 @@ var translate_cn = {
 	inflation_options_desc : '你可以加入xlmpool.com来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
 	inflation_pool  : '加入xlmpool通胀池',
 	inflation_fox  : '投票给瑞狐',
+	home_domain : '域名',
+	domain_desc : '你可以给账号设置一个域名。从而在某些场景中，通过域名所在服务器取得更多的帮助信息。',
+	domain_done : '域名设置成功',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
