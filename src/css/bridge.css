@@ -48,6 +48,15 @@
     transition: none;
 }
 
+.service_info {
+    border: 1px solid #69f;
+    background: #e8f0ff;
+    display: block;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
 .service_alert {
     border: 1px solid #d12;
     background: #f8cfd3;

@@ -77,6 +77,7 @@ var translate_cn = {
 	convert_input : '请输入兑换的具体信息。',
 	receive       : '接收',
 	calculating   : '计算中',
+	path          : '路径：',
 	
 	/** History **/
 	history: '历史',

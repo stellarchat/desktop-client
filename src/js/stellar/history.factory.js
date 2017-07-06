@@ -124,6 +124,11 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				op.asset = {code: "XLM"};
 				op.amount = op.startingBalance;
 				break;
+			case 'pathPayment':
+				op.isInbound = op.destination == address;
+				op.isConvert = op.isInbound && (tx.source == address);
+				op.counterparty = op.isInbound ? tx.source : op.destination;
+				break;
 			default:
 				
 			}

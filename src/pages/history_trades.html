@@ -15,6 +15,7 @@
 			
 			<div class="feed">
 				<div ng-repeat="item in trades" ng-switch="item.tx.operations[0].type">
+					<tx-path-payment ng-switch-when="pathPayment"></tx-path-payment>
 					<tx-payment ng-switch-when="payment"></tx-payment>
 					<tx-payment ng-switch-when="createAccount"></tx-payment>
 					<tx-trust ng-switch-when="changeTrust"></tx-trust>
