@@ -43,6 +43,13 @@ myApp.directive('txOffer', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txOptions', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-options.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txDefault', [ function() {
 	return {
 		restrict : 'E',

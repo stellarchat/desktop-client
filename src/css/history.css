@@ -135,8 +135,8 @@
 }
 
 .circle-green {
-	border-color: #00D600;
-	color: #00D600;
+	border-color: #008000;
+	color: #008000;
 }
 
 .circle-blue {
@@ -147,5 +147,10 @@
 .circle-offer {
 	border-color: #0000D6;
 	color: #ff00ff;
+}
+
+.circle-option {
+	border-color: #ff8000;
+	color: #ff8000;
 }
         
