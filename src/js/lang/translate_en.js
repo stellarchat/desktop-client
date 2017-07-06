@@ -77,6 +77,7 @@ var translate_en = {
 	convert_input : 'Please enter the conversion details.',
 	receive       : 'Receive',
 	calculating   : 'Calculating',
+	path          : 'Path:',
 	
 	/** History **/
 	history: 'History',

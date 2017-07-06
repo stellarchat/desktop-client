@@ -57,6 +57,17 @@
 			</div>
 			
 			<div class="island__paddedContent">
+				<div class="service_info" ng-show="asset.origin && asset.origin.path.length">
+					<label translate="path">Path:</label>
+					<ul>
+						<li ng-repeat="asset in asset.origin.path"
+							ng-switch="asset.asset_type">
+							<span ng-switch-when="native">XLM</span>
+							<span ng-switch-default>{{asset.asset_code}}.{{asset.asset_issuer}}</span>
+						</li>
+					</ul>
+				</div>
+				
 				<div class="service_alert" ng-show="send_error">
 					<div>{{send_error}}</div>
 				</div>

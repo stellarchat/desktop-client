@@ -225,12 +225,16 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				return new StellarSdk.Asset(item.asset_code, item.asset_issuer);
 			}
 		});
+		var sendMax = alt.origin.source_amount;
+		if (alt.max_rate) {
+			sendMax = round(alt.max_rate * sendMax, 7).toString();
+		}
 		self.server.loadAccount(self.address).then(function(account){
 			self.updateSeq(account);
 			var pathPayment = StellarSdk.Operation.pathPayment({
 				destination: self.address,
 				sendAsset  : getAsset(alt.src_code, alt.src_issuer),
-				sendMax    : alt.origin.source_amount,
+				sendMax    : sendMax,
 				destAsset  : getAsset(alt.dst_code, alt.dst_issuer),
 				destAmount : alt.origin.destination_amount,
 				path       : path

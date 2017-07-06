@@ -79,6 +79,7 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
 		$scope.send_done = false;
 		$scope.send_error = '';
 		
+		$scope.asset.max_rate = 1.0001;
 		StellarApi.convert($scope.asset, function(err, hash){
 			$scope.sending = false;
 			
