@@ -6,6 +6,8 @@
 					translate="security">Security</a>
 				<a href="javascript:" ng-class="{active: isMode('inflation')}" ng-click="setMode('inflation')"
 					translate="inflation">Inflation</a>
+				<a href="javascript:" ng-class="{active: isMode('domain')}" ng-click="setMode('domain')"
+					translate="home_domain">Home Domain</a>
 			</div>
 		</div>
 		
@@ -70,6 +72,36 @@
 						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
 				</div>
 			</div>
-		</div>  
+		</div>
+		
+		<div class="col-sm-9" ng-show="isMode('domain')">
+			<label translate="important">Important:</label> 
+		    <p class="hint" translate="domain_desc">A domain name that can optionally be added to the account. Clients can look up more details from this domain.</p>
+		
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-md-10">
+					<label translate="home_domain">Home Domain</label> 
+					<input class="form-control" type="text" ng-model="domain" />
+				</div>
+			</div>
+			<div class="s-alert s-alert--alert row__message" ng-show="domain_error">
+				{{domain_error}}
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="domain_done" translate="domain_done">
+				Home Domain was set.
+			</div>
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="domain_working"
+						ng-click="setDomain()" translate="save">Save</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
+			<div class="s-alert s-alert--alert row__message">
+				{{network_error}}
+			</div>
+		</div>
 	</div>
 </section>

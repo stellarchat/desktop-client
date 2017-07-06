@@ -1,0 +1,18 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div class="circle circle-option" translate="set_options">
+			{{item.tx.operations[0].type}}
+		</div>
+	</div>
+	<div class="feed-item-comment">
+		<div ng-repeat="(key, value) in item.tx.operations[0]" ng-show="value && key != 'type'">
+			<span>{{value}}</span>
+			<span class="timestamp">{{key}}</span>
+		</div>
+	</div>
+
+	<div class="payment">
+		<div class="txamount"> </div>
+		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+	</div>
+</div>
