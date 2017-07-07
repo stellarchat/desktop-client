@@ -36,6 +36,7 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
 		$scope.asset = {};
 		$scope.finding = true;
 		$scope.send_done = false;
+		$scope.send_error = '';
 		StellarApi.queryPath($rootScope.address, $rootScope.address, arr[0], arr[1], amount, function(err, data){
 			$scope.finding = false;
 			if (err) {
@@ -61,8 +62,33 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
 					alt.src_logo = gateway.logo;
 					alt.src_name = gateway.name;
 					
-					if (alt.src_amount > 0) {
-						$scope.paths[alt.src_code + '.' + alt.src_issuer] = alt;
+					var isValid = true;
+					if (alt.src_amount <= 0) {
+						isValid = false;
+					} else {
+						if (alt.src_code == 'XLM') {
+							if ($rootScope.balance - alt.src_amount < 0) {
+								isValid = false;
+							}
+						} else {
+							if ($rootScope.lines[alt.src_code][alt.src_issuer].balance - alt.src_amount < 0) {
+								isValid = false;
+							}
+						}
+						
+						if (alt.src_code == alt.dst_code && alt.src_issuer == alt.dst_issuer && alt.price >= 1) {
+							isValid = false;
+						}
+					}
+					
+					if (isValid) {
+						if ($scope.paths[alt.src_code + '.' + alt.src_issuer]) {
+							if ($scope.paths[alt.src_code + '.' + alt.src_issuer].src_amount > alt.amount) {
+								$scope.paths[alt.src_code + '.' + alt.src_issuer] = alt;
+							}
+						} else {
+							$scope.paths[alt.src_code + '.' + alt.src_issuer] = alt;
+						}
 					}
 				});
 			}
