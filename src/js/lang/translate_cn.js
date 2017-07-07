@@ -75,6 +75,7 @@ var translate_cn = {
 	convert       : '兑换',
 	convert_title : '把一种货币转换成另一种',
 	convert_input : '请输入兑换的具体信息。',
+	convert_nopath: '没有合适的兑换路径。可能是账号的资金不足。',
 	receive       : '接收',
 	calculating   : '计算中',
 	path          : '路径：',
@@ -161,7 +162,7 @@ var translate_cn = {
 	inflation_pool  : '加入xlmpool通胀池',
 	inflation_fox  : '投票给瑞狐',
 	home_domain : '域名',
-	domain_desc : '你可以给账号设置一个域名。从而在某些场景中，通过域名所在服务器取得更多的帮助信息。',
+	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
 	
 	/** Deposit & withdrawl **/

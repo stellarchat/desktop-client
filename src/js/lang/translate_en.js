@@ -75,6 +75,7 @@ var translate_en = {
 	convert       : 'Convert',
 	convert_title : 'Convert one currency into another',
 	convert_input : 'Please enter the conversion details.',
+	convert_nopath: 'No acceptable path. Please make sure your account has enough funds.',
 	receive       : 'Receive',
 	calculating   : 'Calculating',
 	path          : 'Path:',
