@@ -10,7 +10,7 @@
 			</div>
 			
 			<div ng-repeat="(name, gateway) in gateways.getAllSources()">
-				<div class="row" ng-repeat="(code, asset) in gateway.assets">
+				<div class="row" ng-repeat="(code, asset) in gateway.assets" ng-show="asset.list">
 					<div class="row__fixedAsset">
 						<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 							code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
