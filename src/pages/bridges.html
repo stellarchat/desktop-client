@@ -9,18 +9,18 @@
 				<label class="s-inputGroup AddTrust__inputGroup"><span translate="anchor">Anchor</span></label>
 				<div class="dropdown">
 					<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="display: flex; align-items: center;">
-						<div class="AssetCard__main" style="margin-right: 8px;">
-							<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor_logo}}"></div>
-							<div class="AssetCard__content"><span class="AssetCard__code">{{anchor}}</span></div>
+						<div class="brdige_card" style="margin-right: 8px;">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" data-ng-src="{{anchor_logo}}"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">{{anchor_name}}</span></div>
 						</div>
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 						<li role="presentation" ng-repeat="(name, anchor) in bridges">
 							<a role="menuitem" tabindex="-1" href="javascript:" ng-click="changeBridge(anchor.name)">
-								<div class="AssetCard__main">
-									<div class="AssetCard__logo"><img class="AssetCard__logo__image" data-ng-src="{{anchor.logo}}"></div>
-									<div class="AssetCard__content"><span class="AssetCard__code">{{anchor.name}}</span></div>
+								<div class="brdige_card">
+									<div class="brdige_card_logo"><img class="brdige_card_logo_image" data-ng-src="{{anchor.logo}}"></div>
+									<div class="brdige_card_content"><span class="brdige_card_code">{{anchor.name}}</span></div>
 								</div>
 							</a>
 						</li>
@@ -46,11 +46,157 @@
 			</div>
 		</div>
 		
-		<div class="island">
+		<div class="island" ng-hide="anchor.service">
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row">
 				{{anchor_withdraw}}
 			</div>
+		</div>
+		
+		<div class="island" ng-show="anchor.service">
+			<div class="island__header" translate="withdraw">Withdraw</div>
+			<div class="row bridge">
+				<div ng-repeat="svc in anchor.service" ng-switch="svc.type">
+					<a ng-switch-when="alipay" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/alipay.png"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code" translate="alipay">Alipay</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="unionpay" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/unionpay.png"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code" translate="bank_card">Bank</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="bitcoin" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.png"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code" translate="bitcoin">Bitcoin</span></div>
+						</div>
+					</a>
+				</div>
+			
+				<!-- <a href="javascript:" ng-click="changeService('alipay')">
+					<div ng-class="{brdige_card:true, active:isActive('alipay')}">
+						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/alipay.png"></div>
+						<div class="brdige_card_content"><span class="brdige_card_code" translate="alipay">Alipay</span></div>
+					</div>
+				</a>
+				<a href="javascript:" ng-click="changeService('bank')">
+					<div ng-class="{brdige_card:true, active:isActive('bank')}">
+						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/unionpay.png"></div>
+						<div class="brdige_card_content"><span class="brdige_card_code" translate="bank_card">Bank</span></div>
+					</div>
+				</a>
+				
+				
+				<a href="javascript:" ng-click="changeService('ripple')">
+					<div ng-class="{brdige_card:true, active:isActive('ripple')}">
+						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
+						<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
+					</div>
+				</a> -->
+			</div>
+			
+			<div class="island__paddedContent">
+				<form id="serviceForm" name="serviceForm" role="form">
+					<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
+						<div ng-switch-when="label" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+						</div>
+						<div ng-switch-when="text" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+							<input type="text" 
+								ng-model="field.value" 
+								ng-model-options="{debounce:800}" 
+								ng-required="{{field.required}}" class="form-control" />
+						</div>
+						<div ng-switch-when="select" class="col-xs-12 col-md-10">
+							<label ng-bind="field.label"></label>
+							<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+							<select type="text" ng-model="field.value"
+								ng-required="{{field.required}}" class="form-control">
+								<option ng-repeat="option in field.options"
+									ng-bind="option.label" value="{{option.value}}"
+									ng-selected="option.selected" ng-disabled="option.disabled"></option>
+							</select>
+						</div>
+					</div>
+					<div class="row form-group brdige_card_code" ng-show="service_loading">
+						<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
+					</div>
+					<div class="form-group service_alert" ng-show="service_error">
+						<div>{{service_error}}</div>
+					</div>
+					<div class="row form-group" ng-show="service_currency">
+						<div class="col-xs-12 col-sm-6 col-md-5">
+							<label translate="will_recv">Recipient will receive</label>
+							<div class="amount-wrap">
+								<input type="number" autocomplete="off" placeholder="0.00"
+									class="input amount-big form-control"
+									ng-model="service_amount" 
+									ng-model-options="{debounce:800}"
+									required="true">
+								<select class="select currency"
+									ng-model="service_currency"
+									ng-change="updateAsset()"
+									ng-disabled = "!mulipleAsset"
+									ng-class="{'disabled': !mulipleAsset}" required="">
+									<option value="{{asset.code}}.{{asset.issuer}}" 
+										ng-repeat="asset in extra_assets" 
+										ng-selected="service_currency == (asset.code + '.' + asset.issuer)">{{asset.code}}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</form>
+				
+				<div class="form-group service_alert" ng-show="!serviceForm.$valid && service_currency">
+					<div translate="fill_form">Please fill the form correctly.</div>
+				</div>
+				<div class="form-group service_alert" ng-show="quote_error">
+					<div>{{quote_error}}</div>
+				</div>
+			
+				<div class="row form-group brdige_card_code" ng-show="quote_loading">
+					<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
+				</div>
+			</div>
+			
+			<div class="island__paddedContent" ng-show="asset.amount">
+				<label style="width:100%" translate="can_send">You can send</label>
+				<div class="btn-group-pretty">
+					<label class="btn active"> 
+						<span class="tick"></span>
+						<span class="amount">{{asset.amount | number : 4}}</span>
+						<div class="btn_card">
+							<img class="btn_card_logo" data-ng-src="{{asset.logo}}">
+							<span class="title">{{asset.code}}</span>
+							<span class="subtitle">{{asset.issuer_name}}</span>
+						</div>
+					</label>
+				</div>
+				<button class="s-button btn btn-success" 
+					ng-click="send_asset()" 
+					ng-disabled="sending">{{'send' | translate}} {{asset.code}}</button>
+			</div>
+			<div class="island__paddedContent">
+				<div class="service_alert" ng-show="send_error">
+					<div>{{send_error}}</div>
+				</div>
+				
+				<div class="service_success" ng-show="send_done">
+					<div translate="send_done">Asset successfully sent.</div>
+				</div>
+				
+			</div>
+			
 		</div>
 	</div>
 

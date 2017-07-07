@@ -4,6 +4,7 @@ var nw = new NwBuilder({
 	        '!src/node_modules/**/**',
 	        'src/node_modules/sjcl/**/**',
 	        'src/node_modules/bootstrap/dist/**/**',
+	        'src/node_modules/font-awesome/**/**',
 	        'src/node_modules/jquery/dist/jquery.min.js',
 	        'src/node_modules/angular/angular.min.js',
 	        'src/node_modules/angular-route/angular-route.min.js',
@@ -12,7 +13,7 @@ var nw = new NwBuilder({
 	        'src/node_modules/ripple-lib/build/ripple-0.12.0-min.js',
 	        'src/node_modules/stellar-sdk/dist/stellar-sdk.min.js'
 	],
-	platforms: ['win32', 'win64', 'osx64'],
+	platforms: ['win32', 'win64', 'osx64', 'linux64'],
 	flavor : 'normal',
 	version: '0.20.2'
 });

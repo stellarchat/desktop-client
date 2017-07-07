@@ -50,6 +50,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/convert', {
+		templateUrl : 'pages/convert.html',
+		controller : 'ConvertCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/hist_payments', {
 		templateUrl : 'pages/history_payments.html',
 		controller : 'PaymentsCtrl',
@@ -134,7 +140,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	};
 	
 	
-	$rootScope.balance = 88; //native asset;
+	$rootScope.balance = 0; //native asset;
+	$rootScope.reserve = 0;
 	$rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
 	$rootScope.getBalance = function(code, issuer) {
 		if (code == 'XLM') {
@@ -143,7 +150,6 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
 		}
 	}
-	$rootScope.fed_name = "";
 	$rootScope.resolveFed = function() {
 		StellarApi.getFedName(SettingFactory.getFedNetwork(), $rootScope.address, function(err, name){
 			if (err) {
@@ -161,9 +167,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	reset();
 	function reset() {
 		console.warn('reset');
+		$rootScope.fed_name = "";
 		$rootScope.address = 'undefined';
 		$rootScope.lines = {};
 		$rootScope.balance = 0;
+		$rootScope.reserve = 0;
 		
 		$rootScope.offers = {};
 		$rootScope.events = [];
@@ -187,6 +195,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	}
 	
 	$translate.use(SettingFactory.getLang());
+	console.debug('Use ' + SettingFactory.getStellarUrl());
 	StellarApi.setServer(SettingFactory.getStellarUrl());
 	if (SettingFactory.getProxy()) {
 		try {

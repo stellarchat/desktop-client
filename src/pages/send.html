@@ -16,7 +16,9 @@
 						{{balance | number : 7}}
 					</div>
 					<div class="row__shareOption">
-						<button class="s-button btn btn-success" ng-click="pick('XLM', '')">
+						<button class="s-button btn btn-success" 
+							ng-disabled="quote_id"
+							ng-click="pick('XLM', '')">
 							{{'choose' | translate}} XLM</button>
 					</div>
 				</div>
@@ -30,7 +32,9 @@
 							{{line.balance | number : 7}}
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick(line.code, line.issuer)">
+							<button class="s-button btn btn-success" 
+								ng-disabled="quote_id"
+								ng-click="pick(line.code, line.issuer)">
 								{{'choose' | translate}} {{line.code}}</button>
 						</div>
 					</div>
@@ -43,29 +47,24 @@
 		<div class="island">
 			<div class="island__header" translate="send">Send</div>
 			<div class="island__paddedContent">
-				<label class="s-inputGroup AddTrust__inputGroup" ng-hide="true">
-					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="asset_code">Asset Code</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="src_code">
-				</label>
-				<label class="s-inputGroup AddTrust__inputGroup" ng-hide="true">
-					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="issuer_id">Issuer Account ID</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="src_issuer">
-				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
-						ng-model="target_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
+						ng-model="input_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
 						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX">
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="target_amount"
+					<input type="number" autocomplete="off" class="s-inputGroup__item S-flexItem-share" 
+						ng-model="asset.amount"
+						ng-disabled="quote_id"
 						placeholder="{{'example' | translate}}: 100.25">
 				</label>
 
 				<label class="s-inputGroup AddTrust__inputGroup dropdown">
 					<button type="button" class="btn btn-secondary dropdown-toggle s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4"
-						data-toggle="dropdown" style="padding: 0 1.2em 0 1.2em;" ng-disabled="memo_provided">
+						data-toggle="dropdown" style="padding: 0 1.2em 0 1.2em;" 
+						ng-disabled="memo_provided || quote_id">
 						<span style="font-size: 18px; font-weight: 700;">{{'memo' | translate}}: {{memo_type}}</span> &nbsp;&nbsp;
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu" style="font-size: 18px; font-weight: 700;">
@@ -74,27 +73,95 @@
 					      <li><a ng-click="setMemoType('Hash')">Memo-Hash</a></li>
 					    </ul>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
-						ng-model="memo" ng-disabled="memo_provided"
+						ng-model="memo" 
+						ng-disabled="memo_provided || quote_id"
 						placeholder="{{'optional' | translate}}">
 				</label>
 			</div>
 			
 			<div>
+				<div class="island__paddedContent" ng-show="quote_id">
+					<form id="serviceForm" name="serviceForm" role="form">
+						<div ng-repeat="field in extra_fields" ng-switch="field.type" class="row">
+							<div ng-switch-when="label" class="col-xs-12 col-md-10">
+								<label ng-bind="field.label"></label>
+								<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+							</div>
+							<div ng-switch-when="text" class="col-xs-12 col-md-10">
+								<label ng-bind="field.label"></label>
+								<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+								<input type="text" 
+									ng-model="field.value" 
+									ng-model-options="{debounce:800}" 
+									ng-required="{{field.required}}" class="form-control" />
+							</div>
+							<div ng-switch-when="select" class="col-xs-12 col-md-10">
+								<label ng-bind="field.label"></label>
+								<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
+								<select type="text" ng-model="field.value"
+									ng-required="{{field.required}}" class="form-control">
+									<option ng-repeat="option in field.options"
+										ng-bind="option.label" value="{{option.value}}"
+										ng-selected="option.selected" ng-disabled="option.disabled"></option>
+								</select>
+							</div>
+						</div>
+						<div class="row form-group brdige_card_code" ng-show="service_loading">
+							<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
+						</div>
+						<div class="form-group service_alert" ng-show="service_error">
+							<div>{{service_error}}</div>
+						</div>
+						<div class="row form-group" ng-show="service_currency">
+							<div class="col-xs-12 col-sm-6 col-md-5">
+								<label translate="will_recv">Recipient will receive</label>
+								<div class="amount-wrap">
+									<input type="number" autocomplete="off" placeholder="0.00"
+										class="input amount-big form-control"
+										ng-model="service_amount" 
+										ng-model-options="{debounce:800}"
+										required="true">
+									<select class="select currency"
+										ng-model="service_currency"
+										ng-change="updateAsset()"
+										ng-disabled = "!mulipleAsset"
+										ng-class="{'disabled': !mulipleAsset}" required="">
+										<option value="{{asset.code}}.{{asset.issuer}}" 
+											ng-repeat="asset in extra_assets" 
+											ng-selected="service_currency == (asset.code + '.' + asset.issuer)">{{asset.code}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</form>
+					
+					<div class="form-group service_alert" ng-show="!serviceForm.$valid && service_currency">
+						<div translate="fill_form">Please fill the form correctly.</div>
+					</div>
+					<div class="form-group service_alert" ng-show="quote_error">
+						<div>{{quote_error}}</div>
+					</div>
+				
+					<div class="row form-group brdige_card_code" ng-show="quote_loading">
+						<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
+					</div>
+				</div>
+					
 				<div class="island__separator"></div>
 				<div class="AddTrust__confirmation">
-					<div class="s-alert s-alert--alert" ng-show="target_address && target_error.hasError()">
+					<div class="s-alert s-alert--alert" ng-show="input_address && send_error.hasError()">
 						<ul class="AddTrust__errorList">
-							<li translate="invalid_account" ng-show="target_error.invalid">Account is invalid</li>
-							<li ng-show="target_error.domain">{{target_domain}} {{'invalid_domain' | translate}}</li>
-							<li ng-show="target_error.message">{{target_error.message}}</li>
+							<li translate="invalid_account" ng-show="send_error.invalid">Account is invalid</li>
+							<li ng-show="send_error.domain">{{target_domain}} {{'invalid_domain' | translate}}</li>
+							<li ng-show="send_error.message">{{send_error.message}}</li>
 						</ul>
 					</div>
 					<div class="s-alert s-alert--alert" ng-hide="isValidMemo()">
 						<ul class="AddTrust__errorList">
-							<li>{{'memo_invaid' | translate}} {{target_error.memo}}</li>
+							<li>{{'memo_invaid' | translate}} {{send_error.memo}}</li>
 						</ul>
 					</div>
-					<div class="s-alert s-alert--alert" ng-hide="src_code">
+					<div class="s-alert s-alert--alert" ng-hide="asset.code || quote_id">
 						<ul class="AddTrust__errorList">
 							<li translate="select_asset">Please select an asset to send.</li>
 						</ul>
@@ -106,7 +173,7 @@
 					</div>
 					
 					<div class="row__message" ng-show="act_loading">
-						{{'account_loading' | translate}} {{target_address}}
+						<i class="fa fa-spinner fa-pulse"></i> {{'account_loading' | translate}} {{input_address}}
 					</div>
 					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
 						<ul class="AddTrust__errorList">
@@ -116,28 +183,43 @@
 						</ul>
 					</div>
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
-						正在发送到 {{real_address | shortaddress}}
+						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
 					
-					<div class="AddTrust__confirmation__assetCard" ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))">
+					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="asset.code">
 						<div class="AssetCard AssetCard--fixed">
 							<div class="AssetCard__main">
 								<div class="AssetCard__logo">
-									<img class="AssetCard__logo__image" data-ng-src="{{src_logo}}">
+									<img class="AssetCard__logo__image" data-ng-src="{{asset.logo}}">
 								</div>
 								<div class="AssetCard__content">
 									<div class="AssetCard__header">
-										<span class="AssetCard__code">{{src_code}}</span>{{src_name}}
+										<span class="AssetCard__code">{{asset.code}}</span>{{asset.name}}
 									</div>
-									<p class="AssetCard__issuerAccountId">{{src_issuer | shortaddress}}</p>
+									<p class="AssetCard__issuerAccountId">{{asset.issuer | shortaddress}}</p>
 								</div>
 							</div>
 						</div>
+					</div> -->
+					
+					<div class="btn-group-pretty" ng-show="asset.amount">
+						<label ng-class="{btn:true, active: isLine(line.code, line.issuer)}"
+							ng-click="pick(line.code, line.issuer)"
+							ng-repeat="line in send"> 
+							<span class="tick"></span>
+							<span class="amount">{{asset.amount | number : 4}}</span>
+							<div class="btn_card">
+								<img class="btn_card_logo" data-ng-src="{{line.logo}}">
+								<span class="title">{{line.code}}</span>
+								<span class="subtitle">{{line.name}}</span>
+							</div>
+						</label>
 					</div>
+				
 					<button class="s-button btn btn-success" 
-						ng-show="src_code && (!src_issuer || isValidAddress(src_issuer))" 
-						ng-click="send()" 
-						ng-disabled="!target_amount || !isValidAddress(real_address) || sending">{{'send' | translate}} {{src_code}}</button>
+						ng-show="asset.code" 
+						ng-click="send_asset()" 
+						ng-disabled="!asset.amount || !isValidAddress(real_address) || sending">{{'send' | translate}} {{src_code}}</button>
 				</div>
 			</div>
 

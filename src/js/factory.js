@@ -4,7 +4,15 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['lang'] = lang;
 		},
 		getLang : function() {
-			return $window.localStorage['lang'] || 'cn';
+			if ($window.localStorage['lang']) {
+				return $window.localStorage['lang'];
+			} else {
+				if (nw.global.navigator.language.indexOf('zh') >= 0) {
+					return 'cn';
+				} else {
+					return 'en';
+				}
+			}
 		},
 		setProxy : function(proxy) {
 			if ("undefined" == proxy) { 
@@ -19,7 +27,10 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['stellar_url'] = url;
 		},
 		getStellarUrl : function(url) {
-			return $window.localStorage['stellar_url'] || 'https://horizon.stellar.org';
+			if ($window.localStorage['stellar_url']) {
+				return $window.localStorage['stellar_url'];
+			}
+			return this.getLang() == 'cn' ? "https://api.chinastellar.com" : 'https://horizon.stellar.org';
 		},
 		
 		setFedNetwork : function(domain) {
@@ -70,4 +81,42 @@ myApp.factory('SettingFactory', function($window) {
 			$window.localStorage['bridge_service'] = anchor_name;
 		}
 	};
+});
+
+myApp.factory('FedNameFactory', function(SettingFactory, StellarApi) {
+	var fed = {
+		map : {}
+	};
+	
+	fed.isCached = function(address) {
+		return this.map[address] ? true : false;
+	};
+	
+	fed.getName = function(address) {
+		return this.map[address].nick;
+	};
+	
+	fed.resolve = function(address, callback) {
+		var self = this;
+		
+		if (!self.map[address]) {
+			self.map[address] = {
+				address : address,
+				nick    : ""
+			}
+		} else {
+			return callback(new Error("resolving " + address), null);
+		}
+		
+		StellarApi.getFedName(SettingFactory.getFedNetwork(), address, function(err, name){
+			if (err) {
+				console.error(address, err);
+			} else {
+				self.map[address].nick = name;
+			}
+			return callback(null, self.map[address])
+		});
+	};
+	
+	return fed;
 });

@@ -2,12 +2,14 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
                                   function($scope, $rootScope, StellarApi, StellarOrderbook, SettingFactory) {
 	$scope.offers = {
 		origin : null,
-		ask : [],
-		bid : [],
+		ask : {},
+		bid : {},
+		all : {},
 		update : function(data) {
 			this.origin = data;
-			this.ask = [];
-			this.bid = [];
+			this.all = {};
+			this.ask = {};
+			this.bid = {};
 			for (var i=0; i<data.length; i++) {
 				var offer = data[i];
 				var buy_code = offer.buying.asset_type == 'native' ? 'XLM' : offer.buying.asset_code;
@@ -15,23 +17,33 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				var sell_code = offer.selling.asset_type == 'native' ? 'XLM' : offer.selling.asset_code;
 				var sell_issuer = sell_code == 'XLM' ? '' : offer.selling.asset_issuer;
 				
+				this.all[offer.id] = {
+					id : offer.id,
+					buy_code   : buy_code,
+					buy_issuer : buy_issuer,
+					sell_code  : sell_code,
+					sell_issuer : sell_issuer,
+					amount : parseFloat(offer.amount),
+					price  : parseFloat(offer.price) 
+				};
+				
 				if (sameAsset(sell_code, sell_issuer, $scope.base_code, $scope.base_issuer)
 						&& sameAsset(buy_code, buy_issuer, $scope.counter_code, $scope.counter_issuer)) {
-					this.ask.push({
+					this.ask[offer.id] = {
 						id : offer.id,
 						amount : parseFloat(offer.amount),
 						price  : parseFloat(offer.price),
 						volume : offer.amount * offer.price
-					});
+					};
 				}
 				if (sameAsset(sell_code, sell_issuer, $scope.counter_code, $scope.counter_issuer)
 						&& sameAsset(buy_code, buy_issuer, $scope.base_code, $scope.base_issuer) ) {
-					this.bid.push({
+					this.bid[offer.id] = {
 						id : offer.id,
 						amount : offer.amount * offer.price,
 						price  : 1 / offer.price,
 						volume : parseFloat(offer.amount)
-					});
+					};
 				}
 			}
 		}
@@ -259,7 +271,11 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 				} else {
 					if (err.extras && err.extras.result_xdr) {
 						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+						if (resultXdr.result().results()) {
+							$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							$scope[type + '_fail'] = resultXdr.result().switch().name;
+						}
 					} else {
 						console.error("Unhandle!!", err);
 					}
@@ -276,14 +292,39 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		});
 	}
 	
-	$scope.cancel = function(offer_id) {
-		StellarApi.cancel(offer_id, function(err, hash){
+	$scope.cancel = function(offer_id, type) {
+		var offer = {id: offer_id};
+		
+		$scope.offers.all[offer_id].canceling = true;
+		if (type === 'bid') {
+			$scope.offers.bid[offer_id].canceling = true;
+			offer.price = $scope.offers.bid[offer_id].price;
+			offer.selling = getAsset($scope.counter_code, $scope.counter_issuer);
+			offer.buying  = getAsset($scope.base_code, $scope.base_issuer);
+		} else if (type === 'ask') {
+			$scope.offers.ask[offer_id].canceling = true;
+			offer.price = $scope.offers.ask[offer_id].price;
+			offer.selling = getAsset($scope.base_code, $scope.base_issuer);
+			offer.buying  = getAsset($scope.counter_code, $scope.counter_issuer);
+		} else {
+			// type === 'all'
+			if ($scope.offers.bid[offer_id]) { $scope.offers.bid[offer_id].canceling = true; }
+			if ($scope.offers.ask[offer_id]) { $scope.offers.ask[offer_id].canceling = true; }
+			offer.price = $scope.offers.all[offer_id].price;
+			offer.selling = getAsset($scope.offers.all[offer_id].sell_code, $scope.offers.all[offer_id].sell_issuer);
+			offer.buying  = getAsset($scope.offers.all[offer_id].buy_code, $scope.offers.all[offer_id].buy_issuer);
+		}
+		$scope.cancel_error = "";
+		StellarApi.cancel(offer, function(err, hash){
 			if (err) {
-				console.error(err);
-			} else {
-				//$scope.refreshBook();
-				$scope.refreshOffer();
+				if (err.extras && err.extras.result_xdr) {
+					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+					$scope.cancel_error = resultXdr.result().results()[0].value().value().switch().name;
+				} else {
+					$scope.cancel_error = err.detail || err.message || err;
+				}
 			}
+			$scope.refreshOffer();
 		});
 	}
 	
@@ -322,6 +363,13 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
+	$scope.isBase = function(code, issue) {
+		return sameAsset(code, issue, $scope.base_code, $scope.base_issuer);
+	}
+	$scope.isCounter = function(code, issue) {
+		return sameAsset(code, issue, $scope.counter_code, $scope.counter_issuer);
+	}
+	
 	function sameAsset(code, issuer, code2, issuer2) {
 		if (code == 'XLM') {
 			return code == code2;
@@ -330,4 +378,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 	}
 	
+	function getAsset(code, issuer) {
+		return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer); 
+	}
 } ]);

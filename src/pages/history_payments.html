@@ -13,20 +13,26 @@
 							<li>{{error_msg}}</li>
 						</ul>
 				</div>
-				<ul id="tx-history">
-					<li class="tx" ng-repeat="tx in payments">
-                           <span class="amount amount-debit" ng-if="!tx.isInbound"><span class="amount-sign">-</span>{{tx.amount}}</span>
-                           <span class="amount amount-credit" ng-if="tx.isInbound"><span class="amount-sign">+</span>{{tx.amount}}</span>
-                           <span class="asset">{{tx.asset.code}}</span>
-                           <span class="comment">{{tx.type}}({{tx.id}})</span>
-                           <div class="otherParty" ng-if="!tx.isInbound">
-                           	{{'you' | translate}} <span class="glyphicon glyphicon-arrow-right"></span> {{tx.counterparty}}
-                           </div>
-                           <div class="otherParty" ng-if="tx.isInbound">
-                           	{{tx.counterparty}} <span class="glyphicon glyphicon-arrow-right"></span> {{'you' | translate}}
-                           </div>
-					</li>
-            	</ul>
+            	<table class="table-hover HistoryTable">
+            		<thead>
+            			<tr class="HistoryTable-header">
+	            			<th translate="account_id">Account ID</th>
+	            			<th translate="amount">Amount</th>
+	            			<th translate="operation">Operation</th>
+	            		</tr>
+            		</thead>
+            		<tbody>
+            			<tr class="HistoryTable-row" ng-repeat="tx in payments">
+            				<td class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">~{{tx.nick}}</span></td>
+	            			<td class="amount">
+								<span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
+                           		<span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
+                           		<strong>{{tx.asset.code}}</strong>
+							</td>
+	            			<td>{{tx.id}}<br>{{tx.type}}</td>
+            			</tr>
+            		</tbody>
+            	</table>
         	</div>
 		</div>
 	</div>

@@ -1,0 +1,253 @@
+.bridge a {
+	text-decoration: none;
+}
+
+.brdige_card {
+	background: #f4f4f5;
+	border-radius: 3px;
+	display: flex;
+	padding: 8px 16px 8px 8px;
+	height: 64px;
+	align-items: center;
+	border: 1px solid #dedfe0;
+	margin-right: 18px;
+}
+
+.brdige_card_logo {
+	width: 50px;
+	height: 50px;
+	flex: 0 0 auto;
+	margin-right: 16px;
+	border-radius: 3px;
+}
+
+.brdige_card_logo_image {
+	width: 50px;
+	height: 50px;
+	margin: 0;
+	display: block;
+	border-radius: 3px;
+}
+
+.brdige_card_content {
+	overflow: hidden;
+}
+
+.brdige_card_code {
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 24px;
+	margin-right: 8px;
+}
+
+.island .active {
+    background: #057EEF;
+    border: 1px solid #057EEF;
+    color: rgba(255,255,255,1);
+    box-shadow: 2px 7px 30px rgba(0,0,0,.4);
+    transition: none;
+}
+
+.service_info {
+    border: 1px solid #69f;
+    background: #e8f0ff;
+    display: block;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.service_alert {
+    border: 1px solid #d12;
+    background: #f8cfd3;
+    display: block;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.service_success {
+    border: 1px solid #383;
+    display: block;
+    background: #d6e7d6;
+    padding: 14px 18px;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.amount-wrap, .input, .rc-list li, .rc-list li a, .rc-list-menu li, ul.wallets-list li
+	{
+	position: relative
+}
+
+.input.amount-big {
+	font-size: 32px;
+	font-weight: 400;
+	padding-right: 130px;
+	margin-bottom: 0;
+	height: 60px;
+}
+
+select.select {
+	background: url(../img/arrow-down-blue.png) 95% no-repeat;
+	padding: 10px 30px 10px 10px;
+	font-size: 16px;
+	border: none;
+	font-weight: 400;
+	outline: 0;
+	line-height: auto;
+	cursor: pointer;
+	border-radius: 5px;
+	color: #057EEF;
+	-moz-appearance: none;
+	appearance: none;
+	background-size: 20px 11px;
+	background-color: rgba(255, 255, 255, 0)
+}
+
+select.select:hover {
+	background-color: #e6e6e6
+}
+
+select.select.currency {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding-right: 50px;
+	background-position: 80%;
+	padding-left: 30px;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-moz-border-border-top-left-radius: 0;
+	-moz-border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	z-index: 2;
+	height: 100%;
+	font-size: 20px;
+	font-weight: 600;
+	border: 2px solid rgba(5, 126, 239, 0)
+}
+
+select.select.currency.disabled {
+	background-image: none;
+	cursor: default;
+	padding-right: 30px
+}
+
+select.select.currency.disabled:hover {
+	background-color: rgba(255, 255, 255, 0)
+}
+
+select.select option {
+	background-color: rgba(255, 255, 255, .9);
+	color: #666;
+	padding: 3px 6px
+}
+
+select.select option:hover {
+	background-color: #00AFEF
+}
+
+.input, select.select {
+	-webkit-appearance: none
+}
+
+.btn-group-pretty {
+	padding: 15px;
+}
+
+.btn-group-pretty .btn {
+	margin: 0 10px 10px;
+	padding: 10px;
+	border-radius: 5px;
+	position: relative;
+	border: 1px solid rgba(206, 209, 224, .5);
+	transition: .1s linear all
+}
+
+.btn-group-pretty .btn.active {
+	background: #057EEF;
+	border: 1px solid #057EEF;
+	color: rgba(255, 255, 255, 1);
+	box-shadow: 2px 7px 30px rgba(0, 0, 0, .4);
+	transition: none;
+	cursor: default;
+}
+
+.btn-group-pretty .btn span.title {
+	color: rgba(88, 92, 106, 1);
+	font-weight: 700;
+    font-size: 28px;
+    line-height: 24px;
+}
+
+.btn-group-pretty .btn.active span.title {
+	color: rgba(255, 255, 255, 1)
+}
+
+.btn-group-pretty .btn span.subtitle {
+	width: 100%;
+	color: rgba(88, 92, 106, .8);
+	font-size: 21px;
+    line-height: 24px;
+	
+}
+
+.btn-group-pretty .btn.active span.subtitle {
+	color: rgba(255, 255, 255, 1)
+}
+
+.btn-group-pretty .btn span {
+    text-align: left;
+    padding-right: 10px;
+}
+
+.btn-group-pretty .btn span.amount {
+	width: 100%;
+	display: block;
+	color: rgba(88, 92, 106, .8);
+	font-size: 30px;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	border-bottom: 1px dashed rgba(206, 209, 224, .5)
+}
+
+.btn-group-pretty .btn.active span.amount {
+    color: rgba(255,255,255,1);
+}
+
+.btn-group-pretty .btn span.tick {
+	width: 32px;
+	height: 32px;
+	background-size: 32px auto;
+	background-image: url(../img/tick-white.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	display: block;
+	position: absolute;
+	right: 20px;
+	top: 15px;
+	opacity: 0;
+	transition: .1s linear opacity;
+	transition-delay: .1s
+}
+
+.btn-group-pretty .btn.active span.tick {
+	opacity: 1
+}
+
+.btn-group-pretty .btn_card {
+	display: flex;
+	min-width : 256px;
+	align-items: center;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+.btn-group-pretty .btn_card_logo {
+	width: 50px;
+	height: 50px;
+	flex: 0 0 auto;
+	margin-right: 16px;
+	border-radius: 3px;
+}

@@ -22,6 +22,13 @@ myApp.directive('txPayment', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txPathPayment', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-pathPayment.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txTrust', [ function() {
 	return {
 		restrict : 'E',
@@ -33,6 +40,13 @@ myApp.directive('txOffer', [ function() {
 	return {
 		restrict : 'E',
 		templateUrl : 'directive/tx-offer.html',
+		replace : true
+	}
+} ]);
+myApp.directive('txOptions', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-options.html',
 		replace : true
 	}
 } ]);

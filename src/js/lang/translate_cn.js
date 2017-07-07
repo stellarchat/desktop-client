@@ -34,6 +34,8 @@ var translate_cn = {
 	
 	/** Balance & Trust **/
 	balance : '余额',
+	estimated : '资产折合：',
+	reserve   : '冻结：',
 	trust : '授信',
 	asset : '资产',
 	trust_limit : '授信额度',
@@ -64,9 +66,19 @@ var translate_cn = {
 	invalid_domain : '域名无响应',
 	account_loading: '正在解析账号',
 	select_asset : '请先选择要发送的资产。',
+	sending_to   : '正在发送到',
 	send_done    : '发送成功',
 	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
 	can_accept   : '账号可接收',
+	
+	/** Convert **/
+	convert       : '兑换',
+	convert_title : '把一种货币转换成另一种',
+	convert_input : '请输入兑换的具体信息。',
+	convert_nopath: '没有合适的兑换路径。可能是账号的资金不足。',
+	receive       : '接收',
+	calculating   : '计算中',
+	path          : '路径：',
 	
 	/** History **/
 	history: '历史',
@@ -74,7 +86,13 @@ var translate_cn = {
 	trades: '所有操作',
 	latest_payments : '最近的收付记录',
 	latest_trades : '最近的所有操作',
-	you : '你',
+	you         : '你',
+	account_id  : '账号',
+	operation   : '操作',
+	loading     : '载入中...',
+	load_more   : '载入更多',
+	no_more     : '没有更多的交易了',
+	set_options : '设置',
 	
 	choose : '选择',
 	example : '示例',
@@ -86,11 +104,13 @@ var translate_cn = {
 	
 	/** Trade **/
 	trade : '交易',
+	normal: '标准',
 	sent  : '发送',
 	received : '接收',
 	created : '创建',
 	offer : '买卖',
-	offer_cancel : '撤单',
+	offer_cancel    : '撤单',
+	offer_canceling : '撤单中...',
 	price : '价格',
 	buy   : '买',
 	sell  : '卖',
@@ -115,12 +135,15 @@ var translate_cn = {
 	trade_pair : '交易对',
 	pick_trade : '回到',
 	trade_page : '交易页面',
+	advanced   : '高级',
+	buying     : '买入',
+	selling    : '卖出',
 	
 	/** Setting & security **/
 	settings : '设置',
 	network  : '网络',
 	proxy    : '代理',
-	public_url : '恒星公网节点',
+	public_url : '恒星公网节点（重启生效）',
 	fed_protocol: '联邦协议',
 	fed_network : '名称服务（~）',
 	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”。',
@@ -132,9 +155,15 @@ var translate_cn = {
 	save     : '保存',
 	security : '安全',
 	inflation : '通胀地址',
-	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。',
+	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。1万个XLM每周约得到2个XLM。',
 	inflation_done : '通胀地址设置成功',
+	inflation_options      : '其它选择',
+	inflation_options_desc : '你可以加入xlmpool.com来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
+	inflation_pool  : '加入xlmpool通胀池',
 	inflation_fox  : '投票给瑞狐',
+	home_domain : '域名',
+	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
+	domain_done : '域名设置成功',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
@@ -143,8 +172,14 @@ var translate_cn = {
 	dw_coin  : '充值和提现',
 	dw_desc_line1 : '如果你要充值或提现法币和其他链上的币，你需要挑选一个锚点服务商。',
 	dw_desc_line2 : '你可以从下面的下拉框里选择一个锚点。它们是我们从社区挑选并实现了加强版联邦协议的锚点。',
-	anchor : '锚点',
+	anchor   : '锚点',
 	no_trust : '请先授信此资产',
+	alipay   : '支付宝',
+	bank_card : '银行卡',
+	fill_form : '请先完整地填写表单。',
+	analyzing : '正在解析……',
+	will_recv : '对方将收到',
+	can_send  : '你可以发送',
 		
 	Stellar : '恒星',
 	stellar_desktop_client : '恒星桌面钱包',
@@ -152,5 +187,6 @@ var translate_cn = {
 	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
 	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
 	wallet : '钱包',
+	version: '版本',
 	logout : '注销'
 }

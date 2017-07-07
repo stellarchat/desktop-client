@@ -6,6 +6,8 @@
 					translate="security">Security</a>
 				<a href="javascript:" ng-class="{active: isMode('inflation')}" ng-click="setMode('inflation')"
 					translate="inflation">Inflation</a>
+				<a href="javascript:" ng-class="{active: isMode('domain')}" ng-click="setMode('domain')"
+					translate="home_domain">Home Domain</a>
 			</div>
 		</div>
 		
@@ -41,7 +43,7 @@
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
 					<label translate="inflation">Inflaction Destination</label> 
-					<input class="form-control" type="text" ng-model="inflation" placeholder="GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX" />
+					<input class="form-control" type="text" ng-model="inflation" />
 				</div>
 			</div>
 			<div class="s-alert s-alert--alert row__message" ng-show="inflation_error">
@@ -50,16 +52,56 @@
 			<div class="s-alert s-alert--success row__message" ng-show="inflation_done" translate="inflation_done">
 				Inflation Destination was set.
 			</div>
-			<div class="row">
+			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
 						ng-click="setInflation()" translate="save">Save</a>
+				</div>
+			</div>
+			
+			<label translate="inflation_options">Other options</label>
+			<p class="hint" translate="inflation_options_desc">You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.</p>
+			
+			<div class="row">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationPool()" translate="inflation_pool">Vote to xlmpool.com/</a>
 				</div>
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
 						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
 				</div>
 			</div>
-		</div>  
+		</div>
+		
+		<div class="col-sm-9" ng-show="isMode('domain')">
+			<label translate="important">Important:</label> 
+		    <p class="hint" translate="domain_desc">A domain name that can optionally be added to the account. Clients can look up more details from this domain.</p>
+		
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-md-10">
+					<label translate="home_domain">Home Domain</label> 
+					<input class="form-control" type="text" ng-model="domain" />
+				</div>
+			</div>
+			<div class="s-alert s-alert--alert row__message" ng-show="domain_error">
+				{{domain_error}}
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="domain_done" translate="domain_done">
+				Home Domain was set.
+			</div>
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="domain_working"
+						ng-click="setDomain()" translate="save">Save</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
+			<div class="s-alert s-alert--alert row__message">
+				{{network_error}}
+			</div>
+		</div>
 	</div>
 </section>

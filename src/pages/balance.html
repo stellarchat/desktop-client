@@ -2,7 +2,8 @@
 	<group ng-show="loadState.account || true">
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
-			<div class="island__header">{{address}} 
+			<div class="island__header">
+				{{ 'estimated' | translate}} <strong>{{estimated_value | number : 0}} XLM</strong>
 				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="working">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
@@ -20,7 +21,10 @@
 							<gateway name="{{native.name}}" logo="{{native.logo}}"
 								website="{{native.website}}" code="XLM" address=""></gateway>
 						</td>
-						<td class="BalancesTable__row__amount"><span>{{balance | number : 3}} </span></td>
+						<td class="BalancesTable__row__amount">
+							<span>{{balance | number : 3}}</span><br>
+							<span class="BalancesTable__row__removeLink">({{'reserve' | translate}} {{reserve | number : 3}})</span>
+						</td>
 						<td></td>
 					</tr>
 				</tbody>

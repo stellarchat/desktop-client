@@ -14,13 +14,13 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 					t.isInbound = r.to == address;
 					t.counterparty = t.isInbound ? r.from : r.to;
 					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
-					t.amount = r.amount;
+					t.amount = parseFloat(r.amount);
 					break;
 				case 'create_account':
 					t.isInbound = r.account == address;
 					t.counterparty = t.isInbound ? r.source_account : r.account;
 					t.asset = {code: "XLM"};
-					t.amount = r.starting_balance;
+					t.amount = parseFloat(r.starting_balance);
 					break;
 				default:
 					
@@ -65,18 +65,32 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		});
 	};
 	
-	history.transactions = function(address, callback) {
+	history.transactions = function(addressOrPage, callback) {
 		var self = this;
-		this.server.transactions().forAccount(address).order('desc').limit("200").call().then(function(data) {
-			console.log(data);
+		var page;
+		var address;
+		if ('string' === typeof addressOrPage) {
+			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("200").call();
+			address = addressOrPage;
+		} else {
+			page = addressOrPage;
+			address = page.address;
+		}
+		page.then(function(page) {
+			console.log(page);
 			var transactions = [];
-			data.records.forEach(function(record){
+			page.records.forEach(function(record){
 				var tx = self.processTx(record, address);
 				console.log(tx);
 				transactions.push(tx);
 			});
 			
-			callback(null, transactions);
+			var nextPage = null;
+			if (page.records.length >= 200) {
+				nextPage = page.next();
+				nextPage.address = address;
+			}
+			callback(null, transactions, nextPage);
 		}).catch(function(err){
 			console.error('Transactions Fail !', err);
 			callback(err, null);
@@ -109,6 +123,11 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				op.counterparty = op.isInbound ? tx.source : op.destination;
 				op.asset = {code: "XLM"};
 				op.amount = op.startingBalance;
+				break;
+			case 'pathPayment':
+				op.isInbound = op.destination == address;
+				op.isConvert = op.isInbound && (tx.source == address);
+				op.counterparty = op.isInbound ? tx.source : op.destination;
 				break;
 			default:
 				

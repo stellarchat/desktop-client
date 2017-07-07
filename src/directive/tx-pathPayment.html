@@ -1,0 +1,25 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div ng-class="{true: 'circle circle-green', false: 'circle circle-red'}[item.tx.operations[0].isInbound]">
+			<span ng-if="!item.tx.operations[0].isInbound" translate="sent"></span>
+			<span ng-if="item.tx.operations[0].isInbound && item.tx.operations[0].isConvert" translate="convert"></span>
+			<span ng-if="item.tx.operations[0].isInbound && !item.tx.operations[0].isConvert" translate="received"></span>
+		</div>
+	</div>
+	<div class="feed-item-comment">
+		<span>{{item.tx.operations[0].counterparty}}</span>
+		<span ng-if="item.memo" class="timestamp">Memo-{{item.memo_type}}: {{item.memo}}</span>
+	</div>
+
+	<div class="payment">
+		<div class="txamount">{{item.tx.operations[0].amount}} {{item.tx.operations[0].asset.code}}</div>
+		
+		<div class="txamount">
+		{{item.tx.operations[0].sendMax}} {{item.tx.operations[0].sendAsset.code}} 
+		<span class="glyphicon glyphicon-arrow-right"></span>
+		{{item.tx.operations[0].destAmount}} {{item.tx.operations[0].destAsset.code}}
+		
+		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+		
+	</div>
+</div>

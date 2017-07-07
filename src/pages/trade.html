@@ -68,10 +68,16 @@
 									website="{{native.website}}" code="XLM" address=""></gateway>
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick('base', 'XLM', '')" translate="as_base">As Base Asset</button>
+							<button class="s-button btn btn-success"
+								ng-click="pick('base', 'XLM', '')"
+								ng-disabled="isBase('XLM', '')"
+								translate="as_base">As Base Asset</button>
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" ng-click="pick('counter', 'XLM', '')" translate="as_counter">As Counter Asset</button>
+							<button class="s-button btn btn-success"
+								ng-click="pick('counter', 'XLM', '')"
+								ng-disabled="isCounter('XLM', '')"
+								translate="as_counter">As Counter Asset</button>
 						</div>
 					</div>
 					<div ng-repeat="(code, sublines) in lines">
@@ -81,10 +87,16 @@
 										website="{{gateway.website}}" code="{{line.code}}" address="{{line.issuer}}"></gateway>
 							</div>
 							<div class="row__shareOption">
-								<button class="s-button btn btn-success" ng-click="pick('base', line.code, line.issuer)" translate="as_base">As Base Asset</button>
+								<button class="s-button btn btn-success"
+									ng-click="pick('base', line.code, line.issuer)"
+									ng-disabled="isBase(line.code, line.issuer)"
+									translate="as_base">As Base Asset</button>
 							</div>
 							<div class="row__shareOption">
-								<button class="s-button btn btn-success" ng-click="pick('counter', line.code, line.issuer)" translate="as_counter">As Counter Asset</button>
+								<button class="s-button btn btn-success"
+									ng-click="pick('counter', line.code, line.issuer)"
+									ng-disabled="isCounter(line.code, line.issuer)"
+									translate="as_counter">As Counter Asset</button>
 							</div>
 						</div>
 					</div>
@@ -171,8 +183,8 @@
 		</div>
 		<div class="island island--pb" ng-show="!show_pair">
 			<div class="island__header">{{'orderbook' | translate}}
-				<!-- <a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="refreshingBook">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a> -->
+				<a class="btn btn-success btn-sm" ng-click="refreshBook()" ng-disabled="refreshingBook">
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
 			<div class="OfferTables island__sub">
 				<div class="island__sub__division">
@@ -221,10 +233,13 @@
 		<div class="island" ng-show="!show_pair">
 			<div class="island__header">{{'manager_offer' | translate}}
 				<a class="btn btn-success btn-sm" ng-click="refreshOffer()" ng-disabled="refreshingOffer">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
+				</a>
+				
+				<div style="float:right"><input type="checkbox" ng-model="showAdvanced">{{ 'advanced' | translate}}</div>
 			</div>
 			<div class="island--pb">
-				<div class="ManageOffers island__sub">
+				<div class="ManageOffers island__sub" ng-hide="showAdvanced">
 					<div class=" island__sub__division">
 						<h3 class="island__sub__division__title" translate="your_buy_offers">Your buy offers</h3>
 						<table class="ManageOffers__table"><tbody>
@@ -234,12 +249,13 @@
 								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
-							<tr class="ManageOffers__table__row" ng-repeat="item in offers.bid">
+							<tr class="ManageOffers__table__row" ng-repeat="(id, item) in offers.bid">
 								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id)" translate="offer_cancel">Cancel</a>
+									<a href="javascript:" ng-click="cancel(item.id, 'bid')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
 						</tbody></table>
@@ -253,18 +269,43 @@
 								<td class="ManageOffers__table__header__item">{{counter_code}}</td>
 								<td></td>
 							</tr>
-							<tr class="ManageOffers__table__row" ng-repeat="item in offers.ask">
+							<tr class="ManageOffers__table__row" ng-repeat="(id, item) in offers.ask">
 								<td class="ManageOffers__table__row__item">{{item.price | number: price_precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id)" translate="offer_cancel">Cancel</a>
+									<a href="javascript:" ng-click="cancel(item.id, 'ask')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
 						</tbody></table>
 					</div>
 				</div>
+				
+				<div class="ManageOffers island__sub" ng-show="showAdvanced">
+						<table class="ManageOffers__table"><tbody>
+							<tr class="ManageOffers__table__header">
+								<td class="ManageOffers__table__header__item" translate="price">Price</td>
+								<td class="ManageOffers__table__header__item" translate="amount">Amount</td>
+								<td class="ManageOffers__table__header__left" translate="buying">Buying</td>
+								<td class="ManageOffers__table__header__left" translate="selling">Selling</td>
+								<td></td>
+							</tr>
+							<tr class="ManageOffers__table__row" ng-repeat="(id, item) in offers.all">
+								<td class="ManageOffers__table__row__item">{{item.price | number: 4}}</td>
+								<td class="ManageOffers__table__row__item">{{item.amount | number: 4}}</td>
+								<td class="ManageOffers__table__row__left">{{item.buy_code}}<span class="issuer" ng-show="item.buy_issuer">({{item.buy_issuer | shortaddress}})</span></td>
+								<td class="ManageOffers__table__row__left">{{item.sell_code}}<span class="issuer" ng-show="item.sell_issuer">({{item.sell_issuer | shortaddress}})</span></td>
+								<td class="ManageOffers__table__row__item">
+									<a href="javascript:" ng-click="cancel(item.id, 'all')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
+								</td>
+							</tr>
+						</tbody></table>
+				</div>
+				
 			</div>
+			<div class="s-alert s-alert--error OfferMaker__message" ng-show="cancel_error">{{cancel_error}}</div>
 		</div>
 
 	</div>
