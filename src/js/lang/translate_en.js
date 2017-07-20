@@ -163,6 +163,12 @@ var translate_en = {
 	home_domain : 'Home Domain',
 	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
 	domain_done : 'Home Domain was set.',
+	manage_data : 'Manage Data',
+	data_desc1  : 'Allows you to set,modify or delete a Data Entry (name/value pair) that is attached to a particular account. An account can have an arbitrary amount of DataEntries attached to it. Each DataEntry increases the minimum balance needed to be held by the account.',
+	data_desc2  : 'DataEntries can be used for application specific things. They are not used by the core Stellar protocol.',
+	data_key    : 'Data Entry Name',
+	data_value  : 'Data Entry Value',
+	data_done   : 'Data entry was set.',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : 'Deposit/Withdraw',

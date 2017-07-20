@@ -367,6 +367,25 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	
+	api.setData = function(name, value, callback) {
+		var self = this;
+		var opt = {name: name, value: value? value : null};
+		console.debug('manageData:', name, '-', value);
+		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
+			var op = StellarSdk.Operation.manageData(opt);
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log('Data updated.', txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('manageData Fail !', err);
+			callback(err, null);
+		});
+	};
+	
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);
@@ -548,3 +567,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
 	return api;
 } ]);
+
+
+function b64DecodeUnicode(str) {
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
