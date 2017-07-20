@@ -164,6 +164,12 @@ var translate_cn = {
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
+	manage_data : '数据',
+	data_desc1  : '你可以给账号设置任意多的数据项（名称和值），每个数据项都会冻结相应的流明币XLM。',
+	data_desc2  : '数据项可用于各种应用，恒星核心协议并不直接使用它们。',
+	data_key    : '名称',
+	data_value  : '值',
+	data_done   : '数据项设置成功',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
