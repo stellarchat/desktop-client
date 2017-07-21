@@ -93,6 +93,7 @@ var translate_cn = {
 	load_more   : '载入更多',
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
+	set_data    : '数据',
 	
 	choose : '选择',
 	example : '示例',

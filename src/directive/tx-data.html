@@ -1,0 +1,18 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div class="circle circle-option" translate="set_data">
+			{{item.tx.operations[0].type}}
+		</div>
+	</div>
+	<div class="feed-item-comment">
+		<div style="white-space:nowrap;">
+			<span>{{item.tx.operations[0].name}}</span>
+			<span class="timestamp">{{item.tx.operations[0].value}}</span>
+		</div>
+	</div>
+
+	<div class="payment">
+		<div class="txamount"> </div>
+		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+	</div>
+</div>
