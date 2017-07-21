@@ -93,6 +93,7 @@ var translate_en = {
 	load_more   : 'Load more',
 	no_more     : 'No more transactions left',
 	set_options : 'Options',
+	set_data    : 'Data',
 	
 	choose : 'Choose',
 	example : 'example',
