@@ -7,7 +7,7 @@ var translate_en = {
 	account_password : 'Account password',
 	open_existed_account : 'Open existing account',
 	create_blank : 'Create an empty account',
-	create_by_secret : 'Create a new account with a secret key',
+	create_by_secret : 'Import existing secret key',
 	encrypt_new_file : 'Encrypt your new account file',
 	wallet_file : 'Wallet file',
 	password : 'Password',
@@ -138,6 +138,11 @@ var translate_en = {
 	advanced   : 'Advanced',
 	buying     : 'Buying',
 	selling    : 'Selling',
+	
+	/** ICO **/
+	ico_stellar : 'Using Stellar for ICOs',
+	ico_note: 'Note: Before becoming involved in an ICO, cryptocurrency investors and enthusiasts need to consider the risks involved when participating. We do NOT endorse any of these projects.',
+	ico_instruction: 'After adding the trust line, select "Trade - Convert". You can use any currency to purchase the ICO.',
 	
 	/** Setting & security **/
 	settings : 'Settings',

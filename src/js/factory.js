@@ -120,3 +120,43 @@ myApp.factory('FedNameFactory', function(SettingFactory, StellarApi) {
 	
 	return fed;
 });
+
+myApp.factory('RemoteFactory', function($http) {
+	var remote = {};
+	
+	function getResource(url, callback){
+		console.debug('GET: ' + url);
+		$http({
+			method: 'GET',
+			url: url
+		}).then(function(res) {
+			if (res.status != "200") {
+				callback(res, null);
+			} else {
+				callback(null, res.data);
+			}
+		}).catch(function(err) {
+			callback(err, null);
+		});
+	}
+	
+	// Poor network in China, need a backup data source
+	remote.getIcoAnchors = function(callback) {
+		var self = this;
+		var url = 'https://stellarchat.github.io/ico/data/anchor.json';
+		var backup = 'https://ico.stellar.chat/data/anchor.json';
+		
+		getResource(url, function(err, data) {
+			if (err) {
+				console.error(err);
+				getResource(backup, function(err, data){
+					return callback(err, data);
+				});
+			} else {
+				return callback(null, data);
+			}
+		});
+	};
+	
+	return remote;
+});
