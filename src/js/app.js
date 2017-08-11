@@ -80,6 +80,18 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/ico', {
+		templateUrl : 'pages/ico.html',
+		controller : 'IcoCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/ico/:type', {
+		templateUrl : 'pages/ico.html',
+		controller : 'IcoCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/settings', {
 		templateUrl : 'pages/settings.html',
 		controller : 'SettingsCtrl',
@@ -91,8 +103,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory',
-           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory) {
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory', 'RemoteFactory',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory) {
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -163,6 +175,13 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	
 	//the default gateway list
 	$rootScope.gateways = gateways;
+	RemoteFactory.getIcoAnchors(function(err, data){
+		if (err) {
+			console.error(err);
+		} else {
+			gateways.addAnchors(data);
+		}
+	});
 	
 	reset();
 	function reset() {

@@ -1,0 +1,40 @@
+<section class="col-xs-12 content">
+	<group ng-show="loadState.account || true">
+	<div class="so-back islandBack islandBack--t">
+		<div class="island">
+			<div class="island__header" translate="ico_stellar">Using Stellar for ICOs</div>
+			<div class="island__paddedContent">
+				<p>
+					{{'ico_instruction' | translate}}<br>{{'ico_note' | translate}}
+				</p>
+			</div>
+			
+			<div ng-repeat="ico in projects.ongoing">
+				<div class="row" >
+					<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(ico.issuer)">
+								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
+									code="{{ico.code}}" address="{{ico.issuer}}"></gateway>
+					</div>
+					<div class="row__shareOption">
+						<button class="s-button btn btn-danger" ng-show="hasLine(ico.code, ico.issuer) && !hasBalance(ico.code, ico.issuer)" ng-click="delTrust(ico.code, ico.issuer)" ng-disabled="isChanging(ico.code, ico.issuer)">{{'trust_remove' | translate}}</button>
+						<button class="s-button btn btn-warning" ng-show="hasLine(ico.code, ico.issuer) && hasBalance(ico.code, ico.issuer)" ng-disabled="true">{{'trust_remove_desc' | translate}}</button>
+						<button class="s-button btn btn-success" ng-hide="hasLine(ico.code, ico.issuer)" ng-click="addTrust(ico.code, ico.issuer)" ng-disabled="isChanging(ico.code, ico.issuer)">{{'trust_add' | translate}} {{ico.code}}</button>
+					</div>
+				</div>
+				<div class="row no-top">
+					<p><a class="AssetCard__federation" href="{{ico.website}}" target="_blank" ng-show="ico.website">{{ico.website}}</a></p>
+					<p>{{ico.p1}}</p>
+					<p>{{ico.p2}}</p>
+				</div>	
+			</div>
+				
+			<div class="island__paddedContent" ng-show="trust_error">
+				<div class="s-alert s-alert--alert">
+					{{trust_error}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</group>
+</section>
