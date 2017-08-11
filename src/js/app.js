@@ -183,6 +183,15 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		}
 	});
 	
+	$rootScope.ico_data;
+	RemoteFactory.getIcoItems(function(err, data){
+		if (err) {
+			console.error(err);
+		} else {
+			$rootScope.ico_data = data;
+		}
+	});
+	
 	reset();
 	function reset() {
 		console.warn('reset');

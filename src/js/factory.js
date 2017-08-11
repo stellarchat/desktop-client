@@ -158,5 +158,22 @@ myApp.factory('RemoteFactory', function($http) {
 		});
 	};
 	
+	remote.getIcoItems = function(callback) {
+		var self = this;
+		var url = 'https://stellarchat.github.io/ico/data/ico.json';
+		var backup = 'https://ico.stellar.chat/data/ico.json';
+		
+		getResource(url, function(err, data) {
+			if (err) {
+				console.error(err);
+				getResource(backup, function(err, data){
+					return callback(err, data);
+				});
+			} else {
+				return callback(null, data);
+			}
+		});
+	};
+	
 	return remote;
 });
