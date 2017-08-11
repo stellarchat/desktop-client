@@ -9,7 +9,7 @@
 				</p>
 			</div>
 			
-			<div ng-repeat="ico in projects.ongoing">
+			<div ng-repeat="ico in ico_data.ongoing">
 				<div class="row" >
 					<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(ico.issuer)">
 								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
