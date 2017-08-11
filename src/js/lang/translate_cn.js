@@ -7,7 +7,7 @@ var translate_cn = {
 	account_password : '账户密码',
 	open_existed_account : '打开已有账户',
 	create_blank : '创建一个全新账户',
-	create_by_secret : '用秘钥创建账户',
+	create_by_secret : '用秘钥创建',
 	encrypt_new_file : '加密你的新账户文件',
 	wallet_file : '账户文件',
 	password : '密码',
@@ -139,6 +139,11 @@ var translate_cn = {
 	advanced   : '高级',
 	buying     : '买入',
 	selling    : '卖出',
+	
+	/** ICO **/
+	ico_stellar : '用恒星进行ICO',
+	ico_note: '警告：在参与ICO之前，你需要仔细考虑ICO所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
+	ico_instruction: '授信所需的ICO资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与ICO。',
 	
 	/** Setting & security **/
 	settings : '设置',
