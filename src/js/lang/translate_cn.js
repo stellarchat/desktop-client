@@ -149,7 +149,7 @@ var translate_cn = {
 	settings : '设置',
 	network  : '网络',
 	proxy    : '代理',
-	public_url : '恒星公网节点（重启生效）',
+	public_url : '恒星公网节点',
 	fed_protocol: '联邦协议',
 	fed_network : '名称服务（~）',
 	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”。',

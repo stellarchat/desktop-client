@@ -224,7 +224,13 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	
 	$translate.use(SettingFactory.getLang());
 	console.debug('Use ' + SettingFactory.getStellarUrl());
-	StellarApi.setServer(SettingFactory.getStellarUrl());
+	try {
+		StellarApi.setServer(SettingFactory.getStellarUrl());
+	} catch(e) {
+		console.error("Cannot set server", SettingFactory.getStellarUrl(), e);
+		StellarApi.setServer(null);
+	}
+	
 	if (SettingFactory.getProxy()) {
 		try {
 			nw.App.setProxyConfig(SettingFactory.getProxy()); //"127.0.0.1:53323"
