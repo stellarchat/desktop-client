@@ -14,9 +14,11 @@
   "license": "MIT",
   "dependencies": {
     "angular": "^1.6.0",
+    "angular-chart.js": "^1.1.1",
     "angular-route": "^1.6.1",
     "angular-translate": "^2.13.1",
     "bootstrap": "^3.3.7",
+    "chart.js": "^2.6.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
     "nw-builder": "^3.1.3",
