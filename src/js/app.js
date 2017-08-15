@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate']);
+var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js']);
 
 myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	$translateProvider.translations('cn', translate_cn);
@@ -190,6 +190,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		} else {
 			$rootScope.ico_data = data;
 		}
+	});
+	
+	$rootScope.stellar_ticker;
+	RemoteFactory.getStellarTicker(function(err, ticker){
+		if (ticker) { $rootScope.stellar_ticker = ticker; }
 	});
 	
 	reset();

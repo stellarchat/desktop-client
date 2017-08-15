@@ -36,6 +36,7 @@ var translate_en = {
 	balance : 'Balance',
 	estimated : 'Estimated value of holdings:',
 	reserve   : 'Reserve:',
+	total : 'Total',
 	trust : 'Trust',
 	asset : 'Asset',
 	trust_limit : 'Trust Limit',
