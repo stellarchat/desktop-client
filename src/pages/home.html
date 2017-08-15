@@ -1,4 +1,4 @@
-<section class="col-xs-12 content worldimg" style="height: 80%;" ng-controller="HomeCtrl">
+<section class="col-xs-12 content worldimg" style="height: 80%;">
 	<div class="page-header">
 	    <h3 translate="stellar_desktop_client">Stellar Desktop Client</h3>
 	</div>
@@ -8,4 +8,34 @@
     
     <p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
 	<p class="lead" translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</p>
+	
+	<div class="island" ng-show="stellar_ticker">
+		<div class="row" >
+			<div class="row__shareOption">
+				<canvas id="pie" class="chart chart-pie chart-xs" chart-data="pie.data" chart-labels="pie.labels" chart-options="pie.options"></canvas>
+			</div>
+			<div class="row__shareOption" style="flex-grow: 2;">
+				<table class="table table-hover" style="border: 1px solid #dedfe0;">
+					<thead>
+						<tr>
+							<td><strong>{{'total' | translate}}</strong></td>
+							<td class="right"><strong>{{pie.total | number: 0}}</strong></td>
+							<td class="right"><strong>100 %</strong></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="line in pie.table">
+							<td>
+								{{line.curr}}
+							</td>
+							<td class="right">{{line.volume | number : 0}}</td>
+							<td class="right">{{line.pct | number : 2}} %<br/>
+							</td>
+						</tr>
+					</tobdy>
+				</table>
+			</div>
+		</div>
+	</div>
+	
 </section>

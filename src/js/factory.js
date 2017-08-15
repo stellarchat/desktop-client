@@ -142,7 +142,6 @@ myApp.factory('RemoteFactory', function($http) {
 	
 	// Poor network in China, need a backup data source
 	remote.getIcoAnchors = function(callback) {
-		var self = this;
 		var url = 'https://stellarchat.github.io/ico/data/anchor.json';
 		var backup = 'https://ico.stellar.chat/data/anchor.json';
 		
@@ -159,7 +158,6 @@ myApp.factory('RemoteFactory', function($http) {
 	};
 	
 	remote.getIcoItems = function(callback) {
-		var self = this;
 		var url = 'https://stellarchat.github.io/ico/data/ico.json';
 		var backup = 'https://ico.stellar.chat/data/ico.json';
 		
@@ -174,6 +172,11 @@ myApp.factory('RemoteFactory', function($http) {
 			}
 		});
 	};
+	
+	remote.getStellarTicker = function(callback) {
+		var url = 'http://ticker.stellar.org/';
+		getResource(url, callback);
+	}
 	
 	return remote;
 });

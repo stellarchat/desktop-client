@@ -115,6 +115,10 @@ code {
 	flex: 0;
 }
 
+.right {
+	text-align: right;
+}
+
 /*--------------------------------------------------
 .currency-summary {
   font-size: 18px;
