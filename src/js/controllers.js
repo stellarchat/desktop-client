@@ -47,6 +47,24 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 	};
 	function updatePie() {
 		$scope.pie.reset();
+		
+		$rootScope.stellar_ticker.assets.forEach(function(asset){
+			if (asset.code == 'XLM') {
+				$scope.pie.total = asset.volume24h_XLM;
+			} else {
+				if (asset.volume24h_XLM) {
+					$scope.pie.labels.push(asset.slug);
+					$scope.pie.data.push(round(asset.volume24h_XLM, 0));
+					$scope.pie.table.push({
+						curr: asset.code, 
+						domain: asset.domain, 
+						volume: asset.volume24h_XLM, 
+						pct: asset.volume24h_XLM * 100 / $scope.pie.total
+					});
+				}
+			}
+		});
+		/*
 		$rootScope.stellar_ticker.forEach(function(pair){
 			var curr = pair.Name.split('_');
 			var base = curr[0];
@@ -68,6 +86,7 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 		$scope.pie.table.forEach(function(line) {
 			line.pct = 100 * line.volume / $scope.pie.total; 
 		});
+		*/
 	}
 	
 	if ($rootScope.stellar_ticker) {

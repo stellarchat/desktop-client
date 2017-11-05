@@ -174,7 +174,8 @@ myApp.factory('RemoteFactory', function($http) {
 	};
 	
 	remote.getStellarTicker = function(callback) {
-		var url = 'http://ticker.stellar.org/';
+		//var url = 'http://ticker.stellar.org/';
+		var url = 'https://api.stellarterm.com/v1/ticker.json';
 		getResource(url, callback);
 	}
 	

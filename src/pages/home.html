@@ -11,14 +11,15 @@
 	
 	<div class="island" ng-show="stellar_ticker">
 		<div class="row" >
-			<div class="row__shareOption">
+			<div class="row__shareOption" style="flex-grow: 2;">
 				<canvas id="pie" class="chart chart-pie chart-xs" chart-data="pie.data" chart-labels="pie.labels" chart-options="pie.options"></canvas>
 			</div>
-			<div class="row__shareOption" style="flex-grow: 2;">
+			<div class="row__shareOption" style="flex-grow: 3;">
 				<table class="table table-hover" style="border: 1px solid #dedfe0;">
 					<thead>
 						<tr>
-							<td><strong>{{'total' | translate}}</strong></td>
+							<td><strong>XLM</strong></td>
+							<td><strong></td>
 							<td class="right"><strong>{{pie.total | number: 0}}</strong></td>
 							<td class="right"><strong>100 %</strong></td>
 						</tr>
@@ -27,6 +28,9 @@
 						<tr ng-repeat="line in pie.table">
 							<td>
 								{{line.curr}}
+							</td>
+							<td>
+								{{line.domain}}
 							</td>
 							<td class="right">{{line.volume | number : 0}}</td>
 							<td class="right">{{line.pct | number : 2}} %<br/>
