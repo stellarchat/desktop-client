@@ -281,7 +281,9 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
 			$scope.deposit[code].changing = false;
 			if (err) {
-				if (err.extras && err.extras.result_xdr) {
+				if (err.name == "NotFoundError") {
+					$scope.deposit[code].trust_error = "NotFoundError";
+				} else if (err.extras && err.extras.result_xdr) {
 					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
 					$scope.deposit[code].trust_error = resultXdr.result().results()[0].value().value().switch().name;
 				} else {

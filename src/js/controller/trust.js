@@ -69,7 +69,9 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
 			$scope.setChanging(code, issuer, false);
 			if (err) {
-				if (err.extras && err.extras.result_xdr) {
+				if (err.name == "NotFoundError") {
+					$scope.trust_error = "NotFoundError";
+				} else if (err.extras && err.extras.result_xdr) {
 					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
 					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
 				} else {

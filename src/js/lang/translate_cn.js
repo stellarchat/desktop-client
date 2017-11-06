@@ -202,5 +202,9 @@ var translate_cn = {
 	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
 	wallet : '钱包',
 	version: '版本',
-	logout : '注销'
+	logout : '注销',
+	
+	/** Error **/
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
 }
