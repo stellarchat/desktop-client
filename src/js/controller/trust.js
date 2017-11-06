@@ -9,6 +9,11 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 	$scope.fed_error;
 	$scope.fed_loading;
 	
+	$scope.show_all = false;
+	$scope.showHide = function() {
+		$scope.show_all = !$scope.show_all;
+	}
+	
 	$scope.resolve = function() {
 		var snapshot = $scope.fed_url;
 		$scope.fed_error = false;
