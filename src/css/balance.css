@@ -199,7 +199,7 @@
 .BalancesTable__row__amount {
 	font-family: 'OpenSansLight';
 	text-align: right;
-	font-size: 24px;
+	font-size: 22px;
 }
 
 .BalancesTable__row__limit {
@@ -224,7 +224,7 @@
 }
 
 .AssetCard--fixed {
-	width: 420px;
+	width: 400px;
 }
 
 .AssetCard--container .AssetCard__main {
