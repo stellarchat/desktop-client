@@ -141,6 +141,7 @@ var translate_en = {
 	selling    : 'Selling',
 	
 	/** ICO **/
+	ico : 'ICO',
 	ico_stellar : 'Using Stellar for ICOs',
 	ico_note: 'Note: Before becoming involved in an ICO, cryptocurrency investors and enthusiasts need to consider the risks involved when participating. We do NOT endorse any of these projects.',
 	ico_instruction: 'After adding the trust line, select "Trade - Convert". You can use any currency to purchase the ICO.',
@@ -200,5 +201,9 @@ var translate_en = {
 	app_feedback     : 'You can submit an issue on github if there are any problems.',
 	wallet : 'Wallet',
 	version: 'Version',
-	logout : 'Logout'
+	logout : 'Logout',
+	
+	/** Error **/
+	NotFoundError : 'The resource was not found. Your account should be funded first.',
+	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
 }

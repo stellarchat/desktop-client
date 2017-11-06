@@ -142,9 +142,10 @@ var translate_cn = {
 	selling    : '卖出',
 	
 	/** ICO **/
-	ico_stellar : '用恒星进行ICO',
-	ico_note: '警告：在参与ICO之前，你需要仔细考虑ICO所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
-	ico_instruction: '授信所需的ICO资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与ICO。',
+	ico : '衍生项目',
+	ico_stellar : '恒星的衍生项目',
+	ico_note: '警告：在参与项目之前，你需要仔细考虑项目所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
+	ico_instruction: '授信衍生项目的资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与。',
 	
 	/** Setting & security **/
 	settings : '设置',
@@ -201,5 +202,9 @@ var translate_cn = {
 	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
 	wallet : '钱包',
 	version: '版本',
-	logout : '注销'
+	logout : '注销',
+	
+	/** Error **/
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
 }
