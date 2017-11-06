@@ -41,7 +41,11 @@
 					{{info.extra_info}}
 				</div>
 				<div class="row_bridge row__message--error" style="flex: 1;" ng-show="info.no_trust">
-					<strong translate="no_trust">Please create the trust line first.</strong>
+					<strong ng-hide="info.trust_error" translate="no_trust">Please create the trust line first.</strong>
+					<strong ng-show="info.trust_error">{{info.trust_error}}</strong>
+				</div>
+				<div class="row_bridge" style="flex: 1;" ng-show="info.no_trust">
+					<button class="s-button btn btn-success" ng-click="addTrust(info.code, info.issuer)" ng-disabled="info.changing">{{'trust_add' | translate}} {{info.code}}</button>
 				</div>
 			</div>
 		</div>
