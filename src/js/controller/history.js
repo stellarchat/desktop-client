@@ -173,7 +173,7 @@ myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi',
 							console.warn(snapshot[id]);
 						}
 					});
-					console.debug('effects', $scope.effects);
+					//console.debug('effects', $scope.effects);
 				});
 			}
 			$scope.$apply();
