@@ -84,8 +84,10 @@ var translate_cn = {
 	/** History **/
 	history: '历史',
 	payments: '转账',
+	effects: '变动',
 	trades: '所有操作',
 	latest_payments : '最近的收付记录',
+	latest_effects : '最近的账户变动',
 	latest_trades : '最近的所有操作',
 	you         : '你',
 	account_id  : '账号',

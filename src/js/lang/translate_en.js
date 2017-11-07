@@ -84,8 +84,10 @@ var translate_en = {
 	/** History **/
 	history: 'History',
 	payments: 'Payments',
+	effects: 'Effects',
 	trades: 'Transactions',
 	latest_payments : 'Latest Payments',
+	latest_effects : 'Latest Effects',
 	latest_trades : 'Latest Transactions',
 	you         : 'You',
 	account_id  : 'Account ID',
@@ -204,6 +206,6 @@ var translate_en = {
 	logout : 'Logout',
 	
 	/** Error **/
-	NotFoundError : 'The resource was not found. Your account should be funded first.',
+	NotFoundError : 'The resource was not found. Your account has to be activated first.',
 	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
 }
