@@ -10,7 +10,7 @@ var nw = new NwBuilder({
 	        'src/node_modules/angular-route/angular-route.min.js',
 	        'src/node_modules/angular-translate/dist/angular-translate.min.js',
 	        'src/node_modules/chart.js/dist/Chart.min.js',
-	    	'scr/node_modules/angular-chart.js/dist/angular-chart.min.js',
+	    	'src/node_modules/angular-chart.js/dist/angular-chart.min.js',
 	        'src/node_modules/underscore/underscore-min.js',
 	        'src/node_modules/ripple-lib/build/ripple-0.12.0-min.js',
 	        'src/node_modules/stellar-sdk/dist/stellar-sdk.min.js'
