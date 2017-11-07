@@ -34,31 +34,25 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		});
 	};
 	
-	history.effects = function(address, callback) {
-		this.server.effects().forAccount(address).order("desc").limit("200").call().then(function(data){
+	history.effects = function(addressOrPage, callback) {
+		var self = this;
+		var page;
+		var address;
+		if ('string' === typeof addressOrPage) {
+			address = addressOrPage;
+			page = this.server.effects().forAccount(address).order("desc").limit("20").call();
+		} else {
+			page = addressOrPage;
+			address = page.address;
+		}
+		page.then(function(data){
 			console.log(data);
-			var effects = []; 
-			data.records.forEach(function(r){
-				var t = { "id": r.id, "type": r.type };
-				switch(r.type){
-				case 'payment':
-					t.isInbound = r.to == address;
-					t.counterparty = t.isInbound ? r.from : r.to;
-					t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
-					t.amount = r.amount;
-					break;
-				case 'create_account':
-					t.isInbound = r.account == address;
-					t.counterparty = t.isInbound ? r.source_account : r.account;
-					t.asset = {code: "XLM"};
-					t.amount = r.starting_balance;
-					break;
-				default:
-					
-				}
-				effects.push(t);
-			});
-			callback(null, effects);
+			var nextPage = null;
+			if (data.records.length >= 20) {
+				nextPage = data.next();
+				nextPage.address = address;
+			}
+			callback(null, data.records, nextPage);
 		}).catch(function(err){
 			console.error('Effects Fail !', err);
 			callback(err, null);

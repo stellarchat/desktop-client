@@ -62,6 +62,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/hist_effects', {
+		templateUrl : 'pages/history_effects.html',
+		controller : 'EffectsCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/hist_trades', {
 		templateUrl : 'pages/history_trades.html',
 		controller : 'TradesCtrl',
