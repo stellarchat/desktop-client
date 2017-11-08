@@ -30,7 +30,7 @@ myApp.factory('SettingFactory', function($window) {
 			if ($window.localStorage['stellar_url']) {
 				return $window.localStorage['stellar_url'];
 			}
-			return this.getLang() == 'cn' ? "https://api.chinastellar.com" : 'https://horizon.stellar.org';
+			return this.getLang() == 'cn' ? "https://stellar-api.wancloud.io" : 'https://horizon.stellar.org';
 		},
 		
 		setFedNetwork : function(domain) {
