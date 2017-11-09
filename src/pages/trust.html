@@ -10,7 +10,7 @@
 			</div>
 			
 			<div ng-repeat="(name, gateway) in gateways.getAllSources()">
-				<div class="row" ng-repeat="(code, asset) in gateway.assets" ng-show="asset.list">
+				<div class="row" ng-repeat="(code, asset) in gateway.assets" ng-show="asset.list || show_all">
 					<div class="row__fixedAsset">
 						<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 							code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
@@ -25,9 +25,16 @@
 				
 			<div class="island__paddedContent" ng-show="trust_error">
 				<div class="s-alert s-alert--alert">
-					{{trust_error}}
+					{{trust_error | translate}}
 				</div>
 			</div>
+			
+			<a href="" ng-click="showHide()">
+				<div class="txfoot">
+					<span ng-show="!show_all"><i class="fa fa-angle-double-down fa-2x"></i></span>
+					<span ng-show="show_all"><i class="fa fa-angle-double-up fa-2x"></i></span>
+				</div>
+			</a>
 		</div>
 	</div>
 

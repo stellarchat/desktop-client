@@ -15,6 +15,49 @@ body {
 	background-image: url(../img/wireframe-dotted-world.svg);
 	background-repeat:no-repeat;
 }
+
+.header {
+	margin-bottom: 20px;
+}
+.header nav {
+	margin-bottom: 0;
+}
+.header .subnav {
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #ccccca;
+}
+
+.header .subnav ul {
+  padding: 0;
+  margin: 0 0 0 52px;
+  list-style: none;
+}
+
+.header .subnav ul > li {
+  float: left;
+  min-width: 70px;
+  margin: 0 5px 0 0;
+  text-align: center;
+}
+
+.header .subnav ul > li a {
+  display: inline-block;
+  padding: 10px;
+  color: #888888;
+}
+
+.header .subnav ul > li a:hover,
+.header .subnav ul > li a:focus {
+  color: #1f1f1e;
+  text-decoration: none;
+  border-bottom: 2px solid #ccccca;
+}
+
+.header .subnav ul > li.active a {
+  font-family: 'OpenSansRegular';
+  border-bottom: 2px solid #888888;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -70,6 +113,10 @@ code {
 	align-items: center;
 	justify-content: center;
 	flex: 0;
+}
+
+.right {
+	text-align: right;
 }
 
 /*--------------------------------------------------

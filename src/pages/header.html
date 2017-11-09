@@ -1,4 +1,4 @@
-<div ng-controller="HeaderCtrl">
+<div ng-controller="HeaderCtrl" class="header">
     <header ng-show="!showMenu" class="auth">
       <h1 translate="header_wellcome">Stellar is a platform that connects banks, payments systems, and people.</h1>
     </header>
@@ -17,27 +17,25 @@
 	    </div>
 	    <div class="collapse navbar-collapse" id="myNavbar">
 	      <ul class="nav navbar-nav">
-	        <li class="dropdown">
+	        <!-- <li class="dropdown">
 	          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">{{'history' | translate}} <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 	            <li><a href="javascript:" ng-click="goTo('/hist_payments')">{{'payments' | translate}}</a></li>
 	            <li><a href="javascript:" ng-click="goTo('/hist_trades')">{{'trades' | translate}}</a></li>
 	          </ul>
+	        </li> -->
+	        <li ng-class="{active:isActive('/hist_payments') || isActive('/hist_trades') || isActive('/hist_effects')}">
+	        	<a href="javascript:" ng-click="goTo('/hist_payments')">{{'history' | translate}}</a>
 	        </li>
-	        <li class="dropdown">
-	          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:">{{'trade' | translate}} <span class="caret"></span></a>
-	          <ul class="dropdown-menu">
-	            <li><a href="javascript:" ng-click="goTo('/trade')">{{'normal' | translate}}</a></li>
-	            <li><a href="javascript:" ng-click="goTo('/convert')">{{'convert' | translate}}</a></li>
-	          </ul>
-	        </li>
-	        
+	        <li ng-class="{active:isActive('/trade') || isActive('/convert')}"><a href="javascript:" ng-click="goTo('/trade')">{{'trade' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/balance')}"><a href="javascript:" ng-click="goTo('/balance')">{{'balance' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/send')}"><a href="javascript:" ng-click="goTo('/send')">{{'send' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/trust')}"><a href="javascript:" ng-click="goTo('/trust')">{{'trust' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/bridges')}"><a href="javascript:" ng-click="goTo('/bridges')">{{'deposit_withdraw' | translate}}</a></li>
+	        <li ng-class="{active:isActive('/bridges')}" ng-hide="isTestNetwork()"><a href="javascript:" ng-click="goTo('/bridges')">{{'deposit_withdraw' | translate}}</a></li>
+	        <li ng-class="{active:isActive('/ico')}" ng-hide="isTestNetwork()"><a href="javascript:" ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
+	      	<li><a href="javascript:"  ng-click="goTo('/settings')" ng-show="isTestNetwork()"><i class="fa fa-exclamation-triangle"></i> {{'test_net' | translate}}</a></li>
 	        <li>
 	        	<a href="javascript:"  ng-click="goTo('/security')" title="{{address}}">
 	        		<span class="glyphicon glyphicon-user"></span>
@@ -51,4 +49,21 @@
 	    </div>
 	  </div>
 	</nav>
+	<div ng-show="isActive('/hist_payments') || isActive('/hist_trades') || isActive('/hist_effects')" class="subnav">
+		  <div class="container">
+		    <ul>
+		      <li ng-class="{active:isActive('/hist_payments')}"><a href="javascript:" ng-click="goTo('/hist_payments')">{{'payments' | translate}}</a></li>
+		      <li ng-class="{active:isActive('/hist_effects')}"><a href="javascript:" ng-click="goTo('/hist_effects')">{{'effects' | translate}}</a></li>
+		      <li ng-class="{active:isActive('/hist_trades')}"><a href="javascript:" ng-click="goTo('/hist_trades')">{{'trades' | translate}}</a></li>
+		    </ul>
+		</div>
+	</div>
+	<div ng-show="isActive('/trade') || isActive('/convert')" class="subnav">
+		  <div class="container">
+		    <ul>
+		      <li ng-class="{active:isActive('/trade')}"><a href="javascript:" ng-click="goTo('/trade')">{{'normal' | translate}}</a></li>
+		      <li ng-class="{active:isActive('/convert')}"><a href="javascript:" ng-click="goTo('/convert')">{{'convert' | translate}}</a></li>
+		    </ul>
+		</div>
+	</div>
 </div>

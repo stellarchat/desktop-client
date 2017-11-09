@@ -90,3 +90,233 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
  		});
  	};
  } ]);
+
+myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi', 
+    					function($scope, $rootScope, $q, StellarApi) {
+	$scope.effects = [];
+	$scope.parsed = {};
+	$scope.next = undefined;
+
+	$scope.loading = false;
+	$scope.refresh = function() {
+		if ($scope.loading) {
+			return;
+		}
+		$scope.loading = true;
+		$scope.effects = [];
+		$scope.parsed = {};
+		$scope.next = undefined;
+
+		StellarApi.queryEffects(function(err, effects, nextPage) {
+			if (err) {
+				$scope.loading = false;
+				$scope.error_msg = err.message;
+			} else {
+				$scope.error_msg = "";
+				$scope.next = nextPage;
+				
+				var snapshot = {};
+				var id_arr = effects.map(fx =>{
+					snapshot[fx.id] = fx;
+					return fx.id;
+				});
+				var promises = effects.map(fx => {
+					return addEffect(fx).catch(err => err);
+				});
+
+				return $q.all(promises).then(() => {
+					$scope.loading = false;
+					id_arr.forEach((id) =>{
+						if ($scope.parsed[id]) {
+							$scope.effects.push($scope.parsed[id]);
+						} else {
+							console.warn(snapshot[id]);
+						}
+					});
+					console.debug('effects', $scope.effects);
+				});
+				
+			}
+			$scope.$apply();
+		});
+	};
+	$scope.refresh();
+
+	$scope.load_more = function() {
+		if ($scope.loading) {
+			return;
+		}
+		$scope.loading = true;
+		StellarApi.queryEffectsNext($scope.next, function(err, effects, nextPage) {
+			if (err) {
+				$scope.loading = false;
+				$scope.error_msg = err.message;
+			} else {
+				$scope.error_msg = "";
+				$scope.next = nextPage;
+				
+				var snapshot = {};
+				var id_arr = effects.map(fx =>{
+					snapshot[fx.id] = fx;
+					return fx.id;
+				});
+				var promises = effects.map(fx => {
+					return addEffect(fx).catch(err => err);
+				});
+
+				return $q.all(promises).then(() => {
+					$scope.loading = false;
+					id_arr.forEach((id) =>{
+						if ($scope.parsed[id]) {
+							$scope.effects.push($scope.parsed[id]);
+						} else {
+							console.warn(snapshot[id]);
+						}
+					});
+					//console.debug('effects', $scope.effects);
+				});
+			}
+			$scope.$apply();
+		});
+	};
+	
+	function addEffect(effect) {
+		return effect.operation().then((operation) => {
+			return operation.transaction().then((transaction) => {
+				const res = parseEffect(effect, operation, transaction);
+				if (res) {
+					$scope.parsed[res.id] = res;
+					return res;
+				} else {
+					return $q.reject();
+				}
+			});
+		});
+	}
+	
+} ]);
+
+
+function copyAmount(res, fx, prefix) {
+	prefix = prefix || '';
+
+	res[`${prefix}amount`] = fx[`${prefix}amount`];
+	if (fx[`${prefix}asset_type`] === 'native') {
+		res[`${prefix}asset_code`] = 'XLM';
+	} else {
+		res[`${prefix}asset_code`] = fx[`${prefix}asset_code`];
+		res[`${prefix}asset_issuer`] = fx[`${prefix}asset_issuer`];
+	}
+}
+
+function parseEffect(fx, op, tx) {
+
+	let res = {
+		id:			fx.id,
+		type:		fx.type,
+		op_type:    op.type,
+		hash:		tx.hash,
+		date:		tx.created_at,
+		numOps: 	tx.operation_count,
+		memo:		tx.memo,
+		memoType:	tx.memo_type
+	};
+
+	/* eslint-disable camelcase */
+	const handlers = {
+		'account_created': function () {
+			res.from	= op.funder;
+			res.amount	= fx.starting_balance;
+		},
+		'account_removed': function () {
+		},
+		'account_credited': function () {
+			if (op.type === 'path_payment' && op.from === op.to) {
+				//copyAmount(res, fx);
+				res = null;
+			} else if (op.type === 'account_merge') {
+				res.from = op.account;
+				copyAmount(res, fx);
+			} else {
+				res.from = op.from;
+				copyAmount(res, fx);
+			}
+		},
+		'account_debited': function () {
+			if (op.type === 'path_payment' && op.from === op.to) {
+				//copyAmount(res, fx);
+				res = null;
+			} else {
+				res.to = op.to || op.account;	// op.payment || op.create_account(?)
+				copyAmount(res, fx);
+			}
+		},
+		'account_flags_updated': function () {
+		},
+		'account_home_domain_updated': function () {
+			res.domain = fx.home_domain;
+		},
+		'account_thresholds_updated': function () {
+		},
+		'data_created': function () {
+		},
+		'data_removed': function () {
+		},
+		'data_updated': function () {
+		},
+		'offer_created': function () {
+		},
+		'offer_removed': function () {
+		},
+		'offer_updated': function () {
+		},
+		'signer_created': function () {
+			res.public_key	= fx.public_key;
+			res.weight		= fx.weight;
+		},
+		'signer_removed': function () {
+			res.public_key = fx.public_key;
+		},
+		'signer_updated': function () {
+			console.warn(fx, op, tx);
+		},
+		'trade': function () {
+			if (op.type === 'path_payment' && op.from !== op.to && op.from === fx.account) {
+				res = null;
+			} else {
+				copyAmount(res, fx, 'sold_');
+				copyAmount(res, fx, 'bought_');
+			}
+		},
+		'trustline_created': function () {
+			res.asset_code		= fx.asset_code;
+			res.asset_issuer	= fx.asset_issuer;
+			res.limit			= fx.limit;
+		},
+		'trustline_removed': function () {
+			res.asset_code		= fx.asset_code;
+			res.asset_issuer	= fx.asset_issuer;
+			res.limit			= fx.limit;
+		},
+		'trustline_updated': function () {
+			res.asset_code		= fx.asset_code;
+			res.asset_issuer	= fx.asset_issuer;
+			res.limit			= fx.limit;
+		},
+		'trustline_authorized': function () {
+		},
+		'trustline_deauthorized': function () {
+		}
+	};
+	/* eslint-enable camelcase */
+
+	if (fx.type in handlers) {
+		handlers[fx.type]();
+	} else {
+		console.log(fx);
+		console.log(op);
+		console.log(tx);
+	}
+
+	return res;
+}

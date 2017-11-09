@@ -50,6 +50,13 @@ myApp.directive('txOptions', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txData', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-data.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txDefault', [ function() {
 	return {
 		restrict : 'E',

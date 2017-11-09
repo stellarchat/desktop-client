@@ -41,7 +41,9 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			if (!deposit_api) { return; }
 			currencies.forEach(function(asset){
 				$scope.deposit[asset.code] = {
-					issuer : asset.issuer
+					code   : asset.code,
+					issuer : asset.issuer,
+					api    : deposit_api
 				};
 				if ($scope.hasLine(asset.code, asset.issuer)) {
 					$scope.resolveDeposit(deposit_api, asset.code);
@@ -272,4 +274,33 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			$rootScope.$apply();
 		});
 	};
+	
+	$scope.addTrust = function(code, issuer) {
+		$scope.deposit[code].trust_error = "";
+		$scope.deposit[code].changing = true;
+		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
+			$scope.deposit[code].changing = false;
+			if (err) {
+				if (err.name == "NotFoundError") {
+					$scope.deposit[code].trust_error = "NotFoundError";
+				} else if (err.extras && err.extras.result_xdr) {
+					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+					$scope.deposit[code].trust_error = resultXdr.result().results()[0].value().value().switch().name;
+				} else {
+					$scope.deposit[code].trust_error = err.detail || err.message;
+				}
+			}
+			$rootScope.$apply();
+		});
+	};
+	
+	$scope.$on("balanceChange", function() {
+		for (var code in $scope.deposit) {
+			var asset = $scope.deposit[code];
+			if ($scope.deposit[asset.code].no_trust && $scope.hasLine(asset.code, asset.issuer)) {
+				$scope.deposit[asset.code].no_trust = false;
+				$scope.resolveDeposit(asset.api, asset.code);
+			}
+		}
+	});
 } ]);

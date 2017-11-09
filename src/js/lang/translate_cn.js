@@ -7,7 +7,7 @@ var translate_cn = {
 	account_password : '账户密码',
 	open_existed_account : '打开已有账户',
 	create_blank : '创建一个全新账户',
-	create_by_secret : '用秘钥创建账户',
+	create_by_secret : '用秘钥创建',
 	encrypt_new_file : '加密你的新账户文件',
 	wallet_file : '账户文件',
 	password : '密码',
@@ -36,6 +36,7 @@ var translate_cn = {
 	balance : '余额',
 	estimated : '资产折合：',
 	reserve   : '冻结：',
+	total : '总量',
 	trust : '授信',
 	asset : '资产',
 	trust_limit : '授信额度',
@@ -83,8 +84,10 @@ var translate_cn = {
 	/** History **/
 	history: '历史',
 	payments: '转账',
+	effects: '变动',
 	trades: '所有操作',
 	latest_payments : '最近的收付记录',
+	latest_effects : '最近的账户变动',
 	latest_trades : '最近的所有操作',
 	you         : '你',
 	account_id  : '账号',
@@ -93,6 +96,7 @@ var translate_cn = {
 	load_more   : '载入更多',
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
+	set_data    : '数据',
 	
 	choose : '选择',
 	example : '示例',
@@ -139,11 +143,22 @@ var translate_cn = {
 	buying     : '买入',
 	selling    : '卖出',
 	
+	/** ICO **/
+	ico : '衍生项目',
+	ico_stellar : '恒星的衍生项目',
+	ico_note: '警告：在参与项目之前，你需要仔细考虑项目所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
+	ico_instruction: '授信衍生项目的资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与。',
+	
 	/** Setting & security **/
 	settings : '设置',
 	network  : '网络',
 	proxy    : '代理',
-	public_url : '恒星公网节点（重启生效）',
+	switch_net      : '恒星网络',
+	switch_net_desc : '测试网络仅用于开发、测试和研究。钱包大部分功能只适用于公共网络。如非专业人员，请勿切换成测试网络。',
+	public_net : '公共网络',
+	test_net   : '测试网络',
+	public_url : '恒星公网节点',
+	test_url   : '测试网络节点',
 	fed_protocol: '联邦协议',
 	fed_network : '名称服务（~）',
 	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”。',
@@ -164,6 +179,12 @@ var translate_cn = {
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
+	manage_data : '数据',
+	data_desc1  : '你可以给账号设置任意多的数据项（名称和值），每个数据项都会冻结相应的流明币XLM。',
+	data_desc2  : '数据项可用于各种应用，恒星核心协议并不直接使用它们。',
+	data_key    : '名称',
+	data_value  : '值',
+	data_done   : '数据项设置成功',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
@@ -188,5 +209,9 @@ var translate_cn = {
 	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
 	wallet : '钱包',
 	version: '版本',
-	logout : '注销'
+	logout : '注销',
+	
+	/** Error **/
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
 }

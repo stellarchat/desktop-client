@@ -80,6 +80,10 @@
 	padding: 14px 18px;
 	border-top: 1px solid #dedfe0;
 }
+.island .no-top {
+	display: block;
+	border-top: 0px;
+}
 .island input {
 	border: 1px solid #bdbfc0;
 }
@@ -195,7 +199,7 @@
 .BalancesTable__row__amount {
 	font-family: 'OpenSansLight';
 	text-align: right;
-	font-size: 24px;
+	font-size: 22px;
 }
 
 .BalancesTable__row__limit {
@@ -220,7 +224,7 @@
 }
 
 .AssetCard--fixed {
-	width: 420px;
+	width: 400px;
 }
 
 .AssetCard--container .AssetCard__main {

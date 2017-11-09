@@ -7,7 +7,7 @@ var translate_en = {
 	account_password : 'Account password',
 	open_existed_account : 'Open existing account',
 	create_blank : 'Create an empty account',
-	create_by_secret : 'Create a new account with a secret key',
+	create_by_secret : 'Import existing secret key',
 	encrypt_new_file : 'Encrypt your new account file',
 	wallet_file : 'Wallet file',
 	password : 'Password',
@@ -36,6 +36,7 @@ var translate_en = {
 	balance : 'Balance',
 	estimated : 'Estimated value of holdings:',
 	reserve   : 'Reserve:',
+	total : 'Total',
 	trust : 'Trust',
 	asset : 'Asset',
 	trust_limit : 'Trust Limit',
@@ -83,8 +84,10 @@ var translate_en = {
 	/** History **/
 	history: 'History',
 	payments: 'Payments',
+	effects: 'Effects',
 	trades: 'Transactions',
 	latest_payments : 'Latest Payments',
+	latest_effects : 'Latest Effects',
 	latest_trades : 'Latest Transactions',
 	you         : 'You',
 	account_id  : 'Account ID',
@@ -93,6 +96,7 @@ var translate_en = {
 	load_more   : 'Load more',
 	no_more     : 'No more transactions left',
 	set_options : 'Options',
+	set_data    : 'Data',
 	
 	choose : 'Choose',
 	example : 'example',
@@ -138,11 +142,22 @@ var translate_en = {
 	buying     : 'Buying',
 	selling    : 'Selling',
 	
+	/** ICO **/
+	ico : 'ICO',
+	ico_stellar : 'Using Stellar for ICOs',
+	ico_note: 'Note: Before becoming involved in an ICO, cryptocurrency investors and enthusiasts need to consider the risks involved when participating. We do NOT endorse any of these projects.',
+	ico_instruction: 'After adding the trust line, select "Trade - Convert". You can use any currency to purchase the ICO.',
+	
 	/** Setting & security **/
 	settings : 'Settings',
 	network  : 'Network',
 	proxy    : 'Proxy',
-	public_url : 'Public Net URL (Restart needed for updates to take effect)',
+	switch_net      : 'Stellar Network',
+	switch_net_desc : 'The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.',
+	public_net : 'Public Network',
+	test_net   : 'Test Network',
+	public_url : 'Public Net URL',
+	test_url   : 'Test Net URL',
 	fed_protocol: 'Federation Protocol',
 	fed_network : 'Name Service (~)',
 	fed_network_desc : 'You can use ~name instead of name*federation.domain.',
@@ -163,6 +178,12 @@ var translate_en = {
 	home_domain : 'Home Domain',
 	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
 	domain_done : 'Home Domain was set.',
+	manage_data : 'Manage Data',
+	data_desc1  : 'Allows you to set,modify or delete a Data Entry (name/value pair) that is attached to a particular account. An account can have an arbitrary amount of DataEntries attached to it. Each DataEntry increases the minimum balance needed to be held by the account.',
+	data_desc2  : 'DataEntries can be used for application specific things. They are not used by the core Stellar protocol.',
+	data_key    : 'Data Entry Name',
+	data_value  : 'Data Entry Value',
+	data_done   : 'Data entry was set.',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : 'Deposit/Withdraw',
@@ -187,5 +208,9 @@ var translate_en = {
 	app_feedback     : 'You can submit an issue on github if there are any problems.',
 	wallet : 'Wallet',
 	version: 'Version',
-	logout : 'Logout'
+	logout : 'Logout',
+	
+	/** Error **/
+	NotFoundError : 'The resource was not found. Your account has to be activated first.',
+	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
 }

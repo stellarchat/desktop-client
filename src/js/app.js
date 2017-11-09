@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate']);
+var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js']);
 
 myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	$translateProvider.translations('cn', translate_cn);
@@ -62,6 +62,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/hist_effects', {
+		templateUrl : 'pages/history_effects.html',
+		controller : 'EffectsCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/hist_trades', {
 		templateUrl : 'pages/history_trades.html',
 		controller : 'TradesCtrl',
@@ -80,6 +86,18 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/ico', {
+		templateUrl : 'pages/ico.html',
+		controller : 'IcoCtrl',
+		access : {
+			requiredLogin : true
+		}
+	}).when('/ico/:type', {
+		templateUrl : 'pages/ico.html',
+		controller : 'IcoCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/settings', {
 		templateUrl : 'pages/settings.html',
 		controller : 'SettingsCtrl',
@@ -91,8 +109,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory',
-           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory) {
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory', 'RemoteFactory',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory) {
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -163,6 +181,27 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	
 	//the default gateway list
 	$rootScope.gateways = gateways;
+	RemoteFactory.getIcoAnchors(function(err, data){
+		if (err) {
+			console.error(err);
+		} else {
+			gateways.addAnchors(data);
+		}
+	});
+	
+	$rootScope.ico_data;
+	RemoteFactory.getIcoItems(function(err, data){
+		if (err) {
+			console.error(err);
+		} else {
+			$rootScope.ico_data = data;
+		}
+	});
+	
+	$rootScope.stellar_ticker;
+	RemoteFactory.getStellarTicker(function(err, ticker){
+		if (ticker) { $rootScope.stellar_ticker = ticker; }
+	});
 	
 	reset();
 	function reset() {
@@ -193,10 +232,22 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	$rootScope.isTestNetwork = function() {
+		return SettingFactory.getNetworkType() == 'test';
+	}
 	
 	$translate.use(SettingFactory.getLang());
-	console.debug('Use ' + SettingFactory.getStellarUrl());
-	StellarApi.setServer(SettingFactory.getStellarUrl());
+	try {
+		if ('test' == SettingFactory.getNetworkType()) {
+			StellarApi.setServer(SettingFactory.getTestUrl(), SettingFactory.getNetworkType());
+		} else {
+			StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetworkType());
+		}
+	} catch(e) {
+		console.error("Cannot set server", SettingFactory.getStellarUrl(), e);
+		StellarApi.setServer(null);
+	}
+	
 	if (SettingFactory.getProxy()) {
 		try {
 			nw.App.setProxyConfig(SettingFactory.getProxy()); //"127.0.0.1:53323"

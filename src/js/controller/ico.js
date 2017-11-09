@@ -1,45 +1,35 @@
-myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
-                                function($scope, $rootScope, StellarApi) {
-	$scope.manual_code;
-	$scope.manual_issuer;
-	$scope.manual_logo = $rootScope.gateways.getSourceById($scope.manual_issuer).logo;
-	$scope.manual_name;
-	$scope.fed_url;
-	$scope.fed_currencies = [];
-	$scope.fed_error;
-	$scope.fed_loading;
+myApp.controller("IcoCtrl", [ '$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'RemoteFactory',
+                                function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, RemoteFactory) {
+	var type = $routeParams.type;
+	//console.log('IcoCtrl', type);
 	
-	$scope.show_all = false;
-	$scope.showHide = function() {
-		$scope.show_all = !$scope.show_all;
-	}
-	
-	$scope.resolve = function() {
-		var snapshot = $scope.fed_url;
-		$scope.fed_error = false;
-		$scope.fed_loading = true;
-		StellarApi.federation($scope.fed_url).then(function(res){
-			$scope.fed_error = false;
-			$scope.fed_loading = false;
-			$scope.fed_currencies = res.CURRENCIES;
-			$scope.$apply();
-			console.debug(res);
-		}).catch(function(err){
-			if (snapshot !== $scope.fed_url) {
-				return;
+	if ($rootScope.ico_data) {
+		$rootScope.ico_data.ongoing.forEach(function(ico){
+			if (SettingFactory.getLang() == 'cn') {
+				ico.p1 = ico.p1_cn;
+				ico.p2 = ico.p2_cn;
 			}
-			$scope.fed_currencies = [];
-			$scope.fed_error = true;
-			$scope.fed_loading = false;
-			$scope.$apply();
-			console.error(snapshot, err);
 		});
 	}
-	$scope.issuerChange = function() {
-		var gateway = $rootScope.gateways.getSourceById($scope.manual_issuer);
-		$scope.manual_logo = gateway.logo;
-		$scope.manual_name = gateway.name;
-	}
+	
+	//query again
+	RemoteFactory.getIcoItems(function(err, data){
+		if (err) {
+			if (!$rootScope.ico_data) {
+				$scope.trust_error = err.statusText || err.message;
+			}
+		} else {
+			console.log(data);
+			$rootScope.ico_data = data;
+			$rootScope.ico_data.ongoing.forEach(function(ico){
+				if (SettingFactory.getLang() == 'cn') {
+					ico.p1 = ico.p1_cn;
+					ico.p2 = ico.p2_cn;
+				}
+			});
+		}
+	});
+	
 	$scope.hasLine = function(code, issuer) {
 		if (!$rootScope.lines[code] || !$rootScope.lines[code][issuer]) {
 			return false;
