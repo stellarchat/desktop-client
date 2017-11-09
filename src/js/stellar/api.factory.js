@@ -69,10 +69,15 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		return StellarSdk.FederationServer.createForDomain(domain);
 	};
 	
-	api.setServer = function(url) {
+	api.setServer = function(url, type) {
 		var url = url || 'https://horizon.stellar.org';
-		
-		StellarSdk.Network.usePublicNetwork();
+		if ('test' == type) {
+			console.debug("TestNetwork: " + url);
+			StellarSdk.Network.useTestNetwork();
+		} else {
+			console.debug("PublicNetwork: " + url);
+			StellarSdk.Network.usePublicNetwork();
+		}
 		this.server = new StellarSdk.Server(url);
 		history.server = this.server;
 		orderbook.server = this.server;

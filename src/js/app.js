@@ -232,11 +232,17 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	$rootScope.isTestNetwork = function() {
+		return SettingFactory.getNetworkType() == 'test';
+	}
 	
 	$translate.use(SettingFactory.getLang());
-	console.debug('Use ' + SettingFactory.getStellarUrl());
 	try {
-		StellarApi.setServer(SettingFactory.getStellarUrl());
+		if ('test' == SettingFactory.getNetworkType()) {
+			StellarApi.setServer(SettingFactory.getTestUrl(), SettingFactory.getNetworkType());
+		} else {
+			StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetworkType());
+		}
 	} catch(e) {
 		console.error("Cannot set server", SettingFactory.getStellarUrl(), e);
 		StellarApi.setServer(null);

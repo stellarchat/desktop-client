@@ -23,6 +23,16 @@ myApp.factory('SettingFactory', function($window) {
 		getProxy : function() {
 			return $window.localStorage['proxy'] || "";
 		},
+		setNetworkType : function(type) {
+			if (type == 'test') {
+				$window.localStorage['network_type'] = 'test';
+			} else {
+				$window.localStorage['network_type'] = 'public';
+			}
+		},
+		getNetworkType : function() {
+			return $window.localStorage['network_type'] || "public";
+		},
 		setStellarUrl : function(url) {
 			$window.localStorage['stellar_url'] = url;
 		},
@@ -31,6 +41,12 @@ myApp.factory('SettingFactory', function($window) {
 				return $window.localStorage['stellar_url'];
 			}
 			return this.getLang() == 'cn' ? "https://stellar-api.wancloud.io" : 'https://horizon.stellar.org';
+		},
+		setTestUrl : function(url) {
+			$window.localStorage['test_url'] = url;
+		},
+		getTestUrl : function(url) {
+			return $window.localStorage['test_url'] || "https://horizon-testnet.stellar.org";
 		},
 		
 		setFedNetwork : function(domain) {
