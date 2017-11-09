@@ -232,6 +232,9 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	$rootScope.isTestNetwork = function() {
+		return SettingFactory.getNetworkType() == 'test';
+	}
 	
 	$translate.use(SettingFactory.getLang());
 	try {

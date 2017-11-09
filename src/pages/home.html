@@ -9,7 +9,7 @@
     <p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
 	<p class="lead" translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</p>
 	
-	<div class="island" ng-show="stellar_ticker">
+	<div class="island" ng-show="stellar_ticker && !isTestNetwork()">
 		<div class="row" >
 			<div class="row__shareOption" style="flex-grow: 2;">
 				<canvas id="pie" class="chart chart-pie chart-xs" chart-data="pie.data" chart-labels="pie.labels" chart-options="pie.options"></canvas>
