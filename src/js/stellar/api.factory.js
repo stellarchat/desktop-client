@@ -413,6 +413,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		console.debug('payments', this.address);
 		history.payments(this.address, callback);
 	};
+	api.queryPaymentsNext = function(addressOrPage, callback) {
+		console.debug('loop payments', this.address);
+		history.payments(addressOrPage, callback);
+	};
 	
 	api.queryEffects = function(callback) {
 		console.debug('effects', this.address);
