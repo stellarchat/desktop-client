@@ -6,7 +6,7 @@ var gateways = {
 			deposit_api : true,
 			service : [
 			            {type: 'unionpay', name: 'bank'},
-			            {type: 'alipay',   name: 'alipay'},
+			//            {type: 'alipay',   name: 'alipay'},
 			],
 			withdraw_info : 'Send CNY to Alipay: alipay/account/name*ripplefox.com. Send CNY to Bank: BankName/account/name*ripplefox.com',
 			withdraw_info_cn : '支付宝发送CNY到：zfb/账号/姓名*ripplefox.com，银行卡发送CNY到: 银行名称/账号/姓名*ripplefox.com',
