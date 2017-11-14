@@ -3,8 +3,18 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		server : null
 	};
 	
-	history.payments = function(address, callback) {
-		this.server.payments().forAccount(address).order("desc").limit("200").call().then(function(data){
+	history.payments = function(addressOrPage, callback) {
+		var self = this;
+		var page;
+		var address;
+		if ('string' === typeof addressOrPage) {
+			address = addressOrPage;
+			page = this.server.payments().forAccount(address).order("desc").limit("50").call();
+		} else {
+			page = addressOrPage;
+			address = page.address;
+		}
+		page.then(function(data){
 			console.log(data);
 			var payments = []; 
 			data.records.forEach(function(r){
@@ -27,7 +37,13 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				}
 				payments.push(t);
 			});
-			callback(null, payments);
+			
+			var nextPage = null;
+			if (data.records.length >= 50) {
+				nextPage = data.next();
+				nextPage.address = address;
+			}
+			callback(null, payments, nextPage);
 		}).catch(function(err){
 			console.error('Payments Fail !', err);
 			callback(err, null);
@@ -64,7 +80,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		var page;
 		var address;
 		if ('string' === typeof addressOrPage) {
-			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("200").call();
+			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("50").call();
 			address = addressOrPage;
 		} else {
 			page = addressOrPage;
@@ -80,7 +96,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 			});
 			
 			var nextPage = null;
-			if (page.records.length >= 200) {
+			if (page.records.length >= 50) {
 				nextPage = page.next();
 				nextPage.address = address;
 			}
