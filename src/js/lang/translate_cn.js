@@ -207,6 +207,7 @@ var translate_cn = {
 	app_open_source  : '钱包开源啦！',
 	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
 	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
+	trade_volume : '24小时交易量',
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
