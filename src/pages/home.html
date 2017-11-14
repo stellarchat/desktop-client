@@ -1,14 +1,28 @@
-<section class="col-xs-12 content worldimg" style="height: 80%;">
+<section class="col-xs-12 content worldimg">
 	<div class="page-header">
 	    <h3 translate="stellar_desktop_client">Stellar Desktop Client</h3>
 	</div>
 	
-	<p class="lead">{{'app_open_source' | translate}}
-    	<code>https://github.com/stellarchat/desktop-client</code></p>
-    
-    <p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
-	<p class="lead" translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</p>
+	<p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
 	
+	<p class="lead">
+		<span translate="app_open_source">钱包开源啦！ </span>
+		<span translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</span>
+		<a href="https://github.com/stellarchat/desktop-client" target="_blank"><code>https://github.com/stellarchat/desktop-client</code></a>
+	</p>
+
+	<div ng-show="isLangCN()">
+		<p class="lead">
+			使用教程：<a href="http://hx.ripplefox.com" target="_blank"><code>http://hx.ripplefox.com</code></a>
+		</p>
+		<p class="lead">
+			中文维基与资讯传播：<a href="https://www.256kw.com/" target="_blank"><code>https://www.256kw.com/</code></a>
+		</p>
+	</div>
+
+	<div class="page-header" ng-show="stellar_ticker && !isTestNetwork()">
+	    <h3 translate="trade_volume">Trade Volume</h3>
+	</div>
 	<div class="island" ng-show="stellar_ticker && !isTestNetwork()">
 		<div class="row" >
 			<div class="row__shareOption" style="flex-grow: 2;">
@@ -41,5 +55,4 @@
 			</div>
 		</div>
 	</div>
-	
 </section>

@@ -206,6 +206,7 @@ var translate_en = {
 	app_open_source  : 'This app is open source now.',
 	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret carefully.',
 	app_feedback     : 'You can submit an issue on github if there are any problems.',
+	trade_volume : 'Trade Volume',
 	wallet : 'Wallet',
 	version: 'Version',
 	logout : 'Logout',

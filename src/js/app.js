@@ -235,6 +235,9 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isTestNetwork = function() {
 		return SettingFactory.getNetworkType() == 'test';
 	}
+	$rootScope.isLangCN = function() {
+		return SettingFactory.getLang() == 'cn';
+	}
 	
 	$translate.use(SettingFactory.getLang());
 	try {
