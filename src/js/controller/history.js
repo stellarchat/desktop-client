@@ -1,24 +1,48 @@
 myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNameFactory',
                                   function($scope, $rootScope, StellarApi, FedNameFactory) {
 	$scope.payments = [];
+	$scope.next = undefined;
 	
-	$scope.working = false;
+	$scope.loading = false;
 	$scope.refresh = function() {
-		if ($scope.working) { return; }
-		StellarApi.queryPayments(function(err, payments){
-			$scope.working = false;
+		if ($scope.loading) { return; }
+		$scope.next = undefined;
+		$scope.loading = true;
+		
+		StellarApi.queryPayments(function(err, payments, nextPage){
+			$scope.loading = false;
 			if (err) {
 				$scope.error_msg = err.message;
 			} else {
 				$scope.error_msg = "";
 				$scope.payments = payments;
+				$scope.next = nextPage;
 			}
 			$scope.updateAllNick();
 			$scope.$apply();
 		});
-		$scope.working = true;
+		
 	};
 	$scope.refresh();
+	
+	$scope.load_more = function() {
+ 		if ($scope.loading) { return; }
+ 		$scope.loading = true;
+ 		StellarApi.queryPaymentsNext($scope.next, function(err, payments, nextPage){
+ 			$scope.loading = false;
+ 			if (err) {
+ 				$scope.error_msg = err.message;
+ 			} else {
+ 				$scope.error_msg = "";
+ 				payments.forEach(function(item){
+ 					$scope.payments.push(item);
+ 				});
+ 				$scope.next = nextPage;
+ 			}
+ 			$scope.updateAllNick();
+ 			$scope.$apply();
+ 		});
+ 	};
 	
 	$scope.updateAllNick = function() {
 		$scope.payments.forEach(function(tx) {
