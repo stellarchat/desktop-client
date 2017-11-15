@@ -105,6 +105,8 @@ var translate_en = {
 	issuer_id : 'Issuer Account ID',
 	amount : 'Amount',
 	optional : 'Optional',
+	required : 'Required',
+	require_memo : 'Recipient requires a memo. Please make sure it is correct.',
 	
 	trade : 'Trade',
 	normal: 'Normal',
