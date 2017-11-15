@@ -215,6 +215,6 @@ var translate_cn = {
 	logout : '注销',
 	
 	/** Error **/
-	NotFoundError : '恒星网络未找到该账号，请先激活此账号。',
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
 	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
 }

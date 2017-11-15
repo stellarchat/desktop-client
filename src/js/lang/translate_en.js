@@ -214,6 +214,6 @@ var translate_en = {
 	logout : 'Logout',
 	
 	/** Error **/
-	NotFoundError : 'The resource was not found. Your account has to be activated first.',
+	NotFoundError : 'The resource was not found. You must have at least 20 lumens in your account for it to be activated! Each trust line or offer requires a 10 lumen reserve in addition. To make things easy, send at least 41 lumens to the account.',
 	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
 }
