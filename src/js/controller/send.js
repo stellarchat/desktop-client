@@ -5,6 +5,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.memo;
 	$scope.memo_type = 'Text';
 	$scope.memo_provided;
+	$scope.memo_require = false;
 	$scope.sending;
 	$scope.send_done = false;
 	
@@ -58,6 +59,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		$scope.send_error.invalid = false;
 		$scope.send_error.domain = false;
 		$scope.send_error.message = '';
+		$scope.memo_require = false;
 		$scope.send_done = false;
 		
 		$scope.real_address = '';
@@ -88,6 +90,10 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			$scope.memo_provided = false;
 			$scope.real_address = $scope.full_address;
 			$scope.send_error.invalid = !StellarApi.isValidAddress(snapshot);
+			if (!$scope.send_error.invalid && special_destinations[$scope.real_address]) {
+				$scope.memo_type = special_destinations[$scope.real_address].memo_type;
+				$scope.memo_require = true;
+			}
 			$scope.resolveAccountInfo();
 		} else {
 			$scope.is_federation = true;
@@ -374,5 +380,14 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		}
 		return address;		
 	};
+	
+	var special_destinations = {
+		'GCLDH6L6FBLTD3H3B23D6TIFVVTFBLZMNBC3ZOI6FGI5GPQROL4FOXIN' : {memo_type: 'Id',   name: 'RippleFox'},
+		'GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM' : {memo_type: 'Id',   name: 'Kraken'},
+		'GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2' : {memo_type: 'Id',   name: 'Poloniex'},
+		'GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3' : {memo_type: 'Text', name: 'Bittrex'},
+		'GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM' : {memo_type: 'Id',   name: 'BTC38'},
+		'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'Id',   name: 'Changelly'}
+	}
 } ]);
 

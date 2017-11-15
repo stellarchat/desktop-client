@@ -105,6 +105,8 @@ var translate_cn = {
 	issuer_id : '发行方账号',
 	amount : '金额',
 	optional : '选填',
+	required : '必填',
+	require_memo : '接收方需要Memo，请确保备注正确！',
 	
 	/** Trade **/
 	trade : '交易',

@@ -74,11 +74,12 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		if ('test' == type) {
 			console.debug("TestNetwork: " + url);
 			StellarSdk.Network.useTestNetwork();
+			this.server = new StellarSdk.Server(url, {allowHttp: true});
 		} else {
 			console.debug("PublicNetwork: " + url);
 			StellarSdk.Network.usePublicNetwork();
+			this.server = new StellarSdk.Server(url);
 		}
-		this.server = new StellarSdk.Server(url);
 		history.server = this.server;
 		orderbook.server = this.server;
 		path.server = this.server;
