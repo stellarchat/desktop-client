@@ -232,9 +232,16 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isValidAddress = function(address) {
 		return StellarApi.isValidAddress(address);
 	}
+	$rootScope.isPublicNetwork = function() {
+		return SettingFactory.getNetworkType() == 'public';
+	}
 	$rootScope.isTestNetwork = function() {
 		return SettingFactory.getNetworkType() == 'test';
 	}
+	$rootScope.isOtherNetwork = function() {
+		return SettingFactory.getNetworkType() == 'other';
+	}
+	
 	$rootScope.isLangCN = function() {
 		return SettingFactory.getLang() == 'cn';
 	}
@@ -242,12 +249,16 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$translate.use(SettingFactory.getLang());
 	try {
 		if ('test' == SettingFactory.getNetworkType()) {
-			StellarApi.setServer(SettingFactory.getTestUrl(), SettingFactory.getNetworkType());
+			StellarApi.setServer(SettingFactory.getTestUrl(), 'test');
+		} else if ('other' == SettingFactory.getNetworkType()) {
+			StellarApi.setServer(SettingFactory.getOtherUrl(), 'other', SettingFactory.getNetPassphrase());
 		} else {
 			StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetworkType());
 		}
 	} catch(e) {
 		console.error("Cannot set server", SettingFactory.getStellarUrl(), e);
+		console.warn("Change network back to public.");
+		SettingFactory.setNetworkType('public');
 		StellarApi.setServer(null);
 	}
 	
