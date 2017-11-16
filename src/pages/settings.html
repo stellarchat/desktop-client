@@ -17,6 +17,7 @@
 					<div class="btn-group">
 						<label class="btn btn-success" ng-class="{active: network_type=='public'}" ng-click="network_type='public'" >{{'public_net' | translate}}</label>
             			<label class="btn btn-success" ng-class="{active: network_type=='test'}" ng-click="network_type='test'">{{'test_net' | translate}}</label>
+            			<label class="btn btn-success" ng-class="{active: network_type=='other'}" ng-click="network_type='other'">{{'other_net' | translate}}</label>
 					</div>
 				</div>
 			</div>
@@ -38,6 +39,16 @@
 					<datalist id="testnodes">
 						<option value="https://horizon-testnet.stellar.org">
 					</datalist> 
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 20px;" ng-show="network_type=='other'">
+				<div class="col-xs-12 col-md-10">
+					<label translate="other_url">Network URL</label> 
+					<input class="form-control" type="text" ng-model="other_url" placeholder="http://horizon.mytestnet.com"/>
+				</div>
+				<div class="col-xs-12 col-md-10">
+					<label translate="passphrase">Passphrase or id</label> 
+					<input class="form-control" type="text" ng-model="passphrase" placeholder="My Integration Network ; mycrypto"/>
 				</div>
 			</div>
 			

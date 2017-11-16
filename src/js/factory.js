@@ -24,8 +24,8 @@ myApp.factory('SettingFactory', function($window) {
 			return $window.localStorage['proxy'] || "";
 		},
 		setNetworkType : function(type) {
-			if (type == 'test') {
-				$window.localStorage['network_type'] = 'test';
+			if (type == 'test' || type == 'other') {
+				$window.localStorage['network_type'] = type;
 			} else {
 				$window.localStorage['network_type'] = 'public';
 			}
@@ -47,6 +47,18 @@ myApp.factory('SettingFactory', function($window) {
 		},
 		getTestUrl : function(url) {
 			return $window.localStorage['test_url'] || "https://horizon-testnet.stellar.org";
+		},
+		setOtherUrl : function(url) {
+			$window.localStorage['other_url'] = url;
+		},
+		getOtherUrl : function(url) {
+			return $window.localStorage['other_url'];
+		},
+		setNetPassphrase : function(val) {
+			$window.localStorage['net_passphase'] = val;
+		},
+		getNetPassphrase : function(url) {
+			return $window.localStorage['net_passphase'];
 		},
 		
 		setFedNetwork : function(domain) {
