@@ -1,5 +1,8 @@
 {
   "name": "StellarWallet",
   "version": "1.0.0",
-  "main": "main.js"
+  "main": "main.js",
+  "window": {
+  	"icon": "img/rocket.png"
+  }
 }
