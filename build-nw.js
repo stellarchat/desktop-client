@@ -17,7 +17,11 @@ var nw = new NwBuilder({
 	],
 	platforms: ['win32', 'win64', 'osx64', 'linux64'],
 	flavor : 'normal',
-	version: '0.20.2'
+	version: '0.20.2',
+	appName: 'StellarWallet',
+	appVersion : 'v3.3',
+	macIcns: 'src/img/rocket.icns',
+	winIco : 'src/img/rocket.ico'
 });
 
 nw.on('log', console.log);
