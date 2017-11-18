@@ -396,6 +396,25 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	
+	api.merge = function(destAccount, callback) {
+		var self = this;
+		var opt = {destination: destAccount};
+		console.debug('merge:', self.address, '->', destAccount);
+		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
+			var op = StellarSdk.Operation.accountMerge(opt);
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log('Account merged.', txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('accountMerge Fail !', err);
+			callback(err, null);
+		});
+	};
+	
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);
