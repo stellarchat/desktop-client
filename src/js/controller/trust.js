@@ -66,12 +66,20 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 			return false;
 		}
 	}
-	$scope.addTrust = function(code, issuer) {
-		var code = code || $scope.manual_code;
-		var issuer = issuer || $scope.manual_issuer;
-		$scope.setChanging(code, issuer, true);
+	$scope.addTrust = function(code, issuer, amount) {
+		var amount = amount || "100000000000";
 		$scope.trust_error = "";
-		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
+		$scope.trust_done = false;
+		
+		try{
+			new StellarSdk.Asset(code, issuer);
+		} catch(e) {
+			$scope.trust_error = e.message;
+			return;
+		}
+		
+		$scope.setChanging(code, issuer, true);
+		StellarApi.changeTrust(code, issuer, amount, function(err, data){
 			$scope.setChanging(code, issuer, false);
 			if (err) {
 				if (err.name == "NotFoundError") {
@@ -82,6 +90,8 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 				} else {
 					$scope.trust_error = err.detail || err.message;
 				}
+			} else {
+				$scope.trust_done = true;
 			}
 			$rootScope.$apply();
 		});
@@ -91,6 +101,7 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		var issuer = issuer || $scope.manual_issuer;
 		$scope.setChanging(code, issuer, true);
 		$scope.trust_error = "";
+		$scope.trust_done = false;
 		StellarApi.changeTrust(code, issuer, "0", function(err, data){
 			$scope.setChanging(code, issuer, false);
 			if (err) {
@@ -100,6 +111,8 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 				} else {
 					$scope.trust_error = err.detail || err.message || err;
 				}
+			} else {
+				$scope.trust_done = true;
 			}
 			$rootScope.$apply();
 		});
