@@ -55,7 +55,8 @@ var translate_cn = {
 	manual_add : '手动授信',
 	manual_desc: '在了解发行方账号和资产代码的情况下，你可以手动进行授信操作。',
 	issuer_invalid : '发行方账号必须是有效的恒星地址编码。',
-	memo_invaid : '备注必须是有效的。',
+	memo_invaid    : '备注必须是有效的。',
+	trust_granted  : '设置信任额度成功！', 
 	
 	/** send **/
 	send : '发送',
@@ -219,5 +220,5 @@ var translate_cn = {
 	
 	/** Error **/
 	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
-	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结10 XLM。'
 }

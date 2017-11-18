@@ -55,7 +55,8 @@ var translate_en = {
 	manual_add : 'Manually add trust',
 	manual_desc: 'You can add trust manually if you know the account ID and asset code',
 	issuer_invalid : 'Asset issuer account ID must be a valid account ID',
-	memo_invaid : 'Invalid memo.',
+	memo_invaid    : 'Invalid memo.',
+	trust_granted  : 'Trust is granted!', 
 	
 	/** send **/
 	send : 'Send',
@@ -218,5 +219,5 @@ var translate_en = {
 	
 	/** Error **/
 	NotFoundError : 'The resource was not found. You must have at least 20 lumens in your account for it to be activated! Each trust line or offer requires a 10 lumen reserve in addition. To make things easy, send at least 41 lumens to the account.',
-	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
+	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 10 lumen reserve in addition.'
 }
