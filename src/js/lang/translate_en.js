@@ -190,6 +190,12 @@ var translate_en = {
 	data_key    : 'Data Entry Name',
 	data_value  : 'Data Entry Value',
 	data_done   : 'Data entry was set.',
+	delete_account : 'Delete Account',
+	merge_desc     : 'Danger operation! It transfers the native balance (the amount of XLM an account holds) to destination account and removes your account from the ledger.',
+	dest_account   : 'Destination Account',
+	delete_warning : 'I KNOW EVERYTHING >>',
+	back           : 'Back',
+	merge_done     : 'Your account was merged to destination.',
 	
 	/** Deposit & withdrawl **/
 	deposit_withdraw : 'Deposit/Withdraw',

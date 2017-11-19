@@ -10,6 +10,8 @@
 					translate="home_domain">Home Domain</a>
 				<a href="javascript:" ng-class="{active: isMode('data')}" ng-click="setMode('data')"
 					translate="manage_data">Manage Data</a>
+				<a href="javascript:" ng-class="{active: isMode('merge')}" ng-click="setMode('merge')"
+					translate="delete_account">Delete Account</a>
 			</div>
 		</div>
 		
@@ -138,9 +140,43 @@
 			</div>
 		</div>
 		
+		<div class="col-sm-9" ng-show="isMode('merge')">
+			<label translate="important">Important:</label> 
+		    <p class="hint" translate="merge_desc">Danger operation! It transfers the native balance (the amount of XLM an account holds) to another account and removes the source account from the ledger.</p>
+		
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-md-10">
+					<label translate="dest_account">Destination Account</label> 
+					<input class="form-control" type="text" ng-model="dest_account" />
+				</div>
+			</div>
+			<div class="s-alert s-alert--alert row__message" ng-show="merge_error">
+				{{merge_error}}
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="merge_done" translate="merge_done">
+				Your account was merged to destination.
+			</div>
+			<div class="row" style="margin-bottom: 20px;" ng-show="delete_warning">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-warning btn-block btn-big" href="javascript:"	
+						ng-click="toggleWarning()" translate="delete_warning">I KNOW　EVERYTHING >></a>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 20px;" ng-hide="delete_warning" >
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="merge_working"
+						ng-click="toggleWarning()" translate="back">Back</a>
+				</div>
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-danger btn-block btn-big" href="javascript:" ng-disabled="merge_working"
+						ng-click="merge()" translate="delete_account">Delete Account</a>
+				</div>
+			</div>
+		</div>
+		
 		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
 			<div class="s-alert s-alert--alert row__message">
-				{{network_error}}
+				{{network_error | translate}}
 			</div>
 		</div>
 	</div>

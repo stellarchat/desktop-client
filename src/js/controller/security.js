@@ -1,5 +1,5 @@
-myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi',
-	function($scope, AuthenticationFactory, StellarApi) {
+myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
+	function($scope, $rootScope, AuthenticationFactory, StellarApi) {
 		$scope.mode = 'security';
 		$scope.isMode = function(mode) {
 			return $scope.mode === mode;
@@ -36,8 +36,8 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 					for (var key in data.data_attr) {
 						$scope.data_attr[key] = b64DecodeUnicode(data.data_attr[key]);
 					}
-					$scope.$apply();
 				}
+				$scope.$apply();
 			});
 		};
 		$scope.refresh();
@@ -136,6 +136,36 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 						delete $scope.data_attr[$scope.data_key];
 					}
 					$scope.data_done = true;
+				}
+				$scope.$apply();
+			});
+		};
+		
+		$scope.delete_warning = true;
+		$scope.toggleWarning = function() {
+			$scope.delete_warning = !$scope.delete_warning;
+		}
+		$scope.merge = function() {
+			$scope.merge_error = '';
+			$scope.merge_done = false;
+			$scope.merge_working = true;
+			StellarApi.merge($scope.dest_account, function(err, hash){
+				$scope.merge_working = false;
+				if (err) {
+					if (err.message) {
+						$scope.merge_error = err.message;
+					} else {
+						if (err.extras && err.extras.result_xdr) {
+							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+							$scope.merge_error = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							console.error("Unhandle!!", err);
+						}
+					}
+				} else {
+					$rootScope.balance = 0;
+					$rootScope.reserve = 0;
+					$scope.merge_done = true;
 				}
 				$scope.$apply();
 			});

@@ -191,7 +191,13 @@ var translate_cn = {
 	data_key    : '名称',
 	data_value  : '值',
 	data_done   : '数据项设置成功',
-	
+	delete_account : '删除账户',
+	merge_desc     : '危险！此操作将你持有的XLM转移到目标账户，你的账户将从账本中删除！',
+	dest_account   : '目标账户',
+	delete_warning : '我明白所有风险 >>',
+	back           : '返回',
+	merge_done     : '你的账户已经被合并到了目标账户。',
+		
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
 	deposit  : '充值',
