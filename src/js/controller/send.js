@@ -387,6 +387,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		'GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2' : {memo_type: 'Id',   name: 'Poloniex'},
 		'GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3' : {memo_type: 'Text', name: 'Bittrex'},
 		'GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM' : {memo_type: 'Id',   name: 'BTC38'},
+		'GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2' : {memo_type: 'Id',   name: 'Aex.com'},
 		'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'Id',   name: 'Changelly'}
 	}
 } ]);
