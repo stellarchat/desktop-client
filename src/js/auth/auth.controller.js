@@ -72,13 +72,15 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	};
 	
 	$scope.fileInputClick = function() {
+		var dt = new Date();
+		var datestr = (''+dt.getFullYear()+(dt.getMonth()+1)+dt.getDate()+'_'+dt.getHours()+dt.getMinutes()+dt.getSeconds()).replace(/([\-\: ])(\d{1})(?!\d)/g,'$10$2');
 		FileDialog.saveAs(function(filename) {
 	        $scope.$apply(function() {
 	          $scope.walletfile = filename;
 	          $scope.mode = 'register_empty_wallet';
 	          $scope.save_error = '';
 	        });
-	    }, 'wallet.txt');
+	    }, 'wallet' + datestr + '.txt');
 	};
 
 	$scope.submitForm = function() {
