@@ -209,3 +209,59 @@ myApp.factory('RemoteFactory', function($http) {
 	
 	return remote;
 });
+
+myApp.factory('AnchorFactory', function(StellarApi) {
+	var obj = {
+		anchor : {
+			'ripplefox.com' : {
+				domain  : 'ripplefox.com',
+				parsing : false,
+				parsed  : false
+			}
+		},
+		address2anchor : {}
+	};
+	
+	obj.addAnchor = function(domain) {
+		var self = this;
+		if (!self.anchor[domain]) {
+			self.anchor[domain] = {
+				domain  : domain,
+				parsing : false,
+				parsed  : false
+			}
+		}
+		if (!self.anchor[domain].parsed) {
+			self.parse(domain);
+		}
+	}
+	
+	obj.parse = function(domain) {
+		var self = this;
+		if (self.anchor[domain].parsing) {
+			return;
+		}
+		
+		console.debug('Parse stellar.toml of ' + domain);
+		self.anchor[domain].parsing = true;
+		StellarSdk.StellarTomlResolver.resolve(domain).then(function(stellarToml) {
+			console.debug(domain, stellarToml);
+			self.anchor[domain].parsing = false;
+			self.anchor[domain].parsed = true;
+			self.anchor[domain].toml = stellarToml;
+			self.anchor[domain].deposit_api = stellarToml.DEPOSIT_SERVER;
+			self.anchor[domain].fed_api = stellarToml.FEDERATION_SERVER;
+			
+			var currencies = stellarToml.CURRENCIES;
+			currencies.forEach(function(asset){
+				self.address2anchor[asset.issuer] = domain;
+			});
+		}).catch(function(err){
+			self.anchor[domain].parsing = false;
+			console.error(err); 
+		});
+		
+	}
+	
+	return obj;
+});
