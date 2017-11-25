@@ -109,8 +109,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	});
 });
 
-myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory', 'RemoteFactory',
-           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory) {
+myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory', 'RemoteFactory', 'AnchorFactory',
+           function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory, AnchorFactory) {
 	
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
@@ -197,6 +197,9 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			$rootScope.ico_data = data;
 		}
 	});
+	for (var domain in gateways.data) {
+		AnchorFactory.addAnchor(domain);
+	}
 	
 	$rootScope.stellar_ticker;
 	RemoteFactory.getStellarTicker(function(err, ticker){
