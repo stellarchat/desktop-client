@@ -1,5 +1,5 @@
-myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi', 
-                                  function($scope, $rootScope, StellarApi) {
+myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi', 'AnchorFactory',
+                                  function($scope, $rootScope, StellarApi, AnchorFactory) {
 	$scope.working = false;
 	$scope.refresh = function() {
 		if ($scope.working) { return; }
@@ -76,6 +76,29 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi',
 	$scope.estimate();
 	
 	$scope.$on("balanceChange", function() {
+		console.debug('balanceChange event');
 		$scope.estimate();
+		$scope.initDepositData();
 	});
+	
+	$scope.deposit_info = {};
+	$scope.initDepositData = function() {
+		for (var code in $rootScope.lines) {
+			if (!$scope.deposit_info[code]) {
+				$scope.deposit_info[code] = {};
+			}
+			for (var issuer in $rootScope.lines[code]) {
+				if (!$scope.deposit_info[code][issuer]) {
+					$scope.deposit_info[code][issuer] = {deposit_api: null, info: null};
+				}
+				AnchorFactory.addAccount(issuer);
+			}
+		}
+	}
+	$scope.initDepositData();
+	
+	$scope.$on("anchorUpdate", function() {
+		console.debug('anchorUpdate event');
+	});
+	
 } ]);

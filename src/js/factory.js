@@ -210,7 +210,8 @@ myApp.factory('RemoteFactory', function($http) {
 	return remote;
 });
 
-myApp.factory('AnchorFactory', function(StellarApi) {
+myApp.factory('AnchorFactory', ['$rootScope', 'StellarApi', 
+		function($scope, StellarApi) {
 	var obj = {
 		anchor : {
 			'ripplefox.com' : {domain  : 'ripplefox.com', parsing : false, parsed  : false}
@@ -299,6 +300,8 @@ myApp.factory('AnchorFactory', function(StellarApi) {
 			currencies.forEach(function(asset){
 				self.address[asset.issuer] = {domain: domain, parsing: false, parsed: true};
 			});
+			
+			$scope.$broadcast("anchorUpdate");
 		}).catch(function(err){
 			self.anchor[domain].parsing = false;
 			console.error(err); 
@@ -307,4 +310,4 @@ myApp.factory('AnchorFactory', function(StellarApi) {
 	}
 	
 	return obj;
-});
+} ]);
