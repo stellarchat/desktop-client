@@ -1,5 +1,5 @@
-myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi', 
-                                  function($scope, $rootScope, StellarApi) {
+myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi', 'AnchorFactory', 'SettingFactory',
+                                  function($scope, $rootScope, $http, StellarApi, AnchorFactory, SettingFactory) {
 	$scope.working = false;
 	$scope.refresh = function() {
 		if ($scope.working) { return; }
@@ -76,6 +76,68 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', 'StellarApi',
 	$scope.estimate();
 	
 	$scope.$on("balanceChange", function() {
+		console.debug('balanceChange event');
 		$scope.estimate();
+		$scope.initDepositData();
 	});
+	
+	$scope.deposit_info = {};
+	$scope.initDepositData = function() {
+		for (var code in $rootScope.lines) {
+			if (!$scope.deposit_info[code]) {
+				$scope.deposit_info[code] = {};
+			}
+			for (var issuer in $rootScope.lines[code]) {
+				if (!$scope.deposit_info[code][issuer]) {
+					$scope.deposit_info[code][issuer] = {deposit_api: null, info: null, resolved: false, show: false};
+				}
+				AnchorFactory.addAccount(issuer);
+			}
+		}
+	}
+	$scope.initDepositData();
+	
+	$scope.toggleDepositInfo = function(code, issuer) {
+		$scope.deposit_info[code][issuer].show = !$scope.deposit_info[code][issuer].show;
+	}
+	
+	$scope.resolveDeposit = function(code, issuer) {
+		var api = $scope.deposit_info[code][issuer].deposit_api;
+		var url = api + "?address=" + $rootScope.address + "&asset=" + code;
+		console.debug('resolve ' + url);
+		$http({
+			method: 'GET',
+			url: url
+		}).then(function(res) {
+			$scope.deposit_info[code][issuer].resolved = true;
+			$scope.deposit_info[code][issuer].info = res.data;
+			if ($scope.deposit_info[code][issuer].info.extra_info_cn && SettingFactory.getLang() == 'cn') {
+				$scope.deposit_info[code][issuer].info.extra_info = $scope.deposit_info[code][issuer].info.extra_info_cn;
+			}
+		}).catch(function(err) {
+			console.error(err);
+		});
+	}
+	
+	$scope.updateDepositData = function() {
+		for (var code in $scope.deposit_info) {
+			for (var issuer in $scope.deposit_info[code]) {
+				var anchor = AnchorFactory.getAnchor(issuer);
+				if (anchor && anchor.parsed && !$scope.deposit_info[code][issuer].resolved) {
+					console.debug('update deposit data', anchor);
+					if (anchor.deposit_api) {
+						$scope.deposit_info[code][issuer].deposit_api = anchor.deposit_api;
+						$scope.resolveDeposit(code, issuer);
+					}
+				}
+			}
+		}
+	}
+	$scope.updateDepositData();
+	
+	$scope.$on("anchorUpdate", function() {
+		console.debug('anchorUpdate event');
+		$scope.updateDepositData();
+	});
+	
 } ]);
