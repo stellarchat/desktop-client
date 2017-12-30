@@ -595,6 +595,22 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	}
 	
+	api.getErrMsg = function(err) {
+		var message = "";
+		if (err.name == "NotFoundError") {
+			message = "NotFoundError";
+		} else if (err.extras && err.extras.result_xdr) {
+			var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+			message = resultXdr.result().results()[0].value().value().switch().name;
+		} else {
+			message = err.detail || err.message;
+		}
+		if (!message) {
+			console.error("Fail in getErrMsg", err);
+		}
+		return message;
+	}
+	
 	function getAsset(code, issuer) {
 		if (typeof code == 'object') {
 			issuer = code.issuer;
