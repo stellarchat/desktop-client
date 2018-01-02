@@ -11,6 +11,8 @@ myApp.factory('SettingFactory', function($window) {
 					return 'cn';
 				} else {
 					return 'en';
+				} else {
+					return 'fr';
 				}
 			}
 		},
