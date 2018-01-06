@@ -25,13 +25,13 @@ var translate_cn = {
 	show_password : '显示',
 	hide_password : '隐藏',
 	stellar_address : '恒星地址',
-	secret_key : '秘钥:',
+	secret_key : '秘钥和二维码:',
 	show_secret: '显示秘钥',
 	hide_secret: '隐藏秘钥',
 	are_you_sure: '你在一个安全的地方？没有人或摄相头在看你吧？',
 	save_safe: '你把密钥保存在安全的地方了吗？',
 	yes_save: '是，我已经保存好了！',
-	
+
 	/** Balance & Trust **/
 	balance : '余额',
 	estimated : '资产折合：',
@@ -56,8 +56,8 @@ var translate_cn = {
 	manual_desc: '在了解发行方账号和资产代码的情况下，你可以手动进行授信操作。',
 	issuer_invalid : '发行方账号必须是有效的恒星地址编码。',
 	memo_invaid    : '备注必须是有效的。',
-	trust_granted  : '设置信任额度成功！', 
-	
+	trust_granted  : '设置信任额度成功！',
+
 	/** send **/
 	send : '发送',
 	send_pick : '选择要发送的资产',
@@ -72,7 +72,7 @@ var translate_cn = {
 	send_done    : '发送成功',
 	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
 	can_accept   : '账号可接收',
-	
+
 	/** Convert **/
 	convert       : '兑换',
 	convert_title : '把一种货币转换成另一种',
@@ -81,7 +81,7 @@ var translate_cn = {
 	receive       : '接收',
 	calculating   : '计算中',
 	path          : '路径：',
-	
+
 	/** History **/
 	history: '历史',
 	payments: '转账',
@@ -98,7 +98,7 @@ var translate_cn = {
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
 	set_data    : '数据',
-	
+
 	choose : '选择',
 	example : '示例',
 	refresh : '刷新',
@@ -108,7 +108,7 @@ var translate_cn = {
 	optional : '选填',
 	required : '必填',
 	require_memo : '接收方需要Memo，请确保备注正确！',
-	
+
 	/** Trade **/
 	trade : '交易',
 	normal: '标准',
@@ -145,13 +145,13 @@ var translate_cn = {
 	advanced   : '高级',
 	buying     : '买入',
 	selling    : '卖出',
-	
+
 	/** ICO **/
 	ico : '衍生项目',
 	ico_stellar : '恒星的衍生项目',
 	ico_note: '警告：在参与项目之前，你需要仔细考虑项目所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
 	ico_instruction: '授信衍生项目的资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与。',
-	
+
 	/** Setting & security **/
 	settings : '设置',
 	network  : '网络',
@@ -197,7 +197,7 @@ var translate_cn = {
 	delete_warning : '我明白所有风险 >>',
 	back           : '返回',
 	merge_done     : '你的账户已经被合并到了目标账户。',
-		
+
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
 	deposit  : '充值',
@@ -213,7 +213,7 @@ var translate_cn = {
 	analyzing : '正在解析……',
 	will_recv : '对方将收到',
 	can_send  : '你可以发送',
-		
+
 	Stellar : '恒星',
 	stellar_desktop_client : '恒星桌面钱包',
 	app_open_source  : '钱包开源啦！',
@@ -223,7 +223,7 @@ var translate_cn = {
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
-	
+
 	/** Error **/
 	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
 	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结10 XLM。'
