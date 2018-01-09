@@ -64,16 +64,22 @@
 			</div>
 			
 			<label translate="inflation_options">Other options</label>
-			<p class="hint" translate="inflation_options_desc">You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.</p>
+			<p class="hint" translate="inflation_options_desc">
+				You can join xlmpool.com or MoonPool.space to get the inflation lumens. You can also vote for RippleFox to help the gateway.
+			</p>
 			
 			<div class="row">
-				<div class="col-xs-12 col-sm-5">
+				<div class="col-xs-6 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationPool()" translate="inflation_pool">Vote to xlmpool.com/</a>
+						ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote for MoonPool</a>
 				</div>
-				<div class="col-xs-12 col-sm-5">
+				<div class="col-xs-6 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
+					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote for xlmpool.com/</a>
+				</div>
+				<div class="col-xs-6 col-sm-4">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationFox()" translate="inflation_fox">Vote for RippleFox</a>
 				</div>
 			</div>
 		</div>
