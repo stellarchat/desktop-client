@@ -70,7 +70,7 @@ var translate_en = {
 	select_asset : 'Please select an asset to send.',
 	sending_to   : 'Sending to',
 	send_done    : 'Asset successfully sent.',
-	not_funded   : 'Not funded. To crete this account, send it at least 20 lumens (XLM).',
+	not_funded   : 'Not funded. To create this account, send it at least 20 lumens (XLM).',
 	can_accept   : 'The account can accept',
 	
 	/** Convert **/
