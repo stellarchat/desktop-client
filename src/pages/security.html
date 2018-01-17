@@ -64,16 +64,24 @@
 			</div>
 			
 			<label translate="inflation_options">Other options</label>
-			<p class="hint" translate="inflation_options_desc">You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.</p>
+			<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
 			
 			<div class="row">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
 						ng-click="setInflationPool()" translate="inflation_pool">Vote to xlmpool.com/</a>
 				</div>
+			</div>
+			<div class="row">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
 						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationLumenaut()" translate="inflation_fox">Vote to lumenaut.net</a>
 				</div>
 			</div>
 		</div>
