@@ -12,7 +12,7 @@ var nw = new NwBuilder({
 	        'src/node_modules/chart.js/dist/Chart.min.js',
 	    	'src/node_modules/angular-chart.js/dist/angular-chart.min.js',
 	        'src/node_modules/underscore/underscore-min.js',
-	        'src/node_modules/ripple-lib/build/ripple-0.12.5-rc2-min.js',
+//	        'src/node_modules/ripple-lib/build/ripple-0.12.5-rc2-min.js',
 	        'src/node_modules/stellar-sdk/dist/stellar-sdk.min.js'
 	],
 	platforms: ['win32', 'win64', 'osx64', 'linux64'],

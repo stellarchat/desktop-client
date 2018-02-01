@@ -8,6 +8,7 @@ The desktop client allows you to encrypt your secret key and store it as a file 
 - Offline transaction signing. Protect the secret key from exposure to the Internet.
 - Send/receive/convert lumens, assets and tokens.
 - Buy/sell lumens, assets and tokens.
+- Merge account.
 - Create your own tokens.
 - View balances and history.
 - Manage trust lines, account data, inflation destination.
@@ -36,6 +37,7 @@ You need to install [nwjs](https://nwjs.io) if you want to do development.
 - 交易本地签名。密钥不会暴露到因特网。
 - 支持发送、兑换任意资产。
 - 支持交易任意资产。（恒星中任意资产均可两两交易）。
+- 支持合并账号。
 - 支持创建新资产。
 - 查询资产和历史记录。
 - 管理授信、账户数据；可设置恒星通胀地址，帮助自己或他人得到利息。
