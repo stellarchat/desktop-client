@@ -3,6 +3,7 @@ var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart
 myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	$translateProvider.translations('cn', translate_cn);
 	$translateProvider.translations('en', translate_en);
+	$translateProvider.translations('fr', translate_fr);
 	$translateProvider.preferredLanguage('cn');
 	$translateProvider.useSanitizeValueStrategy('escape');
 
