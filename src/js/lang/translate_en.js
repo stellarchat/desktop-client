@@ -178,10 +178,12 @@ var translate_en = {
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
 	inflation_options      : 'Other options',
-	inflation_options_desc : 'You can join one of the following inflation pools.',
+	inflation_options_desc : 'You can join one of the following inflation pools. You can also vote for RippleFox to help the anchor.',
 	inflation_pool : 'Vote to xlmpool.com',
 	inflation_fox  : 'Vote to RippleFox',
-	inflation_lumenaut     : 'Vote to lumenaut.net'
+	inflation_lumenaut     : 'Vote to lumenaut.net',
+  inflation_moonpool : 'Vote for MoonPool',
+
 	home_domain : 'Home Domain',
 	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
 	domain_done : 'Home Domain was set.',
