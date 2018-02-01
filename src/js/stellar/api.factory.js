@@ -425,7 +425,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			}
 			self.balances = data.balances;
 			self.subentry = data.subentry_count;
-			$scope.reserve = self.subentry * 10 + 20;
+			$scope.reserve = self.subentry * 0.5 + 1;
 			self.updateRootBalance();
 			$scope.$apply();
 			if (callback) { callback(); }
