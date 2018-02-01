@@ -84,6 +84,11 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 			$scope.setInflation();
 		}
 
+		$scope.setInflationLumenaut = function() {
+			$scope.inflation = 'GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT';
+			$scope.setInflation();
+		}
+		
 		$scope.domain = '';
 		$scope.domain_working = false;
 		$scope.domain_error = '';

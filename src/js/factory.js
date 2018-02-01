@@ -11,6 +11,8 @@ myApp.factory('SettingFactory', function($window) {
 					return 'cn';
 				} else {
 					return 'en';
+				} else {
+					return 'fr';
 				}
 			}
 		},
@@ -40,7 +42,7 @@ myApp.factory('SettingFactory', function($window) {
 			if ($window.localStorage['stellar_url']) {
 				return $window.localStorage['stellar_url'];
 			}
-			return this.getLang() == 'cn' ? "https://api.chinastellar.com" : 'https://horizon.stellar.org';
+			return this.getLang() == 'cn' ? "https://horizon.stellar.org" : 'https://horizon.stellar.org';
 		},
 		setTestUrl : function(url) {
 			$window.localStorage['test_url'] = url;
