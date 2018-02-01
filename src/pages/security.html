@@ -14,7 +14,7 @@
 					translate="delete_account">Delete Account</a>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-9" ng-show="isMode('security')">
 	      <label translate="important">Important:</label>
 	      <p class="hint" translate="security_notice">The secret key below gives access to your money in the unlikely case that you lose your password.
@@ -25,7 +25,10 @@
 	        <label translate="stellar_address">Stellar address</label>
 	        <p class="key">{{address}}</p>
 	        <label translate="secret_key">Secret key:</label>
-	        <p class="key" ng-show="showSecret==true">{{keyOpen}}</p>
+	        <p class="key" ng-show="showSecret==true">
+						{{keyOpen}}
+						<qrcode data="{{keyQRCode}}" size=200></qrcode>
+					</p>
 	        <p class="key" ng-hide="showSecret==true">{{key}}</p>
 	        <p ng-hide="showSecret==true">
 	            <button class="btn btn-info btn-sm" ng-really-message="{{'are_you_sure' | translate}}" ng-really-click="showSec(true)" translate="show_secret">Show secret key</button>
@@ -39,14 +42,14 @@
 	        <div class="col-xs-12 col-sm-5 col-lg-4"><a class="btn btn-info btn-block btn-big" href="javascript:" ng-click="goTo('/balance')" translate="yes_save">Yes, I saved my secret key</a></div>
 	      </div>
 	    </div>
-	    
+
 		<div class="col-sm-9" ng-show="isMode('inflation')">
-			<label translate="important">Important:</label> 
+			<label translate="important">Important:</label>
 		    <p class="hint" translate="inflation_desc">New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.</p>
-		
+
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
-					<label translate="inflation">Inflaction Destination</label> 
+					<label translate="inflation">Inflaction Destination</label>
 					<input class="form-control" type="text" ng-model="inflation" />
 				</div>
 			</div>
@@ -62,29 +65,39 @@
 						ng-click="setInflation()" translate="save">Save</a>
 				</div>
 			</div>
-			
+
 			<label translate="inflation_options">Other options</label>
-			<p class="hint" translate="inflation_options_desc">You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.</p>
-			
+			<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
+
+			<div class="row">
+				<div class="col-xs-6 col-sm-4">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote for MoonPool</a>
+				</div>
+				<div class="col-xs-6 col-sm-4">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote for xlmpool.com/</a>
+				</div>
+				<div class="col-xs-6 col-sm-4">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+						ng-click="setInflationFox()" translate="inflation_fox">Vote for RippleFox</a>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationPool()" translate="inflation_pool">Vote to xlmpool.com/</a>
-				</div>
-				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
+						ng-click="setInflationLumenaut()" translate="inflation_fox">Vote to lumenaut.net</a>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-9" ng-show="isMode('domain')">
-			<label translate="important">Important:</label> 
+			<label translate="important">Important:</label>
 		    <p class="hint" translate="domain_desc">A domain name that can optionally be added to the account. Clients can look up more details from this domain.</p>
-		
+
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
-					<label translate="home_domain">Home Domain</label> 
+					<label translate="home_domain">Home Domain</label>
 					<input class="form-control" type="text" ng-model="domain" />
 				</div>
 			</div>
@@ -101,18 +114,18 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-9" ng-show="isMode('data')">
-			<label translate="important">Important:</label> 
+			<label translate="important">Important:</label>
 		    <p class="hint" translate="data_desc1">Allows you to set,modify or delete a Data Entry (name/value pair) that is attached to a particular account. An account can have an arbitrary amount of DataEntries attached to it. Each DataEntry increases the minimum balance needed to be held by the account.</p>
 			<p class="hint" translate="data_desc2">DataEntries can be used for application specific things. They are not used by the core Stellar protocol.</p>
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-6 col-md-5">
-					<label translate="data_key">Name</label> 
+					<label translate="data_key">Name</label>
 					<input class="form-control" type="text" ng-model="data_key" />
 				</div>
 				<div class="col-xs-6 col-md-5">
-					<label translate="data_value">Value</label> 
+					<label translate="data_value">Value</label>
 					<input class="form-control" type="text" ng-model="data_value" />
 				</div>
 			</div>
@@ -139,14 +152,14 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-9" ng-show="isMode('merge')">
-			<label translate="important">Important:</label> 
+			<label translate="important">Important:</label>
 		    <p class="hint" translate="merge_desc">Danger operation! It transfers the native balance (the amount of XLM an account holds) to another account and removes the source account from the ledger.</p>
-		
+
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
-					<label translate="dest_account">Destination Account</label> 
+					<label translate="dest_account">Destination Account</label>
 					<input class="form-control" type="text" ng-model="dest_account" />
 				</div>
 			</div>
@@ -158,7 +171,7 @@
 			</div>
 			<div class="row" style="margin-bottom: 20px;" ng-show="delete_warning">
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-warning btn-block btn-big" href="javascript:"	
+					<a class="btn btn-warning btn-block btn-big" href="javascript:"
 						ng-click="toggleWarning()" translate="delete_warning">I KNOW　EVERYTHING >></a>
 				</div>
 			</div>
@@ -173,7 +186,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
 			<div class="s-alert s-alert--alert row__message">
 				{{network_error | translate}}

@@ -1,11 +1,11 @@
-var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js']);
+var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
 myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 	$translateProvider.translations('cn', translate_cn);
 	$translateProvider.translations('en', translate_en);
 	$translateProvider.preferredLanguage('cn');
 	$translateProvider.useSanitizeValueStrategy('escape');
-    
+
 	$httpProvider.interceptors.push('TokenInterceptor');
 
 	$routeProvider.when('/login', {
@@ -111,7 +111,7 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 
 myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFactory', 'StellarApi', 'SettingFactory', 'RemoteFactory', 'AnchorFactory',
            function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory, AnchorFactory) {
-	
+
 	$rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
 		  if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
 			  $location.path("/login");
@@ -129,7 +129,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			  }
 		  }
 	});
-	
+
 	$rootScope.$on('$routeChangeSuccess', function(event, nextRoute, currentRoute) {
 	      $rootScope.showMenu = AuthenticationFactory.isLogged();
 	      $rootScope.role = AuthenticationFactory.userRole;
@@ -138,10 +138,10 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	    	  $location.path('/');
 	      }
 	});
-	
+
 	$rootScope.$on('$blobUpdate', function(){
 		console.log($rootScope.address, AuthenticationFactory.userBlob);
-		
+
 	      if ($rootScope.address && AuthenticationFactory.userBlob) {
 	    	  var data = JSON.parse(AuthenticationFactory.userBlob);
 	    	  console.log('$blobUpdate', data);
@@ -152,12 +152,12 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	    	  StellarApi.queryAccount();
 	      }
 	});
- 
+
 	$rootScope.goTo = function(url){
 	      $location.path(url);
 	};
-	
-	
+
+
 	$rootScope.balance = 0; //native asset;
 	$rootScope.reserve = 0;
 	$rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
@@ -178,7 +178,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			}
 		});
 	};
-	
+
 	//the default gateway list
 	$rootScope.gateways = gateways;
 	RemoteFactory.getIcoAnchors(function(err, data){
@@ -188,7 +188,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			gateways.addAnchors(data);
 		}
 	});
-	
+
 	$rootScope.ico_data;
 	RemoteFactory.getIcoItems(function(err, data){
 		if (err) {
@@ -200,12 +200,12 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	for (var domain in gateways.data) {
 		AnchorFactory.addAnchor(domain);
 	}
-	
+
 	$rootScope.stellar_ticker;
 	RemoteFactory.getStellarTicker(function(err, ticker){
 		if (ticker) { $rootScope.stellar_ticker = ticker; }
 	});
-	
+
 	reset();
 	function reset() {
 		console.warn('reset');
@@ -214,7 +214,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		$rootScope.lines = {};
 		$rootScope.balance = 0;
 		$rootScope.reserve = 0;
-		
+
 		$rootScope.offers = {};
 		$rootScope.events = [];
 		$rootScope.history = [];
@@ -224,11 +224,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			count: 0
 		};
 	}
-	
+
 	$rootScope.reset = function(){
 		reset();
 	}
-	
+
 	$rootScope.objKeyLength = function(obj) {
 		return Object.keys(obj).length;
 	}
@@ -244,11 +244,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	$rootScope.isOtherNetwork = function() {
 		return SettingFactory.getNetworkType() == 'other';
 	}
-	
+
 	$rootScope.isLangCN = function() {
 		return SettingFactory.getLang() == 'cn';
 	}
-	
+
 	$translate.use(SettingFactory.getLang());
 	try {
 		if ('test' == SettingFactory.getNetworkType()) {
@@ -264,7 +264,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 		SettingFactory.setNetworkType('public');
 		StellarApi.setServer(null);
 	}
-	
+
 	if (SettingFactory.getProxy()) {
 		try {
 			nw.App.setProxyConfig(SettingFactory.getProxy()); //"127.0.0.1:53323"
@@ -279,6 +279,6 @@ function round(dight, howMany) {
 		dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
 	} else {
 		dight = Math.round(dight);
-	}	
+	}
 	return dight;
 }
