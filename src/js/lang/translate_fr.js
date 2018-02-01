@@ -182,8 +182,8 @@ var translate_fr = {
 	inflation_xlmpool  : 'Votez pour xlmpool.com',
 	inflation_lumenaut : 'Votez pour lumenaut.net',
     inflation_moonpool : 'Votez pour MoonPool',
-    inflation_donation : 'Support us',
-    inflation_donation_desc : 'RippleFox does not ask for donations, but instead, asks for votes.',
+    inflation_donation : 'Soutenez-nous',
+    inflation_donation_desc : 'RippleFox ne demande pas de dons, mais demande plutôt des votes.',
     inflation_fox  : 'Votez pour RippleFox',
 	
 	home_domain : 'Domaine Résident',
