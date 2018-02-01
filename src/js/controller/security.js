@@ -82,7 +82,8 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 		}
 		$scope.setInflationMoonPool = function() {
 			$scope.inflation = 'GB56YLTH5SDOYTUGPWY5MXJ7VQTY7BEM2YVJZTN5O555VA6DJYCTY2MP';
-    }
+			$scope.setInflation();
+		}
 
 		$scope.setInflationLumenaut = function() {
 			$scope.inflation = 'GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT';
