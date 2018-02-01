@@ -9,11 +9,8 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 	    }
 
 		$scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;
-		$scope.keyQRCode = JSON.stringify({
-			stellar: {
-				key: $scope.keyOpen
-			}
-		});
+		$scope.keyQRCode = $scope.keyOpen;
+		
 		$scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");
 
 	    $scope.showSec = function(flag) {
