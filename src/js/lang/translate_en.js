@@ -25,13 +25,13 @@ var translate_en = {
 	show_password : 'Show password',
 	hide_password : 'Hide password',
 	stellar_address : 'Stellar address',
-	secret_key : 'Secret key:',
+	secret_key : 'Secret key and QRCode:',
 	show_secret: 'Show secret key',
 	hide_secret: 'Hide secret key',
 	are_you_sure: 'Are you in a safe place where no person or camera can see your screen?',
 	save_safe: 'Have you saved your secret key somewhere safe?',
 	yes_save: 'Yes, I saved my secret key',
-	
+
 	/** Balance & Trust **/
 	balance : 'Balance',
 	estimated : 'Estimated value of holdings:',
@@ -55,8 +55,9 @@ var translate_en = {
 	manual_add : 'Manually add trust',
 	manual_desc: 'You can add trust manually if you know the account ID and asset code',
 	issuer_invalid : 'Asset issuer account ID must be a valid account ID',
-	memo_invaid : 'Invalid memo.',
-	
+	memo_invaid    : 'Invalid memo.',
+	trust_granted  : 'Trust is granted!',
+
 	/** send **/
 	send : 'Send',
 	send_pick : 'Choose asset to send',
@@ -69,9 +70,9 @@ var translate_en = {
 	select_asset : 'Please select an asset to send.',
 	sending_to   : 'Sending to',
 	send_done    : 'Asset successfully sent.',
-	not_funded   : 'Not funded. To crete this account, send it at least 20 lumens (XLM).',
+	not_funded   : 'Not funded. To create this account, send it at least 20 lumens (XLM).',
 	can_accept   : 'The account can accept',
-	
+
 	/** Convert **/
 	convert       : 'Convert',
 	convert_title : 'Convert one currency into another',
@@ -80,7 +81,7 @@ var translate_en = {
 	receive       : 'Receive',
 	calculating   : 'Calculating',
 	path          : 'Path:',
-	
+
 	/** History **/
 	history: 'History',
 	payments: 'Payments',
@@ -97,7 +98,7 @@ var translate_en = {
 	no_more     : 'No more transactions left',
 	set_options : 'Options',
 	set_data    : 'Data',
-	
+
 	choose : 'Choose',
 	example : 'example',
 	refresh : 'Refresh',
@@ -105,7 +106,9 @@ var translate_en = {
 	issuer_id : 'Issuer Account ID',
 	amount : 'Amount',
 	optional : 'Optional',
-	
+	required : 'Required',
+	require_memo : 'Recipient requires a memo. Please make sure it is correct.',
+
 	trade : 'Trade',
 	normal: 'Normal',
 	sent  : 'Sent',
@@ -141,13 +144,13 @@ var translate_en = {
 	advanced   : 'Advanced',
 	buying     : 'Buying',
 	selling    : 'Selling',
-	
+
 	/** ICO **/
 	ico : 'ICO',
 	ico_stellar : 'Using Stellar for ICOs',
 	ico_note: 'Note: Before becoming involved in an ICO, cryptocurrency investors and enthusiasts need to consider the risks involved when participating. We do NOT endorse any of these projects.',
 	ico_instruction: 'After adding the trust line, select "Trade - Convert". You can use any currency to purchase the ICO.',
-	
+
 	/** Setting & security **/
 	settings : 'Settings',
 	network  : 'Network',
@@ -156,8 +159,11 @@ var translate_en = {
 	switch_net_desc : 'The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.',
 	public_net : 'Public Network',
 	test_net   : 'Test Network',
+	other_net  : 'User defined',
 	public_url : 'Public Net URL',
 	test_url   : 'Test Net URL',
+	other_url  : 'Network URL',
+	passphrase : 'Passphrase or id',
 	fed_protocol: 'Federation Protocol',
 	fed_network : 'Name Service (~)',
 	fed_network_desc : 'You can use ~name instead of name*federation.domain.',
@@ -172,9 +178,12 @@ var translate_en = {
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
 	inflation_options      : 'Other options',
-	inflation_options_desc : 'You can join xlmpool.com to get the inflation lumens. Or you can vote to RippleFox.',
+	inflation_options_desc : 'You can join one of the following inflation pools. You can also vote for RippleFox to help the anchor.',
 	inflation_pool : 'Vote to xlmpool.com',
 	inflation_fox  : 'Vote to RippleFox',
+	inflation_lumenaut     : 'Vote to lumenaut.net',
+  inflation_moonpool : 'Vote for MoonPool',
+
 	home_domain : 'Home Domain',
 	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
 	domain_done : 'Home Domain was set.',
@@ -184,7 +193,13 @@ var translate_en = {
 	data_key    : 'Data Entry Name',
 	data_value  : 'Data Entry Value',
 	data_done   : 'Data entry was set.',
-	
+	delete_account : 'Delete Account',
+	merge_desc     : 'Danger operation! It transfers the native balance (the amount of XLM an account holds) to destination account and removes your account from the ledger.',
+	dest_account   : 'Destination Account',
+	delete_warning : 'I KNOW EVERYTHING >>',
+	back           : 'Back',
+	merge_done     : 'Your account was merged to destination.',
+
 	/** Deposit & withdrawl **/
 	deposit_withdraw : 'Deposit/Withdraw',
 	deposit  : 'Deposit',
@@ -200,7 +215,7 @@ var translate_en = {
 	analyzing : 'Analyzing ...',
 	will_recv : 'Recipient will receive',
 	can_send  : 'You can send',
-		
+
 	Stellar : 'Stellar',
 	stellar_desktop_client : 'Stellar Desktop Client',
 	app_open_source  : 'This app is open source now.',
@@ -210,8 +225,8 @@ var translate_en = {
 	wallet : 'Wallet',
 	version: 'Version',
 	logout : 'Logout',
-	
+
 	/** Error **/
-	NotFoundError : 'The resource was not found. Your account has to be activated first.',
-	changeTrustLowReserve : 'Not enough funds to create a new trust line.'
+	NotFoundError : 'The resource was not found. You must have at least 20 lumens in your account for it to be activated! Each trust line or offer requires a 10 lumen reserve in addition. To make things easy, send at least 41 lumens to the account.',
+	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 10 lumen reserve in addition.'
 }

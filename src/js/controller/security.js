@@ -1,5 +1,5 @@
-myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi',
-	function($scope, AuthenticationFactory, StellarApi) {
+myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
+	function($scope, $rootScope, AuthenticationFactory, StellarApi) {
 		$scope.mode = 'security';
 		$scope.isMode = function(mode) {
 			return $scope.mode === mode;
@@ -7,14 +7,20 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 		$scope.setMode = function(mode) {
 			return $scope.mode = mode;
 	    }
-	
+
 		$scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;
+		$scope.keyQRCode = JSON.stringify({
+			stellar: {
+				key: $scope.keyOpen
+			}
+		});
 		$scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");
-		
+
 	    $scope.showSec = function(flag) {
 			$scope.showSecret = flag;
 		};
-		
+
+
 		$scope.network_error;
 		$scope.refresh = function() {
 			StellarApi.getInfo(null, function(err, data) {
@@ -36,12 +42,12 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 					for (var key in data.data_attr) {
 						$scope.data_attr[key] = b64DecodeUnicode(data.data_attr[key]);
 					}
-					$scope.$apply();
 				}
+				$scope.$apply();
 			});
 		};
 		$scope.refresh();
-		
+
 		$scope.inflation = '';
 		$scope.inflation_working = false;
 		$scope.inflation_error = '';
@@ -73,8 +79,16 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 			$scope.inflation = 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX';
 			$scope.setInflation();
 		}
-		$scope.setInflationPool = function() {
+		$scope.setInflationXLMPool = function() {
 			$scope.inflation = 'GA3FUYFOPWZ25YXTCA73RK2UGONHCO27OHQRSGV3VCE67UEPEFEDCOPA';
+			$scope.setInflation();
+		}
+		$scope.setInflationMoonPool = function() {
+			$scope.inflation = 'GB56YLTH5SDOYTUGPWY5MXJ7VQTY7BEM2YVJZTN5O555VA6DJYCTY2MP';
+    }
+
+		$scope.setInflationLumenaut = function() {
+			$scope.inflation = 'GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT';
 			$scope.setInflation();
 		}
 		
@@ -105,7 +119,7 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 				$scope.$apply();
 			});
 		};
-		
+
 		$scope.data_attr = {};
 		$scope.data_key = '';
 		$scope.data_value = '';
@@ -136,6 +150,36 @@ myApp.controller("SecurityCtrl", ['$scope', 'AuthenticationFactory', 'StellarApi
 						delete $scope.data_attr[$scope.data_key];
 					}
 					$scope.data_done = true;
+				}
+				$scope.$apply();
+			});
+		};
+
+		$scope.delete_warning = true;
+		$scope.toggleWarning = function() {
+			$scope.delete_warning = !$scope.delete_warning;
+		}
+		$scope.merge = function() {
+			$scope.merge_error = '';
+			$scope.merge_done = false;
+			$scope.merge_working = true;
+			StellarApi.merge($scope.dest_account, function(err, hash){
+				$scope.merge_working = false;
+				if (err) {
+					if (err.message) {
+						$scope.merge_error = err.message;
+					} else {
+						if (err.extras && err.extras.result_xdr) {
+							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+							$scope.merge_error = resultXdr.result().results()[0].value().value().switch().name;
+						} else {
+							console.error("Unhandle!!", err);
+						}
+					}
+				} else {
+					$rootScope.balance = 0;
+					$rootScope.reserve = 0;
+					$scope.merge_done = true;
 				}
 				$scope.$apply();
 			});

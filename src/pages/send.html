@@ -1,5 +1,5 @@
 <section class="col-xs-12 content" ng-controller="SendCtrl">
-	<group ng-show="loadState.account || true">
+	<group>
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
 			<div class="island__header" translate="send_pick">Choose asset to send</div>
@@ -64,7 +64,7 @@
 				<label class="s-inputGroup AddTrust__inputGroup dropdown">
 					<button type="button" class="btn btn-secondary dropdown-toggle s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4"
 						data-toggle="dropdown" style="padding: 0 1.2em 0 1.2em;" 
-						ng-disabled="memo_provided || quote_id">
+						ng-disabled="memo_require || memo_provided || quote_id">
 						<span style="font-size: 18px; font-weight: 700;">{{'memo' | translate}}: {{memo_type}}</span> &nbsp;&nbsp;
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu" style="font-size: 18px; font-weight: 700;">
@@ -75,7 +75,7 @@
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
 						ng-model="memo" 
 						ng-disabled="memo_provided || quote_id"
-						placeholder="{{'optional' | translate}}">
+						placeholder="{{memo_require ? 'required' : 'optional' | translate}}">
 				</label>
 			</div>
 			
@@ -166,6 +166,11 @@
 							<li translate="select_asset">Please select an asset to send.</li>
 						</ul>
 					</div>
+					<div class="s-alert s-alert--alert" ng-show="memo_require && !memo">
+						<ul class="AddTrust__errorList">
+							<li translate="require_memo">Recipient requires a memo. Please make sure it is correct.</li>
+						</ul>
+					</div>
 					<div class="s-alert s-alert--success" ng-show="send_done">
 						<ul class="AddTrust__errorList">
 							<li translate="send_done">Asset successfully sent.</li>
@@ -219,7 +224,7 @@
 					<button class="s-button btn btn-success" 
 						ng-show="asset.code" 
 						ng-click="send_asset()" 
-						ng-disabled="!asset.amount || !isValidAddress(real_address) || sending">{{'send' | translate}} {{src_code}}</button>
+						ng-disabled="!asset.amount || !isValidAddress(real_address) || sending || (memo_require && !memo)">{{'send' | translate}} {{src_code}}</button>
 				</div>
 			</div>
 

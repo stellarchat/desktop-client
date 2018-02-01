@@ -12,7 +12,7 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
 		StellarApi.queryPayments(function(err, payments, nextPage){
 			$scope.loading = false;
 			if (err) {
-				$scope.error_msg = err.message;
+				$scope.error_msg = StellarApi.getErrMsg(err);
 			} else {
 				$scope.error_msg = "";
 				$scope.payments = payments;
@@ -85,7 +85,7 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
  		StellarApi.queryTransactions(function(err, trades, nextPage){
  			$scope.loading = false;
  			if (err) {
- 				$scope.error_msg = err.message;
+ 				$scope.error_msg = StellarApi.getErrMsg(err);
  			} else {
  				$scope.error_msg = "";
  				$scope.trades = trades;
@@ -134,7 +134,7 @@ myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi',
 		StellarApi.queryEffects(function(err, effects, nextPage) {
 			if (err) {
 				$scope.loading = false;
-				$scope.error_msg = err.message;
+				$scope.error_msg = StellarApi.getErrMsg(err);
 			} else {
 				$scope.error_msg = "";
 				$scope.next = nextPage;

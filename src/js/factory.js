@@ -11,6 +11,8 @@ myApp.factory('SettingFactory', function($window) {
 					return 'cn';
 				} else {
 					return 'en';
+				} else {
+					return 'fr';
 				}
 			}
 		},
@@ -24,8 +26,8 @@ myApp.factory('SettingFactory', function($window) {
 			return $window.localStorage['proxy'] || "";
 		},
 		setNetworkType : function(type) {
-			if (type == 'test') {
-				$window.localStorage['network_type'] = 'test';
+			if (type == 'test' || type == 'other') {
+				$window.localStorage['network_type'] = type;
 			} else {
 				$window.localStorage['network_type'] = 'public';
 			}
@@ -40,13 +42,25 @@ myApp.factory('SettingFactory', function($window) {
 			if ($window.localStorage['stellar_url']) {
 				return $window.localStorage['stellar_url'];
 			}
-			return this.getLang() == 'cn' ? "https://stellar-api.wancloud.io" : 'https://horizon.stellar.org';
+			return this.getLang() == 'cn' ? "https://horizon.stellar.org" : 'https://horizon.stellar.org';
 		},
 		setTestUrl : function(url) {
 			$window.localStorage['test_url'] = url;
 		},
 		getTestUrl : function(url) {
 			return $window.localStorage['test_url'] || "https://horizon-testnet.stellar.org";
+		},
+		setOtherUrl : function(url) {
+			$window.localStorage['other_url'] = url;
+		},
+		getOtherUrl : function(url) {
+			return $window.localStorage['other_url'];
+		},
+		setNetPassphrase : function(val) {
+			$window.localStorage['net_passphase'] = val;
+		},
+		getNetPassphrase : function(url) {
+			return $window.localStorage['net_passphase'];
 		},
 		
 		setFedNetwork : function(domain) {
@@ -197,3 +211,105 @@ myApp.factory('RemoteFactory', function($http) {
 	
 	return remote;
 });
+
+myApp.factory('AnchorFactory', ['$rootScope', 'StellarApi', 
+		function($scope, StellarApi) {
+	var obj = {
+		anchor : {
+			'ripplefox.com' : {domain  : 'ripplefox.com', parsing : false, parsed  : false}
+		},
+		address : {
+			'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX' : {domain : 'ripplefox.com', parsing: false, parsed: false}
+		}
+	};
+	
+	obj.isAnchorParsed = function(domain) {
+		return this.anchor[domain] && this.anchor[domain].parsed;
+	}
+	obj.isAccountParsed = function(address) {
+		return this.address[address] && this.address[address].parsed;
+	}
+	obj.getAnchor = function(domainOrAddress) {
+		var domain = domainOrAddress;
+		if (this.address[domainOrAddress]) {
+			domain = this.address[domainOrAddress].domain;
+		}
+		return this.anchor[domain];
+	}
+	
+	obj.addAnchor = function(domain) {
+		var self = this;
+		if (!self.anchor[domain]) {
+			self.anchor[domain] = {domain  : domain, parsing : false, parsed  : false};
+		}
+		if (!self.anchor[domain].parsed) {
+			self.parseDomain(domain);
+		}
+	}
+	
+	obj.addAccount = function(address) {
+		var self = this;
+		if (!self.address[address]) {
+			self.address[address] = {domain  : null, parsing : false, parsed  : false};
+		}
+		if (!self.address[address].parsed) {
+			self.parseAccount(address);
+		}
+	}
+	
+	obj.parseAccount = function(address) {
+		var self = this;
+		if (self.address[address].parsing) {
+			return;
+		}
+		
+		console.debug('Parse domain of ' + address);
+		self.address[address].parsing = true;
+		StellarApi.getInfo(address, function(err, data) {
+			self.address[address].parsing = false;
+			if (err) {
+				console.error(err);
+			} else {
+				self.address[address].parsed = true;
+				if (data.home_domain) {
+					console.debug(address, data.home_domain);
+					self.address[address].domain = data.home_domain;
+					self.addAnchor(data.home_domain);
+				} else {
+					console.debug(address + ' home_domain not set.');
+				}
+			}
+		});
+	}
+	
+	obj.parseDomain = function(domain) {
+		var self = this;
+		if (self.anchor[domain].parsing) {
+			return;
+		}
+		
+		console.debug('Parse stellar.toml of ' + domain);
+		self.anchor[domain].parsing = true;
+		StellarSdk.StellarTomlResolver.resolve(domain).then(function(stellarToml) {
+			console.debug(domain, stellarToml);
+			self.anchor[domain].parsing = false;
+			self.anchor[domain].parsed = true;
+			self.anchor[domain].toml = stellarToml;
+			self.anchor[domain].deposit_api = stellarToml.DEPOSIT_SERVER;
+			self.anchor[domain].fed_api = stellarToml.FEDERATION_SERVER;
+			
+			var currencies = stellarToml.CURRENCIES;
+			currencies.forEach(function(asset){
+				self.address[asset.issuer] = {domain: domain, parsing: false, parsed: true};
+			});
+			
+			$scope.$broadcast("anchorUpdate");
+		}).catch(function(err){
+			self.anchor[domain].parsing = false;
+			console.error(err); 
+		});
+		
+	}
+	
+	return obj;
+} ]);

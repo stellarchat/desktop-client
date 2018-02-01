@@ -12,6 +12,8 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
 	$scope.network_type = SettingFactory.getNetworkType();
 	$scope.url = SettingFactory.getStellarUrl();
 	$scope.test_url = SettingFactory.getTestUrl();
+	$scope.other_url = SettingFactory.getOtherUrl();
+	$scope.passphrase = SettingFactory.getNetPassphrase();
 	
 	$scope.fed_network = SettingFactory.getFedNetwork();
 	$scope.fed_ripple  = SettingFactory.getFedRipple();
@@ -33,10 +35,27 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
 				SettingFactory.setStellarUrl($scope.url);
 				server_change = true;
 			}
+			if (SettingFactory.getOtherUrl() != $scope.other_url) {
+				SettingFactory.setOtherUrl($scope.other_url);
+				server_change = true;
+			}
+			if (SettingFactory.getNetPassphrase() != $scope.passphrase) {
+				SettingFactory.setNetPassphrase($scope.passphrase);
+				server_change = true;
+			}
 			
 			if (server_change) {
 				try {
-					StellarApi.setServer('test' == $scope.network_type ? $scope.test_url : $scope.url, $scope.network_type);
+					var url = "";
+					if ($scope.network_type == 'test') {
+						url = $scope.test_url;
+					} else if ($scope.network_type == 'other') {
+						url = $scope.other_url;
+					} else {
+						$scope.url;
+					}
+					
+					StellarApi.setServer(url, $scope.network_type, $scope.passphrase);
 					StellarApi.logout();
 					$rootScope.reset();
 					$rootScope.$broadcast('$blobUpdate');

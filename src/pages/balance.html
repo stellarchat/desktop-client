@@ -1,5 +1,5 @@
 <section class="col-xs-12 content">
-	<group ng-show="loadState.account || true">
+	<group>
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
 			<div class="island__header">
@@ -29,7 +29,7 @@
 					</tr>
 				</tbody>
 				<tbody ng-repeat="(code, sublines) in lines">
-					<tr class="BalancesTable__row" ng-repeat="(issuer, line) in sublines">
+					<tr class="BalancesTable__row" ng-repeat-start="(issuer, line) in sublines">
 						<td ng-init="gateway=gateways.getSourceById(line.issuer)">
 							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
 								code="{{code}}" address="{{line.issuer}}"></gateway>
@@ -45,7 +45,20 @@
 								translate="trust_remove">Remove trust</a>
 							<span class="BalancesTable__row__removeLink" 
 								ng-show="isRemoving(line.code, line.issuer)"
-								translate="trust_removeing">Removing</span>
+								translate="trust_removeing">Removing</span><br>
+							<a class="BalancesTable__row__removeLink" href="javascript:"
+								ng-show="deposit_info[code][issuer].resolved"
+								ng-click="toggleDepositInfo(code, issuer)">
+								{{'deposit' | translate}}
+								<i class="fa fa-angle-double-down" ng-hide="deposit_info[code][issuer].show"></i>
+								<i class="fa fa-angle-double-up" ng-show="deposit_info[code][issuer].show"></i>
+							</a>
+						</td>
+					</tr>
+					<tr ng-repeat-end ng-show="deposit_info[code][issuer].resolved && deposit_info[code][issuer].show" class="BalancesTable__row">
+						<td colspan=3>
+							<span>{{deposit_info[code][issuer].info.how}}{{deposit_info[code][issuer].info.deposit_info}}</span><br>
+							<span>{{deposit_info[code][issuer].info.extra_info}}</span>
 						</td>
 					</tr>
 				</tobdy>

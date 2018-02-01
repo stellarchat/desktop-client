@@ -69,16 +69,21 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		return StellarSdk.FederationServer.createForDomain(domain);
 	};
 	
-	api.setServer = function(url, type) {
+	api.setServer = function(url, type, passphrase) {
 		var url = url || 'https://horizon.stellar.org';
 		if ('test' == type) {
 			console.debug("TestNetwork: " + url);
 			StellarSdk.Network.useTestNetwork();
+			this.server = new StellarSdk.Server(url, {allowHttp: true});
+		} else if ('other' == type) {
+			console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
+			StellarSdk.Network.use(new StellarSdk.Network(passphrase));
+			this.server = new StellarSdk.Server(url, {allowHttp: true});
 		} else {
 			console.debug("PublicNetwork: " + url);
 			StellarSdk.Network.usePublicNetwork();
+			this.server = new StellarSdk.Server(url);
 		}
-		this.server = new StellarSdk.Server(url);
 		history.server = this.server;
 		orderbook.server = this.server;
 		path.server = this.server;
@@ -391,6 +396,25 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		});
 	};
 	
+	api.merge = function(destAccount, callback) {
+		var self = this;
+		var opt = {destination: destAccount};
+		console.debug('merge:', self.address, '->', destAccount);
+		self.server.loadAccount(self.address).then(function(account){
+			self.updateSeq(account);
+			var op = StellarSdk.Operation.accountMerge(opt);
+	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        return self.server.submitTransaction(tx);
+		}).then(function(txResult){
+			console.log('Account merged.', txResult);
+			callback(null, txResult.hash);
+		}).catch(function(err){
+			console.error('accountMerge Fail !', err);
+			callback(err, null);
+		});
+	};
+	
 	api.queryAccount = function(callback) {
 		var self = this;
 		console.debug('query', self.address);
@@ -569,6 +593,22 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		}).catch(function(err){
 			return callback(err);
 		});
+	}
+	
+	api.getErrMsg = function(err) {
+		var message = "";
+		if (err.name == "NotFoundError") {
+			message = "NotFoundError";
+		} else if (err.extras && err.extras.result_xdr) {
+			var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
+			message = resultXdr.result().results()[0].value().value().switch().name;
+		} else {
+			message = err.detail || err.message;
+		}
+		if (!message) {
+			console.error("Fail in getErrMsg", err);
+		}
+		return message;
 	}
 	
 	function getAsset(code, issuer) {

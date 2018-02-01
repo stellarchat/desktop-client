@@ -25,13 +25,13 @@ var translate_cn = {
 	show_password : '显示',
 	hide_password : '隐藏',
 	stellar_address : '恒星地址',
-	secret_key : '秘钥:',
+	secret_key : '秘钥和二维码:',
 	show_secret: '显示秘钥',
 	hide_secret: '隐藏秘钥',
 	are_you_sure: '你在一个安全的地方？没有人或摄相头在看你吧？',
 	save_safe: '你把密钥保存在安全的地方了吗？',
 	yes_save: '是，我已经保存好了！',
-	
+
 	/** Balance & Trust **/
 	balance : '余额',
 	estimated : '资产折合：',
@@ -55,8 +55,9 @@ var translate_cn = {
 	manual_add : '手动授信',
 	manual_desc: '在了解发行方账号和资产代码的情况下，你可以手动进行授信操作。',
 	issuer_invalid : '发行方账号必须是有效的恒星地址编码。',
-	memo_invaid : '备注必须是有效的。',
-	
+	memo_invaid    : '备注必须是有效的。',
+	trust_granted  : '设置信任额度成功！',
+
 	/** send **/
 	send : '发送',
 	send_pick : '选择要发送的资产',
@@ -71,7 +72,7 @@ var translate_cn = {
 	send_done    : '发送成功',
 	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
 	can_accept   : '账号可接收',
-	
+
 	/** Convert **/
 	convert       : '兑换',
 	convert_title : '把一种货币转换成另一种',
@@ -80,7 +81,7 @@ var translate_cn = {
 	receive       : '接收',
 	calculating   : '计算中',
 	path          : '路径：',
-	
+
 	/** History **/
 	history: '历史',
 	payments: '转账',
@@ -97,7 +98,7 @@ var translate_cn = {
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
 	set_data    : '数据',
-	
+
 	choose : '选择',
 	example : '示例',
 	refresh : '刷新',
@@ -105,7 +106,9 @@ var translate_cn = {
 	issuer_id : '发行方账号',
 	amount : '金额',
 	optional : '选填',
-	
+	required : '必填',
+	require_memo : '接收方需要Memo，请确保备注正确！',
+
 	/** Trade **/
 	trade : '交易',
 	normal: '标准',
@@ -142,13 +145,13 @@ var translate_cn = {
 	advanced   : '高级',
 	buying     : '买入',
 	selling    : '卖出',
-	
+
 	/** ICO **/
 	ico : '衍生项目',
 	ico_stellar : '恒星的衍生项目',
 	ico_note: '警告：在参与项目之前，你需要仔细考虑项目所涉及的风险。你的资金可能完全损失。项目来自源于社区，我们不为任何项目背书。',
 	ico_instruction: '授信衍生项目的资产后，选择“交易 - 兑换”，即可用你所拥有的资产参与。',
-	
+
 	/** Setting & security **/
 	settings : '设置',
 	network  : '网络',
@@ -157,8 +160,11 @@ var translate_cn = {
 	switch_net_desc : '测试网络仅用于开发、测试和研究。钱包大部分功能只适用于公共网络。如非专业人员，请勿切换成测试网络。',
 	public_net : '公共网络',
 	test_net   : '测试网络',
+	other_net  : '自定义',
 	public_url : '恒星公网节点',
 	test_url   : '测试网络节点',
+	other_url  : '网络节点',
+	passphrase : '网络标识',
 	fed_protocol: '联邦协议',
 	fed_network : '名称服务（~）',
 	fed_network_desc : '你可以用“~名字”来代替“名字*联邦.域名”。',
@@ -173,8 +179,9 @@ var translate_cn = {
 	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。1万个XLM每周约得到2个XLM。',
 	inflation_done : '通胀地址设置成功',
 	inflation_options      : '其它选择',
-	inflation_options_desc : '你可以加入xlmpool.com来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
-	inflation_pool  : '加入xlmpool通胀池',
+	inflation_options_desc : '你可以加入xlmpool.com或MoonPool.space来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
+	inflation_xlmpool  : '加入xlmpool通胀池',
+	inflation_moonpool  : '加入MoonPool通胀池',
 	inflation_fox  : '投票给瑞狐',
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
@@ -185,7 +192,13 @@ var translate_cn = {
 	data_key    : '名称',
 	data_value  : '值',
 	data_done   : '数据项设置成功',
-	
+	delete_account : '删除账户',
+	merge_desc     : '危险！此操作将你持有的XLM转移到目标账户，你的账户将从账本中删除！',
+	dest_account   : '目标账户',
+	delete_warning : '我明白所有风险 >>',
+	back           : '返回',
+	merge_done     : '你的账户已经被合并到了目标账户。',
+
 	/** Deposit & withdrawl **/
 	deposit_withdraw : '充提',
 	deposit  : '充值',
@@ -201,7 +214,7 @@ var translate_cn = {
 	analyzing : '正在解析……',
 	will_recv : '对方将收到',
 	can_send  : '你可以发送',
-		
+
 	Stellar : '恒星',
 	stellar_desktop_client : '恒星桌面钱包',
 	app_open_source  : '钱包开源啦！',
@@ -211,8 +224,8 @@ var translate_cn = {
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
-	
+
 	/** Error **/
-	NotFoundError : '恒星网络未找到该账号，请先激活此账号。',
-	changeTrustLowReserve : '恒星资金不足，无法授信新资产。'
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结10 XLM。'
 }

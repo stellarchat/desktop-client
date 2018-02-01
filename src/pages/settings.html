@@ -12,11 +12,19 @@
 		<div class="col-sm-9" ng-show="isMode('network')">
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
+					<label translate="proxy">Proxy</label> 
+					<input class="form-control" type="text" ng-model="proxy" placeholder="127.0.0.1:1080" />
+				</div>
+			</div>
+			
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-md-10">
 					<label translate="switch_net">Stellar Network</label>
 					<p translate="switch_net_desc">The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.</p>
 					<div class="btn-group">
 						<label class="btn btn-success" ng-class="{active: network_type=='public'}" ng-click="network_type='public'" >{{'public_net' | translate}}</label>
             			<label class="btn btn-success" ng-class="{active: network_type=='test'}" ng-click="network_type='test'">{{'test_net' | translate}}</label>
+            			<label class="btn btn-success" ng-class="{active: network_type=='other'}" ng-click="network_type='other'">{{'other_net' | translate}}</label>
 					</div>
 				</div>
 			</div>
@@ -40,13 +48,17 @@
 					</datalist> 
 				</div>
 			</div>
-			
-			<div class="row" style="margin-bottom: 20px;">
+			<div class="row" style="margin-bottom: 20px;" ng-show="network_type=='other'">
 				<div class="col-xs-12 col-md-10">
-					<label translate="proxy">Proxy</label> 
-					<input class="form-control" type="text" ng-model="proxy" placeholder="127.0.0.1:1080" />
+					<label translate="other_url">Network URL</label> 
+					<input class="form-control" type="text" ng-model="other_url" placeholder="http://horizon.mytestnet.com"/>
+				</div>
+				<div class="col-xs-12 col-md-10">
+					<label translate="passphrase">Passphrase or id</label> 
+					<input class="form-control" type="text" ng-model="passphrase" placeholder="My Integration Network ; mycrypto"/>
 				</div>
 			</div>
+			
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-click="save('network')" translate="save">Save</a>

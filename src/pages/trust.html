@@ -1,6 +1,6 @@
 <section class="col-xs-12 content" ng-controller="TrustCtrl">
-	<group ng-show="loadState.account || true">
-	<div class="so-back islandBack islandBack--t">
+	<group>
+	<div class="so-back islandBack islandBack--t" ng-show="isPublicNetwork()">
 		<div class="island">
 			<div class="island__header" translate="add_trust">Add trust from known anchors</div>
 			<div class="island__paddedContent">
@@ -22,12 +22,6 @@
 					</div>
 				</div>
 			</div>
-				
-			<div class="island__paddedContent" ng-show="trust_error">
-				<div class="s-alert s-alert--alert">
-					{{trust_error | translate}}
-				</div>
-			</div>
 			
 			<a href="" ng-click="showHide()">
 				<div class="txfoot">
@@ -37,6 +31,14 @@
 			</a>
 		</div>
 	</div>
+	
+	<div class="s-alert s-alert--alert row__message" ng-show="trust_error">
+		{{trust_error | translate}}
+	</div>
+	<div class="s-alert s-alert--success row__message" ng-show="trust_done" translate="trust_granted">
+		Trust is granted!
+	</div>
+
 
 	<div class="so-back islandBack">
 		<div class="island">
@@ -89,6 +91,13 @@
 					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="manual_issuer" ng-change="issuerChange()"
 					placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX">
 				</label>
+				<label class="s-inputGroup AddTrust__inputGroup">
+					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
+					<input type="text" autocomplete="off"
+						class="s-inputGroup__item S-flexItem-share" 
+						ng-model="manual_amount"
+						placeholder="{{'example' | translate}}: 1000000000">
+				</label>
 			</div>
 
 			<div>
@@ -116,7 +125,7 @@
 					</div>
 					<button class="s-button btn btn-success" 
 							ng-show="manual_code && isValidAddress(manual_issuer)" 
-							ng-click="addTrust()" 
+							ng-click="addTrust(manual_code, manual_issuer, manual_amount)" 
 							ng-disabled="isChanging(manual_code, manual_issuer)">{{'trust_add' | translate}} {{manual_code}}</button>
 				</div>
 			</div>
