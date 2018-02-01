@@ -70,7 +70,7 @@ var translate_en = {
 	select_asset : 'Please select an asset to send.',
 	sending_to   : 'Sending to',
 	send_done    : 'Asset successfully sent.',
-	not_funded   : 'Not funded. To create this account, send it at least 20 lumens (XLM).',
+	not_funded   : 'Not funded. To create this account, send it at least 1 lumens (XLM).',
 	can_accept   : 'The account can accept',
 
 	/** Convert **/
@@ -177,12 +177,14 @@ var translate_en = {
 	inflation : 'Inflation Destination',
 	inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
 	inflation_done : 'Inflation Destination was set.',
-	inflation_options      : 'Other options',
-	inflation_options_desc : 'You can join one of the following inflation pools. You can also vote for RippleFox to help the anchor.',
-	inflation_pool : 'Vote to xlmpool.com',
-	inflation_fox  : 'Vote to RippleFox',
-	inflation_lumenaut     : 'Vote to lumenaut.net',
-  inflation_moonpool : 'Vote for MoonPool',
+	inflation_options      : 'Inflation pools',
+	inflation_options_desc : 'You can join one of the following inflation pools. You can check their website to check the votes and the fee.',
+	inflation_xlmpool  : 'Vote to xlmpool.com',
+	inflation_lumenaut : 'Vote to lumenaut.net',
+    inflation_moonpool : 'Vote to moonpool.space',
+    inflation_donation : 'Support us',
+    inflation_donation_desc : 'RippleFox does not ask for donations, but instead, asks for votes.',
+    inflation_fox  : 'Vote to RippleFox',
 
 	home_domain : 'Home Domain',
 	domain_desc : 'A domain name that can optionally be added to the account. Clients can look up more details from this domain.',
@@ -227,6 +229,6 @@ var translate_en = {
 	logout : 'Logout',
 
 	/** Error **/
-	NotFoundError : 'The resource was not found. You must have at least 20 lumens in your account for it to be activated! Each trust line or offer requires a 10 lumen reserve in addition. To make things easy, send at least 41 lumens to the account.',
-	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 10 lumen reserve in addition.'
+	NotFoundError : 'The resource was not found. You must have at least 1 lumen in your account for it to be activated! Each trust line or offer requires a 0.5 lumen reserve in addition. To make things easy, send at least 3 lumens to the account.',
+	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 0.5 lumen reserve in addition.'
 }

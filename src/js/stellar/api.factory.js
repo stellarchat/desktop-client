@@ -268,7 +268,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     			if (self.subentry !== res.subentry_count) {
     				console.debug('subentry: ' + self.subentry + ' -> ' + res.subentry_count);
     				self.subentry = res.subentry_count;
-    				$scope.reserve = self.subentry * 10 + 20;
+    				$scope.reserve = self.subentry * 0.5 + 1;
     				$scope.$apply();
     			}
     			if(!_.isEqual(self.balances, res.balances)) {
