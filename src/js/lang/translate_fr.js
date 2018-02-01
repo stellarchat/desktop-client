@@ -70,7 +70,7 @@ var translate_fr = {
 	select_asset : 'Veuillez sélectionner un actif à envoyer.',
 	sending_to   : 'Envoyer à',
 	send_done    : 'Envoi a bien été exécuté',
-	not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 20 lumens (XLM).',
+	not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 1 lumens (XLM).',
 	can_accept   : 'Le compte peut accepter',
 	
 	/** Convert **/
@@ -229,6 +229,6 @@ var translate_fr = {
 	logout : 'Se déconnecter',
 	
 	/** Error **/
-	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 20 lumens dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 10 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 41 lumens au compte.',
-	changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 10 lumens suplémentaires.'
+	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 lumen dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 3 lumens au compte.',
+	changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 0.5 lumens suplémentaires.'
 }

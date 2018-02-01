@@ -70,7 +70,7 @@ var translate_en = {
 	select_asset : 'Please select an asset to send.',
 	sending_to   : 'Sending to',
 	send_done    : 'Asset successfully sent.',
-	not_funded   : 'Not funded. To create this account, send it at least 20 lumens (XLM).',
+	not_funded   : 'Not funded. To create this account, send it at least 1 lumens (XLM).',
 	can_accept   : 'The account can accept',
 
 	/** Convert **/
@@ -229,6 +229,6 @@ var translate_en = {
 	logout : 'Logout',
 
 	/** Error **/
-	NotFoundError : 'The resource was not found. You must have at least 20 lumens in your account for it to be activated! Each trust line or offer requires a 10 lumen reserve in addition. To make things easy, send at least 41 lumens to the account.',
-	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 10 lumen reserve in addition.'
+	NotFoundError : 'The resource was not found. You must have at least 1 lumen in your account for it to be activated! Each trust line or offer requires a 0.5 lumen reserve in addition. To make things easy, send at least 3 lumens to the account.',
+	changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 0.5 lumen reserve in addition.'
 }

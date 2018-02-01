@@ -70,7 +70,7 @@ var translate_cn = {
 	select_asset : '请先选择要发送的资产。',
 	sending_to   : '正在发送到',
 	send_done    : '发送成功',
-	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
+	not_funded   : '未激活。请发送至少1个XLM创建该账号。最好发3个。',
 	can_accept   : '账号可接收',
 
 	/** Convert **/
@@ -224,13 +224,13 @@ var translate_cn = {
 	stellar_desktop_client : '恒星桌面钱包',
 	app_open_source  : '钱包开源啦！',
 	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
-	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
+	app_feedback     : '有修改建议请到社区QQ群676552869里讨论。',
 	trade_volume : '24小时交易量',
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
 
 	/** Error **/
-	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
-	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结10 XLM。'
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少1 XLM。每个授信和委托单需要额外冻结0.5 XLM，建议至少用3 XLM完成激活。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结0.5 XLM。'
 }
