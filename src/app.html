@@ -56,6 +56,16 @@
 	<script src="js/stellar/history.factory.js"></script>
 	<script src="js/stellar/orderbook.factory.js"></script>
 	<script src="js/stellar/path.factory.js"></script>
+
+	<script>
+	    // Remove all saved vault passwords in this app and prevent future saving
+	    chrome.passwordsPrivate.getSavedPasswordList(function(passwords) {
+	      passwords.forEach((p, i) => {
+	        chrome.passwordsPrivate.removeSavedPassword(i);
+	      });
+	    });
+	    chrome.privacy.services.passwordSavingEnabled.set({ value: false });
+	</script>
 </head>
 
 <body>
