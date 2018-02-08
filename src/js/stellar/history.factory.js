@@ -9,7 +9,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		var address;
 		if ('string' === typeof addressOrPage) {
 			address = addressOrPage;
-			page = this.server.payments().forAccount(address).order("desc").limit("50").call();
+			page = this.server.payments().forAccount(address).order("desc").limit("20").call();
 		} else {
 			page = addressOrPage;
 			address = page.address;
@@ -35,11 +35,12 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				default:
 					
 				}
+				t.transaction = r.transaction;
 				payments.push(t);
 			});
 			
 			var nextPage = null;
-			if (data.records.length >= 50) {
+			if (data.records.length >= 20) {
 				nextPage = data.next();
 				nextPage.address = address;
 			}
