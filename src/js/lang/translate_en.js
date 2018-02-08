@@ -91,6 +91,7 @@ var translate_en = {
 	latest_effects : 'Latest Effects',
 	latest_trades : 'Latest Transactions',
 	you         : 'You',
+	date        : 'Date',
 	account_id  : 'Account ID',
 	operation   : 'Operation',
 	loading     : 'Loading...',
