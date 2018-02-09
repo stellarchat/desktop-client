@@ -1,3 +1,5 @@
+[![Travis CI status](https://www.travis-ci.org/stellarchat/desktop-client.svg?branch=master)](https://travis-ci.org/stellarchat/desktop-client)
+
 # Stellar Desktop Client
 
 The desktop client allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
