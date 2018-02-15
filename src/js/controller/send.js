@@ -128,15 +128,20 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 					$scope.memo_provided = false;
 				}
 				
-				if (data.extra_fields) {
-					$scope.quote_id = data.account_id;
-					$scope.extra_fields = data.extra_fields;
-					$scope.extra_assets = data.assets;
-					$scope.mulipleAsset = $scope.extra_assets.length > 1;
-					$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
+				if (data.error) {
+					$scope.send_error.message = data.detail || data.error;
 				} else {
-					$scope.resolveAccountInfo();
+					if (data.extra_fields) {
+						$scope.quote_id = data.account_id;
+						$scope.extra_fields = data.extra_fields;
+						$scope.extra_assets = data.assets;
+						$scope.mulipleAsset = $scope.extra_assets.length > 1;
+						$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
+					} else {
+						$scope.resolveAccountInfo();
+					}
 				}
+				
 				$scope.$apply();
 			}).catch(function(err){
 				if (snapshot !== $scope.full_address) {

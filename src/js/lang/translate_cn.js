@@ -91,6 +91,7 @@ var translate_cn = {
 	latest_effects : '最近的账户变动',
 	latest_trades : '最近的所有操作',
 	you         : '你',
+	date        : '时间',
 	account_id  : '账号',
 	operation   : '操作',
 	loading     : '载入中...',

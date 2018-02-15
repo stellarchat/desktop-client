@@ -93,7 +93,7 @@ myApp.directive('masterKey', function() {
 
 			var validator = function(value) {
 				try{
-					var keypair = StellarSdk.Keypair.fromSeed(value);
+					var keypair = StellarSdk.Keypair.fromSecret(value);
 				} catch(e) {
 					ctrl.$setValidity('masterKey', false);
 					return value;

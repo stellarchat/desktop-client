@@ -16,6 +16,7 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
 			} else {
 				$scope.error_msg = "";
 				$scope.payments = payments;
+				$scope.updateTx(0);
 				$scope.next = nextPage;
 			}
 			$scope.updateAllNick();
@@ -34,9 +35,11 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
  				$scope.error_msg = err.message;
  			} else {
  				$scope.error_msg = "";
+ 				var start_index = $scope.payments.length;
  				payments.forEach(function(item){
  					$scope.payments.push(item);
  				});
+ 				$scope.updateTx(start_index);
  				$scope.next = nextPage;
  			}
  			$scope.updateAllNick();
@@ -67,6 +70,21 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
 				tx.nick = nick;
 			}
 		});
+	};
+	
+	$scope.updateTx = function(start_index) {
+		for (var i=start_index; i<$scope.payments.length; i++) {
+			update($scope.payments[i], i);
+		}
+		
+		function update(payment, index) {
+			payment.transaction().then(function(tx){
+				$scope.payments[index].date = tx.created_at;
+				$scope.payments[index].memo = tx.memo;
+				$scope.payments[index].memo_type = tx.memo_type;
+				$scope.$apply();
+			});
+		}
 	};
 } ]);
 

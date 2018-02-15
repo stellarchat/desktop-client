@@ -73,8 +73,8 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		}
 		
 		if ($scope.counter_code == 'XLM') {
-			$scope.price_precise = 2;
-			$scope.value_precise = 2;
+			$scope.price_precise = 3;
+			$scope.value_precise = 3;
 		} else if ($scope.counter_code == 'BTC') {
 			$scope.price_precise = 8;
 			$scope.value_precise = 4;
