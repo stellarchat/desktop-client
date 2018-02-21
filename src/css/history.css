@@ -73,6 +73,29 @@
 	vertical-align: middle;
 }
 
+.feed-item-comment .table {
+	display: table; 
+	width:100%;
+	min-width:780px;
+}
+
+.feed-item-comment .batchtable {
+	padding-left: 10px;
+	display: table; 
+	width:100%;
+	min-width:780px;
+}
+
+.feed-item-comment .batchtable .batchrow {
+	display:table-row;
+}
+
+.feed-item-comment .cell {
+	display: table-cell;
+	white-space:nowrap;
+	border-top: 1px solid #E5E5E5;
+}
+
 .feed-item-icon {
 	display: table-cell;
 	vertical-align: middle;
@@ -152,5 +175,10 @@
 .circle-option {
 	border-color: #ff8000;
 	color: #ff8000;
+}
+
+.circle-batch {
+	border-color: #8000ff;
+	color: #8000ff;
 }
         

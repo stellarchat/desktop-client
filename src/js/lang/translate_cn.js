@@ -99,6 +99,8 @@ var translate_cn = {
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
 	set_data    : '数据',
+	batch       : '批量',
+	source_account : '源账号',
 
 	choose : '选择',
 	example : '示例',
