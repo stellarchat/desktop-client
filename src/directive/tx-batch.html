@@ -30,10 +30,10 @@
 			</div>
 			<div ng-switch-when="manageOffer" class="batchrow">
 				<div class="cell">{{op.type}}</div>
-				<div class="cell">{{item.tx.operations[0].amount}} {{item.tx.operations[0].selling.code}} 
+				<div class="cell">{{op.amount}} {{op.selling.code}} 
 					<span class="glyphicon glyphicon-arrow-right"></span>
-					{{item.tx.operations[0].buying.code}}
-					{{'price' | translate}}: {{item.tx.operations[0].price}}
+					{{op.buying.code}}
+					{{'price' | translate}}: {{op.price}}
 				</div>
 			</div>
 			<div ng-switch-when="manageData" class="batchrow">
