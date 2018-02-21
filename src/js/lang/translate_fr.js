@@ -99,6 +99,8 @@ var translate_fr = {
 	no_more     : 'Pas de trasactions supplémentaires',
 	set_options : 'Options',
 	set_data    : 'Données',
+	batch       : 'Lot',
+	source_account : 'Compte source',
 	
 	choose : 'Choisir',
 	example : 'exemple',

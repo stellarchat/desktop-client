@@ -57,6 +57,13 @@ myApp.directive('txData', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txBatch', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-batch.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txDefault', [ function() {
 	return {
 		restrict : 'E',
