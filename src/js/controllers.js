@@ -66,33 +66,14 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 				}
 			}
 		});
+		
+		$scope.pie.table.sort((a, b) =>{
+			return b.volume - a.volume;
+		});
 
 		$scope.pie.table.forEach(item => {
 			item.pct = item.volume * 100 / $scope.pie.total;
 		});
-		/*
-		$rootScope.stellar_ticker.forEach(function(pair){
-			var curr = pair.Name.split('_');
-			var base = curr[0];
-			var counter = curr[1];
-			
-			if (base == 'XLM' && pair.Base_Volume > 0) {
-				$scope.pie.labels.push(counter);
-				$scope.pie.data.push(round(pair.Base_Volume, 0));
-				$scope.pie.table.push({curr: counter, volume: pair.Base_Volume, pct: 0});
-				$scope.pie.total +=  round(pair.Base_Volume, 0);
-			}
-			if (counter == 'XLM' && pair.Counter_Volume > 0) {
-				$scope.pie.labels.push(base);
-				$scope.pie.data.push(round(pair.Counter_Volume, 0));
-				$scope.pie.table.push({curr: base, volume: pair.Counter_Volume, pct: 0});
-				$scope.pie.total +=  round(pair.Counter_Volume, 0);
-			}
-		});
-		$scope.pie.table.forEach(function(line) {
-			line.pct = 100 * line.volume / $scope.pie.total; 
-		});
-		*/
 	}
 	
 	if ($rootScope.stellar_ticker) {
