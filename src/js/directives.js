@@ -57,6 +57,13 @@ myApp.directive('txData', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txBatch', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-batch.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txDefault', [ function() {
 	return {
 		restrict : 'E',
@@ -93,7 +100,7 @@ myApp.directive('masterKey', function() {
 
 			var validator = function(value) {
 				try{
-					var keypair = StellarSdk.Keypair.fromSeed(value);
+					var keypair = StellarSdk.Keypair.fromSecret(value);
 				} catch(e) {
 					ctrl.$setValidity('masterKey', false);
 					return value;

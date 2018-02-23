@@ -1,3 +1,5 @@
+[![Travis CI status](https://www.travis-ci.org/stellarchat/desktop-client.svg?branch=master)](https://travis-ci.org/stellarchat/desktop-client)
+
 # Stellar Desktop Client
 
 The desktop client allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
@@ -18,12 +20,12 @@ The desktop client allows you to encrypt your secret key and store it as a file 
 
 ## Build
 
-You should have Node.js installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+You should have Node.js (4.8.x recommended) installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
 
 You need to install [nwjs](https://nwjs.io) if you want to do development.  
 
 - Run `npm install`
-- You need to create a softlink under the src folder. You can run `ln -s ../node_modules ./node_modules`. In windows, you can run `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
+- You need to create a softlink under the src folder, so it can find the node_modules files. You can run `ln -s ../node_modules ./src/node_modules`. In windows, you can run `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
 - Run `nw src` to develop or run `node build-nw.js` to build
 
 
@@ -60,10 +62,10 @@ You need to install [nwjs](https://nwjs.io) if you want to do development.
 
 ## 开发和运行
 
-Node.js是必须的。没有安装的话，推荐使用[Node version manager](https://github.com/creationix/nvm)。
+Node.js是必须的(建议4.8.x)。没有安装的话，推荐使用[Node version manager](https://github.com/creationix/nvm)。
 
 要在本地开发还需要安装[nwjs](https://nwjs.io)，装SDK版本。 
 
 - 安装各种依赖包 `npm install`
-- 你还要建一个文件夹的软链接，这样src文件夹也能看到外面的node_modules。 在src下面跑一下 `ln -s ../node_modules ./node_modules`。如果在windows上，运行 `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
+- 你还要建一个文件夹的软链接，这样src文件夹也能看到外面的node_modules。 跑一下 `ln -s ../node_modules ./src/node_modules`。如果在windows上，运行 `mklink /d d:\ProjectName\src\node_modules d:\ProjectName\node_modules`
 - 开发运行 `nw src`，编译运行  `node build-nw.js`

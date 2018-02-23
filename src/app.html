@@ -29,6 +29,7 @@
   
 	<script src="js/lang/translate_cn.js"></script>
 	<script src="js/lang/translate_en.js"></script>
+	<script src="js/lang/translate_fr.js"></script>
 	<script src="js/gateways.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/filters.js"></script>
@@ -55,6 +56,16 @@
 	<script src="js/stellar/history.factory.js"></script>
 	<script src="js/stellar/orderbook.factory.js"></script>
 	<script src="js/stellar/path.factory.js"></script>
+
+	<script>
+	    // Remove all saved vault passwords in this app and prevent future saving
+	    chrome.passwordsPrivate.getSavedPasswordList(function(passwords) {
+	      passwords.forEach((p, i) => {
+	        chrome.passwordsPrivate.removeSavedPassword(i);
+	      });
+	    });
+	    chrome.privacy.services.passwordSavingEnabled.set({ value: false });
+	</script>
 </head>
 
 <body>

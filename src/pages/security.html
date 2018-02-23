@@ -24,11 +24,12 @@
 	      <div class="secret">
 	        <label translate="stellar_address">Stellar address</label>
 	        <p class="key">{{address}}</p>
+	        <p class="key"><qrcode data="{{address}}" size=200></qrcode></p>
 	        <label translate="secret_key">Secret key:</label>
 	        <p class="key" ng-show="showSecret==true">
 						{{keyOpen}}
-						<qrcode data="{{keyQRCode}}" size=200></qrcode>
-					</p>
+			</p>
+			<p class="key" ng-show="showSecret==true"><qrcode data="{{keyQRCode}}" size=200></qrcode></p>
 	        <p class="key" ng-hide="showSecret==true">{{key}}</p>
 	        <p ng-hide="showSecret==true">
 	            <button class="btn btn-info btn-sm" ng-really-message="{{'are_you_sure' | translate}}" ng-really-click="showSec(true)" translate="show_secret">Show secret key</button>
@@ -69,24 +70,27 @@
 			<label translate="inflation_options">Other options</label>
 			<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
 
-			<div class="row">
+			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-6 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote for MoonPool</a>
+					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
 				</div>
 				<div class="col-xs-6 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote for xlmpool.com/</a>
+						ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
 				</div>
-				<div class="col-xs-6 col-sm-4">
+				<div class="col-xs-12 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationFox()" translate="inflation_fox">Vote for RippleFox</a>
+						ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
 				</div>
 			</div>
+			
+			<label translate="inflation_donation">Support us</label>
+			<p class="hint" translate="inflation_donation_desc">You can join one of the following inflation pools.</p>
 			<div class="row">
-				<div class="col-xs-12 col-sm-5">
+				<div class="col-xs-6 col-sm-4">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationLumenaut()" translate="inflation_fox">Vote to lumenaut.net</a>
+						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
 				</div>
 			</div>
 		</div>

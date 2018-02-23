@@ -97,7 +97,13 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 		UserAuthFactory.register(options, function(err, blob){
 			if (err) {
 				console.error('Register failed!', err);
-				$scope.save_error = err.message;
+				if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
+					//The default folder is the root of HD when the first time user save file on Mac.
+					// EACCES: permission denied
+					$scope.save_error = "Permission denied. Please choose another location.";
+				} else {
+					$scope.save_error = err.message;
+				}
 				$scope.$apply();
 				return;
 			}

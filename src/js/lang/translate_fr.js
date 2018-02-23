@@ -1,5 +1,5 @@
 var translate_fr = {
-	header_wellcome : 'Stellar est une plateforme de connection pour les intitutions, sytèmes bancaire, et les individus.',
+	header_wellcome : 'Stellar est une plateforme de connection pour les institutions, systèmes bancaire, et les individus.',
 	login_desc : 'Vous ne pouvez utiliser qu\'une clé secrète pour accéder à un compte existant. Celà est dû au fait que le client de bureau stocke vos informations de connexion localement sur votre ordinateur, de sorte que votre compte soit aussi sûr que la sécurité de votre ordinateur personnel.',
 	open_account : 'Accéder à un compte',
 	select_file : 'Choisir un fichier de compte',
@@ -70,7 +70,7 @@ var translate_fr = {
 	select_asset : 'Veuillez sélectionner un actif à envoyer.',
 	sending_to   : 'Envoyer à',
 	send_done    : 'Envoi a bien été exécuté',
-	not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 20 lumens (XLM).',
+	not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 1 lumens (XLM).',
 	can_accept   : 'Le compte peut accepter',
 	
 	/** Convert **/
@@ -91,6 +91,7 @@ var translate_fr = {
 	latest_effects : 'Derniers Résultats',
 	latest_trades : 'Dernières Transactions',
 	you         : 'Vous',
+	date        : 'Temps',
 	account_id  : 'ID du compte',
 	operation   : 'Opération',
 	loading     : 'Chargement...',
@@ -98,6 +99,8 @@ var translate_fr = {
 	no_more     : 'Pas de trasactions supplémentaires',
 	set_options : 'Options',
 	set_data    : 'Données',
+	batch       : 'Lot',
+	source_account : 'Compte source',
 	
 	choose : 'Choisir',
 	example : 'exemple',
@@ -179,8 +182,13 @@ var translate_fr = {
 	inflation_done : 'La destination d\'inflation a été configurée.',
 	inflation_options      : 'Autres options',
 	inflation_options_desc : 'Vous pouvez rejoindre xlmpool.com pour obtenir les lumens d\'inflation. Ou vous pouvez voter pour RippleFox.',
-	inflation_pool : 'Votez pour xlmpool.com',
-	inflation_fox  : 'Votez pour RippleFox',
+	inflation_xlmpool  : 'Votez pour xlmpool.com',
+	inflation_lumenaut : 'Votez pour lumenaut.net',
+    inflation_moonpool : 'Votez pour MoonPool',
+    inflation_donation : 'Soutenez-nous',
+    inflation_donation_desc : 'RippleFox ne demande pas de dons, mais demande plutôt des votes.',
+    inflation_fox  : 'Votez pour RippleFox',
+	
 	home_domain : 'Domaine Résident',
 	domain_desc : 'Un nom de domaine peut éventuellement être ajouté au compte. Les clients peuvent rechercher plus de détails depuis ce domaine',
 	domain_done : 'Le domaine résident a été configuré',
@@ -224,6 +232,6 @@ var translate_fr = {
 	logout : 'Se déconnecter',
 	
 	/** Error **/
-	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 20 lumens dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 10 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 41 lumens au compte.',
-	changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 10 lumens suplémentaires.'
+	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 lumen dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 3 lumens au compte.',
+	changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 0.5 lumens suplémentaires.'
 }

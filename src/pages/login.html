@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
           <label for="login_password" translate="account_password">Account password</label>
-          <input class="form-control" id="login_password" name="login_password" type="password" ng-model="password" required="required"/>
+          <input class="form-control" id="login_password" name="login_password" type="password" ng-model="password" required="required" autocomplete="disabled" />
         </div>
         <div class="text-error" ng-show="error"><br/><span>{{error}}</span></div>
         <div class="text-status" ng-show="status"><span>{{status}}</span>

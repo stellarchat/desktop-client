@@ -18,11 +18,11 @@ var nw = new NwBuilder({
 	        'src/node_modules/qrcode-generator/qrcode_UTF8.js',
 	        'src/node_modules/angular-qrcode/angular-qrcode.js'
 	],
-	platforms: ['win32', 'win64', 'osx64', 'linux64'],
+	platforms: ['win32', 'win64', 'osx64', 'linux64', 'linux32'],
 	flavor : 'normal',
-	version: '0.20.2',
+	version: '0.28.1',
 	appName: 'StellarWallet',
-	appVersion : 'v3.3',
+	appVersion : 'v3.5',
 	macIcns: 'src/img/rocket.icns',
 	winIco : 'src/img/rocket.ico'
 });

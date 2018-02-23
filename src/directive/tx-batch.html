@@ -1,0 +1,62 @@
+<div class="feed-item">
+	<div class="feed-item-icon">
+		<div class="circle circle-batch">
+			<span translate="batch">Batch</span>
+		</div>
+	</div>
+	<div class="feed-item-comment">
+		<div style="white-space:nowrap;"><span translate="source_account">source_account</span>: <span>{{item.source_account}}</span></div>
+		<span ng-if="item.memo" class="timestamp">Memo-{{item.memo_type}}: {{item.memo}}</span>
+		<div ng-repeat="op in item.tx.operations" ng-switch="op.type" class="batchtable">
+			<div ng-switch-when="payment" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">{{op.destination}}</div>
+				<div class="txamount cell">{{op.amount}} {{op.asset.code}}</div>
+			</div>
+			<div ng-switch-when="createAccount" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">{{op.destination}}</div>
+				<div class="txamount cell">{{op.startingBalance}} {{op.asset.code}}</div>
+			</div>
+			<div ng-switch-when="pathPayment" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">{{op.destination}}</div>
+				<div class="txamount cell">{{op.destAmount}} {{op.destAsset.code}}</div>
+			</div>
+			<div ng-switch-when="changeTrust" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">{{op.line.issuer}}</div>
+				<div class="txamount cell">{{op.limit}} {{op.line.code}}</div>
+			</div>
+			<div ng-switch-when="manageOffer" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">{{op.amount}} {{op.selling.code}} 
+					<span class="glyphicon glyphicon-arrow-right"></span>
+					{{op.buying.code}}
+					{{'price' | translate}}: {{op.price}}
+				</div>
+			</div>
+			<div ng-switch-when="manageData" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">
+					<span translate="data_key">Key</span>: <span>{{op.name}}</span><br>
+					<span translate="data_value">Value</span>: <span class="timestamp">{{op.value}}</span>
+				</div>
+			</div>
+			<div ng-switch-when="setOptions" class="batchrow">
+				<div class="cell">{{op.type}}</div>
+				<div class="cell">
+					<div ng-repeat="(key, value) in op" ng-show="value && key != 'type'">
+						<span>{{value}}</span>
+						<span class="timestamp">{{key}}</span>
+					</div>
+				</div>
+			</div>
+			<div ng-switch-default>Unknown Type {{op.type}}</div>
+		</div>
+	</div>
+
+	<div class="payment">
+		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+	</div>
+</div>

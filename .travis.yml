@@ -1,0 +1,42 @@
+dist: trusty
+language: node_js
+node_js:
+  - "4"
+
+before_install:
+  - sudo apt-get update -q
+  - sudo apt-get install wine wine-mono -y
+
+install:
+  - npm install -g nw@sdk 
+  - npm install
+  - ln -s ../node_modules ./src/node_modules
+
+script:
+  - node build-nw.js
+
+before_deploy:
+  - tag=$(git describe --abbrev=0 --tags)
+  - cd build/StellarWallet/
+  - for dir in *; do zip -r "StellarDesktop${dir^}-${tag}.zip" "$dir"; done
+  - rm -rf */
+  - ls -al
+
+deploy:
+  provider: releases
+  api_key:
+    secure: WguojeKSRQ14sz+3bPvBX767vHIOUn8TRVgRRRfVs1eUtmAUpOwsNE9xs39xtYNtrlcqOUXX68hIoJ7sWNhuSRNDkDOFt1adzv3Ivtri0+8bxtbTEQh5lDY0SvQYYhHPW9BICKXeNrH0usRrlZoT1+yA7sCkHXsggWAJchYQLxe6koF0uxkepROYciJKUiNj28RUWKeKthJAear8gdCfXq40wIa4OfDBTvqRGxmdcyK+3eTOunfmblFCspfXPadlonberOmZcC1Vn4ul/WOZXRI3cO5+MzgMjG6Exx0fnWDRaplNV+6ADhH5EcT4rzdvM2BYeEdJJ343qKl/eUruH6MqujY6puESqoNxTWq6YEx4SMUCmwId7mGuasNTbRY7yCQkQaDddPdhFtpd4J0cZklsKabE12Gbw3hyYpiMMZLErx+0IG2IjQfc2x4nLd9zL5xgo2kvEWkraSJcA/8GrWdoZoSCBo1Dfm7yzXRhlLzQVUwvKgxDsP1kKbeKnHJp33Rj8qaSGFVM4HN9buf6EeiTmXefDiPaCG0DaDcnnUM14JmvO1cKSdUie9mu0YwsH+AJ/kZLV/kpJ7TDjEg6EnH1eUkM5tdTlM2r6kRi630yKsRHEZkwAZ+F8Zb7IfNrYQTIfGocNm+QR1+0tzlKXN3DZ4P4F3LMPIq+cea6mSo=
+  skip_cleanup: true
+  file_glob: true
+  file: ./*
+  on:
+    tags: true
+
+after_deploy:
+  - echo "SHA1 Information"
+  - sha1sum *.zip
+  - echo "MD5 Information"
+  - md5sum *.zip
+
+notifications:
+  email: false

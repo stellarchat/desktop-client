@@ -70,7 +70,7 @@ var translate_cn = {
 	select_asset : '请先选择要发送的资产。',
 	sending_to   : '正在发送到',
 	send_done    : '发送成功',
-	not_funded   : '未激活。请发送至少20个XLM创建该账号。',
+	not_funded   : '未激活。请发送至少1个XLM创建该账号。最好发3个。',
 	can_accept   : '账号可接收',
 
 	/** Convert **/
@@ -91,6 +91,7 @@ var translate_cn = {
 	latest_effects : '最近的账户变动',
 	latest_trades : '最近的所有操作',
 	you         : '你',
+	date        : '时间',
 	account_id  : '账号',
 	operation   : '操作',
 	loading     : '载入中...',
@@ -98,6 +99,8 @@ var translate_cn = {
 	no_more     : '没有更多的交易了',
 	set_options : '设置',
 	set_data    : '数据',
+	batch       : '批量',
+	source_account : '源账号',
 
 	choose : '选择',
 	example : '示例',
@@ -178,11 +181,16 @@ var translate_cn = {
 	inflation : '通胀地址',
 	inflation_desc : '恒星币每年通胀率为1%。当通胀地址得到的票数超过0.05%的总量时，就能从每周的分发中得到利息。1万个XLM每周约得到2个XLM。',
 	inflation_done : '通胀地址设置成功',
-	inflation_options      : '其它选择',
-	inflation_options_desc : '你可以加入xlmpool.com或MoonPool.space来得到每周的利息，或者投给RippleFox来帮助网关得到利息。',
+	inflation_options      : '社区通胀池',
+	inflation_options_desc : '你可以加入以下通胀池来得到每周的利息，不同的池子可能会收不同的手续费。',
 	inflation_xlmpool  : '加入xlmpool通胀池',
-	inflation_moonpool  : '加入MoonPool通胀池',
+	inflation_lumenaut : '加入lumenaut通胀池',
+	inflation_moonpool : '加入MoonPool通胀池',
+    inflation_donation : '支持我们',
+    inflation_donation_desc : '我们不请求捐助，但我们希望你能投票支持我们。',
 	inflation_fox  : '投票给瑞狐',
+	
+	
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
@@ -219,13 +227,13 @@ var translate_cn = {
 	stellar_desktop_client : '恒星桌面钱包',
 	app_open_source  : '钱包开源啦！',
 	app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
-	app_feedback     : '有修改建议请到社区QQ群566413562里讨论。',
+	app_feedback     : '有修改建议请到社区QQ群676552869里讨论。',
 	trade_volume : '24小时交易量',
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
 
 	/** Error **/
-	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少20 XLM。每个授信和委托单需要额外冻结10 XLM，建议至少用41 XLM完成激活。',
-	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结10 XLM。'
+	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少1 XLM。每个授信和委托单需要额外冻结0.5 XLM，建议至少用3 XLM完成激活。',
+	changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结0.5 XLM。'
 }

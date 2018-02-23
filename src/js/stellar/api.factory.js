@@ -48,19 +48,19 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.random = function() {
 		var keypair = StellarSdk.Keypair.random();
-		this.address = keypair.accountId();
-		this.seed = keypair.seed();
+		this.address = keypair.publicKey();
+		this.seed = keypair.secret();
 		return {address: this.address, secret: this.seed};
 	};
 	
 	api.getAddress = function(seed) {
 		var seed = seed || this.seed;
-		var keypair = StellarSdk.Keypair.fromSeed(seed);
-		return keypair.accountId();
+		var keypair = StellarSdk.Keypair.fromSecret(seed);
+		return keypair.publicKey();
 	};
 	
 	api.isValidAddress = function(address) {
-		return StellarSdk.Keypair.isValidPublicKey(address);
+		return StellarSdk.StrKey.isValidEd25519PublicKey(address);
 	};
 	api.federation = function(fed_url) {
 		return StellarSdk.StellarTomlResolver.resolve(fed_url);
@@ -150,7 +150,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	        });
 			var memo = self.getMemo(memo_type, memo_value);
 	        var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.debug('Funded.', txResult);
@@ -172,7 +172,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	        });
 			var memo = self.getMemo(memo_type, memo_value);
 	        var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Send XLM done.', txResult);
@@ -194,7 +194,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	        });
 			var memo = self.getMemo(memo_type, memo_value);
 	        var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Send Asset done.', txResult);
@@ -250,7 +250,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				path       : path
 	        });
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Send Asset done.', txResult);
@@ -268,7 +268,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     			if (self.subentry !== res.subentry_count) {
     				console.debug('subentry: ' + self.subentry + ' -> ' + res.subentry_count);
     				self.subentry = res.subentry_count;
-    				$scope.reserve = self.subentry * 10 + 20;
+    				$scope.reserve = self.subentry * 0.5 + 1;
     				$scope.$apply();
     			}
     			if(!_.isEqual(self.balances, res.balances)) {
@@ -345,7 +345,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				limit: limit.toString()
 	        });
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log(txResult);
@@ -366,7 +366,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			self.updateSeq(account);
 			var op = StellarSdk.Operation.setOptions(opt);
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Option updated.', txResult);
@@ -385,7 +385,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			self.updateSeq(account);
 			var op = StellarSdk.Operation.manageData(opt);
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Data updated.', txResult);
@@ -404,7 +404,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			self.updateSeq(account);
 			var op = StellarSdk.Operation.accountMerge(opt);
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log('Account merged.', txResult);
@@ -425,7 +425,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 			}
 			self.balances = data.balances;
 			self.subentry = data.subentry_count;
-			$scope.reserve = self.subentry * 10 + 20;
+			$scope.reserve = self.subentry * 0.5 + 1;
 			self.updateRootBalance();
 			$scope.$apply();
 			if (callback) { callback(); }
@@ -511,7 +511,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				price : price.toString()
 	        });
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log(txResult);
@@ -568,7 +568,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 				offerId : offer_id
 	        });
 	        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-	        tx.sign(StellarSdk.Keypair.fromSeed(self.seed));
+	        tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
 	        return self.server.submitTransaction(tx);
 		}).then(function(txResult){
 			console.log(txResult);
