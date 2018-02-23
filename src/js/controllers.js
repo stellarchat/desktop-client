@@ -28,10 +28,11 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 		if (ticker) {
 			$rootScope.stellar_ticker = ticker;
 			console.log(ticker);
-			updatePie();
+			update();
 		}
 	});
 	
+	$scope.data = [];
 	$scope.pie = {
 		labels : [],
 		data : [],
@@ -45,8 +46,9 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 			this.total  = 0;
 		}
 	};
-	function updatePie() {
+	function update() {
 		$scope.pie.reset();
+		$scope.data = [];
 		
 		$scope.pie.total = 0;
 		$rootScope.stellar_ticker.assets.forEach(function(asset){
@@ -55,9 +57,10 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 			} else {
 				if (asset.volume24h_XLM) {
 					$scope.pie.total += asset.volume24h_XLM;
-					$scope.pie.labels.push(asset.slug);
-					$scope.pie.data.push(round(asset.volume24h_XLM, 0));
-					$scope.pie.table.push({
+					//$scope.pie.labels.push(asset.slug);
+					//$scope.pie.data.push(round(asset.volume24h_XLM, 0));
+					$scope.data.push({
+						slug: asset.slug,
 						curr: asset.code, 
 						domain: asset.domain, 
 						volume: asset.volume24h_XLM, 
@@ -66,37 +69,31 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 				}
 			}
 		});
+		
+		$scope.data.sort((a, b) =>{
+			return b.volume - a.volume;
+		});
 
-		$scope.pie.table.forEach(item => {
+		$scope.data.forEach(item => {
 			item.pct = item.volume * 100 / $scope.pie.total;
 		});
-		/*
-		$rootScope.stellar_ticker.forEach(function(pair){
-			var curr = pair.Name.split('_');
-			var base = curr[0];
-			var counter = curr[1];
-			
-			if (base == 'XLM' && pair.Base_Volume > 0) {
-				$scope.pie.labels.push(counter);
-				$scope.pie.data.push(round(pair.Base_Volume, 0));
-				$scope.pie.table.push({curr: counter, volume: pair.Base_Volume, pct: 0});
-				$scope.pie.total +=  round(pair.Base_Volume, 0);
+		
+		for (var i=0; i<$scope.data.length; i++) {
+			var asset = $scope.data[i];
+			if (i<5) {
+				$scope.pie.labels.push(asset.slug);
+				$scope.pie.data.push(round(asset.volume, 0));
+			} else if (i==5) {
+				$scope.pie.labels.push('Others');
+				$scope.pie.data.push(round(asset.volume, 0));
+			} else {
+				$scope.pie.data[5] += round(asset.volume, 0);
 			}
-			if (counter == 'XLM' && pair.Counter_Volume > 0) {
-				$scope.pie.labels.push(base);
-				$scope.pie.data.push(round(pair.Counter_Volume, 0));
-				$scope.pie.table.push({curr: base, volume: pair.Counter_Volume, pct: 0});
-				$scope.pie.total +=  round(pair.Counter_Volume, 0);
-			}
-		});
-		$scope.pie.table.forEach(function(line) {
-			line.pct = 100 * line.volume / $scope.pie.total; 
-		});
-		*/
+		}
 	}
 	
 	if ($rootScope.stellar_ticker) {
-		updatePie();
+		update();
 	}
 }]);
 
