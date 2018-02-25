@@ -32,6 +32,11 @@ deploy:
   on:
     tags: true
 
+after_deploy:
+  - echo "SHA1 Information"
+  - sha1sum *.zip
+  - echo "MD5 Information"
+  - md5sum *.zip
 
 notifications:
   email: false

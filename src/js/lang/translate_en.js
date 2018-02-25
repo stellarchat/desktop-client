@@ -99,7 +99,9 @@ var translate_en = {
 	no_more     : 'No more transactions left',
 	set_options : 'Options',
 	set_data    : 'Data',
-
+	batch       : 'Batch',
+	source_account : 'Source Account',
+	
 	choose : 'Choose',
 	example : 'example',
 	refresh : 'Refresh',

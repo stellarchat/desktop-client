@@ -1,7 +1,9 @@
-// initialize your app
-// and ...
-nw.Window.open('app.html', {}, function(win) {
+
+nw.Window.open('app.html', {position: 'center', width: 1024, height: 800, min_width: 800, min_height: 600}, function(win) {
 	//win.showDevTools();
-	win.width = 1024;
-	win.height = 800;
+	//win.maximize();
+
+	//win.once('loaded', function(){
+	//	win.setPosition('center');
+	//});
 });

@@ -106,7 +106,14 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
  				$scope.error_msg = StellarApi.getErrMsg(err);
  			} else {
  				$scope.error_msg = "";
- 				$scope.trades = trades;
+ 				trades.forEach(function(item){
+ 					if (item.operation_count == 1) {
+ 						item.type = item.tx.operations[0].type;
+ 					} else {
+ 						item.type = 'batch';
+ 					}
+ 					$scope.trades.push(item);
+ 				});
  				$scope.next = nextPage;
  			}
  			$scope.$apply();
@@ -124,6 +131,11 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
  			} else {
  				$scope.error_msg = "";
  				trades.forEach(function(item){
+ 					if (item.operation_count == 1) {
+ 						item.type = item.tx.operations[0].type;
+ 					} else {
+ 						item.type = 'batch';
+ 					}
  					$scope.trades.push(item);
  				});
  				$scope.next = nextPage;
