@@ -4,6 +4,7 @@
 		<div class="circle circle-blue" translate="offer_cancel" ng-hide="{{item.tx.operations[0].amount}}"></div>
 	</div>
 	<div class="feed-item-comment">
+		<span ng-if="item.source_account !== address" class="timestamp">{{item.source_account}}</span>
 		<span>{{item.tx.operations[0].selling.code}}/{{item.tx.operations[0].buying.code}}</span>
 	</div>
 
