@@ -1,13 +1,18 @@
 <div class="feed-item">
 	<div class="feed-item-icon">
 		<div ng-class="{true: 'circle circle-green', false: 'circle circle-red'}[item.tx.operations[0].isInbound]">
-			<span ng-if="!item.tx.operations[0].isInbound" translate="sent"></span>
-			<span ng-if="item.tx.operations[0].isInbound && item.tx.operations[0].isConvert" translate="convert"></span>
+			<span ng-if="item.tx.operations[0].isConvert" translate="convert"></span>
+			<span ng-if="!item.tx.operations[0].isInbound && !item.tx.operations[0].isConvert" translate="sent"></span>
 			<span ng-if="item.tx.operations[0].isInbound && !item.tx.operations[0].isConvert" translate="received"></span>
 		</div>
 	</div>
 	<div class="feed-item-comment">
-		<span>{{item.tx.operations[0].counterparty}}</span>
+		<div ng-if="item.tx.operations[0].isConvert && item.source_account!==address"><span class="timestamp">{{item.source_account}}</span></div>
+		<div ng-if="!item.tx.operations[0].isConvert">
+			<span>{{item.source_account}}</span>
+			<span class="glyphicon glyphicon-arrow-right"></span>
+			<span>{{item.tx.operations[0].counterparty}}</span>
+		</div>
 		<span ng-if="item.memo" class="timestamp">Memo-{{item.memo_type}}: {{item.memo}}</span>
 	</div>
 

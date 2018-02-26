@@ -136,7 +136,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				break;
 			case 'pathPayment':
 				op.isInbound = op.destination == address;
-				op.isConvert = op.isInbound && (tx.source == address);
+				op.isConvert = tx.source == op.destination;
 				op.counterparty = op.isInbound ? tx.source : op.destination;
 				break;
 			default:
