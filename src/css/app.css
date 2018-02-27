@@ -119,6 +119,10 @@ code {
 	text-align: right;
 }
 
+.nowrap {
+	white-space:nowrap;
+}
+
 /*--------------------------------------------------
 .currency-summary {
   font-size: 18px;
