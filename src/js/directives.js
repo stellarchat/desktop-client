@@ -57,6 +57,13 @@ myApp.directive('txData', [ function() {
 		replace : true
 	}
 } ]);
+myApp.directive('txInflation', [ function() {
+	return {
+		restrict : 'E',
+		templateUrl : 'directive/tx-inflation.html',
+		replace : true
+	}
+} ]);
 myApp.directive('txBatch', [ function() {
 	return {
 		restrict : 'E',
