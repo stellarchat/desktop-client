@@ -81,7 +81,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 		var page;
 		var address;
 		if ('string' === typeof addressOrPage) {
-			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("50").call();
+			page = this.server.transactions().forAccount(addressOrPage).order('desc').limit("20").call();
 			address = addressOrPage;
 		} else {
 			page = addressOrPage;
@@ -92,12 +92,11 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 			var transactions = [];
 			page.records.forEach(function(record){
 				var tx = self.processTx(record, address);
-				console.log(tx);
 				transactions.push(tx);
 			});
 			
 			var nextPage = null;
-			if (page.records.length >= 50) {
+			if (page.records.length >= 20) {
 				nextPage = page.next();
 				nextPage.address = address;
 			}
@@ -137,7 +136,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
 				break;
 			case 'pathPayment':
 				op.isInbound = op.destination == address;
-				op.isConvert = op.isInbound && (tx.source == address);
+				op.isConvert = tx.source == op.destination;
 				op.counterparty = op.isInbound ? tx.source : op.destination;
 				break;
 			default:

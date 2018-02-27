@@ -101,6 +101,7 @@ var translate_fr = {
 	set_data    : 'Données',
 	batch       : 'Lot',
 	source_account : 'Compte source',
+	inflation_op   : 'Inflation',
 	
 	choose : 'Choisir',
 	example : 'exemple',
