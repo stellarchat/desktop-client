@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<div class="feed-item-comment">
-		<div ng-if="item.tx.operations[0].isConvert && item.source_account!==address"><span class="timestamp">{{item.source_account}}</span></div>
+		<div ng-if="item.tx.operations[0].isConvert && item.source_account!==address"><span class="timestamp nowrap">{{'source_account' | translate}}: {{item.source_account}}</span></div>
 		<div ng-if="!item.tx.operations[0].isConvert">
 			<span>{{item.source_account}}</span>
 			<span class="glyphicon glyphicon-arrow-right"></span>
