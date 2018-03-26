@@ -304,12 +304,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		$scope.cancel_error = "";
 		StellarApi.cancel(offer, function(err, hash){
 			if (err) {
-				if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.cancel_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.cancel_error = err.detail || err.message || err;
-				}
+				$scope.cancel_error = StellarApi.getErrMsg(err);
 			}
 			$scope.refreshOffer();
 		});
