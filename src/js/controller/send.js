@@ -351,16 +351,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			$scope.sending = false;
 			
 			if (err) {
-				if (err.message) {
-					$scope.send_error.message = err.message;
-				} else {
-					if (err.extras && err.extras.result_xdr) {
-						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope.send_error.message = resultXdr.result().results()[0].value().value().switch().name;
-					} else {
-						console.error("Unhandle!!", err);
-					}
-				}
+				$scope.send_error.message = StellarApi.getErrMsg(err);
 			} else {
 				$scope.service_amount = 0;
 				$scope.asset.amount = 0;

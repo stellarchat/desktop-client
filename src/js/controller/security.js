@@ -22,16 +22,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 		$scope.refresh = function() {
 			StellarApi.getInfo(null, function(err, data) {
 				if (err) {
-					if (err.message) {
-						$scope.network_error = err.message;
-					} else {
-						if (err.extras && err.extras.result_xdr) {
-							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.network_error = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							console.error("Unhandle!!", err);
-						}
-					}
+					$scope.network_error = StellarApi.getErrMsg(err);
 				} else {
 					$scope.inflation = data.inflation_destination;
 					$scope.domain = data.home_domain;
@@ -56,16 +47,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 			StellarApi.setOption('inflationDest', $scope.inflation, function(err, hash){
 				$scope.inflation_working = false;
 				if (err) {
-					if (err.message) {
-						$scope.inflation_error = err.message;
-					} else {
-						if (err.extras && err.extras.result_xdr) {
-							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.inflation_error = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							console.error("Unhandle!!", err);
-						}
-					}
+					$scope.inflation_error = StellarApi.getErrMsg(err);
 				} else {
 					$scope.inflation_done = true;
 				}
@@ -101,16 +83,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 			StellarApi.setOption('homeDomain', $scope.domain, function(err, hash){
 				$scope.domain_working = false;
 				if (err) {
-					if (err.message) {
-						$scope.domain_error = err.message;
-					} else {
-						if (err.extras && err.extras.result_xdr) {
-							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.domain_error = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							console.error("Unhandle!!", err);
-						}
-					}
+					$scope.domain_error = StellarApi.getErrMsg(err);
 				} else {
 					$scope.domain_done = true;
 				}
@@ -131,16 +104,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 			StellarApi.setData($scope.data_key, $scope.data_value, function(err, hash){
 				$scope.data_working = false;
 				if (err) {
-					if (err.message) {
-						$scope.data_error = err.message;
-					} else {
-						if (err.extras && err.extras.result_xdr) {
-							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.data_error = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							console.error("Unhandle!!", err);
-						}
-					}
+					$scope.data_error = StellarApi.getErrMsg(err);
 				} else {
 					if ($scope.data_value) {
 						$scope.data_attr[$scope.data_key] = $scope.data_value;
@@ -164,16 +128,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 			StellarApi.merge($scope.dest_account, function(err, hash){
 				$scope.merge_working = false;
 				if (err) {
-					if (err.message) {
-						$scope.merge_error = err.message;
-					} else {
-						if (err.extras && err.extras.result_xdr) {
-							var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-							$scope.merge_error = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							console.error("Unhandle!!", err);
-						}
-					}
+					$scope.merge_error = StellarApi.getErrMsg(err);
 				} else {
 					$rootScope.balance = 0;
 					$rootScope.reserve = 0;

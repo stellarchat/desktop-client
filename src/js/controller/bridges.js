@@ -257,16 +257,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				$scope.asset.amount, $scope.memo_type, $scope.memo, function(err, hash){
 			$scope.sending = false;
 			if (err) {
-				if (err.message) {
-					$scope.send_error = err.message;
-				} else {
-					if (err.extras && err.extras.result_xdr) {
-						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
-					} else {
-						console.error("Unhandle!!", err);
-					}
-				}
+				$scope.send_error = StellarApi.getErrMsg(err);
 			} else {
 				$scope.service_amount = 0;
 				$scope.send_done = true;
@@ -281,14 +272,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
 			$scope.deposit[code].changing = false;
 			if (err) {
-				if (err.name == "NotFoundError") {
-					$scope.deposit[code].trust_error = "NotFoundError";
-				} else if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.deposit[code].trust_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.deposit[code].trust_error = err.detail || err.message;
-				}
+				$scope.deposit[code].trust_error = StellarApi.getErrMsg(err);;
 			}
 			$rootScope.$apply();
 		});
