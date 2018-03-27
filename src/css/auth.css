@@ -109,6 +109,16 @@
   color: #1a6834;
 }
 
+.errorGroup {
+	position: relative;
+	overflow: visible;
+	left: 0;
+}
+
+.error {
+  color: #b01e2e;
+}
+
 .text-error {
   color: #b01e2e;
   margin: -20px 0 0 0;
