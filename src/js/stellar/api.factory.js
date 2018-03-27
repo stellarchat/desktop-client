@@ -263,6 +263,15 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.listenStream = function() {
 		var self = this;
+		if (self.closeAccountStream) {
+			self.closeAccountStream();
+			self.closeAccountStream = undefined;
+		}
+		if (self.closeTxStream) {
+			self.closeTxStream();
+			self.closeTxStream = undefined;
+		}
+		
 		self.closeAccountStream = self.server.accounts().accountId(self.address).stream({
     		onmessage: function(res){
     			if (self.subentry !== res.subentry_count) {
