@@ -123,3 +123,16 @@
   color: #b01e2e;
   margin: -20px 0 0 0;
 }
+
+.contact {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.editing {
+  background: #f7f7f7;
+  margin-right: 0px;
+}
