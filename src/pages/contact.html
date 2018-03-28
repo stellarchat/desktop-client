@@ -17,19 +17,19 @@
       <form id="addForm" name="addForm" ng-submit="create()">
         <div class="form-group">
           <label translate="contact">Contact</label>
-          <input type="text" maxlength="70" ng-model="contact.name" required class="form-control input-lg">
+          <input type="text" maxlength="70" ng-model="contact.name" required class="form-control input-lg" ng-change="resolve()">
           <div class="errorGroup">
-            <div class="error">This contact already exists.</div>
+          	<div class="error" ng-show="!contact.name">Please enter a contact.</div>
+            <div class="error" ng-show="error.exist">This contact already exists.</div>
           </div>
         </div>
         <div class="form-group">
           <div>
             <label for="address_desktop">Stellar address</label>
-            <input type="text" ng-model="contact.address" required class="form-control input-lg">
+            <input type="text" ng-model="contact.address" required class="form-control input-lg" ng-change="resolve()">
             <div class="errorGroup">
-              <div class="error">Please enter a Stellar address.</div>
-              <div class="error">You already have a contact with the same Stellar address and/or the same memo.</div>
-              <div class="error">Not a valid Stellar address.</div>
+              <div class="error" ng-show="!contact.address">Please enter a Stellar address.</div>
+              <div class="error" ng-show="error.address">Not a valid Stellar address.</div>
             </div>
           </div>
         </div>
@@ -37,22 +37,21 @@
           <div>
             <label for="dt_desktop">Memo</label>
             <div style="display: flex;">
-              <select class="form-control input-lg" style="width:auto; display:inline-block" ng-model="contact.memotype">
+              <select class="form-control input-lg" style="width:auto; display:inline-block" ng-model="contact.memotype" ng-change="resolve()">
 				  <option value="id">Memo-Id</option>
 				  <option value="text">Memo-Text</option>
 				  <option value="hash">Memo-Hash</option>
 			  </select>
-              <input id="memo" name="memo" type="text" ng-model="contact.memo" placeholder="Leave blank if not applicable"  class="form-control input-lg" style="flex: 1;">
+              <input id="memo" name="memo" type="text" ng-model="contact.memo" placeholder="Leave blank if not applicable"  class="form-control input-lg" style="flex: 1;"  ng-change="resolve()">
             </div>
             <div class="errorGroup">
-              <div class="error">Invalid memo</div>
-              <div class="error">You already have a contact with the same Stellar address and/or the same memo.</div>
+              <div class="error" ng-show="error.memo">{{error.memo}}</div>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-8 col-sm-8 col-md-9 text-left">
-            <button type="submit" ng-disabled="!contact.name || isValidAddress(contact.adress)" class="btn btn-success btn-block submit custom-btn">Add contact</button>
+            <button type="submit" ng-disabled="invalid()" class="btn btn-success btn-block submit custom-btn">Add contact</button>
           </div>
           <div class="col-xs-4 col-sm-4 col-md-3 text-center">
             <button type="button" ng-click="addform_visible = false" class="btn btn-default btn-block custom-btn btn-cancel">{{'cancel' | translate}}</button>
