@@ -1,13 +1,45 @@
-myApp.factory('AuthenticationFactory', function($window) {
+myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
   return {
     isLogged: function() {
-    	if ($window.sessionStorage.token && $window.sessionStorage.user || $window.sessionStorage.userBlob) {
+    	if ($window.sessionStorage.userBlob || $window.sessionStorage.blob) {
             return true;
         } else {
-            delete this.user;
+            delete this.blob;
             delete this.userBlob;
+            delete this.password;
+            delete this.walletfile;
             return false;
         }
+    },
+    setBlob: function(blob) {
+    	this.blob       = blob;
+    	this.userBlob   = JSON.stringify(blob.data);
+    	this.password   = blob.password;
+    	this.walletfile = blob.walletfile;
+    	$window.sessionStorage.userBlob   = this.userBlob;
+        $window.sessionStorage.password   = this.password;
+        $window.sessionStorage.walletfile = this.walletfile;
+    },
+    getBlobFromSession: function(callback) {
+    	var self = this;
+    	self.userBlob   = $window.sessionStorage.userBlob;
+    	self.password   = $window.sessionStorage.password;
+    	self.walletfile = $window.sessionStorage.walletfile;
+    	
+    	BlobFactory.init(self.walletfile, self.password, function(err, blob){
+    		console.log('Init blob from session', blob);
+    		self.blob = blob;
+    		self.userBlob = JSON.stringify(blob.data);
+    		$window.sessionStorage.userBlob = self.userBlob;
+    		
+    		if (typeof callback === 'function') {
+    	        callback(err, blob);
+    	    }
+    	});
+    },
+    addContact: function(contact, callback) {
+    	this.blob.unshift("/contacts", contact, callback);
+    	console.log(this.blob);
     }
   };
 });
@@ -16,12 +48,14 @@ myApp.factory('UserAuthFactory', function($window, $location, $http, Authenticat
   return {
     logout: function() {
       if (AuthenticationFactory.isLogged()) {
-        delete AuthenticationFactory.user;
+        delete AuthenticationFactory.blob;
         delete AuthenticationFactory.userBlob;
+        delete AuthenticationFactory.password;
+        delete AuthenticationFactory.walletfile;
 
-        delete $window.sessionStorage.token;
-        delete $window.sessionStorage.user;
         delete $window.sessionStorage.userBlob;
+        delete $window.sessionStorage.password;
+        delete $window.sessionStorage.walletfile;
 
         $location.path("/login");
       }
