@@ -37,9 +37,13 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     	    }
     	});
     },
-    addContact: function(contact, callback) {
+    addContact: function(contact, callback){
     	this.blob.unshift("/contacts", contact, callback);
-    	console.log(this.blob);
+    	console.log('addContact', this.blob);
+    },
+    updateContact: function(name, contact, callback){
+    	this.blob.filter('/contacts', 'name', name, 'extend', '', contact, callback);
+    	console.log('updateContact', this.blob);
     }
   };
 });

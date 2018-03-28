@@ -59,7 +59,7 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
 
 		AuthenticationFactory.addContact(contact, function(err, blob){
 			if (err) {
-				$scope.error['memo'] = err.message;
+				$scope.error['memo'] = err.message;	// just find some place to show err
 			} else {
 				AuthenticationFactory.setBlob(blob);
 				$rootScope.contacts = blob.data.contacts;
@@ -87,8 +87,66 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', 'AuthenticationFacto
       $scope.editname     = $scope.entry.name;
       $scope.editaddress  = $scope.entry.address;
       $scope.editview     = $scope.entry.view || $scope.entry.address;
-      $scope.editmemotype = $scope.entry.memotype;
+      $scope.editmemotype = $scope.entry.memotype || 'id';
       $scope.editmemo     = $scope.entry.memo;
+    };
+    
+    $scope.error = {};
+    $scope.invalid = function(obj) {
+		return $scope.error['exist'] || $scope.error['address'] || $scope.error['memo'];
+	}
+    
+    $scope.resolve = function() {
+		if ($scope.editname && $scope.editname != $scope.entry.name) {
+			var item = $rootScope.contacts.find(function(element){
+				return element.name == $scope.editname;
+			});
+			$scope.error['exist'] = item;
+		} else {
+			$scope.error['exist'] = null;
+		}
+		
+		if ($scope.editaddress) {
+			$scope.error['address'] = !StellarApi.isValidAddress($scope.editaddress);
+		} else {
+			$scope.error['address'] = null;
+		}
+		
+		if ($scope.editmemotype) {
+			$scope.error['memo'] = StellarApi.isValidMemo($scope.editmemotype, $scope.editmemo);
+		} else {
+			$scope.error['memo'] = '';
+		}
+	};
+	
+    $scope.update = function (index){
+    	if ($scope.invalid()) {
+    		return;
+    	}
+      
+    	var contact = {
+  			name    : $scope.editname,
+  			view    : $scope.editview,
+  			address : $scope.editaddress
+  		};
+
+  		if ($scope.editmemo) {
+  			contact.memotype = $scope.editmemotype;
+  			contact.memo     = $scope.editmemo;
+  		}
+
+  		AuthenticationFactory.updateContact($scope.entry.name, contact, function(err, blob){
+			if (err) {
+				$scope.error['memo'] = err.message; // just find some place to show err
+			} else {
+				console.log('updatedCallback', blob.data.contacts);
+				AuthenticationFactory.setBlob(blob);
+				$rootScope.contacts = blob.data.contacts;
+			}
+			$scope.$apply();
+		});
+  		
+        $scope.editing = false;
     };
     
 }]);
