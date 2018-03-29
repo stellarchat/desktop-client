@@ -149,4 +149,16 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', 'AuthenticationFacto
         $scope.editing = false;
     };
     
+    $scope.remove = function (index){
+    	AuthenticationFactory.deleteContact($scope.entry.name, function(err, blob){
+			if (err) {
+				$scope.error['memo'] = err.message; // just find some place to show err
+			} else {
+				console.log('deleteCallback', blob.data.contacts);
+				AuthenticationFactory.setBlob(blob);
+				$rootScope.contacts = blob.data.contacts;
+			}
+			$scope.$apply();
+		});
+    };
 }]);

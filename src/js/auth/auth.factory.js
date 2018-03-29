@@ -39,11 +39,12 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     },
     addContact: function(contact, callback){
     	this.blob.unshift("/contacts", contact, callback);
-    	console.log('addContact', this.blob);
     },
     updateContact: function(name, contact, callback){
     	this.blob.filter('/contacts', 'name', name, 'extend', '', contact, callback);
-    	console.log('updateContact', this.blob);
+    },
+    deleteContact: function(name, callback){
+    	this.blob.filter('/contacts', 'name', name, 'unset', '', callback);
     }
   };
 });

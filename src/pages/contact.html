@@ -116,7 +116,7 @@
               <button ng-disabled="!editname || !editaddress || invalid()" ng-click="update($index)" class="btn btn-block btn-success">Save</button>
             </div>
             <div class="col-xs-4 col-md-4">
-              <confirm action-text="Are you sure you want to delete this contact?" action-button-text="Delete" action-button-css="btn btn-default btn-danger" action-function="remove($index)" cancel-button-css="btn btn-default cancel-btn btn-cancel" cancel-button-text="Cancel" ng-hide="showPassword==true"><a href="" class="btn btn-danger btn-block">Delete</a></confirm>
+            	<button class="btn btn-danger btn-block" ng-really-message="{{'are_you_sure' | translate}}" ng-really-click="remove($index)" translate="delete">Delete</button>
             </div>
             <div ng-show="editing" class="col-xs-4 col-md-4">
               <button ng-click="cancel($index)" class="btn btn-default btn-block btn-cancel">{{'cancel' | translate}}</button>
