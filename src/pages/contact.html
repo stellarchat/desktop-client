@@ -60,6 +60,7 @@
       </form>
     </div>
   </div>
+  
   <div ng-repeat="entry in contacts" ng-class="{editing: editing, contact: true}" ng-controller="ContactRowCtrl" class="row row-padding-small contact">
     <div ng-hide="editing" class="col-xs-3 col-md-3 col-sm-3">
     	<span ng-hide="editing" class="name">{{entry.name}}</span>
@@ -81,7 +82,7 @@
       <div ng-show="editing" class="row">
         <div class="col-md-3 col-sm-4 col-xs-12 contact-input-wrapper">
           <ng-form name="inlineName" class="inline-name-form">
-            <input name="editname" type="text" maxlength="70" ng-model="editname" ng-enter="update($index)" class="form-control inline" ng-change="resolve()">
+            <input name="editname" type="text" maxlength="70" ng-model="editname" required class="form-control" ng-change="resolve()">
             <div class="errorGroup">
               <div class="error" ng-show="error.exist">You already have a contact with the same name.</div>
             </div>
@@ -89,7 +90,7 @@
         </div>
         <div class="col-md-4 col-sm-4 col-xs-12 address-wrapper">
           <ng-form name="inlineAddress">
-            <input name="editaddress" type="text" ng-model="editaddress" ng-enter="update($index)" class="form-control inline" ng-change="resolve()">
+            <input name="editaddress" type="text" ng-model="editaddress" required class="form-control" ng-change="resolve()">
             <div class="errorGroup">
               <div class="error" ng-show="error.address">Not a valid address.</div>
             </div>
@@ -101,7 +102,7 @@
 					  <option value="text">Memo-Text</option>
 					  <option value="hash">Memo-Hash</option>
 				  </select>
-	              <input id="memo" name="memo" type="text" ng-model="editmemo" placeholder="Leave blank if not applicable" ng-enter="update($index)" class="form-control inline" style="flex: 1;" ng-change="resolve()">
+	              <input id="memo" name="memo" type="text" ng-model="editmemo" placeholder="Leave blank if not applicable" class="form-control" style="flex: 1;" ng-change="resolve()">
 	          </div>
               <div class="errorGroup">
                 <div class="error" ng-show="error.memo">{{error.memo}}</div>
@@ -112,7 +113,7 @@
         <div class="col-md-5 col-sm-4 col-xs-12">
           <div class="row">
             <div class="col-xs-4 col-md-4">
-              <button ng-disabled="false" ng-click="update($index)" class="btn btn-block btn-success">Save</button>
+              <button ng-disabled="!editname || !editaddress || invalid()" ng-click="update($index)" class="btn btn-block btn-success">Save</button>
             </div>
             <div class="col-xs-4 col-md-4">
               <confirm action-text="Are you sure you want to delete this contact?" action-button-text="Delete" action-button-css="btn btn-default btn-danger" action-function="remove($index)" cancel-button-css="btn btn-default cancel-btn btn-cancel" cancel-button-text="Cancel" ng-hide="showPassword==true"><a href="" class="btn btn-danger btn-block">Delete</a></confirm>
