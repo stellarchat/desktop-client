@@ -29,7 +29,9 @@
 	        </li>
 	        <li ng-class="{active:isActive('/trade') || isActive('/convert')}"><a href="javascript:" ng-click="goTo('/trade')">{{'trade' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/balance')}"><a href="javascript:" ng-click="goTo('/balance')">{{'balance' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/send')}"><a href="javascript:" ng-click="goTo('/send')">{{'send' | translate}}</a></li>
+	        <li ng-class="{active:isActive('/send') || isActive('/contact')}">
+	        	<a href="javascript:" ng-click="goTo('/send')">{{'send' | translate}}</a>
+	        </li>
 	        <li ng-class="{active:isActive('/trust')}"><a href="javascript:" ng-click="goTo('/trust')">{{'trust' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/bridges')}" ng-show="isPublicNetwork()"><a href="javascript:" ng-click="goTo('/bridges')">{{'deposit_withdraw' | translate}}</a></li>
 	        <li ng-class="{active:isActive('/ico')}" ng-show="isPublicNetwork()"><a href="javascript:" ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
@@ -64,6 +66,14 @@
 		    <ul>
 		      <li ng-class="{active:isActive('/trade')}"><a href="javascript:" ng-click="goTo('/trade')">{{'normal' | translate}}</a></li>
 		      <li ng-class="{active:isActive('/convert')}"><a href="javascript:" ng-click="goTo('/convert')">{{'convert' | translate}}</a></li>
+		    </ul>
+		</div>
+	</div>
+	<div ng-show="isActive('/send') || isActive('/contact')" class="subnav">
+		  <div class="container">
+		    <ul>
+		      <li ng-class="{active:isActive('/send')}"><a href="javascript:" ng-click="goTo('/send')">{{'send' | translate}}</a></li>
+		      <li ng-class="{active:isActive('/contact')}"><a href="javascript:" ng-click="goTo('/contact')">{{'contacts' | translate}}</a></li>
 		    </ul>
 		</div>
 	</div>

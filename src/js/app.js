@@ -51,6 +51,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
 		access : {
 			requiredLogin : true
 		}
+	}).when('/contact', {
+		templateUrl : 'pages/contact.html',
+		controller : 'ContactCtrl',
+		access : {
+			requiredLogin : true
+		}
 	}).when('/convert', {
 		templateUrl : 'pages/convert.html',
 		controller : 'ConvertCtrl',
@@ -124,9 +130,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 			  // check if user object exists else fetch it. This is incase of a page refresh
 			  if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
 			  if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
-			  if (!AuthenticationFactory.userBlob) {
-				  AuthenticationFactory.userBlob = $window.sessionStorage.userBlob;
-				  $rootScope.$broadcast('$blobUpdate');
+			  if (!AuthenticationFactory.userBlob && $window.sessionStorage.userBlob) {
+				  //AuthenticationFactory.userBlob = $window.sessionStorage.userBlob;
+				  AuthenticationFactory.getBlobFromSession(function(err, blob){
+					  $rootScope.$broadcast('$blobUpdate');
+				  });
 			  }
 		  }
 	});
@@ -141,12 +149,13 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	});
 
 	$rootScope.$on('$blobUpdate', function(){
-		console.log($rootScope.address, AuthenticationFactory.userBlob);
+		console.log($rootScope.address, AuthenticationFactory.blob);
 
 	      if ($rootScope.address && AuthenticationFactory.userBlob) {
 	    	  var data = JSON.parse(AuthenticationFactory.userBlob);
 	    	  console.log('$blobUpdate', data);
 	    	  $rootScope.address = data.account_id;
+	    	  $rootScope.contacts = data.contacts;
 	    	  $rootScope.resolveFed();
 	    	  StellarApi.setAccount(data.account_id, data.masterkey);
 	    	  StellarApi.listenStream();
@@ -211,7 +220,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 	function reset() {
 		console.warn('reset');
 		$rootScope.fed_name = "";
-		$rootScope.address = 'undefined';
+		$rootScope.address  = 'undefined';
+		$rootScope.contacts = [];
 		$rootScope.lines = {};
 		$rootScope.balance = 0;
 		$rootScope.reserve = 0;

@@ -26,8 +26,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
 		        	return;
 		        }
 		        
-		        AuthenticationFactory.userBlob = JSON.stringify(blob.data);
-		        $window.sessionStorage.userBlob = AuthenticationFactory.userBlob;
+		        AuthenticationFactory.setBlob(blob);
 		        $rootScope.$broadcast('$blobUpdate');
 				$location.path('/');
 	        });
@@ -114,10 +113,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 	        console.log('key:', $scope.masterkey);
 	        console.log($scope.password, $scope.key)
 	        
-	        AuthenticationFactory.userBlob = JSON.stringify(blob.data);
-	        $window.sessionStorage.userBlob = AuthenticationFactory.userBlob;
-	        console.log('$window.sessionStorage.userBlob', $window.sessionStorage.userBlob);
-	        
+	        AuthenticationFactory.setBlob(blob);
 	        $rootScope.$broadcast('$blobUpdate');
 	        
 	        $scope.$apply(function(){

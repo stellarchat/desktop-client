@@ -28,7 +28,7 @@ var translate_en = {
 	secret_key : 'Secret key and QRCode:',
 	show_secret: 'Show secret key',
 	hide_secret: 'Hide secret key',
-	are_you_sure: 'Are you in a safe place where no person or camera can see your screen?',
+	are_you_sure_secret: 'Are you in a safe place where no person or camera can see your screen?',
 	save_safe: 'Have you saved your secret key somewhere safe?',
 	yes_save: 'Yes, I saved my secret key',
 
@@ -72,6 +72,20 @@ var translate_en = {
 	send_done    : 'Asset successfully sent.',
 	not_funded   : 'Not funded. To create this account, send it at least 1 lumens (XLM).',
 	can_accept   : 'The account can accept',
+	
+	contacts : 'Contacts',
+	contact  : 'Contact',
+	address  : 'Address',
+	add_contact : 'Add contact',
+	edit        : 'edit',
+	Delete      : 'Delete',
+	are_you_sure: 'Are you sure?',
+	no_contact  : "You don't have any contacts yet. Click on 'Add contact' button in the top right corner to add a new contact.",
+	error_need_contact : 'Please enter a contact.',
+	error_same_contact : 'This contact already exists.',
+	error_need_address : 'Please enter an address.',
+	error_invalid_address : 'Not a valid address.',
+	error_already_name    : 'You already have a contact with the same name.',
 
 	/** Convert **/
 	convert       : 'Convert',
