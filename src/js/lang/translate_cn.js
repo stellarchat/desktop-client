@@ -28,7 +28,7 @@ var translate_cn = {
 	secret_key : '秘钥和二维码:',
 	show_secret: '显示秘钥',
 	hide_secret: '隐藏秘钥',
-	are_you_sure: '你在一个安全的地方？没有人或摄相头在看你吧？',
+	are_you_sure_secret: '你在一个安全的地方？没有人或摄相头在看你吧？',
 	save_safe: '你把密钥保存在安全的地方了吗？',
 	yes_save: '是，我已经保存好了！',
 
@@ -72,6 +72,21 @@ var translate_cn = {
 	send_done    : '发送成功',
 	not_funded   : '未激活。请发送至少1个XLM创建该账号。最好发3个。',
 	can_accept   : '账号可接收',
+	
+	contacts : '联系人',
+	contact  : '联系人',
+	address  : '地址',
+	add_contact : '添加联系人',
+	edit        : '编辑',
+	leave_blank : '选填，可留空',
+	Delete      : '删除',
+	are_you_sure: '你确定要这样做？',
+	no_contact  : '您目前还没有任何联系人。请点击 “添加联系人” 按钮来添加一个新的联系人。',
+	error_need_contact : '请输入一个联系人',
+	error_same_contact : '该联系人已存在',
+	error_need_address : '请输入一个账号地址',
+	error_invalid_address : '不是有效的账号地址',
+	error_already_name    : '已有同名联系人',
 
 	/** Convert **/
 	convert       : '兑换',
