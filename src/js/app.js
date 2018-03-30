@@ -127,6 +127,10 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 				  console.log('Leave trade page');
 				  StellarApi.closeOrderbook();
 			  }
+			  if (currentRoute && currentRoute.originalPath == '/send') {
+				  console.log('Leave send page');
+				  $location.search({}); // clean params
+			  }
 			  // check if user object exists else fetch it. This is incase of a page refresh
 			  if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
 			  if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
