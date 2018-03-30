@@ -33,7 +33,9 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
 		}
 		
 		if ($scope.contact.address) {
-			$scope.error['address'] = !StellarApi.isValidAddress($scope.contact.address);
+			$scope.error['address'] = !(StellarApi.isValidAddress($scope.editaddress) 
+					|| ripple.UInt160.is_valid($scope.editaddress)
+					|| !isNaN(ripple.Base.decode_check([0, 5], $scope.editaddress, 'bitcoin')));
 		} else {
 			$scope.error['address'] = null;
 		}
@@ -73,8 +75,8 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
 	
 }]);
 
-myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
-                                 function($scope, $rootScope, AuthenticationFactory, StellarApi) {
+myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'StellarApi',
+                                 function($scope, $rootScope, $location, AuthenticationFactory, StellarApi) {
 
 	$scope.editing = false;
 	$scope.cancel = function (index) {
@@ -107,12 +109,14 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', 'AuthenticationFacto
 		}
 		
 		if ($scope.editaddress) {
-			$scope.error['address'] = !StellarApi.isValidAddress($scope.editaddress);
+			$scope.error['address'] = !(StellarApi.isValidAddress($scope.editaddress) 
+									|| ripple.UInt160.is_valid($scope.editaddress)
+									|| !isNaN(ripple.Base.decode_check([0, 5], $scope.editaddress, 'bitcoin')));
 		} else {
 			$scope.error['address'] = null;
 		}
 		
-		if ($scope.editmemotype) {
+		if ($scope.editmemo) {
 			$scope.error['memo'] = StellarApi.isValidMemo($scope.editmemotype, $scope.editmemo);
 		} else {
 			$scope.error['memo'] = '';
@@ -161,4 +165,8 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', 'AuthenticationFacto
 			$scope.$apply();
 		});
     };
+    
+    $scope.send = function(index){
+    	$location.path('/send').search($scope.entry);
+    }
 }]);
