@@ -1,5 +1,7 @@
-myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', '$http',
-                              function($scope, $rootScope, StellarApi, SettingFactory, $http) {
+myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', '$http',
+                              function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, $http) {
+	console.log('Send to', $routeParams);
+	
 	$scope.asset = {};
 	$scope.input_address;
 	$scope.memo;
@@ -8,6 +10,18 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.memo_require = false;
 	$scope.sending;
 	$scope.send_done = false;
+	
+	$scope.initSend = function(){
+		if (!$routeParams.address) {
+			return;
+		}
+		$scope.input_address = $routeParams.address;
+		if ($routeParams.memo) {
+			$scope.memo_type = capitalizeFirstLetter($routeParams.memotype);
+			$scope.memo = $routeParams.memo;
+		}
+		$scope.resolve();
+	}
 	
 	$scope.send_error = {
 		invalid : false,
@@ -387,5 +401,12 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'Id',   name: 'Changelly'},
 		'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'Text', name: 'Binance'}
 	}
+	
+	function capitalizeFirstLetter(string) {
+	    return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+	
+	$scope.initSend();
+	
 } ]);
 

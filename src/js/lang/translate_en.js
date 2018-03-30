@@ -78,6 +78,7 @@ var translate_en = {
 	address  : 'Address',
 	add_contact : 'Add contact',
 	edit        : 'edit',
+	leave_blank : 'Leave blank if not applicable',
 	Delete      : 'Delete',
 	are_you_sure: 'Are you sure?',
 	no_contact  : "You don't have any contacts yet. Click on 'Add contact' button in the top right corner to add a new contact.",
