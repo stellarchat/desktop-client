@@ -33,9 +33,9 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
 		}
 		
 		if ($scope.contact.address) {
-			$scope.error['address'] = !(StellarApi.isValidAddress($scope.address) 
-					|| ripple.UInt160.is_valid($scope.address)
-					|| !isNaN(ripple.Base.decode_check([0, 5], $scope.address, 'bitcoin')));
+			$scope.error['address'] = !(StellarApi.isValidAddress($scope.contact.address) 
+					|| ripple.UInt160.is_valid($scope.contact.address)
+					|| !isNaN(ripple.Base.decode_check([0, 5], $scope.contact.address, 'bitcoin')));
 		} else {
 			$scope.error['address'] = null;
 		}
