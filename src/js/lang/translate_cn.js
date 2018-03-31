@@ -248,6 +248,7 @@ var translate_cn = {
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
+	new_version_available: '发现新版本',
 
 	/** Error **/
 	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少1 XLM。每个授信和委托单需要额外冻结0.5 XLM，建议至少用3 XLM完成激活。',

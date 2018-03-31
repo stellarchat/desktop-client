@@ -246,6 +246,7 @@ var translate_fr = {
 	wallet : 'Portefeuille',
 	version: 'Version',
 	logout : 'Se déconnecter',
+	new_version_available: 'Nouvelle version disponible',
 	
 	/** Error **/
 	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 lumen dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 3 lumens au compte.',
