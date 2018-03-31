@@ -210,7 +210,7 @@ myApp.factory('RemoteFactory', function($http) {
 	}
 	
 	remote.getClientVersion = function(callback) {
-		var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/master/package.json";
+		var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/master/src/package.json";
 		getResource(url, callback);
 	}
 	return remote;

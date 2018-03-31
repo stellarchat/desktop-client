@@ -1,5 +1,5 @@
 var NwBuilder = require('nw-builder');
-var VERSION = require('./package.json').version;
+var VERSION = require('./src/package.json').version;
 
 var nw = new NwBuilder({
 	files: ['src/**/**',
