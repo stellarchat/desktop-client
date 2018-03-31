@@ -1,6 +1,6 @@
 {
   "name": "stellar-desktop",
-  "version": "4.0-beta",
+  "version": "4.0",
   "description": "Stellar desktop client",
   "main": "build-nw.js",
   "scripts": {
