@@ -1,4 +1,6 @@
 var NwBuilder = require('nw-builder');
+var VERSION = require('./package.json').version;
+
 var nw = new NwBuilder({
 	files: ['src/**/**',
 	        '!src/node_modules/**/**',
@@ -22,7 +24,7 @@ var nw = new NwBuilder({
 	flavor : 'normal',
 	version: '0.28.1',
 	appName: 'StellarWallet',
-	appVersion : 'v3.6',
+	appVersion : VERSION,
 	macIcns: 'src/img/rocket.icns',
 	winIco : 'src/img/rocket.ico'
 });
