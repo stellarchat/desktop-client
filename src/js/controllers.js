@@ -29,7 +29,7 @@ myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory', 'Remo
 		} else {
 			if (data && data.version) {
 				$scope.new_version = data.version;
-				$scope.diff = ($scope.version !== data.new_version);
+				$scope.diff = ($scope.version !== $scope.new_version);
 			}
 		}
 	});
