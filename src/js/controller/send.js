@@ -1,5 +1,5 @@
-myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', '$http',
-                              function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, $http) {
+myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'AuthenticationFactory', '$http',
+                              function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
 	console.log('Send to', $routeParams);
 	
 	$scope.asset = {};
@@ -12,15 +12,10 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
 	$scope.send_done = false;
 	
 	$scope.initSend = function(){
-		if (!$routeParams.address) {
-			return;
+		if (AuthenticationFactory.getContact($routeParams.name)) {
+			$scope.input_address = $routeParams.name;
+			$scope.resolve();
 		}
-		$scope.input_address = $routeParams.address;
-		if ($routeParams.memo) {
-			$scope.memo_type = capitalizeFirstLetter($routeParams.memotype);
-			$scope.memo = $routeParams.memo;
-		}
-		$scope.resolve();
 	}
 	
 	$scope.send_error = {
@@ -41,6 +36,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
 	$scope.extra_assets = [];
 	$scope.act_loading;
 	$scope.is_federation;
+	$scope.is_contact;
 	
 	$scope.setMemoType = function(type) {
 		$scope.memo_type = type;
@@ -95,7 +91,20 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
 	$scope.resolve = function() {
 		$scope.resetService();
 		
-		$scope.full_address = autoCompleteURL($scope.input_address);
+		if (AuthenticationFactory.getContact($scope.input_address)){
+			$scope.is_contact = true;
+			var contact = AuthenticationFactory.getContact($scope.input_address);
+			$scope.full_address = contact.address;
+			$scope.real_address = $scope.full_address;
+			if (contact.memo) {
+				$scope.memo_type = capitalizeFirstLetter(contact.memotype);
+				$scope.memo = contact.memo;
+			}
+		} else {
+			$scope.is_contact = false;
+			$scope.full_address = autoCompleteURL($scope.input_address);
+		}
+		
 		var snapshot = $scope.full_address;
 		var i = snapshot.indexOf("*");
 		if (i<0) {

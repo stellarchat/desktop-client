@@ -45,6 +45,16 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     },
     deleteContact: function(name, callback){
     	this.blob.filter('/contacts', 'name', name, 'unset', '', callback);
+    },
+    getContact: function(value) {
+    	if (!value) return false;
+    	var contacts = this.blob.data.contacts;
+    	for (var i=0;i<contacts.length;i++) {
+    		if (contacts[i].name === value || contacts[i].address === value) {
+    			return contacts[i];
+    		}
+    	}
+    	return false;
     }
   };
 });
