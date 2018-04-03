@@ -57,8 +57,11 @@
 					</tr>
 					<tr ng-repeat-end ng-show="deposit_info[code][issuer].resolved && deposit_info[code][issuer].show" class="BalancesTable__row">
 						<td colspan=3>
-							<span>{{deposit_info[code][issuer].info.how}}{{deposit_info[code][issuer].info.deposit_info}}</span><br>
-							<span>{{deposit_info[code][issuer].info.extra_info}}</span>
+							<span>{{deposit_info[code][issuer].info.how}}</span><br>
+							<div ng-repeat="(key, msg) in deposit_info[code][issuer].info.extra_info">
+								<span>{{key}}: {{msg}}</span><br>
+							</div>
+							
 						</td>
 					</tr>
 				</tobdy>

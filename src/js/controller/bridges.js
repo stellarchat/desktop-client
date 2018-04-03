@@ -68,10 +68,12 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			method: 'GET',
 			url: url
 		}).then(function(res) {
-			$scope.deposit[code].deposit_info = res.data.deposit_info;
+			$scope.deposit[code].how = res.data.how;
 			$scope.deposit[code].extra_info = res.data.extra_info;
-			if (res.data.extra_info_cn && SettingFactory.getLang() == 'cn') {
-				$scope.deposit[code].extra_info = res.data.extra_info_cn;
+			if (typeof $scope.deposit[code].extra_info !== "object") {
+				$scope.deposit[code].extra_info = {
+					"Extra Info" : $scope.deposit[code].extra_info
+				}
 			}
 		}).catch(function(err) {
 			console.error(err);

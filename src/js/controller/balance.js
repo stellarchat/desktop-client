@@ -103,7 +103,7 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi',
 	
 	$scope.resolveDeposit = function(code, issuer) {
 		var api = $scope.deposit_info[code][issuer].deposit_api;
-		var url = api + "?address=" + $rootScope.address + "&asset=" + code;
+		var url = api + "?account=" + $rootScope.address + "&asset_code=" + code;
 		console.debug('resolve ' + url);
 		$http({
 			method: 'GET',
@@ -111,11 +111,15 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi',
 		}).then(function(res) {
 			$scope.deposit_info[code][issuer].resolved = true;
 			$scope.deposit_info[code][issuer].info = res.data;
-			if ($scope.deposit_info[code][issuer].info.extra_info_cn && SettingFactory.getLang() == 'cn') {
-				$scope.deposit_info[code][issuer].info.extra_info = $scope.deposit_info[code][issuer].info.extra_info_cn;
+			if ($scope.deposit_info[code][issuer].info.extra_info) {
+				if (typeof $scope.deposit_info[code][issuer].info.extra_info !== "object") {
+					$scope.deposit_info[code][issuer].info.extra_info = {
+						"Extra Info" : $scope.deposit_info[code][issuer].info.extra_info
+					}
+				}
 			}
 		}).catch(function(err) {
-			console.error(err);
+			console.error(url, err);
 		});
 	}
 	
