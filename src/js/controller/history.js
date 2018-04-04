@@ -1,5 +1,5 @@
-myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNameFactory',
-                                  function($scope, $rootScope, StellarApi, FedNameFactory) {
+myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory', 
+                                  function($scope, $rootScope, StellarApi, FedNameFactory, AuthenticationFactory) {
 	$scope.payments = [];
 	$scope.next = undefined;
 	
@@ -49,17 +49,28 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
 	
 	$scope.updateAllNick = function() {
 		$scope.payments.forEach(function(tx) {
-			if (FedNameFactory.isCached(tx.counterparty)) {
-				tx.nick = FedNameFactory.getName(tx.counterparty);
+			var contact = AuthenticationFactory.getContact(tx.counterparty);
+			if (contact) {
+				// Check contacts
+				tx.nick = contact.name;
 			} else {
-				FedNameFactory.resolve(tx.counterparty, function(err, data) {
-					if (err) {
-						console.error(err);
-					} else {
-						$scope.updateNick(tx.counterparty, data.nick);
-						$scope.$apply();
+				//Check FedName service
+				if (FedNameFactory.isCached(tx.counterparty)) {
+					if (FedNameFactory.getName(tx.counterparty)) {
+						tx.nick = "~" + FedNameFactory.getName(tx.counterparty);
 					}
-				});
+				} else {
+					FedNameFactory.resolve(tx.counterparty, function(err, data) {
+						if (err) {
+							console.error(err);
+						} else {
+							if (data.nick) {
+								$scope.updateNick(tx.counterparty, "~" + data.nick);
+								$scope.$apply();
+							}
+						}
+					});
+				}
 			}
 		});
 	};
