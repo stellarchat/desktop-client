@@ -83,7 +83,21 @@
 						href="javascript:" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.png"></div>
-							<div class="brdige_card_content"><span class="brdige_card_code" translate="bitcoin">Bitcoin</span></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="xrp" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="usdt" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/usdt.svg"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">USDT</span></div>
 						</div>
 					</a>
 				</div>
