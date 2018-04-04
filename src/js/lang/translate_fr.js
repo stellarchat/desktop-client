@@ -222,6 +222,7 @@ var translate_fr = {
 	merge_done     : 'Votre compte a été fusionné avec le compte destinataire',
 	
 	/** Deposit & withdrawl **/
+	service : 'Service',
 	deposit_withdraw : 'Déposer/Retirer',
 	deposit  : 'Déposer',
 	withdraw : 'Retirer',

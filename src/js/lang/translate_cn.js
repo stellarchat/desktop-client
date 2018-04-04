@@ -128,7 +128,6 @@ var translate_cn = {
 	required : '必填',
 	require_memo : '接收方需要Memo，请确保备注正确！',
 
-	/** Trade **/
 	trade : '交易',
 	normal: '标准',
 	sent  : '发送',
@@ -206,7 +205,6 @@ var translate_cn = {
     inflation_donation_desc : '我们不请求捐助，但我们希望你能投票支持我们。',
 	inflation_fox  : '投票给瑞狐',
 	
-	
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
@@ -224,6 +222,7 @@ var translate_cn = {
 	merge_done     : '你的账户已经被合并到了目标账户。',
 
 	/** Deposit & withdrawl **/
+	service : '服务',
 	deposit_withdraw : '充提',
 	deposit  : '充值',
 	withdraw : '提现',

@@ -222,6 +222,7 @@ var translate_en = {
 	merge_done     : 'Your account was merged to destination.',
 
 	/** Deposit & withdrawl **/
+	service : 'Service',
 	deposit_withdraw : 'Deposit/Withdraw',
 	deposit  : 'Deposit',
 	withdraw : 'Withdraw',
