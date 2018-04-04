@@ -97,7 +97,7 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 		for (var i=0; i<$scope.data.length; i++) {
 			var asset = $scope.data[i];
 			other_volume = other_volume - asset.volume;
-			if (other_volume > $scope.pie.total * 0.05) {
+			if (other_volume > $scope.pie.total * 0.1) {
 				$scope.pie.labels.push(asset.slug);
 				$scope.pie.data.push(round(asset.volume, 0));
 			} else {
