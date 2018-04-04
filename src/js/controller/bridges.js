@@ -12,7 +12,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			var anchor = anchors[name];
 			var parsed =  AnchorFactory.getAnchor(anchor.name);
 			//var deposit_api_url = AnchorFactory.
-			if (parsed && parsed.deposit_api){
+			if (anchor.deposit_service || parsed && parsed.deposit_api){
 				$scope.bridges[name] = anchor;
 			}
 			if (name == $scope.anchor_name) {
