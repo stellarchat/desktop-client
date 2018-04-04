@@ -239,7 +239,7 @@ var translate_fr = {
 	can_send  : 'Vous pouvez envoyer',
 		
 	Stellar : 'Stellar',
-	stellar_desktop_client : 'Stellar Desktop Client',
+	stellar_desktop_client : 'Foxlet Wallet',
 	app_open_source  : 'Cette application est Open Source',
 	app_safe_notice  : 'Stellar Desktop Client stocke vos informations de connexion localement sur votre ordinateur. Soyez vigilant, sauvegarder votre secret avec soin.',
 	app_feedback     : 'Vous pouvez soumettre toutes issues ou bugs sur la page Github',

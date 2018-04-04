@@ -1,8 +1,8 @@
 [![Travis CI status](https://www.travis-ci.org/stellarchat/desktop-client.svg?branch=master)](https://travis-ci.org/stellarchat/desktop-client)
 
-# Stellar Desktop Client
+# Foxlet
 
-The desktop client allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
+Foxlet is a Stellar wallet allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
 
 ## Key Features
 
@@ -15,6 +15,7 @@ The desktop client allows you to encrypt your secret key and store it as a file 
 - View balances and history.
 - Manage trust lines, account data, inflation destination.
 - Federation protocol support.
+- Contacts support.
 - Deposit/withdraw CNY, BTC.
 - Participate ICO
 
@@ -29,9 +30,9 @@ You need to install [nwjs](https://nwjs.io) if you want to do development.
 - Run `nw src` to develop or run `node build-nw.js` to build
 
 
-# 恒星桌面钱包 🚀
+# Foxlet恒星钱包 🚀
 
-恒星桌面钱包也称为恒星离线钱包。它是一个注重安全的，功能完备的恒星客户端。
+Foxlet钱包也称为恒星桌面钱包或恒星离线钱包。它是一个注重安全的，功能完备的恒星客户端。
 
 ## 主要功能
 
@@ -45,7 +46,7 @@ You need to install [nwjs](https://nwjs.io) if you want to do development.
 - 管理授信、账户数据；可设置恒星通胀地址，帮助自己或他人得到利息。
 - 全面支持联邦协议。通过联邦协议可提现到比特币、银行。
 - 集成锚点充提服务，在钱包里即可完成充值、提现。
-- 支持[fed.network](https://fed.network/)名称服务，可通过~短号发送资产给朋友。
+- 支持设置联系人和[fed.network](https://fed.network/)名称服务，可通过~短号发送资产给朋友。
 - 支持恒星ICO活动。
 
 ## 为什么需要这个钱包？
@@ -53,12 +54,6 @@ You need to install [nwjs](https://nwjs.io) if you want to do development.
 - 官方一直不推出好用的钱包，所以让我们自己创造一个。
 - 目前各渠道的钱包不太好用，而且基本没中文，广大中国人民很不满。
 - 很多人注重安全。离线钱包密钥加密存电脑，本地签名后提交易，不能更安全了。
-
-## 参考
-
-- 文件加解密参考了 [ripple desktop client](https://github.com/ripple/ripple-client-desktop)。
-- 有一些界面参考了 [stellarterm](https://github.com/stellarterm)，不过我们也就用了一些纯前端的HTML和CSS。
-- 我们使用 [nwjs](https://nwjs.io) 来创建钱包。业务逻辑都是自己写的，安全第一。
 
 ## 开发和运行
 

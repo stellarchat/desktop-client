@@ -3,7 +3,7 @@ var gateways = {
 		'ripplefox.com' : {
 			name : 'ripplefox.com',
 			website : 'https://ripplefox.com/anchor/',
-			deposit_api : true,
+			deposit_service : true,
 			service : [
 			            {type: 'unionpay', name: 'bank'},
 			//            {type: 'alipay',   name: 'alipay'},
@@ -18,7 +18,7 @@ var gateways = {
 		'coin.babelbank.com' : {
 			name : 'coin.babelbank.com',
 			website : 'https://coin.babelbank.com/',
-			deposit_api : true,
+			deposit_service : true,
 			service : [
 			            {type: 'usdt',   name: 'usdt_withdraw'},
 			],
@@ -34,7 +34,7 @@ var gateways = {
 		'naobtc.com' : {
 			name : 'naobtc.com',
 			website : 'https://naobtc.com/',
-			deposit_api : true,
+			deposit_service : true,
 			service : [
 			            {type: 'bitcoin',   name: 'btc_withdraw'},
 			],
@@ -49,7 +49,7 @@ var gateways = {
 		'fchain.io' : {
 			name : 'fchain.io',
 			website : 'https://fchain.io/',
-			deposit_api : true,
+			deposit_service : true,
 			assets : {
 				'XCN' : {code : 'XCN', issuer : 'GCNY5OXYSY4FKHOPT2SPOQZAOEIGXB5LBYW3HVU3OWSTQITS65M5RCNY', list: true},
 				'ETH' : {code : 'ETH', issuer : 'GBETHKBL5TCUTQ3JPDIYOZ5RDARTMHMEKIO2QZQ7IOZ4YC5XV3C2IKYU'},
