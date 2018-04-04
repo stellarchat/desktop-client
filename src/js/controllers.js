@@ -93,16 +93,17 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 			item.pct = item.volume * 100 / $scope.pie.total;
 		});
 		
+		var other_volume = $scope.pie.total;
 		for (var i=0; i<$scope.data.length; i++) {
 			var asset = $scope.data[i];
-			if (i<5) {
+			other_volume = other_volume - asset.volume;
+			if (other_volume > $scope.pie.total * 0.05) {
 				$scope.pie.labels.push(asset.slug);
 				$scope.pie.data.push(round(asset.volume, 0));
-			} else if (i==5) {
-				$scope.pie.labels.push('Others');
-				$scope.pie.data.push(round(asset.volume, 0));
 			} else {
-				$scope.pie.data[5] += round(asset.volume, 0);
+				$scope.pie.labels.push('Others');
+				$scope.pie.data.push(round(other_volume, 0));
+				break;
 			}
 		}
 	}
