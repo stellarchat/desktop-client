@@ -1,8 +1,8 @@
 [![Travis CI status](https://www.travis-ci.org/stellarchat/desktop-client.svg?branch=master)](https://travis-ci.org/stellarchat/desktop-client)
 
-# Foxlet
+# Foxlet Wallet (A Desktop Client for Stellar)
 
-Foxlet is a Stellar wallet allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
+Foxlet allows you to encrypt your secret key and store it as a file locally on your computer. You can use it on Windows, Linux and Mac.
 
 ## Key Features
 
