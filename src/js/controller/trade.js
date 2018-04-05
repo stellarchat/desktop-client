@@ -266,20 +266,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		StellarApi.offer(option, function(err, hash) {
 			$scope[type + 'ing'] = false;
 			if (err) {
-				if (err.message) {
-					$scope[type + '_fail'] = err.message;
-				} else {
-					if (err.extras && err.extras.result_xdr) {
-						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						if (resultXdr.result().results()) {
-							$scope[type + '_fail'] = resultXdr.result().results()[0].value().value().switch().name;
-						} else {
-							$scope[type + '_fail'] = resultXdr.result().switch().name;
-						}
-					} else {
-						console.error("Unhandle!!", err);
-					}
-				}
+				$scope[type + '_fail'] = StellarApi.getErrMsg(err);
 			} else {
 				$scope[type + '_ok'] = true;
 				$scope[type + '_amount'] = "";
@@ -317,12 +304,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 		$scope.cancel_error = "";
 		StellarApi.cancel(offer, function(err, hash){
 			if (err) {
-				if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.cancel_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.cancel_error = err.detail || err.message || err;
-				}
+				$scope.cancel_error = StellarApi.getErrMsg(err);
 			}
 			$scope.refreshOffer();
 		});

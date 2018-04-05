@@ -41,10 +41,10 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     "filter": 36
   };
 
-  BlobObj.opsReverseMap = [];
-  angular.forEach(BlobObj.ops, function (name, code) {
-    BlobObj.opsReverseMap[code] = name;
-  });
+  BlobObj.opsReverseMap = {};
+  for (var name in BlobObj.ops) {
+	  BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
+  }
 
   /**
    * Attempts to retrieve the blob.
@@ -380,7 +380,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     // Normalize subcommands to minimize the patch size
     params = params.slice(0, 2).concat(normalizeSubcommands(params.slice(2), true));
 
-    this.applyUpdate('filter', pointer, params);
+    this.applyUpdate('filter', pointer, params, callback);
   };
 
   function BlobError(message, backend) {

@@ -28,7 +28,7 @@ var translate_cn = {
 	secret_key : '秘钥和二维码:',
 	show_secret: '显示秘钥',
 	hide_secret: '隐藏秘钥',
-	are_you_sure: '你在一个安全的地方？没有人或摄相头在看你吧？',
+	are_you_sure_secret: '你在一个安全的地方？没有人或摄相头在看你吧？',
 	save_safe: '你把密钥保存在安全的地方了吗？',
 	yes_save: '是，我已经保存好了！',
 
@@ -72,6 +72,21 @@ var translate_cn = {
 	send_done    : '发送成功',
 	not_funded   : '未激活。请发送至少1个XLM创建该账号。最好发3个。',
 	can_accept   : '账号可接收',
+	
+	contacts : '联系人',
+	contact  : '联系人',
+	address  : '地址',
+	add_contact : '添加联系人',
+	edit        : '编辑',
+	leave_blank : '选填，可留空',
+	Delete      : '删除',
+	are_you_sure: '你确定要这样做？',
+	no_contact  : '您目前还没有任何联系人。请点击 “添加联系人” 按钮来添加一个新的联系人。',
+	error_need_contact : '请输入一个联系人',
+	error_same_contact : '该联系人已存在',
+	error_need_address : '请输入一个账号地址',
+	error_invalid_address : '不是有效的账号地址',
+	error_already_name    : '已有同名联系人',
 
 	/** Convert **/
 	convert       : '兑换',
@@ -101,6 +116,7 @@ var translate_cn = {
 	set_data    : '数据',
 	batch       : '批量',
 	source_account : '源账号',
+	inflation_op   : '通胀',
 
 	choose : '选择',
 	example : '示例',
@@ -112,7 +128,6 @@ var translate_cn = {
 	required : '必填',
 	require_memo : '接收方需要Memo，请确保备注正确！',
 
-	/** Trade **/
 	trade : '交易',
 	normal: '标准',
 	sent  : '发送',
@@ -190,7 +205,6 @@ var translate_cn = {
     inflation_donation_desc : '我们不请求捐助，但我们希望你能投票支持我们。',
 	inflation_fox  : '投票给瑞狐',
 	
-	
 	home_domain : '域名',
 	domain_desc : '账号可设置一个域名。在某些场景下，可通过域名取得更多的帮助信息。',
 	domain_done : '域名设置成功',
@@ -208,6 +222,7 @@ var translate_cn = {
 	merge_done     : '你的账户已经被合并到了目标账户。',
 
 	/** Deposit & withdrawl **/
+	service : '服务',
 	deposit_withdraw : '充提',
 	deposit  : '充值',
 	withdraw : '提现',
@@ -232,6 +247,7 @@ var translate_cn = {
 	wallet : '钱包',
 	version: '版本',
 	logout : '注销',
+	new_version_available: '发现新版本',
 
 	/** Error **/
 	NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少1 XLM。每个授信和委托单需要额外冻结0.5 XLM，建议至少用3 XLM完成激活。',

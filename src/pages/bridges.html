@@ -35,10 +35,14 @@
 					<span style="margin-right: 8px;"><strong>{{code}}</strong></span>
 				</div>
 				<div class="row_bridge" style="flex: 1;" ng-hide="info.no_trust">
-					<strong>{{info.deposit_info}}</strong>
+					<strong>{{info.how}}</strong>
 				</div>
 				<div class="row_bridge" style="flex: 1;" ng-hide="info.no_trust">
-					{{info.extra_info}}
+					<table>
+						<tr ng-repeat="(key, msg) in info.extra_info">
+							<td>{{key}}:</td><td>{{msg}}</td>
+						</tr>
+					</table>
 				</div>
 				<div class="row_bridge row__message--error" style="flex: 1;" ng-show="info.no_trust">
 					<strong ng-hide="info.trust_error" translate="no_trust">Please create the trust line first.</strong>
@@ -79,7 +83,21 @@
 						href="javascript:" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.png"></div>
-							<div class="brdige_card_content"><span class="brdige_card_code" translate="bitcoin">Bitcoin</span></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="xrp" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="usdt" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/usdt.svg"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">USDT</span></div>
 						</div>
 					</a>
 				</div>

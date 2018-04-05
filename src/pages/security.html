@@ -32,7 +32,7 @@
 			<p class="key" ng-show="showSecret==true"><qrcode data="{{keyQRCode}}" size=200></qrcode></p>
 	        <p class="key" ng-hide="showSecret==true">{{key}}</p>
 	        <p ng-hide="showSecret==true">
-	            <button class="btn btn-info btn-sm" ng-really-message="{{'are_you_sure' | translate}}" ng-really-click="showSec(true)" translate="show_secret">Show secret key</button>
+	            <button class="btn btn-info btn-sm" ng-really-message="{{'are_you_sure_secret' | translate}}" ng-really-click="showSec(true)" translate="show_secret">Show secret key</button>
 	        </p>
 	        <p ng-show="showSecret==true">
 	          <button class="btn btn-info btn-sm" ng-click="showSec(false)" translate="hide_secret">Hide secret key</button>

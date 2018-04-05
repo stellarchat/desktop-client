@@ -1,0 +1,133 @@
+<section ng-controller="ContactCtrl" class="col-xs-12 content">
+  <div class="row row-padding-small head hidden-xs">
+    <div class="col-xs-3 col-sm-3 col-md-3" translate="contact">Contact</div>
+    <div class="col-xs-6 col-sm-5 col-md-7" translate="address">Address</div>
+    <div class="col-xs-12 col-sm-4 col-md-2 text-right">
+    	<a ng-click="toggle_form()" ng-disabled="addform_visible" class="btn btn-block btn-success btn-sm" translate="add_contact">Add contact</a>
+    </div>
+  </div>
+  <hr>
+  <div class="row head visible-xs">
+    <div class="col-xs-12 col-sm-2">
+    	<a ng-click="toggle_form()" ng-disabled="addform_visible" class="btn btn-success btn-block btn-sm sign custom-btn" translate="add_contact">Add contact</a>
+    </div>
+  </div>
+  <div ng-show="addform_visible" class="row row-padding-small addForm">
+    <div class="col-xs-12 col-md-8 col-sm-10">
+      <form id="addForm" name="addForm" ng-submit="create()">
+        <div class="form-group">
+          <label translate="contact">Contact</label>
+          <input type="text" maxlength="70" ng-model="contact.name" required class="form-control input-lg" ng-change="resolve()">
+          <div class="errorGroup">
+          	<div class="error" ng-show="!contact.name" translate="error_need_contact">Please enter a contact.</div>
+            <div class="error" ng-show="error.exist" translate="error_same_contact">This contact already exists.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div>
+            <label translate="address">Address</label>
+            <input type="text" ng-model="contact.address" required class="form-control input-lg" ng-change="resolve()">
+            <div class="errorGroup">
+              <div class="error" ng-show="!contact.address" translate="error_need_address">Please enter an address.</div>
+              <div class="error" ng-show="error.address" translate="error_invalid_address">Not a valid address.</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div>
+            <label>Memo</label>
+            <div style="display: flex;">
+              <select class="form-control input-lg" style="width:auto; display:inline-block" ng-model="contact.memotype" ng-change="resolve()">
+				  <option value="id">Memo-Id</option>
+				  <option value="text">Memo-Text</option>
+				  <option value="hash">Memo-Hash</option>
+			  </select>
+              <input id="memo" name="memo" type="text" ng-model="contact.memo" placeholder="{{'leave_blank' | translate}}"  class="form-control input-lg" style="flex: 1;"  ng-change="resolve()">
+            </div>
+            <div class="errorGroup">
+              <div class="error" ng-show="error.memo">{{error.memo}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-8 col-sm-8 col-md-9 text-left">
+            <button type="submit" ng-disabled="!contact.name || !contact.address || invalid()" class="btn btn-success btn-block submit custom-btn" translate="add_contact">Add contact</button>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-3 text-center">
+            <button type="button" ng-click="addform_visible = false" class="btn btn-default btn-block custom-btn btn-cancel">{{'cancel' | translate}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div ng-repeat="entry in contacts" ng-class="{editing: editing, contact: true}" ng-controller="ContactRowCtrl" class="row row-padding-small contact">
+    <div ng-hide="editing" class="col-xs-3 col-md-3 col-sm-3">
+    	<span ng-hide="editing" class="name">{{entry.name}}</span>
+    </div>
+    <div ng-hide="editing" class="col-xs-12 col-sm-6 col-md-6">
+      <div><b class="hidden-xs">{{entry.address}}</b></div>
+    </div>
+    <div ng-hide="editing" class="col-xs-6 col-sm-3 col-md-3 text-right pull-right">
+      <div class="row">
+        <div ng-hide="editing" class="col-xs-4 col-md-4 col-sm-4">
+          <button ng-click="edit($index)" class="edit btn btn-block btn-default btn-sm btn-link" translate="edit">edit</button>
+        </div>
+        <div ng-hide="editing" class="col-xs-8 col-md-8 col-sm-8">
+          <button ng-click="send($index)" class="send btn btn-block btn-primary btn-sm" translate="send">Send</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <div ng-show="editing" class="row">
+        <div class="col-md-3 col-sm-4 col-xs-12 contact-input-wrapper">
+          <ng-form name="inlineName" class="inline-name-form">
+            <input name="editname" type="text" maxlength="70" ng-model="editname" required class="form-control" ng-change="resolve()">
+            <div class="errorGroup">
+              <div class="error" ng-show="error.exist" translate="error_already_name">You already have a contact with the same name.</div>
+            </div>
+          </ng-form>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 address-wrapper">
+          <ng-form name="inlineAddress">
+            <input name="editaddress" type="text" ng-model="editaddress" required class="form-control" ng-change="resolve()">
+            <div class="errorGroup">
+              <div class="error" ng-show="error.address" translate="error_invalid_address">Not a valid address.</div>
+            </div>
+            <div class="form-group">
+              <label>Memo</label>
+              <div style="display: flex;">
+	              <select class="form-control inline" style="width:auto; display:inline-block" ng-model="editmemotype" ng-change="resolve()">
+					  <option value="id">Memo-Id</option>
+					  <option value="text">Memo-Text</option>
+					  <option value="hash">Memo-Hash</option>
+				  </select>
+	              <input id="memo" name="memo" type="text" ng-model="editmemo" placeholder="Leave blank if not applicable" class="form-control" style="flex: 1;" ng-change="resolve()">
+	          </div>
+              <div class="errorGroup">
+                <div class="error" ng-show="error.memo">{{error.memo}}</div>
+              </div>
+            </div>
+          </ng-form>
+        </div>
+        <div class="col-md-5 col-sm-4 col-xs-12">
+          <div class="row">
+            <div class="col-xs-4 col-md-4">
+              <button ng-disabled="!editname || !editaddress || invalid()" ng-click="update($index)" class="btn btn-block btn-success" translate="save">Save</button>
+            </div>
+            <div class="col-xs-4 col-md-4">
+            	<button class="btn btn-danger btn-block" ng-really-message="{{'are_you_sure' | translate}}" ng-really-click="remove($index)" translate="Delete">Delete</button>
+            </div>
+            <div ng-show="editing" class="col-xs-4 col-md-4">
+              <button ng-click="cancel($index)" class="btn btn-default btn-block btn-cancel">{{'cancel' | translate}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-hide="contacts.length" translate="no_contact">
+    You don't have any contacts yet.
+     Click on 'Add contact' button in the top right corner to add a new contact.
+  </div>
+</section>

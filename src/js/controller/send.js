@@ -1,5 +1,7 @@
-myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', '$http',
-                              function($scope, $rootScope, StellarApi, SettingFactory, $http) {
+myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'AuthenticationFactory', '$http',
+                              function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
+	console.log('Send to', $routeParams);
+	
 	$scope.asset = {};
 	$scope.input_address;
 	$scope.memo;
@@ -8,6 +10,13 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.memo_require = false;
 	$scope.sending;
 	$scope.send_done = false;
+	
+	$scope.initSend = function(){
+		if (AuthenticationFactory.getContact($routeParams.name)) {
+			$scope.input_address = $routeParams.name;
+			$scope.resolve();
+		}
+	}
 	
 	$scope.send_error = {
 		invalid : false,
@@ -27,6 +36,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.extra_assets = [];
 	$scope.act_loading;
 	$scope.is_federation;
+	$scope.is_contact;
 	
 	$scope.setMemoType = function(type) {
 		$scope.memo_type = type;
@@ -81,7 +91,20 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 	$scope.resolve = function() {
 		$scope.resetService();
 		
-		$scope.full_address = autoCompleteURL($scope.input_address);
+		if (AuthenticationFactory.getContact($scope.input_address)){
+			$scope.is_contact = true;
+			var contact = AuthenticationFactory.getContact($scope.input_address);
+			$scope.full_address = contact.address;
+			$scope.real_address = $scope.full_address;
+			if (contact.memo) {
+				$scope.memo_type = capitalizeFirstLetter(contact.memotype);
+				$scope.memo = contact.memo;
+			}
+		} else {
+			$scope.is_contact = false;
+			$scope.full_address = autoCompleteURL($scope.input_address);
+		}
+		
 		var snapshot = $scope.full_address;
 		var i = snapshot.indexOf("*");
 		if (i<0) {
@@ -351,16 +374,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 			$scope.sending = false;
 			
 			if (err) {
-				if (err.message) {
-					$scope.send_error.message = err.message;
-				} else {
-					if (err.extras && err.extras.result_xdr) {
-						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope.send_error.message = resultXdr.result().results()[0].value().value().switch().name;
-					} else {
-						console.error("Unhandle!!", err);
-					}
-				}
+				$scope.send_error.message = StellarApi.getErrMsg(err);
 			} else {
 				$scope.service_amount = 0;
 				$scope.asset.amount = 0;
@@ -396,5 +410,12 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFact
 		'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'Id',   name: 'Changelly'},
 		'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'Text', name: 'Binance'}
 	}
+	
+	function capitalizeFirstLetter(string) {
+	    return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+	
+	$scope.initSend();
+	
 } ]);
 

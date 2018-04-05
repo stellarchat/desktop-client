@@ -263,6 +263,15 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 	
 	api.listenStream = function() {
 		var self = this;
+		if (self.closeAccountStream) {
+			self.closeAccountStream();
+			self.closeAccountStream = undefined;
+		}
+		if (self.closeTxStream) {
+			self.closeTxStream();
+			self.closeTxStream = undefined;
+		}
+		
 		self.closeAccountStream = self.server.accounts().accountId(self.address).stream({
     		onmessage: function(res){
     			if (self.subentry !== res.subentry_count) {
@@ -599,9 +608,13 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 		var message = "";
 		if (err.name == "NotFoundError") {
 			message = "NotFoundError";
-		} else if (err.extras && err.extras.result_xdr) {
-			var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-			message = resultXdr.result().results()[0].value().value().switch().name;
+		} else if (err.data && err.data.extras && err.data.extras.result_xdr) {
+			var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.data.extras.result_xdr, 'base64');
+			if (resultXdr.result().results()) {
+				message = resultXdr.result().results()[0].value().value().switch().name;
+			} else {
+				message = resultXdr.result().switch().name;
+			}
 		} else {
 			message = err.detail || err.message;
 		}

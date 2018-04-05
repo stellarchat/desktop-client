@@ -1,4 +1,4 @@
-<section class="col-xs-12 content" ng-controller="SendCtrl">
+<section class="col-xs-12 content">
 	<group>
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
@@ -51,7 +51,10 @@
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
 					<input type="text" class="s-inputGroup__item S-flexItem-share" 
 						ng-model="input_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
-						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX">
+						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX" list="contacts">
+					<datalist id="contacts">
+						<option ng-repeat="entry in contacts" value="{{entry.name}}">{{entry.address}}</option>
+					</datalist> 
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
@@ -182,7 +185,7 @@
 					</div>
 					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
 						<ul class="AddTrust__errorList">
-							<li ng-show="is_federation">{{real_address}}</li>
+							<li ng-show="is_federation || is_contact">{{real_address}}</li>
 							<li ng-show="real_not_fund" translate="not_funded">Not funded</li>
 							<li ng-show="real_accept">{{'can_accept' | translate}} {{real_accept}}</li>
 						</ul>

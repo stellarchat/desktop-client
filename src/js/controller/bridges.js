@@ -1,5 +1,5 @@
-myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi', '$http', 
-                                   function($scope, $rootScope, $location, SettingFactory, StellarApi, $http) {
+myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'AnchorFactory', 'StellarApi', '$http', 
+                                   function($scope, $rootScope, $location, SettingFactory, AnchorFactory, StellarApi, $http) {
 	$scope.bridges = {};
 	$scope.anchor;
 	$scope.anchor_name = SettingFactory.getBridgeService();
@@ -10,7 +10,9 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		var anchors = $rootScope.gateways.getAllSources();
 		for (var name in anchors) {
 			var anchor = anchors[name];
-			if (anchor.deposit_api){
+			var parsed =  AnchorFactory.getAnchor(anchor.name);
+			//var deposit_api_url = AnchorFactory.
+			if (anchor.deposit_service || parsed && parsed.deposit_api){
 				$scope.bridges[name] = anchor;
 			}
 			if (name == $scope.anchor_name) {
@@ -40,15 +42,19 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 			$scope.fed = new StellarSdk.FederationServer(stellarToml.FEDERATION_SERVER, $scope.anchor_name, {});
 			if (!deposit_api) { return; }
 			currencies.forEach(function(asset){
-				$scope.deposit[asset.code] = {
-					code   : asset.code,
-					issuer : asset.issuer,
-					api    : deposit_api
-				};
-				if ($scope.hasLine(asset.code, asset.issuer)) {
-					$scope.resolveDeposit(deposit_api, asset.code);
+				if (asset.host && asset.host.indexOf($scope.anchor_name) < 0) {
+					// ignore the asset not issued by the domain
 				} else {
-					$scope.deposit[asset.code].no_trust = true;
+					$scope.deposit[asset.code] = {
+						code   : asset.code,
+						issuer : asset.issuer,
+						api    : deposit_api
+					};
+					if ($scope.hasLine(asset.code, asset.issuer)) {
+						$scope.resolveDeposit(deposit_api, asset.code);
+					} else {
+						$scope.deposit[asset.code].no_trust = true;
+					}
 				}
 			});
 			if ($scope.service) {
@@ -62,16 +68,18 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	$scope.resolve();
 	
 	$scope.resolveDeposit = function(api, code) {
-		var url = api + "?address=" + $rootScope.address + "&asset=" + code;
+		var url = api + "?account=" + $rootScope.address + "&asset_code=" + code;
 		console.debug('resolve ' + url);
 		$http({
 			method: 'GET',
 			url: url
 		}).then(function(res) {
-			$scope.deposit[code].deposit_info = res.data.deposit_info;
+			$scope.deposit[code].how = res.data.how;
 			$scope.deposit[code].extra_info = res.data.extra_info;
-			if (res.data.extra_info_cn && SettingFactory.getLang() == 'cn') {
-				$scope.deposit[code].extra_info = res.data.extra_info_cn;
+			if (typeof $scope.deposit[code].extra_info !== "object") {
+				$scope.deposit[code].extra_info = {
+					"Extra Info" : $scope.deposit[code].extra_info
+				}
 			}
 		}).catch(function(err) {
 			console.error(err);
@@ -84,6 +92,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 	    $scope.anchor_name = $scope.anchor.name;
 	    $scope.anchor_logo = $scope.anchor.logo;
 	    $scope.anchor_withdraw = $scope.anchor.withdraw_info;
+	    $scope.resetService();
 	    if ($scope.anchor.service) {
 			$scope.service = $scope.anchor.service[0].name;
 		}
@@ -257,16 +266,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 				$scope.asset.amount, $scope.memo_type, $scope.memo, function(err, hash){
 			$scope.sending = false;
 			if (err) {
-				if (err.message) {
-					$scope.send_error = err.message;
-				} else {
-					if (err.extras && err.extras.result_xdr) {
-						var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-						$scope.send_error = resultXdr.result().results()[0].value().value().switch().name;
-					} else {
-						console.error("Unhandle!!", err);
-					}
-				}
+				$scope.send_error = StellarApi.getErrMsg(err);
 			} else {
 				$scope.service_amount = 0;
 				$scope.send_done = true;
@@ -281,14 +281,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 		StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
 			$scope.deposit[code].changing = false;
 			if (err) {
-				if (err.name == "NotFoundError") {
-					$scope.deposit[code].trust_error = "NotFoundError";
-				} else if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.deposit[code].trust_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.deposit[code].trust_error = err.detail || err.message;
-				}
+				$scope.deposit[code].trust_error = StellarApi.getErrMsg(err);;
 			}
 			$rootScope.$apply();
 		});

@@ -1,6 +1,6 @@
 {
-  "name": "StellarWallet",
-  "version": "1.0.0",
+  "name": "Foxlet",
+  "version": "4.0",
   "main": "main.js",
   "window": {
   	"icon": "img/rocket.png"

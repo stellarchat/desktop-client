@@ -82,14 +82,7 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		StellarApi.changeTrust(code, issuer, amount, function(err, data){
 			$scope.setChanging(code, issuer, false);
 			if (err) {
-				if (err.name == "NotFoundError") {
-					$scope.trust_error = "NotFoundError";
-				} else if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.trust_error = err.detail || err.message;
-				}
+				$scope.trust_error = StellarApi.getErrMsg(err);
 			} else {
 				$scope.trust_done = true;
 			}
@@ -105,12 +98,7 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
 		StellarApi.changeTrust(code, issuer, "0", function(err, data){
 			$scope.setChanging(code, issuer, false);
 			if (err) {
-				if (err.extras && err.extras.result_xdr) {
-					var resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.extras.result_xdr, 'base64');
-					$scope.trust_error = resultXdr.result().results()[0].value().value().switch().name;
-				} else {
-					$scope.trust_error = err.detail || err.message || err;
-				}
+				$scope.trust_error = StellarApi.getErrMsg(err);
 			} else {
 				$scope.trust_done = true;
 			}

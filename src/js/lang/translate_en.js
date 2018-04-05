@@ -28,7 +28,7 @@ var translate_en = {
 	secret_key : 'Secret key and QRCode:',
 	show_secret: 'Show secret key',
 	hide_secret: 'Hide secret key',
-	are_you_sure: 'Are you in a safe place where no person or camera can see your screen?',
+	are_you_sure_secret: 'Are you in a safe place where no person or camera can see your screen?',
 	save_safe: 'Have you saved your secret key somewhere safe?',
 	yes_save: 'Yes, I saved my secret key',
 
@@ -72,6 +72,21 @@ var translate_en = {
 	send_done    : 'Asset successfully sent.',
 	not_funded   : 'Not funded. To create this account, send it at least 1 lumens (XLM).',
 	can_accept   : 'The account can accept',
+	
+	contacts : 'Contacts',
+	contact  : 'Contact',
+	address  : 'Address',
+	add_contact : 'Add contact',
+	edit        : 'edit',
+	leave_blank : 'Leave blank if not applicable',
+	Delete      : 'Delete',
+	are_you_sure: 'Are you sure?',
+	no_contact  : "You don't have any contacts yet. Click on 'Add contact' button in the top right corner to add a new contact.",
+	error_need_contact : 'Please enter a contact.',
+	error_same_contact : 'This contact already exists.',
+	error_need_address : 'Please enter an address.',
+	error_invalid_address : 'Not a valid address.',
+	error_already_name    : 'You already have a contact with the same name.',
 
 	/** Convert **/
 	convert       : 'Convert',
@@ -101,6 +116,7 @@ var translate_en = {
 	set_data    : 'Data',
 	batch       : 'Batch',
 	source_account : 'Source Account',
+	inflation_op   : 'Inflation',
 	
 	choose : 'Choose',
 	example : 'example',
@@ -206,6 +222,7 @@ var translate_en = {
 	merge_done     : 'Your account was merged to destination.',
 
 	/** Deposit & withdrawl **/
+	service : 'Service',
 	deposit_withdraw : 'Deposit/Withdraw',
 	deposit  : 'Deposit',
 	withdraw : 'Withdraw',
@@ -222,14 +239,15 @@ var translate_en = {
 	can_send  : 'You can send',
 
 	Stellar : 'Stellar',
-	stellar_desktop_client : 'Stellar Desktop Client',
+	stellar_desktop_client : 'Foxlet Wallet',
 	app_open_source  : 'This app is open source now.',
-	app_safe_notice  : 'The desktop client stores your login information locally on your computer. Please backup your secret carefully.',
+	app_safe_notice  : 'The client stores your login information locally on your computer. Please backup your secret carefully.',
 	app_feedback     : 'You can submit an issue on github if there are any problems.',
 	trade_volume : 'Trade Volume',
 	wallet : 'Wallet',
 	version: 'Version',
 	logout : 'Logout',
+	new_version_available: 'New version available',
 
 	/** Error **/
 	NotFoundError : 'The resource was not found. You must have at least 1 lumen in your account for it to be activated! Each trust line or offer requires a 0.5 lumen reserve in addition. To make things easy, send at least 3 lumens to the account.',

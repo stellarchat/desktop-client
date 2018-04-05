@@ -209,6 +209,10 @@ myApp.factory('RemoteFactory', function($http) {
 		getResource(url, callback);
 	}
 	
+	remote.getClientVersion = function(callback) {
+		var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/master/src/package.json";
+		getResource(url, callback);
+	}
 	return remote;
 });
 
@@ -300,7 +304,12 @@ myApp.factory('AnchorFactory', ['$rootScope', 'StellarApi',
 			
 			var currencies = stellarToml.CURRENCIES;
 			currencies.forEach(function(asset){
-				self.address[asset.issuer] = {domain: domain, parsing: false, parsed: true};
+				if (asset.host && asset.host.indexOf(domain) < 0) {
+					//ignore the asset not issued by this domain
+					console.warn(domain, asset);
+				} else {
+					self.address[asset.issuer] = {domain: domain, parsing: false, parsed: true};
+				}
 			});
 			
 			$scope.$broadcast("anchorUpdate");

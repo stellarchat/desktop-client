@@ -28,7 +28,7 @@ var translate_fr = {
 	secret_key : 'Clé secrète:',
 	show_secret: 'Afficher la clé secrète',
 	hide_secret: 'Cacher la clé secrète',
-	are_you_sure: 'Êtes-vous dans un endroit sûr où aucune(s) personne(s) ou appareil(s) photo ne peut voir votre écran?',
+	are_you_sure_secret: 'Êtes-vous dans un endroit sûr où aucune(s) personne(s) ou appareil(s) photo ne peut voir votre écran?',
 	save_safe: 'Avez-vous enregistré votre clé secrète quelque part en sécurité?',
 	yes_save: 'Oui, j\'ai sauvé ma clé secrète',
 	
@@ -73,6 +73,21 @@ var translate_fr = {
 	not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 1 lumens (XLM).',
 	can_accept   : 'Le compte peut accepter',
 	
+	contacts : 'Contacts',
+	contact  : 'Contact',
+	address  : 'Adresse',
+	add_contact : 'Ajouter un contact',
+	edit        : 'éditer',
+	leave_blank : 'Laissez vide si non applicable',
+	Delete      : 'Supprimer',
+	are_you_sure: 'Êtes-vous certain?',
+	no_contact  : "Vous n'avez pas encore de contacts. Cliquez sur le bouton \"Ajouter un contact\" dans le coin en haut à droite pour ajouter un nouveau contact.",
+	error_need_contact : 'Veuillez entrer un contact.',
+	error_same_contact : 'Ce contact existe déjà.',
+	error_need_address : 'Veuillez entrer une adresse.',
+	error_invalid_address : 'Adresse non valide.',
+	error_already_name    : 'Vous avez déjà un contact avec le même nom.',
+	
 	/** Convert **/
 	convert       : 'Convertir',
 	convert_title : 'Convertir une devise en une autre devise',
@@ -101,6 +116,7 @@ var translate_fr = {
 	set_data    : 'Données',
 	batch       : 'Lot',
 	source_account : 'Compte source',
+	inflation_op   : 'Inflation',
 	
 	choose : 'Choisir',
 	example : 'exemple',
@@ -206,6 +222,7 @@ var translate_fr = {
 	merge_done     : 'Votre compte a été fusionné avec le compte destinataire',
 	
 	/** Deposit & withdrawl **/
+	service : 'Service',
 	deposit_withdraw : 'Déposer/Retirer',
 	deposit  : 'Déposer',
 	withdraw : 'Retirer',
@@ -222,7 +239,7 @@ var translate_fr = {
 	can_send  : 'Vous pouvez envoyer',
 		
 	Stellar : 'Stellar',
-	stellar_desktop_client : 'Stellar Desktop Client',
+	stellar_desktop_client : 'Foxlet Wallet',
 	app_open_source  : 'Cette application est Open Source',
 	app_safe_notice  : 'Stellar Desktop Client stocke vos informations de connexion localement sur votre ordinateur. Soyez vigilant, sauvegarder votre secret avec soin.',
 	app_feedback     : 'Vous pouvez soumettre toutes issues ou bugs sur la page Github',
@@ -230,6 +247,7 @@ var translate_fr = {
 	wallet : 'Portefeuille',
 	version: 'Version',
 	logout : 'Se déconnecter',
+	new_version_available: 'Nouvelle version disponible',
 	
 	/** Error **/
 	NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 lumen dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 3 lumens au compte.',
