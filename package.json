@@ -4,6 +4,7 @@
   "description": "Stellar desktop client",
   "main": "build-nw.js",
   "scripts": {
+    "lint": "eslint . --ext=js,html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,6 +30,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "eslint-plugin-html": "^4.0.3"
   }
 }
