@@ -1,7 +1,7 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -63,8 +63,7 @@ module.exports = {
             "error",
             "beside"
         ],
-        "indent": "off",
-        "indent-legacy": "off",
+        "indent": ["error", 2],
         "init-declarations": "off",
         "jsx-quotes": "error",
         "key-spacing": "off",
@@ -101,6 +100,7 @@ module.exports = {
         "no-caller": "error",
         "no-catch-shadow": "off",
         "no-confusing-arrow": "error",
+        "no-console": "off",
         "no-continue": "off",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
@@ -179,7 +179,7 @@ module.exports = {
         "no-template-curly-in-string": "error",
         "no-ternary": "off",
         "no-throw-literal": "off",
-        "no-trailing-spaces": "off",
+        "no-trailing-spaces": ["error", {"skipBlankLines": false}],
         "no-undef-init": "error",
         "no-undefined": "off",
         "no-underscore-dangle": "off",
