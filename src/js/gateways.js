@@ -181,13 +181,13 @@ var gateways = {
       if (!this.data[name]) {
         console.log('Add '+ name);
         this.data[name] = anchors[name];
-        for (var code in anchors[name].assets) {
-          var asset = anchors[name].assets[code];
+        for (const code in anchors[name].assets) {
+          const asset = anchors[name].assets[code];
           this.dataByIssuer[asset.issuer] = anchors[name];
         }
       } else {
-        for (var code in anchors[name].assets) {
-          var asset = anchors[name].assets[code];
+        for (const code in anchors[name].assets) {
+          const asset = anchors[name].assets[code];
           if (!this.data[name].assets[code]) {
             console.log('Update ' + name + ' - ' + code);
             this.data[name].assets[code] = asset;
