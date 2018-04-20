@@ -1,3 +1,4 @@
+/* exported translate_cn */
 var translate_cn = {
   header_wellcome : '恒星，分布式的全球支付网络',
   login_desc : '本钱包使用秘钥来登录已有的账户。你的秘钥加密保存在了你的电脑里，所以账户像你的个人电脑一样安全。请务必做好密钥的备份。',

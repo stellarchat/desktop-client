@@ -1,3 +1,5 @@
+/* global angular, myApp */
+
 myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
   return {
     isLogged: function() {

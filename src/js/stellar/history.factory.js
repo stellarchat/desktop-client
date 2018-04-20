@@ -1,10 +1,11 @@
+/* global myApp, StellarSdk */
+
 myApp.factory('StellarHistory', ['$rootScope', function($scope) {
   var history = {
     server : null
   };
 
   history.payments = function(addressOrPage, callback) {
-    var self = this;
     var page;
     var address;
     if ('string' === typeof addressOrPage) {
@@ -52,7 +53,6 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
   };
 
   history.effects = function(addressOrPage, callback) {
-    var self = this;
     var page;
     var address;
     if ('string' === typeof addressOrPage) {

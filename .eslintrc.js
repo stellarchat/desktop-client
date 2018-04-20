@@ -4,6 +4,9 @@ module.exports = {
         "es6": true,
     },
     "extends": "eslint:recommended",
+    "plugins": [
+        "html"
+    ],
     "rules": {
         "no-console": "off",
         "no-trailing-spaces": ["error", {"skipBlankLines": false}],

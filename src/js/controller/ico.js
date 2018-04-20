@@ -1,7 +1,8 @@
+/* global myApp */
+
 myApp.controller("IcoCtrl", [ '$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'RemoteFactory',
   function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, RemoteFactory) {
-    var type = $routeParams.type;
-    //console.log('IcoCtrl', type);
+    //console.log('IcoCtrl', $routeParams.type);
 
     if ($rootScope.ico_data) {
       $rootScope.ico_data.ongoing.forEach(function(ico){
@@ -57,8 +58,8 @@ myApp.controller("IcoCtrl", [ '$scope', '$rootScope', '$routeParams', 'StellarAp
       }
     }
     $scope.addTrust = function(code, issuer) {
-      var code = code || $scope.manual_code;
-      var issuer = issuer || $scope.manual_issuer;
+      code = code || $scope.manual_code;
+      issuer = issuer || $scope.manual_issuer;
       $scope.setChanging(code, issuer, true);
       $scope.trust_error = "";
       StellarApi.changeTrust(code, issuer, "100000000000", function(err, data){
@@ -70,8 +71,8 @@ myApp.controller("IcoCtrl", [ '$scope', '$rootScope', '$routeParams', 'StellarAp
       });
     };
     $scope.delTrust = function(code, issuer) {
-      var code = code || $scope.manual_code;
-      var issuer = issuer || $scope.manual_issuer;
+      code = code || $scope.manual_code;
+      issuer = issuer || $scope.manual_issuer;
       $scope.setChanging(code, issuer, true);
       $scope.trust_error = "";
       StellarApi.changeTrust(code, issuer, "0", function(err, data){

@@ -1,3 +1,5 @@
+/* global myApp */
+
 myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory',
   function($scope, $rootScope, StellarApi, FedNameFactory, AuthenticationFactory) {
     $scope.payments = [];

@@ -1,3 +1,5 @@
+/* global myApp, StellarSdk */
+
 myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
   function($scope, $rootScope, StellarApi) {
     $scope.manual_code;
@@ -67,7 +69,7 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
       }
     }
     $scope.addTrust = function(code, issuer, amount) {
-      var amount = amount || "100000000000";
+      amount = amount || "100000000000";
       $scope.trust_error = "";
       $scope.trust_done = false;
 
@@ -90,8 +92,8 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
       });
     };
     $scope.delTrust = function(code, issuer) {
-      var code = code || $scope.manual_code;
-      var issuer = issuer || $scope.manual_issuer;
+      code = code || $scope.manual_code;
+      issuer = issuer || $scope.manual_issuer;
       $scope.setChanging(code, issuer, true);
       $scope.trust_error = "";
       $scope.trust_done = false;

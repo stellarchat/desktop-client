@@ -1,3 +1,4 @@
+/* exported translate_en */
 var translate_en = {
   header_wellcome : 'Stellar is a platform that connects banks, payments systems, and people.',
   login_desc : 'You can only use a secret key to access an existing account. This is because the desktop client stores your login information locally on your computer, so your account is as safe as the security of your personal computer.',

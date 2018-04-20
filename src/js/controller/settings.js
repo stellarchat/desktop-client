@@ -1,3 +1,5 @@
+/* global myApp */
+
 myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi',
   function($scope, $rootScope, $location, SettingFactory, StellarApi) {
     $scope.mode = 'network';

@@ -3,6 +3,8 @@
  * User blob storage for desktop client
  */
 
+/* global $, angular, myApp, require */
+
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
 var fs = require('fs');
@@ -154,13 +156,12 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
   BlobObj.prototype.decrypt = function (data) {
     var blob = this;
+    function decrypt(priv, ciphertext) {
+      blob.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
+      return blob;
+    }
 
     try {
-      function decrypt(priv, ciphertext) {
-        blob.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
-        return blob;
-      }
-
       return decrypt(""+this.password.length+'|'+this.password, atob(data));
     } catch (e) {
       console.log("client: blob: decryption failed", e.toString());
@@ -170,7 +171,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   BlobObj.escapeToken = function (token) {
-    return token.replace(/[~\/]/g, function (key) { return key === "~" ? "~0" : "~1"; });
+    return token.replace(/[~/]/g, function (key) { return key === "~" ? "~0" : "~1"; });
   };
   BlobObj.prototype.escapeToken = BlobObj.escapeToken;
 

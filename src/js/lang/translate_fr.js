@@ -1,3 +1,4 @@
+/* exported translate_fr */
 var translate_fr = {
   header_wellcome : 'Stellar est une plateforme de connection pour les institutions, systèmes bancaire, et les individus.',
   login_desc : 'Vous ne pouvez utiliser qu\'une clé secrète pour accéder à un compte existant. Celà est dû au fait que le client de bureau stocke vos informations de connexion localement sur votre ordinateur, de sorte que votre compte soit aussi sûr que la sécurité de votre ordinateur personnel.',

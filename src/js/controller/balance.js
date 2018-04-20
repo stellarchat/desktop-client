@@ -1,3 +1,5 @@
+/* global myApp */
+
 myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi', 'AnchorFactory', 'SettingFactory',
   function($scope, $rootScope, $http, StellarApi, AnchorFactory, SettingFactory) {
     $scope.working = false;

@@ -1,3 +1,5 @@
+/* global myApp, nw */
+
 myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'UserAuthFactory', 'AuthenticationFactory',
   function($scope, $rootScope, $window, $location, FileDialog, UserAuthFactory, AuthenticationFactory) {
     $scope.fileInputClick = function() {

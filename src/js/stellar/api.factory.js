@@ -1,3 +1,5 @@
+/* global _, myApp, round, StellarSdk */
+
 myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath',
   function($scope, history, orderbook, path) {
     var api = {
@@ -54,7 +56,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     };
 
     api.getAddress = function(seed) {
-      var seed = seed || this.seed;
+      seed = seed || this.seed;
       var keypair = StellarSdk.Keypair.fromSecret(seed);
       return keypair.publicKey();
     };
@@ -70,7 +72,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     };
 
     api.setServer = function(url, type, passphrase) {
-      var url = url || 'https://horizon.stellar.org';
+      url = url || 'https://horizon.stellar.org';
       if ('test' == type) {
         console.debug("TestNetwork: " + url);
         StellarSdk.Network.useTestNetwork();
@@ -302,7 +304,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
     api.updateRootBalance = function(balances) {
       var self = this;
-      var balances = balances || self.balances;
+      balances = balances || self.balances;
       var native = 0;
       var lines = {};
 
@@ -329,7 +331,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     }
 
     api.getInfo = function(address, callback) {
-      var address = address || this.address;
+      address = address || this.address;
       this.server.accounts().accountId(address).call().then(function(data){
         callback(null, data);
       }).catch(function(err){
@@ -635,7 +637,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     return api;
   } ]);
 
-
+/* exported b64DecodeUnicode */
 function b64DecodeUnicode(str) {
   return decodeURIComponent(atob(str).split('').map(function(c) {
     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);

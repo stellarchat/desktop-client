@@ -1,3 +1,5 @@
+/* global _, myApp, round, StellarSdk */
+
 myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook', 'SettingFactory',
   function($scope, $rootScope, StellarApi, StellarOrderbook, SettingFactory) {
     $scope.offers = {
@@ -127,7 +129,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
           this.asks[i].depth = depth;
         }
         depth = 0;
-        for (var i=0; i<this.bids.length; i++) {
+        for (let i=0; i<this.bids.length; i++) {
           this.bids[i].volumn = this.bids[i].amount;
           this.bids[i].amount = this.bids[i].volumn / this.bids[i].price;
           depth = depth + parseFloat(this.bids[i].volumn);
@@ -140,10 +142,10 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
         if (this.bids.length>0 && this.bids[this.bids.length-1].depth > max_depth) {
           max_depth = this.bids[this.bids.length-1].depth;
         }
-        for (var i=0; i<this.asks.length; i++) {
+        for (let i=0; i<this.asks.length; i++) {
           this.asks[i].pct = round(this.asks[i].depth / max_depth * 100, 2);
         }
-        for (var i=0; i<this.bids.length; i++) {
+        for (let i=0; i<this.bids.length; i++) {
           this.bids[i].pct = round(this.bids[i].depth / max_depth * 100, 2);
         }
       }
@@ -155,9 +157,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
       var counter = {code: $scope.counter_code, issuer: $scope.counter_issuer};
       $scope.refreshingBook = true;
       StellarApi.queryBook(base, counter, function(err, data) {
-        if (err) {
-
-        } else {
+        if (!err) {
           console.debug(!$scope.book.origin || !_.isEqual($scope.book.origin.asks, data.asks) || !_.isEqual($scope.book.origin.bids, data.bids) ? 'book changed': 'book unchange');
           if(!$scope.book.origin || !_.isEqual($scope.book.origin.asks, data.asks) || !_.isEqual($scope.book.origin.bids, data.bids)) {
             $scope.book.update(data);
@@ -189,9 +189,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
     $scope.refreshOffer = function() {
       $scope.refreshingOffer = true;
       StellarApi.queryOffer(function(err, offers){
-        if (err) {
-
-        } else {
+        if (!err) {
           $scope.offers.update(offers);
           console.log($scope.offers);
         }

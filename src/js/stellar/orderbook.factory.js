@@ -1,3 +1,5 @@
+/* global myApp, StellarSdk */
+
 myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
   var orderbook = {
     server : null,

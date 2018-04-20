@@ -1,3 +1,5 @@
+/* global myApp */
+
 myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', '$http',
   function($scope, $rootScope, StellarApi, SettingFactory, $http) {
     $scope.send = [];

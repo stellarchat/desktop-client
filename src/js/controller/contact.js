@@ -1,3 +1,5 @@
+/* global myApp, ripple */
+
 myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
   function($scope, $rootScope, AuthenticationFactory, StellarApi) {
 

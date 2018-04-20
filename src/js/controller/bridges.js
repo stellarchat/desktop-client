@@ -1,3 +1,5 @@
+/* global myApp, StellarSdk */
+
 myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'AnchorFactory', 'StellarApi', '$http',
   function($scope, $rootScope, $location, SettingFactory, AnchorFactory, StellarApi, $http) {
     $scope.bridges = {};

@@ -1,3 +1,5 @@
+/* global myApp, StellarSdk */
+
 myApp.factory('StellarPath', ['$rootScope', function($scope) {
   var path = {
     server : null,
