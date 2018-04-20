@@ -1,3 +1,5 @@
+/* global myApp */
+
 myApp.filter('shortaddress', function() {
   return function(address) {
     if (!address || address.length < 8) {

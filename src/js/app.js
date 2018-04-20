@@ -1,3 +1,5 @@
+/* globals angular, gateways, nw, translate_cn, translate_en, translate_fr, */
+/* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
 myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
@@ -136,14 +138,14 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
         if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
         if (!AuthenticationFactory.userBlob && $window.sessionStorage.userBlob) {
           //AuthenticationFactory.userBlob = $window.sessionStorage.userBlob;
-          AuthenticationFactory.getBlobFromSession(function(err, blob){
+          AuthenticationFactory.getBlobFromSession(function(/* err, blob */){
             $rootScope.$broadcast('$blobUpdate');
           });
         }
       }
     });
 
-    $rootScope.$on('$routeChangeSuccess', function(event, nextRoute, currentRoute) {
+    $rootScope.$on('$routeChangeSuccess', function(/* event, nextRoute, currentRoute */) {
       $rootScope.showMenu = AuthenticationFactory.isLogged();
       $rootScope.role = AuthenticationFactory.userRole;
       // if the user is already logged in, take him to the home page
@@ -289,8 +291,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
     }
   }]);
 
-// eslint-disable-next-line no-unused-vars
-function round(dight, howMany) {
+/* exported round */
+var round = function(dight, howMany) {
   if(howMany) {
     dight = Math.round(dight * Math.pow(10, howMany)) / Math.pow(10, howMany);
   } else {

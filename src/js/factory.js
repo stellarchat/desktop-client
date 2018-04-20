@@ -1,3 +1,5 @@
+/* global myApp, nw, StellarSdk */
+
 myApp.factory('SettingFactory', function($window) {
   return {
     setLang : function(lang) {

@@ -1,3 +1,5 @@
+/* global myApp, round */
+
 myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'SettingFactory', 'StellarApi',
   function($scope, $rootScope, $location, UserAuthFactory, SettingFactory, StellarApi) {
 

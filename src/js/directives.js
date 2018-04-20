@@ -1,3 +1,4 @@
+/* global myApp, StellarSdk */
 
 myApp.directive('gateway', [ function() {
   return {
@@ -107,7 +108,7 @@ myApp.directive('masterKey', function() {
 
       var validator = function(value) {
         try{
-          var keypair = StellarSdk.Keypair.fromSecret(value);
+          StellarSdk.Keypair.fromSecret(value);
         } catch(e) {
           ctrl.$setValidity('masterKey', false);
           return value;
@@ -179,7 +180,7 @@ myApp.directive('strongPassword', function () {
           return;
         }
 
-        checkRepetition = function (pLen, str) {
+        const checkRepetition = function (pLen, str) {
           var res = "";
           for (var i = 0; i < str.length; i++ ) {
             var repeated = true;
