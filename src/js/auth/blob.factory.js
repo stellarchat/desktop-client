@@ -3,6 +3,8 @@
  * User blob storage for desktop client
  */
 
+/* global $, angular, myApp, require */
+
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
 var fs = require('fs');
@@ -43,12 +45,12 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
   BlobObj.opsReverseMap = {};
   for (var name in BlobObj.ops) {
-	  BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
+    BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
   }
 
   /**
-   * Attempts to retrieve the blob.
-   */
+	 * Attempts to retrieve the blob.
+	 */
   BlobObj.get = function(walletfile, callback){
     fs.readFile(walletfile, 'utf8', function(err, data){
       if (err) {
@@ -61,8 +63,8 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   /**
-   * Attempts to retrieve and decrypt the blob.
-   */
+	 * Attempts to retrieve and decrypt the blob.
+	 */
   BlobObj.init = function(walletfile, password, callback) {
     BlobObj.get(walletfile, function (err, data) {
       if (err) {
@@ -83,19 +85,19 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   /**
-   * Create a blob object
-   *
-   * @param {object} opts
-   * @param {string} opts.url
-   * @param {string} opts.id
-   * @param opts.crypt
-   * @param opts.unlock
-   * @param {string} opts.username
-   * @param {string} opts.account
-   * @param {string} opts.masterkey
-   * @param {object=} opts.oldUserBlob
-   * @param {function} callback
-   */
+	 * Create a blob object
+	 *
+	 * @param {object} opts
+	 * @param {string} opts.url
+	 * @param {string} opts.id
+	 * @param opts.crypt
+	 * @param opts.unlock
+	 * @param {string} opts.username
+	 * @param {string} opts.account
+	 * @param {string} opts.masterkey
+	 * @param {object=} opts.oldUserBlob
+	 * @param {function} callback
+	 */
   BlobObj.create = function (opts, callback) {
     var blob = new BlobObj(opts.password, opts.walletfile);
     blob.data = {
@@ -154,13 +156,12 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
   BlobObj.prototype.decrypt = function (data) {
     var blob = this;
+    function decrypt(priv, ciphertext) {
+      blob.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
+      return blob;
+    }
 
     try {
-      function decrypt(priv, ciphertext) {
-        blob.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
-        return blob;
-      }
-
       return decrypt(""+this.password.length+'|'+this.password, atob(data));
     } catch (e) {
       console.log("client: blob: decryption failed", e.toString());
@@ -170,7 +171,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   BlobObj.escapeToken = function (token) {
-    return token.replace(/[~\/]/g, function (key) { return key === "~" ? "~0" : "~1"; });
+    return token.replace(/[~/]/g, function (key) { return key === "~" ? "~0" : "~1"; });
   };
   BlobObj.prototype.escapeToken = BlobObj.escapeToken;
 
@@ -214,7 +215,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   BlobObj.prototype._traverse = function (context, pointer,
-                                          originalPointer, op, params) {
+    originalPointer, op, params) {
     var _this = this;
     var part = unescapeToken(pointer.shift());
 
@@ -247,7 +248,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
     if (pointer.length !== 0) {
       return this._traverse(context[part], pointer,
-                            originalPointer, op, params);
+        originalPointer, op, params);
     }
 
     switch (op) {
