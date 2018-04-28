@@ -1,6 +1,6 @@
-# Stellar Desktop Client
+# Foxlet Wallet
 
-A full featured desktop client for stellar.
+A full featured desktop client for Stellar platform.
 
 Provide a webpage for wallet introduction.
 
