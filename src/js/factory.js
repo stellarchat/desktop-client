@@ -78,14 +78,13 @@ myApp.factory('SettingFactory', function($window) {
       return this.NETWORKS[this.getNetworkType()];
     },
     setStellarUrl : function(url) {
-      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = this.NETWORKS[this.getNetworkType()].defaultHorizon;
+      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].defaultHorizon;
     },
     getStellarUrl : function() {
       return $window.localStorage[`network_horizon/${this.getNetworkType()}`] || this.setStellarUrl();
     },
     setNetPassphrase : function(val) {
-      //return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphase/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()];
-      return $window.localStorage
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()].networkPassphrase;
     },
     getNetPassphrase : function() {
       return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].networkPassphrase;
