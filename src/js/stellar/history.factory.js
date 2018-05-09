@@ -125,7 +125,8 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($scope
       operation_count : record.operation_count,
       memo_type : record.memo_type,
       memo : record.memo,
-      resultCode : resultXdr.result().results()[0].value().value().switch().name
+      resultCode : resultXdr.result().results()[0].value().value().switch().name,
+      nativeCode : SettingFactory.getCoin(),
     };
 
     tx.operations.forEach(function(op) {
