@@ -1,6 +1,6 @@
 /* global myApp, StellarSdk */
 
-myApp.factory('StellarHistory', ['$rootScope', function($scope) {
+myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($scope, SettingFactory) {
   var history = {
     server : null
   };
@@ -19,24 +19,30 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
       console.log(data);
       var payments = [];
       data.records.forEach(function(r){
-        var t = { "id": r.id, "type": r.type };
-        switch(r.type){
-        case 'payment':
-          t.isInbound = r.to == address;
-          t.counterparty = t.isInbound ? r.from : r.to;
-          t.asset = r.asset_type == "native" ? {code: "XLM"} : {code:r.asset_code, issuer: r.asset_issuer};
-          t.amount = parseFloat(r.amount);
-          break;
-        case 'create_account':
-          t.isInbound = r.account == address;
-          t.counterparty = t.isInbound ? r.source_account : r.account;
-          t.asset = {code: "XLM"};
-          t.amount = parseFloat(r.starting_balance);
-          break;
-        default:
-
+        var t = {
+          id: r.id,
+          type: r.type,
+          transaction: r.transaction,
+        };
+        switch(r.type) {
+          case 'payment': {
+            t.isInbound = r.to == address;
+            t.counterparty = t.isInbound ? r.from : r.to;
+            t.asset = r.asset_type == "native" ? {code: SettingFactory.getCoin()} : {code:r.asset_code, issuer: r.asset_issuer};
+            t.amount = parseFloat(r.amount);
+            break;
+          }
+          case 'create_account': {
+            t.isInbound = r.account == address;
+            t.counterparty = t.isInbound ? r.source_account : r.account;
+            t.asset = {code: SettingFactory.getCoin()};
+            t.amount = parseFloat(r.starting_balance);
+            break;
+          }
+          default: {
+            // add quite empty line.
+          }
         }
-        t.transaction = r.transaction;
         payments.push(t);
       });
 
@@ -131,7 +137,7 @@ myApp.factory('StellarHistory', ['$rootScope', function($scope) {
       case 'createAccount':
         op.isInbound = op.destination == address;
         op.counterparty = op.isInbound ? tx.source : op.destination;
-        op.asset = {code: "XLM"};
+        op.asset = {code: SettingFactory.getCoin()};
         op.amount = op.startingBalance;
         break;
       case 'pathPayment':
