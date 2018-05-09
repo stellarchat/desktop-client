@@ -11,56 +11,51 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
     }
 
     $scope.proxy = SettingFactory.getProxy();
+
+    $scope.active_network = SettingFactory.getNetworkType();
+    $scope.active_horizon = SettingFactory.getStellarUrl();
+    $scope.active_passphrase = SettingFactory.getNetPassphrase();
+    $scope.active_coin = SettingFactory.getCoin();
     $scope.network_type = SettingFactory.getNetworkType();
-    $scope.url = SettingFactory.getStellarUrl();
-    $scope.test_url = SettingFactory.getTestUrl();
-    $scope.other_url = SettingFactory.getOtherUrl();
-    $scope.passphrase = SettingFactory.getNetPassphrase();
+    $scope.network_horizon = SettingFactory.getStellarUrl();
+    $scope.network_passphrase = SettingFactory.getNetPassphrase();
+    $scope.network_coin = SettingFactory.getCoin();
+    $scope.all_networks = SettingFactory.NETWORKS;
 
     $scope.fed_network = SettingFactory.getFedNetwork();
     $scope.fed_ripple  = SettingFactory.getFedRipple();
     $scope.fed_bitcoin = SettingFactory.getFedBitcoin();
+    $scope.set = function(network) {
+      $scope.network_type = network;
+      $scope.network_horizon = SettingFactory.DEFAULT_HORIZONS[network];
+      if(network === 'other') {
+        $scope.network_passphrase = undefined;
+        $scope.network_coin = undefined;
+      }
+    }
     $scope.save = function(mode) {
       $scope.network_error = "";
       if (mode == 'network') {
-        SettingFactory.setProxy($scope.proxy);
-        var server_change = false;
-        if (SettingFactory.getNetworkType() != $scope.network_type) {
-          SettingFactory.setNetworkType($scope.network_type);
-          server_change = true;
-        }
-        if (SettingFactory.getTestUrl() != $scope.test_url) {
-          SettingFactory.setTestUrl($scope.test_url);
-          server_change = true;
-        }
-        if (SettingFactory.getStellarUrl() != $scope.url) {
-          SettingFactory.setStellarUrl($scope.url);
-          server_change = true;
-        }
-        if (SettingFactory.getOtherUrl() != $scope.other_url) {
-          SettingFactory.setOtherUrl($scope.other_url);
-          server_change = true;
-        }
-        if (SettingFactory.getNetPassphrase() != $scope.passphrase) {
-          SettingFactory.setNetPassphrase($scope.passphrase);
-          server_change = true;
-        }
-
-        if (server_change) {
+        if ($scope.active_network !== $scope.network_type ||
+            $scope.active_horizon !== $scope.network_passphrase ||
+            $scope.active_passphrase !== $scope.network_horizon ||
+            $scope.active_coin !== $scope.network_coin) {
           try {
-            var url = "";
-            if ($scope.network_type == 'test') {
-              url = $scope.test_url;
-            } else if ($scope.network_type == 'other') {
-              url = $scope.other_url;
-            } else {
-              $scope.url;
-            }
+            SettingFactory.setNetworkType($scope.network_type);
+            SettingFactory.setStellarUrl($scope.network_horizon);
+            SettingFactory.setNetPassphrase($scope.network_passphrase);
+            SettingFactory.setCoin($scope.network_coin);
 
-            StellarApi.setServer(url, $scope.network_type, $scope.passphrase);
+            $scope.active_network = SettingFactory.getNetworkType()
+            $scope.active_horizon = SettingFactory.getStellarUrl()
+            $scope.active_passphrase = SettingFactory.getNetPassphrase()
+            $scope.active_coin = SettingFactory.getCoin()
+
+            StellarApi.setServer($scope.active_horizon, $scope.active_passphrase, SettingFactory.getAllowHttp());
             StellarApi.logout();
             $rootScope.reset();
             $rootScope.$broadcast('$blobUpdate');
+
           } catch (e) {
             console.error(e);
             $scope.network_error = e.message;
@@ -72,6 +67,10 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
         SettingFactory.setFedNetwork($scope.fed_network);
         SettingFactory.setFedRipple($scope.fed_ripple);
         SettingFactory.setFedBitcoin($scope.fed_bitcoin);
+      }
+
+      if (mode == 'proxy') {
+        SettingFactory.setProxy($scope.proxy);
       }
     };
 

@@ -71,21 +71,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       return StellarSdk.FederationServer.createForDomain(domain);
     };
 
-    api.setServer = function(url, type, passphrase) {
-      url = url || 'https://horizon.stellar.org';
-      if ('test' == type) {
-        console.debug("TestNetwork: " + url);
-        StellarSdk.Network.useTestNetwork();
-        this.server = new StellarSdk.Server(url, {allowHttp: true});
-      } else if ('other' == type) {
-        console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
-        StellarSdk.Network.use(new StellarSdk.Network(passphrase));
-        this.server = new StellarSdk.Server(url, {allowHttp: true});
-      } else {
-        console.debug("PublicNetwork: " + url);
-        StellarSdk.Network.usePublicNetwork();
-        this.server = new StellarSdk.Server(url);
-      }
+    api.setServer = function(url, passphrase, allowHttp=false) {
+      if(!url) throw new Error('No URL')
+      console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
+      StellarSdk.Network.use(new StellarSdk.Network(passphrase));
+      this.server = new StellarSdk.Server(url, {allowHttp});
       history.server = this.server;
       orderbook.server = this.server;
       path.server = this.server;
