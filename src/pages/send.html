@@ -9,8 +9,8 @@
 			<div class="AddTrustFromDirectory">
 				<div class="row" ng-init="native=gateways.getSourceById('')">
 					<div class="row__fixedAsset">
-						<gateway name="{{native.name}}" logo="{{native.logo}}"
-								website="{{native.website}}" code="XLM" address=""></gateway>
+						<gateway name="{{currentNetwork.coin.name}}" logo="{{currentNetwork.coin.logo}}"
+								website="{{currentNetwork.website}}" code="{{currentNetwork.coin.code}}" address=""></gateway>
 					</div>
 					<div class="row__shareOption">
 						{{balance | number : 7}}
@@ -18,8 +18,8 @@
 					<div class="row__shareOption">
 						<button class="s-button btn btn-success" 
 							ng-disabled="quote_id"
-							ng-click="pick('XLM', '')">
-							{{'choose' | translate}} XLM</button>
+							ng-click="pickCoin()">
+							{{'choose' | translate}} {{currentNetwork.coin.code}}</button>
 					</div>
 				</div>
 				<div ng-repeat="(code, sublines) in lines">
@@ -34,7 +34,7 @@
 						<div class="row__shareOption">
 							<button class="s-button btn btn-success" 
 								ng-disabled="quote_id"
-								ng-click="pick(line.code, line.issuer)">
+								ng-click="pickToken(line.code, line.issuer)">
 								{{'choose' | translate}} {{line.code}}</button>
 						</div>
 					</div>
@@ -212,7 +212,7 @@
 					
 					<div class="btn-group-pretty" ng-show="asset.amount">
 						<label ng-class="{btn:true, active: isLine(line.code, line.issuer)}"
-							ng-click="pick(line.code, line.issuer)"
+							ng-click="pickToken(line.code, line.issuer)"
 							ng-repeat="line in send"> 
 							<span class="tick"></span>
 							<span class="amount">{{asset.amount | number : 4}}</span>

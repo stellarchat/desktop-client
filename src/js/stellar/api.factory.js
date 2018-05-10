@@ -152,7 +152,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         callback(err, null);
       });
     };
-    api.sendXLM = function(target, amount, memo_type, memo_value, callback) {
+    api.sendCoin = function(target, amount, memo_type, memo_value, callback) {
       var self = this;
       amount = round(amount, 7);
       self.server.loadAccount(self.address).then(function(account){
@@ -167,14 +167,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
         return self.server.submitTransaction(tx);
       }).then(function(txResult){
-        console.log('Send XLM done.', txResult);
+        console.log(`Send ${$scope.currentNetwork.coin.code} done.`, txResult);
         callback(null, txResult.hash);
       }).catch(function(err){
         console.error('Send Fail !', err);
         callback(err, null);
       });
     };
-    api.sendAsset = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
+    api.sendToken = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
       var self = this;
       amount = round(amount, 7);
       self.server.loadAccount(self.address).then(function(account){
@@ -200,20 +200,20 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       amount = round(amount, 7);
       console.debug(target, currency, issuer, amount, memo_type, memo_value);
       var self = this;
-      if (currency == 'XLM') {
+      if (currency == $scope.currentNetwork.coin.code) {
         self.isFunded(target, function(err, isFunded){
           if (err) {
             return callback(err, null);
           } else {
             if (isFunded) {
-              self.sendXLM(target, amount, memo_type, memo_value, callback);
+              self.sendCoin(target, amount, memo_type, memo_value, callback);
             } else {
               self.fund(target, amount, memo_type, memo_value, callback);
             }
           }
         });
       } else {
-        self.sendAsset(target, currency, issuer, amount, memo_type, memo_value, callback);
+        self.sendToken(target, currency, issuer, amount, memo_type, memo_value, callback);
       }
     };
 
