@@ -12,7 +12,7 @@ myApp.factory('SettingFactory', function($window) {
         coin: {
           name: "Stellar Network",
           code: "XLM",
-          logo: "stellar.png"
+          logo: "img/rocket.png"
         },
         allowHTTP: false,
         tabs: ["history", "trade", "balance", "send", "trust", "service", "ico"]
@@ -25,7 +25,7 @@ myApp.factory('SettingFactory', function($window) {
         coin: {
           name: "Stellar Network",
           code: "XLM",
-          logo: "stellar.png"
+          logo: "img/rocket.png"
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust"]
