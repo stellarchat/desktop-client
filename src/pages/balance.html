@@ -17,9 +17,9 @@
 				</thead>
 				<tbody>
 					<tr class="BalancesTable__row">
-						<td ng-init="native=currentNetwork.coin">
-							<gateway name="{{native.name}}" logo="{{native.logo}}"
-								website="{{native.website}}" code="{{native.code}}" address=""></gateway>
+						<td ng-init="native=currentNetwork">
+							<gateway name="{{native.name}}" logo="{{native.coin.logo}}"
+								website="{{native.website}}" code="{{native.coin.code}}" address=""></gateway>
 						</td>
 						<td class="BalancesTable__row__amount">
 							<span>{{balance | number : 7}}</span><br>

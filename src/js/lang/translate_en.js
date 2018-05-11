@@ -251,6 +251,6 @@ var translate_en = {
   new_version_available: 'New version available',
 
   /** Error **/
-  NotFoundError : 'The resource was not found. You must have at least 1 lumen in your account for it to be activated! Each trust line or offer requires a 0.5 lumen reserve in addition. To make things easy, send at least 3 lumens to the account.',
+  NotFoundError : 'The resource was not found. You must have at least 1 {{name}} in your account for it to be activated! Each trust line or offer requires a 0.5 {{name}}  reserve in addition. To make things easy, send at least 3 {{name}}s to the account.',
   changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 0.5 lumen reserve in addition.'
 }

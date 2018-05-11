@@ -55,6 +55,7 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
             StellarApi.logout();
             $rootScope.reset();
             $rootScope.$broadcast('$blobUpdate');
+            location.reload();
 
           } catch (e) {
             console.error(e);

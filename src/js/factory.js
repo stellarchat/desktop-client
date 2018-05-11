@@ -10,7 +10,8 @@ myApp.factory('SettingFactory', function($window) {
         networkPassphrase: StellarSdk.Networks.PUBLIC,
         defaultHorizon: "https://horizon.stellar.org",
         coin: {
-          name: "Stellar Network",
+          name: "lumen",
+          atom: "stroop",
           code: "XLM",
           logo: "img/rocket.png"
         },
@@ -23,7 +24,8 @@ myApp.factory('SettingFactory', function($window) {
         networkPassphrase: StellarSdk.Networks.TESTNET,
         defaultHorizon: "https://horizon-testnet.stellar.org",
         coin: {
-          name: "Stellar Network",
+          name: "lumen",
+          atom: "stroop",
           code: "XLM",
           logo: "img/rocket.png"
         },
@@ -37,6 +39,7 @@ myApp.factory('SettingFactory', function($window) {
         defaultHorizon: undefined,
         coin: {
           name: undefined,
+          atom: undefined,
           code: undefined,
           logo: undefined
         },
