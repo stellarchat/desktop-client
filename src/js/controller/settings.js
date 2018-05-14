@@ -27,7 +27,7 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
     $scope.fed_bitcoin = SettingFactory.getFedBitcoin();
     $scope.set = function(network) {
       $scope.network_type = network;
-      $scope.network_horizon = SettingFactory.NETWORKS[network].defaultHorizon;
+      $scope.network_horizon = SettingFactory.NETWORKS[network].knownHorizons[0];
       if(network === 'other') {
         $scope.network_passphrase = undefined;
         $scope.network_coin = undefined;

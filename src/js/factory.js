@@ -2,13 +2,19 @@
 
 myApp.factory('SettingFactory', function($window) {
   return {
-    // To add new preset, add unique prop to NETWORKS, DEFAULT_HORIZONS and COINS, new row at settings.html and translation.
+    // To add new preset network, add new entry here and in `translationKey` to all translations.
+    // P.S. Undefined entries will be asked for in user interface.
     NETWORKS: {
       xlm: {
         name: "Stellar Public Network",
+        translationKey: 'public_url',
         networkType: 'xlm',
         networkPassphrase: StellarSdk.Networks.PUBLIC,
-        defaultHorizon: "https://horizon.stellar.org",
+        knownHorizons: [
+          'https://horizon.stellar.org',  // First one is default.
+          'https://stellar-api.wancloud.io',
+          'https://api.chinastellar.com',
+        ],
         coin: {
           name: "lumen",
           atom: "stroop",
@@ -20,9 +26,12 @@ myApp.factory('SettingFactory', function($window) {
       },
       xlmTest: {
         name: "Stellar Test Network",
+        translationKey: 'test_url',
         networkType: 'xlmTest',
         networkPassphrase: StellarSdk.Networks.TESTNET,
-        defaultHorizon: "https://horizon-testnet.stellar.org",
+        knownHorizons: [
+          'https://horizon-testnet.stellar.org',
+        ],
         coin: {
           name: "lumen",
           atom: "stroop",
@@ -34,14 +43,16 @@ myApp.factory('SettingFactory', function($window) {
       },
       other: {
         name: "User defined",
+        translationKey: 'other_url',
         networkType: 'other',
         networkPassphrase: undefined,
-        defaultHorizon: undefined,
+        knownHorizons: [
+        ],
         coin: {
-          name: undefined,
-          atom: undefined,
+          name: "lumen",  // TODO: ask in settings
+          atom: "stroop",  // TODO: ask in settings
           code: undefined,
-          logo: undefined
+          logo: "img/rocket.png",  // TODO: ask in settings
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust"]
@@ -81,7 +92,7 @@ myApp.factory('SettingFactory', function($window) {
       return this.NETWORKS[this.getNetworkType()];
     },
     setStellarUrl : function(url) {
-      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].defaultHorizon;
+      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].knownHorizons[0];
     },
     getStellarUrl : function() {
       return $window.localStorage[`network_horizon/${this.getNetworkType()}`] || this.setStellarUrl();
