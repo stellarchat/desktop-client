@@ -71,7 +71,7 @@ var translate_fr = {
   select_asset : 'Veuillez sélectionner un actif à envoyer.',
   sending_to   : 'Envoyer à',
   send_done    : 'Envoi a bien été exécuté',
-  not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 1 lumens (XLM).',
+  not_funded   : 'Le compte n\'est pas financé. Pour créer ce compte, vous devez y envoyez au moins 1 {{name}}s ({{code}}).',
   can_accept   : 'Le compte peut accepter',
 
   contacts : 'Contacts',
@@ -195,10 +195,10 @@ var translate_fr = {
   save     : 'Sauvegarder',
   security : 'Sécurité',
   inflation : 'Destination de l\'inflation',
-  inflation_desc : 'De nouveaux lumens sont ajoutés au réseau à raison de 1% chaque année. Chaque semaine, le protocole distribue ces lumens à n\'importe quel compte qui obtient plus de .05% des "votes" d\'autres comptes dans le réseau.',
+  inflation_desc : 'De nouveaux {{name}}s sont ajoutés au réseau à raison de 1% chaque année. Chaque semaine, le protocole distribue ces {{name}}s à n\'importe quel compte qui obtient plus de .05% des "votes" d\'autres comptes dans le réseau.',
   inflation_done : 'La destination d\'inflation a été configurée.',
   inflation_options      : 'Autres options',
-  inflation_options_desc : 'Vous pouvez rejoindre xlmpool.com pour obtenir les lumens d\'inflation. Ou vous pouvez voter pour RippleFox.',
+  inflation_options_desc : 'Vous pouvez rejoindre xlmpool.com pour obtenir les {{name}}s d\'inflation. Ou vous pouvez voter pour RippleFox.',
   inflation_xlmpool  : 'Votez pour xlmpool.com',
   inflation_lumenaut : 'Votez pour lumenaut.net',
   inflation_moonpool : 'Votez pour MoonPool',
@@ -216,7 +216,7 @@ var translate_fr = {
   data_value  : 'Valeur Saisie de Données',
   data_done   : 'La Saisie de Données a été configurée',
   delete_account : 'Fermer un Compte',
-  merge_desc     : 'ATTENTION! Cette opération va entrainer le transfert du solde (quantité de XLM detenue par le compte) vers un compte destinataire et supprimera le compte du registre',
+  merge_desc     : 'ATTENTION! Cette opération va entrainer le transfert du solde (quantité de {{code}} detenue par le compte) vers un compte destinataire et supprimera le compte du registre',
   dest_account   : 'Compte Destinataire',
   delete_warning : 'JE SUIS INFORMÉ ET CONSCIENT DE MON ACTION >>',
   back           : 'Retour',
@@ -251,6 +251,6 @@ var translate_fr = {
   new_version_available: 'Nouvelle version disponible',
 
   /** Error **/
-  NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 lumen dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 lumens suplémentaires. Pour faciliter les choses, envoyez au moins 3 lumens au compte.',
-  changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 0.5 lumens suplémentaires.'
+  NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 {{name}} dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 {{name}}s suplémentaires. Pour faciliter les choses, envoyez au moins 3 {{name}}s au compte.',
+  changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 0.5 {{name}}s suplémentaires.'
 }
