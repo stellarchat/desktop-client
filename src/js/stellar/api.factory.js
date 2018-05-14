@@ -553,7 +553,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         offer_id = offer.id;
       } else {
         selling = StellarSdk.Asset.native();
-        buying  = new StellarSdk.Asset('DUMMY', account.accountId());
+        buying  = new StellarSdk.Asset('DUMMY', self.address);
         price   = "1";
         offer_id = offer;
       }
