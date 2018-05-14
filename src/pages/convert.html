@@ -65,7 +65,7 @@
 					<ul>
 						<li ng-repeat="asset in asset.origin.path"
 							ng-switch="asset.asset_type">
-							<span ng-switch-when="native">XLM</span>
+							<span ng-switch-when="native">{{currentNetwork.coin.code}}</span>
 							<span ng-switch-default>{{asset.asset_code}}.{{asset.asset_issuer}}</span>
 						</li>
 					</ul>

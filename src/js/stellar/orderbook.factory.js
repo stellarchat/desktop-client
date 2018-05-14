@@ -1,6 +1,6 @@
 /* global myApp, StellarSdk */
 
-myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
+myApp.factory('StellarOrderbook', ['$rootScope', function($rootScope) {
   var orderbook = {
     server : null,
     closeBookStream : undefined
@@ -41,7 +41,7 @@ myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
       issuer = code.issuer;
       code = code.code;
     }
-    return code == 'XLM' ? code : code + '.' + issuer;
+    return code == $rootScope.currentNetwork.coin.code ? code : code + '.' + issuer;
   }
 
   function getAsset(code, issuer) {
@@ -49,7 +49,7 @@ myApp.factory('StellarOrderbook', ['$rootScope', function($scope) {
       issuer = code.issuer;
       code = code.code;
     }
-    return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+    return code == $rootScope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
   }
 
   return orderbook;

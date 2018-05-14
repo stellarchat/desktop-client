@@ -126,7 +126,7 @@ myApp.factory('SettingFactory', function($window) {
         return JSON.parse($window.localStorage['tradepair']);
       } else {
         return {
-          base_code   : 'XLM',
+          base_code   : this.getCurrentNetwork().coin.code,
           base_issuer : '',
           counter_code   : 'CNY',
           counter_issuer : 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'

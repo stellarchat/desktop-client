@@ -621,7 +621,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         issuer = code.issuer;
         code = code.code;
       }
-      return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+      return code == $scope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
 
     return api;
