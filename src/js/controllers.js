@@ -69,7 +69,7 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
 
       $scope.pie.total = 0;
       $rootScope.stellar_ticker.assets.forEach(function(asset){
-        if (asset.code == 'XLM') {
+        if (asset.code == $rootScope.currentNetwork.coin.code) {
           //$scope.pie.total = asset.volume24h_XLM;
         } else {
           if (asset.volume24h_XLM) {

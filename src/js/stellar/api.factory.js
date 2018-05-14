@@ -523,7 +523,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       });
     };
 
-    // option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
     api.offer = function(option, callback) {
       var self = this;
       console.debug('%s %s %s use %s@ %s', option.type, option.amount, option.currency, option.base, option.price);
