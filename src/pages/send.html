@@ -9,17 +9,17 @@
 			<div class="AddTrustFromDirectory">
 				<div class="row" ng-init="native=gateways.getSourceById('')">
 					<div class="row__fixedAsset">
-						<gateway name="{{native.name}}" logo="{{native.logo}}"
-								website="{{native.website}}" code="XLM" address=""></gateway>
+						<gateway name="{{currentNetwork.name}}" logo="{{currentNetwork.coin.logo}}"
+								website="{{currentNetwork.website}}" code="{{currentNetwork.coin.code}}" address=""></gateway>
 					</div>
 					<div class="row__shareOption">
 						{{balance | number : 7}}
 					</div>
 					<div class="row__shareOption">
-						<button class="s-button btn btn-success" 
+						<button class="s-button btn btn-success"
 							ng-disabled="quote_id"
-							ng-click="pick('XLM', '')">
-							{{'choose' | translate}} XLM</button>
+							ng-click="pickCoin()">
+							{{'choose' | translate}} {{currentNetwork.coin.code}}</button>
 					</div>
 				</div>
 				<div ng-repeat="(code, sublines) in lines">
@@ -32,9 +32,9 @@
 							{{line.balance | number : 7}}
 						</div>
 						<div class="row__shareOption">
-							<button class="s-button btn btn-success" 
+							<button class="s-button btn btn-success"
 								ng-disabled="quote_id"
-								ng-click="pick(line.code, line.issuer)">
+								ng-click="pickToken(line.code, line.issuer)">
 								{{'choose' | translate}} {{line.code}}</button>
 						</div>
 					</div>
@@ -49,16 +49,16 @@
 			<div class="island__paddedContent">
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="recipient">Recipient</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" 
+					<input type="text" class="s-inputGroup__item S-flexItem-share"
 						ng-model="input_address" ng-change="resolve()" ng-model-options="{ debounce:800}"
 						placeholder="{{'example' | translate}}: GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX" list="contacts">
 					<datalist id="contacts">
 						<option ng-repeat="entry in contacts" value="{{entry.name}}">{{entry.address}}</option>
-					</datalist> 
+					</datalist>
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
-					<input type="number" autocomplete="off" class="s-inputGroup__item S-flexItem-share" 
+					<input type="number" autocomplete="off" class="s-inputGroup__item S-flexItem-share"
 						ng-model="asset.amount"
 						ng-disabled="quote_id"
 						placeholder="{{'example' | translate}}: 100.25">
@@ -66,7 +66,7 @@
 
 				<label class="s-inputGroup AddTrust__inputGroup dropdown">
 					<button type="button" class="btn btn-secondary dropdown-toggle s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4"
-						data-toggle="dropdown" style="padding: 0 1.2em 0 1.2em;" 
+						data-toggle="dropdown" style="padding: 0 1.2em 0 1.2em;"
 						ng-disabled="memo_require || memo_provided || quote_id">
 						<span style="font-size: 18px; font-weight: 700;">{{'memo' | translate}}: {{memo_type}}</span> &nbsp;&nbsp;
 						<span class="caret"></span></button>
@@ -75,13 +75,13 @@
 					      <li><a ng-click="setMemoType('Text')">Memo-Text</a></li>
 					      <li><a ng-click="setMemoType('Hash')">Memo-Hash</a></li>
 					    </ul>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" 
-						ng-model="memo" 
+					<input type="text" class="s-inputGroup__item S-flexItem-share"
+						ng-model="memo"
 						ng-disabled="memo_provided || quote_id"
 						placeholder="{{memo_require ? 'required' : 'optional' | translate}}">
 				</label>
 			</div>
-			
+
 			<div>
 				<div class="island__paddedContent" ng-show="quote_id">
 					<form id="serviceForm" name="serviceForm" role="form">
@@ -93,9 +93,9 @@
 							<div ng-switch-when="text" class="col-xs-12 col-md-10">
 								<label ng-bind="field.label"></label>
 								<p ng-show="field.hint" ng-bind="field.hint" class="field-hint"></p>
-								<input type="text" 
-									ng-model="field.value" 
-									ng-model-options="{debounce:800}" 
+								<input type="text"
+									ng-model="field.value"
+									ng-model-options="{debounce:800}"
 									ng-required="{{field.required}}" class="form-control" />
 							</div>
 							<div ng-switch-when="select" class="col-xs-12 col-md-10">
@@ -121,7 +121,7 @@
 								<div class="amount-wrap">
 									<input type="number" autocomplete="off" placeholder="0.00"
 										class="input amount-big form-control"
-										ng-model="service_amount" 
+										ng-model="service_amount"
 										ng-model-options="{debounce:800}"
 										required="true">
 									<select class="select currency"
@@ -129,27 +129,27 @@
 										ng-change="updateAsset()"
 										ng-disabled = "!mulipleAsset"
 										ng-class="{'disabled': !mulipleAsset}" required="">
-										<option value="{{asset.code}}.{{asset.issuer}}" 
-											ng-repeat="asset in extra_assets" 
+										<option value="{{asset.code}}.{{asset.issuer}}"
+											ng-repeat="asset in extra_assets"
 											ng-selected="service_currency == (asset.code + '.' + asset.issuer)">{{asset.code}}</option>
 									</select>
 								</div>
 							</div>
 						</div>
 					</form>
-					
+
 					<div class="form-group service_alert" ng-show="!serviceForm.$valid && service_currency">
 						<div translate="fill_form">Please fill the form correctly.</div>
 					</div>
 					<div class="form-group service_alert" ng-show="quote_error">
 						<div>{{quote_error}}</div>
 					</div>
-				
+
 					<div class="row form-group brdige_card_code" ng-show="quote_loading">
 						<label><i class="fa fa-spinner fa-pulse"></i> {{'analyzing' | translate}}</label>
 					</div>
 				</div>
-					
+
 				<div class="island__separator"></div>
 				<div class="AddTrust__confirmation">
 					<div class="s-alert s-alert--alert" ng-show="input_address && send_error.hasError()">
@@ -179,7 +179,7 @@
 							<li translate="send_done">Asset successfully sent.</li>
 						</ul>
 					</div>
-					
+
 					<div class="row__message" ng-show="act_loading">
 						<i class="fa fa-spinner fa-pulse"></i> {{'account_loading' | translate}} {{input_address}}
 					</div>
@@ -193,7 +193,7 @@
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
 						{{'sending_to' | translate}} {{real_address | shortaddress}}
 					</div>
-					
+
 					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="asset.code">
 						<div class="AssetCard AssetCard--fixed">
 							<div class="AssetCard__main">
@@ -209,11 +209,11 @@
 							</div>
 						</div>
 					</div> -->
-					
+
 					<div class="btn-group-pretty" ng-show="asset.amount">
 						<label ng-class="{btn:true, active: isLine(line.code, line.issuer)}"
-							ng-click="pick(line.code, line.issuer)"
-							ng-repeat="line in send"> 
+							ng-click="pickToken(line.code, line.issuer)"
+							ng-repeat="line in send">
 							<span class="tick"></span>
 							<span class="amount">{{asset.amount | number : 4}}</span>
 							<div class="btn_card">
@@ -223,17 +223,17 @@
 							</div>
 						</label>
 					</div>
-				
-					<button class="s-button btn btn-success" 
-						ng-show="asset.code" 
-						ng-click="send_asset()" 
+
+					<button class="s-button btn btn-success"
+						ng-show="asset.code"
+						ng-click="send_asset()"
 						ng-disabled="!asset.amount || !isValidAddress(real_address) || sending || (memo_require && !memo)">{{'send' | translate}} {{src_code}}</button>
 				</div>
 			</div>
 
 		</div>
 	</div>
-	
-	
+
+
 	</group>
 </section>

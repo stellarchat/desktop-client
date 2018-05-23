@@ -17,12 +17,12 @@
 	</div>
 
 	<div class="payment">
-		<div class="txamount">{{item.tx.operations[0].amount}} {{item.tx.operations[0].asset.code}}</div>
+		<div class="txamount">{{item.tx.operations[0].amount}} {{item.tx.operations[0].asset.issuer ? item.tx.operations[0].asset.code : item.nativeCode}}</div>
 		
 		<div class="txamount">
-		{{item.tx.operations[0].sendMax}} {{item.tx.operations[0].sendAsset.code}} 
+		{{item.tx.operations[0].sendMax}} {{item.tx.operations[0].sendAsset.issuer ? item.tx.operations[0].sendAsset.code : item.nativeCode}} 
 		<span class="glyphicon glyphicon-arrow-right"></span>
-		{{item.tx.operations[0].destAmount}} {{item.tx.operations[0].destAsset.code}}
+		{{item.tx.operations[0].destAmount}} {{item.tx.operations[0].destAsset.issuer ? item.tx.operations[0].destAsset.code : item.nativeCode}}
 		
 		<div class="timestamp">{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</div>
 		

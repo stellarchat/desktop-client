@@ -3,7 +3,7 @@
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
 			<div class="island__header">
-				{{ 'estimated' | translate}} <strong>{{estimated_value | number : 0}} XLM</strong>
+				{{ 'estimated' | translate}} <strong>{{estimated_value | number : 0}} {{currentNetwork.coin.code}}</strong>
 				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="working">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
@@ -17,9 +17,9 @@
 				</thead>
 				<tbody>
 					<tr class="BalancesTable__row">
-						<td ng-init="native=gateways.getSourceById('')">
-							<gateway name="{{native.name}}" logo="{{native.logo}}"
-								website="{{native.website}}" code="XLM" address=""></gateway>
+						<td ng-init="native=currentNetwork">
+							<gateway name="{{native.name}}" logo="{{native.coin.logo}}"
+								website="{{native.website}}" code="{{native.coin.code}}" address=""></gateway>
 						</td>
 						<td class="BalancesTable__row__amount">
 							<span>{{balance | number : 7}}</span><br>
@@ -31,7 +31,7 @@
 				<tbody ng-repeat="(code, sublines) in lines">
 					<tr class="BalancesTable__row" ng-repeat-start="(issuer, line) in sublines">
 						<td ng-init="gateway=gateways.getSourceById(line.issuer)">
-							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
+							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 								code="{{code}}" address="{{line.issuer}}"></gateway>
 						</td>
 						<td class="BalancesTable__row__amount">
@@ -43,7 +43,7 @@
 								ng-hide="line.balance > 0 || isRemoving(line.code, line.issuer)"
 								ng-click="delTrust(line.code, line.issuer)"
 								translate="trust_remove">Remove trust</a>
-							<span class="BalancesTable__row__removeLink" 
+							<span class="BalancesTable__row__removeLink"
 								ng-show="isRemoving(line.code, line.issuer)"
 								translate="trust_removeing">Removing</span><br>
 							<a class="BalancesTable__row__removeLink" href="javascript:"
@@ -61,7 +61,7 @@
 							<div ng-repeat="(key, msg) in deposit_info[code][issuer].info.extra_info">
 								<span>{{key}}: {{msg}}</span><br>
 							</div>
-							
+
 						</td>
 					</tr>
 				</tobdy>

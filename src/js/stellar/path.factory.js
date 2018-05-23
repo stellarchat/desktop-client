@@ -42,7 +42,7 @@ myApp.factory('StellarPath', ['$rootScope', function($scope) {
       issuer = code.issuer;
       code = code.code;
     }
-    return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+    return code == $scope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
   }
 
   return path;

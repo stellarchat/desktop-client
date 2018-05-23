@@ -51,7 +51,14 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       }
       return !$scope.send_error.memo;
     };
-    $scope.pick = function(code, issuer) {
+    $scope.pickCoin = function() {
+      $scope.asset.code = $rootScope.currentNetwork.coin.code;
+      $scope.asset.issuer = undefined;
+      $scope.asset.name = $rootScope.currentNetwork.coin.name;
+      $scope.asset.logo = $rootScope.currentNetwork.coin.logo;
+      $scope.asset.website = $rootScope.currentNetwork.website;
+    };
+    $scope.pickToken = function(code, issuer) {
       $scope.asset.code = code;
       $scope.asset.issuer = issuer;
       var gateway = $rootScope.gateways.getSourceById(issuer);
@@ -60,7 +67,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       $scope.asset.website = gateway.website;
     };
     $scope.isLine = function(code, issuer) {
-      if (code == 'XLM') {
+      if(code === $rootScope.currentNetwork.coin.code && !issuer) {
         return code == $scope.asset.code;
       } else {
         return code == $scope.asset.code && issuer == $scope.asset.issuer;
@@ -320,16 +327,15 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
         if (err) {
           if (err.message == "NotFoundError") {
             $scope.real_not_fund = true;
-            var gateway = $rootScope.gateways.getSourceById('');
             $scope.send.unshift({
-              code   : 'XLM',
+              code   : $rootScope.currentNetwork.coin.code,
               issuer : '',
-              name   : gateway.name,
-              logo   : gateway.logo
+              name   : $rootScope.currentNetwork.coin.name,
+              logo   : $rootScope.currentNetwork.coin.logo
             });
 
-            if ($scope.asset.code !== 'XLM') {
-              $scope.pick('XLM', '');
+            if ($scope.asset.code !== $rootScope.currentNetwork.coin.code) {
+              $scope.pickCoin();
             }
           } else {
             console.error('resolveAccountInfo', err);
@@ -339,20 +345,22 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
           var code, issuer, name, logo;
           data.balances.forEach(function(line){
             if (line.asset_type == 'native') {
-              accept.push('XLM');
-              code = 'XLM';
+              accept.push($rootScope.currentNetwork.coin.code);
+              code = $rootScope.currentNetwork.coin.code;
               issuer = '';
+              name = $rootScope.currentNetwork.coin.name;
+              logo = $rootScope.currentNetwork.coin.logo;
             } else {
               if (accept.indexOf(line.asset_code) < 0) {
                 accept.push(line.asset_code);
               }
               code = line.asset_code;
               issuer = line.asset_issuer;
+              var gateway = $rootScope.gateways.getSourceById(issuer);
+              name = gateway.name;
+              logo = gateway.logo;
             }
 
-            var gateway = $rootScope.gateways.getSourceById(issuer);
-            name = gateway.name;
-            logo = gateway.logo;
             $scope.send.unshift({
               code   : code,
               issuer : issuer,

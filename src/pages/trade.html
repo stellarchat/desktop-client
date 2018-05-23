@@ -65,18 +65,18 @@
 					<div class="row" ng-init="native=gateways.getSourceById('')">
 						<div class="row__fixedAsset">
 							<gateway name="{{native.name}}" logo="{{native.logo}}"
-									website="{{native.website}}" code="XLM" address=""></gateway>
+									website="{{native.website}}" code="{{currentNetwork.coin.code}}" address=""></gateway>
 						</div>
 						<div class="row__shareOption">
 							<button class="s-button btn btn-success"
-								ng-click="pick('base', 'XLM', '')"
-								ng-disabled="isBase('XLM', '')"
+								ng-click="pick('base', '{{currentNetwork.coin.code}}', '')"
+								ng-disabled="isBase('{{currentNetwork.coin.code}}', '')"
 								translate="as_base">As Base Asset</button>
 						</div>
 						<div class="row__shareOption">
 							<button class="s-button btn btn-success"
-								ng-click="pick('counter', 'XLM', '')"
-								ng-disabled="isCounter('XLM', '')"
+								ng-click="pick('counter', '{{currentNetwork.coin.code}}', '')"
+								ng-disabled="isCounter('{{currentNetwork.coin.code}}', '')"
 								translate="as_counter">As Counter Asset</button>
 						</div>
 					</div>

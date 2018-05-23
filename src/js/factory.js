@@ -2,8 +2,64 @@
 
 myApp.factory('SettingFactory', function($window) {
   return {
+    // To add new preset network, add new entry here and in `translationKey` to all translations.
+    // P.S. Undefined entries will be asked for in user interface.
+    NETWORKS: {
+      xlm: {
+        name: "Stellar Public Network",
+        translationKey: 'public_url',
+        networkType: 'xlm',
+        networkPassphrase: StellarSdk.Networks.PUBLIC,
+        knownHorizons: [
+          'https://horizon.stellar.org',  // First one is default.
+          'https://stellar-api.wancloud.io',
+          'https://api.chinastellar.com',
+        ],
+        coin: {
+          name: "lumen",
+          atom: "stroop",
+          code: "XLM",
+          logo: "img/rocket.png"
+        },
+        allowHTTP: false,
+        tabs: ["history", "trade", "balance", "send", "trust", "service", "ico"]
+      },
+      xlmTest: {
+        name: "Stellar Test Network",
+        translationKey: 'test_url',
+        networkType: 'xlmTest',
+        networkPassphrase: StellarSdk.Networks.TESTNET,
+        knownHorizons: [
+          'https://horizon-testnet.stellar.org',
+        ],
+        coin: {
+          name: "lumen",
+          atom: "stroop",
+          code: "XLM",
+          logo: "img/rocket.png"
+        },
+        allowHTTP: true,
+        tabs: ["history", "trade", "balance", "send", "trust"]
+      },
+      other: {
+        name: "User defined",
+        translationKey: 'other_url',
+        networkType: 'other',
+        networkPassphrase: undefined,
+        knownHorizons: [
+        ],
+        coin: {
+          name: "lumen",  // TODO: ask in settings
+          atom: "stroop",  // TODO: ask in settings
+          code: undefined,
+          logo: "img/rocket.png",  // TODO: ask in settings
+        },
+        allowHTTP: true,
+        tabs: ["history", "trade", "balance", "send", "trust"]
+      }
+    },
     setLang : function(lang) {
-      $window.localStorage['lang'] = lang;
+      return $window.localStorage['lang'] = lang;
     },
     getLang : function() {
       if ($window.localStorage['lang']) {
@@ -18,51 +74,43 @@ myApp.factory('SettingFactory', function($window) {
         }
       }
     },
+
     setProxy : function(proxy) {
-      if ("undefined" == proxy) {
-        proxy = "";
-      }
-      $window.localStorage['proxy'] = proxy;
+      return $window.localStorage[`proxy`] = "undefined" === proxy ? '' : proxy;
     },
     getProxy : function() {
-      return $window.localStorage['proxy'] || "";
+      return $window.localStorage[`proxy`] || "";
     },
-    setNetworkType : function(type) {
-      if (type == 'test' || type == 'other') {
-        $window.localStorage['network_type'] = type;
-      } else {
-        $window.localStorage['network_type'] = 'public';
-      }
+
+    setNetworkType : function(network) {
+      return $window.localStorage[`network_type`] = network in this.NETWORKS ? network : 'xlm';
     },
     getNetworkType : function() {
-      return $window.localStorage['network_type'] || "public";
+      return $window.localStorage[`network_type`] || this.setNetworkType();
+    },
+    getCurrentNetwork : function() {
+      return this.NETWORKS[this.getNetworkType()];
     },
     setStellarUrl : function(url) {
-      $window.localStorage['stellar_url'] = url;
+      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].knownHorizons[0];
     },
-    getStellarUrl : function(url) {
-      if ($window.localStorage['stellar_url']) {
-        return $window.localStorage['stellar_url'];
-      }
-      return this.getLang() == 'cn' ? "https://horizon.stellar.org" : 'https://horizon.stellar.org';
-    },
-    setTestUrl : function(url) {
-      $window.localStorage['test_url'] = url;
-    },
-    getTestUrl : function(url) {
-      return $window.localStorage['test_url'] || "https://horizon-testnet.stellar.org";
-    },
-    setOtherUrl : function(url) {
-      $window.localStorage['other_url'] = url;
-    },
-    getOtherUrl : function(url) {
-      return $window.localStorage['other_url'];
+    getStellarUrl : function() {
+      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] || this.setStellarUrl();
     },
     setNetPassphrase : function(val) {
-      $window.localStorage['net_passphase'] = val;
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()].networkPassphrase;
     },
-    getNetPassphrase : function(url) {
-      return $window.localStorage['net_passphase'];
+    getNetPassphrase : function() {
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].networkPassphrase;
+    },
+    setCoin : function(val) {
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_coin/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()].coin.code;
+    },
+    getCoin : function() {
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_coin/${this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].coin.code;
+    },
+    getAllowHttp : function() {
+      return this.NETWORKS[this.getNetworkType()].allowHTTP;
     },
 
     setFedNetwork : function(domain) {
@@ -89,7 +137,7 @@ myApp.factory('SettingFactory', function($window) {
         return JSON.parse($window.localStorage['tradepair']);
       } else {
         return {
-          base_code   : 'XLM',
+          base_code   : this.getCurrentNetwork().coin.code,
           base_issuer : '',
           counter_code   : 'CNY',
           counter_issuer : 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'
