@@ -14,10 +14,10 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
         this.bid = {};
         for (var i=0; i<data.length; i++) {
           var offer = data[i];
-          var buy_code = offer.buying.asset_type == 'native' ? 'XLM' : offer.buying.asset_code;
-          var buy_issuer = buy_code == 'XLM' ? '' : offer.buying.asset_issuer;
-          var sell_code = offer.selling.asset_type == 'native' ? 'XLM' : offer.selling.asset_code;
-          var sell_issuer = sell_code == 'XLM' ? '' : offer.selling.asset_issuer;
+          var buy_code = offer.buying.asset_type == 'native' ? $rootScope.currentNetwork.coin.code : offer.buying.asset_code;
+          var buy_issuer = offer.buying.asset_type == 'native' ? '' : offer.buying.asset_issuer;
+          var sell_code = offer.selling.asset_type == 'native' ? $rootScope.currentNetwork.coin.code : offer.selling.asset_code;
+          var sell_issuer = offer.selling.asset_type == 'native' ? '' : offer.selling.asset_issuer;
 
           this.all[offer.id] = {
             id : offer.id,
@@ -242,7 +242,6 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
       }
     }
 
-    //option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
     $scope.offer = function(type) {
       $scope[type + 'ing'] = true;
       $scope[type + '_ok'] = false;
@@ -351,7 +350,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
     }
 
     function sameAsset(code, issuer, code2, issuer2) {
-      if (code == 'XLM') {
+      if (code == $rootScope.currentNetwork.coin.code) {
         return code == code2;
       } else {
         return code == code2 && issuer == issuer2;
@@ -359,6 +358,11 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
     }
 
     function getAsset(code, issuer) {
-      return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+      if (typeof code == 'object') {
+        issuer = code.issuer;
+        code = code.code;
+      }
+      return code == $rootScope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
+
   } ]);

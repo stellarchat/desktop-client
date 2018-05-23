@@ -16,12 +16,12 @@
 			<div ng-switch-when="createAccount" class="batchrow">
 				<div class="cell">{{op.type}}</div>
 				<div class="cell">{{op.destination}}</div>
-				<div class="txamount cell">{{op.startingBalance}} {{op.asset.code}}</div>
+				<div class="txamount cell">{{op.startingBalance}} {{item.nativeCode}}</div>
 			</div>
 			<div ng-switch-when="pathPayment" class="batchrow">
 				<div class="cell">{{op.type}}</div>
 				<div class="cell">{{op.destination}}</div>
-				<div class="txamount cell">{{op.destAmount}} {{op.destAsset.code}}</div>
+				<div class="txamount cell">{{op.destAmount}} {{op.destAsset.issuer ? op.destAsset.code : item.nativeCode}}</div>
 			</div>
 			<div ng-switch-when="changeTrust" class="batchrow">
 				<div class="cell">{{op.type}}</div>
@@ -30,9 +30,9 @@
 			</div>
 			<div ng-switch-when="manageOffer" class="batchrow">
 				<div class="cell">{{op.type}}</div>
-				<div class="cell">{{op.amount}} {{op.selling.code}} 
+				<div class="cell">{{op.amount}} {{op.selling.issuer ? op.selling.code : item.nativeCode}}
 					<span class="glyphicon glyphicon-arrow-right"></span>
-					{{op.buying.code}}
+					{{op.buying.issuer ? op.buying.code : item.nativeCode}}
 					{{'price' | translate}}: {{op.price}}
 				</div>
 			</div>

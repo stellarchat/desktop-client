@@ -6,11 +6,11 @@
 				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
 			</div>
-			
+
 			<div class="AddTrustFromDirectory">
 				<div class="s-alert s-alert--alert" ng-show="error_msg">
 						<ul class="AddTrust__errorList">
-							<li>{{error_msg | translate}}</li>
+							<li>{{error_msg | translate:currentNetwork.coin}}</li>
 						</ul>
 				</div>
             	<table class="table-hover HistoryTable">

@@ -71,21 +71,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       return StellarSdk.FederationServer.createForDomain(domain);
     };
 
-    api.setServer = function(url, type, passphrase) {
-      url = url || 'https://horizon.stellar.org';
-      if ('test' == type) {
-        console.debug("TestNetwork: " + url);
-        StellarSdk.Network.useTestNetwork();
-        this.server = new StellarSdk.Server(url, {allowHttp: true});
-      } else if ('other' == type) {
-        console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
-        StellarSdk.Network.use(new StellarSdk.Network(passphrase));
-        this.server = new StellarSdk.Server(url, {allowHttp: true});
-      } else {
-        console.debug("PublicNetwork: " + url);
-        StellarSdk.Network.usePublicNetwork();
-        this.server = new StellarSdk.Server(url);
-      }
+    api.setServer = function(url, passphrase, allowHttp=false) {
+      if(!url) throw new Error('No URL')
+      console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
+      StellarSdk.Network.use(new StellarSdk.Network(passphrase));
+      this.server = new StellarSdk.Server(url, {allowHttp});
       history.server = this.server;
       orderbook.server = this.server;
       path.server = this.server;
@@ -162,7 +152,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         callback(err, null);
       });
     };
-    api.sendXLM = function(target, amount, memo_type, memo_value, callback) {
+    api.sendCoin = function(target, amount, memo_type, memo_value, callback) {
       var self = this;
       amount = round(amount, 7);
       self.server.loadAccount(self.address).then(function(account){
@@ -177,14 +167,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         tx.sign(StellarSdk.Keypair.fromSecret(self.seed));
         return self.server.submitTransaction(tx);
       }).then(function(txResult){
-        console.log('Send XLM done.', txResult);
+        console.log(`Send ${$scope.currentNetwork.coin.code} done.`, txResult);
         callback(null, txResult.hash);
       }).catch(function(err){
         console.error('Send Fail !', err);
         callback(err, null);
       });
     };
-    api.sendAsset = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
+    api.sendToken = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
       var self = this;
       amount = round(amount, 7);
       self.server.loadAccount(self.address).then(function(account){
@@ -210,20 +200,20 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       amount = round(amount, 7);
       console.debug(target, currency, issuer, amount, memo_type, memo_value);
       var self = this;
-      if (currency == 'XLM') {
+      if (currency == $scope.currentNetwork.coin.code) {
         self.isFunded(target, function(err, isFunded){
           if (err) {
             return callback(err, null);
           } else {
             if (isFunded) {
-              self.sendXLM(target, amount, memo_type, memo_value, callback);
+              self.sendCoin(target, amount, memo_type, memo_value, callback);
             } else {
               self.fund(target, amount, memo_type, memo_value, callback);
             }
           }
         });
       } else {
-        self.sendAsset(target, currency, issuer, amount, memo_type, memo_value, callback);
+        self.sendToken(target, currency, issuer, amount, memo_type, memo_value, callback);
       }
     };
 
@@ -533,7 +523,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       });
     };
 
-    // option {type:'buy', currency:'XLM', issuer: '', base: 'CNY', base_issuer: 'GXXX', amount: 100, price: 0.01}
     api.offer = function(option, callback) {
       var self = this;
       console.debug('%s %s %s use %s@ %s', option.type, option.amount, option.currency, option.base, option.price);
@@ -631,7 +620,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         issuer = code.issuer;
         code = code.code;
       }
-      return code == 'XLM' ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+      return code == $scope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
 
     return api;

@@ -6,59 +6,70 @@
 					translate="network">Network</a>
 				<a href="javascript:" ng-class="{active: isMode('federation')}" ng-click="setMode('federation')"
 					translate="fed_protocol">Federation Protocol</a>
+				<a href="javascript:" ng-class="{active: isMode('proxy')}" ng-click="setMode('proxy')"
+					translate="proxy">Proxy</a>
 			</div>
 		</div>
-		
-		<div class="col-sm-9" ng-show="isMode('network')">
+
+		<div class="col-sm-9" ng-show="isMode('proxy')">
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
-					<label translate="proxy">Proxy</label> 
+					<label translate="proxy">Proxy</label>
 					<input class="form-control" type="text" ng-model="proxy" placeholder="127.0.0.1:1080" />
 				</div>
 			</div>
-			
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-sm-5">
+					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-click="save('proxy')" translate="save">Save</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-9" ng-show="isMode('network')">
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
-					<label translate="switch_net">Stellar Network</label>
+					<label>Selected Stellar Network</label>
+					<ul>
+						<!-- <li><strong>Type: </strong><tt>{{active_network | translate}}</tt></li> -->
+						<li><strong>Passphrase: </strong><tt>{{active_passphrase}}</tt></li>
+						<li><strong>Coin: </strong><tt>{{active_coin}}</tt></li>
+						<li><strong>Horizon: </strong><tt>{{active_horizon}}</tt></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 20px;">
+				<div class="col-xs-12 col-md-10">
+					<label translate="switch_net">Switch Stellar Network</label>
 					<p translate="switch_net_desc">The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.</p>
 					<div class="btn-group">
-						<label class="btn btn-success" ng-class="{active: network_type=='public'}" ng-click="network_type='public'" >{{'public_net' | translate}}</label>
-            			<label class="btn btn-success" ng-class="{active: network_type=='test'}" ng-click="network_type='test'">{{'test_net' | translate}}</label>
-            			<label class="btn btn-success" ng-class="{active: network_type=='other'}" ng-click="network_type='other'">{{'other_net' | translate}}</label>
+						<span ng-repeat="n in all_networks">
+							<button class="btn btn-success" ng-class="{active: network_type == n.networkType}" ng-click="set(n.networkType)">{{n.name}}</button>
+						</span>
 					</div>
 				</div>
 			</div>
-			<div class="row" style="margin-bottom: 20px;" ng-show="network_type=='public'">
-				<div class="col-xs-12 col-md-10">
-					<label translate="public_url">Public Net URL</label> 
-					<input class="form-control" type="text" ng-model="url" placeholder="https://horizon.stellar.org" list="nodes"/>
-					<datalist id="nodes">
-						<option value="https://horizon.stellar.org">
-						<option value="https://stellar-api.wancloud.io">
-						<option value="https://api.chinastellar.com">
-					</datalist> 
+
+			<div class="row" style="margin-bottom: 20px;" ng-init="network = currentNetwork">
+				<div class="col-xs-12 col-md-10" ng-if="all_networks[network_type].knownHorizons.length > 0">
+					<label translate="other_url">Network URL</label>
+					<input class="form-control" type="text" ng-model="network_horizon" placeholder="{{all_networks[network_type].knownHorizons[0]}}" list="horizons"/>
+					<datalist id="horizons">
+						<option ng-repeat="horizon in network.knownHorizons" value="{{horizon}}">
+					</datalist>
+				</div>
+				<div class="col-xs-12 col-md-10" ng-if="all_networks[network_type].knownHorizons.length == 0">
+					<label translate="other_url">Network URL</label>
+					<input class="form-control" type="text" ng-model="network_horizon" placeholder="http://horizon.mytestnet.com"/>
+				</div>
+				<div class="col-xs-12 col-md-10" ng-if="!all_networks[network_type].networkPassphrase">
+					<label translate="passphrase">Passphrase or id</label>
+					<input class="form-control" type="text" ng-model="network_passphrase" placeholder="My Integration Network ; mycrypto"/>
+				</div>
+				<div class="col-xs-12 col-md-10" ng-if="!all_networks[network_type].coin.name">
+					<label translate="coin_ticket">coin ticket</label>
+					<input class="form-control" type="text" ng-model="network_coin" placeholder="XLM"/>
 				</div>
 			</div>
-			<div class="row" style="margin-bottom: 20px;" ng-show="network_type=='test'">
-				<div class="col-xs-12 col-md-10">
-					<label translate="test_url">Test Net URL</label> 
-					<input class="form-control" type="text" ng-model="test_url" placeholder="https://horizon-testnet.stellar.org" list="testnodes"/>
-					<datalist id="testnodes">
-						<option value="https://horizon-testnet.stellar.org">
-					</datalist> 
-				</div>
-			</div>
-			<div class="row" style="margin-bottom: 20px;" ng-show="network_type=='other'">
-				<div class="col-xs-12 col-md-10">
-					<label translate="other_url">Network URL</label> 
-					<input class="form-control" type="text" ng-model="other_url" placeholder="http://horizon.mytestnet.com"/>
-				</div>
-				<div class="col-xs-12 col-md-10">
-					<label translate="passphrase">Passphrase or id</label> 
-					<input class="form-control" type="text" ng-model="passphrase" placeholder="My Integration Network ; mycrypto"/>
-				</div>
-			</div>
-			
+
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
 					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-click="save('network')" translate="save">Save</a>
@@ -68,7 +79,7 @@
 				{{network_error}}
 			</div>
 		</div>
-		
+
 		<div class="col-sm-9" ng-show="isMode('federation')">
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
@@ -97,6 +108,6 @@
 				</div>
 			</div>
 		</div>
-		
+
 	</div>
 </section>

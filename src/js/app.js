@@ -2,12 +2,14 @@
 /* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
-myApp.config(function($routeProvider, $httpProvider, $translateProvider) {
+myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compileProvider) {
   $translateProvider.translations('cn', translate_cn);
   $translateProvider.translations('en', translate_en);
   $translateProvider.translations('fr', translate_fr);
   $translateProvider.preferredLanguage('cn');
   $translateProvider.useSanitizeValueStrategy('escape');
+
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(local|http|https|app|tel|ftp|file|blob|content|ms-appx|x-wmapp0|cdvfile|chrome-extension):|data:image\//);
 
   $httpProvider.interceptors.push('TokenInterceptor');
 
@@ -178,7 +180,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
     $rootScope.reserve = 0;
     $rootScope.lines = {}; // lines.CNY.xxx = {code: 'CNY', issuer: 'xxx', balance: 200, limit: 1000}
     $rootScope.getBalance = function(code, issuer) {
-      if (code == 'XLM') {
+      if (code == $rootScope.currentNetwork.coin.code) {
         return $rootScope.balance;
       } else {
         return $rootScope.lines[code] && $rootScope.lines[code][issuer] ? $rootScope.lines[code][issuer].balance : 0;
@@ -252,15 +254,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
     $rootScope.isValidAddress = function(address) {
       return StellarApi.isValidAddress(address);
     }
-    $rootScope.isPublicNetwork = function() {
-      return SettingFactory.getNetworkType() == 'public';
-    }
-    $rootScope.isTestNetwork = function() {
-      return SettingFactory.getNetworkType() == 'test';
-    }
-    $rootScope.isOtherNetwork = function() {
-      return SettingFactory.getNetworkType() == 'other';
-    }
+    $rootScope.currentNetwork = SettingFactory.getCurrentNetwork();
 
     $rootScope.isLangCN = function() {
       return SettingFactory.getLang() == 'cn';
@@ -268,17 +262,11 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 
     $translate.use(SettingFactory.getLang());
     try {
-      if ('test' == SettingFactory.getNetworkType()) {
-        StellarApi.setServer(SettingFactory.getTestUrl(), 'test');
-      } else if ('other' == SettingFactory.getNetworkType()) {
-        StellarApi.setServer(SettingFactory.getOtherUrl(), 'other', SettingFactory.getNetPassphrase());
-      } else {
-        StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetworkType());
-      }
+      StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetPassphrase(), SettingFactory.getAllowHttp());
     } catch(e) {
-      console.error("Cannot set server", SettingFactory.getStellarUrl(), e);
-      console.warn("Change network back to public.");
-      SettingFactory.setNetworkType('public');
+      console.error("Cannot set server", SettingFactory.getStellarUrl(), SettingFactory.getNetworkType(), e);
+      console.warn("Change network back to xlm.");
+      SettingFactory.setNetworkType('xlm');
       StellarApi.setServer(null);
     }
 

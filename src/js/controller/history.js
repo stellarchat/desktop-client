@@ -158,8 +158,8 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
     };
   } ]);
 
-myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi',
-  function($scope, $rootScope, $q, StellarApi) {
+myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi', 'SettingFactory',
+  function($scope, $rootScope, $q, StellarApi, SettingFactory) {
     $scope.effects = [];
     $scope.parsed = {};
     $scope.next = undefined;
@@ -250,7 +250,7 @@ myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi',
     function addEffect(effect) {
       return effect.operation().then((operation) => {
         return operation.transaction().then((transaction) => {
-          const res = parseEffect(effect, operation, transaction);
+          const res = parseEffect(effect, operation, transaction, SettingFactory.getCoin());
           if (res) {
             $scope.parsed[res.id] = res;
             return res;
@@ -264,19 +264,21 @@ myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi',
   } ]);
 
 
-function copyAmount(res, fx, prefix) {
+function copyAmount(res, fx, nativeCode, prefix) {
   prefix = prefix || '';
 
   res[`${prefix}amount`] = fx[`${prefix}amount`];
   if (fx[`${prefix}asset_type`] === 'native') {
-    res[`${prefix}asset_code`] = 'XLM';
+    res[`${prefix}asset_code`] = nativeCode;
   } else {
     res[`${prefix}asset_code`] = fx[`${prefix}asset_code`];
     res[`${prefix}asset_issuer`] = fx[`${prefix}asset_issuer`];
   }
 }
 
-function parseEffect(fx, op, tx) {
+function parseEffect(fx, op, tx, nativeCode) {
+
+  console.log(fx, op, tx)
 
   let res = {
     id:			fx.id,
@@ -299,14 +301,14 @@ function parseEffect(fx, op, tx) {
     },
     'account_credited': function () {
       if (op.type === 'path_payment' && op.from === op.to) {
-        //copyAmount(res, fx);
+        //copyAmount(res, fx, nativeCode);
         res = null;
       } else if (op.type === 'account_merge') {
         res.from = op.account;
-        copyAmount(res, fx);
+        copyAmount(res, fx, nativeCode);
       } else {
         res.from = op.from;
-        copyAmount(res, fx);
+        copyAmount(res, fx, nativeCode);
       }
     },
     'account_debited': function () {
@@ -315,7 +317,7 @@ function parseEffect(fx, op, tx) {
         res = null;
       } else {
         res.to = op.to || op.account;	// op.payment || op.create_account(?)
-        copyAmount(res, fx);
+        copyAmount(res, fx, nativeCode);
       }
     },
     'account_flags_updated': function () {
@@ -351,8 +353,8 @@ function parseEffect(fx, op, tx) {
       if (op.type === 'path_payment' && op.from !== op.to && op.from === fx.account) {
         res = null;
       } else {
-        copyAmount(res, fx, 'sold_');
-        copyAmount(res, fx, 'bought_');
+        copyAmount(res, fx, nativeCode, 'sold_');
+        copyAmount(res, fx, nativeCode, 'bought_');
       }
     },
     'trustline_created': function () {

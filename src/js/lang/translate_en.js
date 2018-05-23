@@ -71,7 +71,7 @@ var translate_en = {
   select_asset : 'Please select an asset to send.',
   sending_to   : 'Sending to',
   send_done    : 'Asset successfully sent.',
-  not_funded   : 'Not funded. To create this account, send it at least 1 lumens (XLM).',
+  not_funded   : 'Not funded. To create this account, send it at least 1 {{name}}s ({{code}}).',
   can_accept   : 'The account can accept',
 
   contacts : 'Contacts',
@@ -175,8 +175,8 @@ var translate_en = {
   settings : 'Settings',
   network  : 'Network',
   proxy    : 'Proxy',
-  switch_net      : 'Stellar Network',
-  switch_net_desc : 'The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.',
+  switch_net      : 'Switch Stellar Network',
+  switch_net_desc : 'You can switch between different Stellar Network. The testnets are for, well, testing - they are also occasionally reset, so don’t get attached to any balances or accounts that you have on it.',
   public_net : 'Public Network',
   test_net   : 'Test Network',
   other_net  : 'User defined',
@@ -195,7 +195,7 @@ var translate_en = {
   save     : 'Save',
   security : 'Security',
   inflation : 'Inflation Destination',
-  inflation_desc : 'New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.',
+  inflation_desc : 'New {{name}}s are added to the network at the rate of 1% each year. Each week, the protocol distributes these {{name}}s to any account that gets over .05% of the “votes” from other accounts in the network.',
   inflation_done : 'Inflation Destination was set.',
   inflation_options      : 'Inflation pools',
   inflation_options_desc : 'You can join one of the following inflation pools. You can check their website to check the votes and the fee.',
@@ -216,7 +216,7 @@ var translate_en = {
   data_value  : 'Data Entry Value',
   data_done   : 'Data entry was set.',
   delete_account : 'Delete Account',
-  merge_desc     : 'Danger operation! It transfers the native balance (the amount of XLM an account holds) to destination account and removes your account from the ledger.',
+  merge_desc     : 'Danger operation! It transfers the native balance (the amount of {{code}} an account holds) to destination account and removes your account from the ledger.',
   dest_account   : 'Destination Account',
   delete_warning : 'I KNOW EVERYTHING >>',
   back           : 'Back',
@@ -251,6 +251,6 @@ var translate_en = {
   new_version_available: 'New version available',
 
   /** Error **/
-  NotFoundError : 'The resource was not found. You must have at least 1 lumen in your account for it to be activated! Each trust line or offer requires a 0.5 lumen reserve in addition. To make things easy, send at least 3 lumens to the account.',
-  changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 0.5 lumen reserve in addition.'
+  NotFoundError : 'The resource was not found. You must have at least 1 {{name}} in your account for it to be activated! Each trust line or offer requires a 0.5 {{name}}  reserve in addition. To make things easy, send at least 3 {{name}}s to the account.',
+  changeTrustLowReserve : 'Not enough funds to create a new trust line. Each trust line requires a 0.5 {{name}} reserve in addition.'
 }
