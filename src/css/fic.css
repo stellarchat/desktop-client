@@ -1,0 +1,77 @@
+.EthAddressTable {
+	width: 100%;
+}
+
+.EthAddressTable-header {
+	text-align: center;
+}
+
+.EthAddressTable-header th {
+	text-align: left;
+  padding: 0.5em 1em;
+	font-weight: bold;
+}
+
+.EthAddressTable-row {
+	border-top: 1px solid #dedfe0;;
+}
+
+.EthAddressTable-row td {
+	padding: 0.5em 1em;
+	font-size: 75%;
+}
+
+.EthAddressTable-row .amount {
+	text-align: right;
+}
+
+.EthAddressTable-row .amount .credit {
+	color: #0c0dff;
+}
+
+.EthAddressTable-row .amount .debit {
+	color: #e34949;
+}
+
+.EthAddressTable-row .address {
+	word-break: break-all;
+}
+
+.EthAddressTable-row .bold {
+	font-weight: bold;
+}
+
+.eth_fields .form-control {
+	margin-right: 15px;
+}
+
+.island .row.center {
+	align-items: center;
+	justify-content: center;
+}
+
+.content.center {
+	align-items: center;
+	justify-content: center;
+}
+
+input::-webkit-calendar-picker-indicator {
+	opacity: 1;
+}
+
+.island__form .row{
+	border-top: 0;
+}
+
+.modal-content .data-line {
+	font-size: 18px;
+	line-height: 27px;
+}
+.modal-content .data-line .code {
+	font-family: monospace;
+  font-size: 14px;
+  padding: 0 5px;
+  border: 1px solid #ccc;
+  background: #eee;
+  margin: 5px 0 15px;
+}

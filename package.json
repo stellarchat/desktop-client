@@ -43,8 +43,10 @@
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.2",
     "electron-notifications": "^1.0.0",
+    "ethereum-address": "0.0.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
+    "momentjs": "^2.0.0",
     "qrcode-generator": "^1.4.0",
     "sjcl": "^1.0.7",
     "stellar-sdk": "^0.8.2",
@@ -59,6 +61,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^12.1.0",
     "eslint": "^4.19.1",
-    "eslint-plugin-html": "^4.0.3"
+    "eslint-plugin-html": "^4.0.3",
+    "gulp": "^3.9.1"
   }
 }

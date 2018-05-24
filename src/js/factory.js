@@ -41,6 +41,22 @@ myApp.factory('SettingFactory', function($window) {
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
       },
+      ficTest: {
+       name: "FIC Test Network",
+       translationKey: 'fictest_net',
+       networkType: 'ficTest',
+       networkPassphrase: 'FIC Test Network ; 2017',
+       knownHorizons: [
+         'http://testnet.factury.co:8400',
+       ],
+       coin: {
+         name: "FIC Network",
+         code: "FIC",
+         logo: "img/fic.png"
+       },
+       allowHTTP: true,
+       tabs: ["history", "balance", "send", "ficnetwork"]
+     },
       other: {
         name: "User defined",
         translationKey: 'other_url',

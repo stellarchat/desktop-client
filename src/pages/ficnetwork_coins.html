@@ -1,0 +1,68 @@
+<section class="col-xs-12 content">
+	<group>
+	<div class="so-back islandBack islandBack--t" ng-repeat="(key, addr) in FicCoins track by $index">
+    <div class="island">
+      <div class="island__header">
+				{{ 'ficnetwork_address' | translate }}: {{key}}
+			</div>
+      <table class="table-hover EthAddressTable" ng-show="FicCoins">
+        <thead>
+          <tr class="EthAddressTable-header">
+            <th translate="fic_claimed">FIC Claimed</th>
+            <th translate="fic_available">FIC Available</th>
+            <th translate="available_in">Available in</th>
+            <th translate="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="EthAddressTable-row">
+            <td>
+              {{addr.claimed['0'] | number}}
+            </td>
+            <td>
+              {{addr.remaining['0'] | number}}
+            </td>
+            <td>
+              0 {{ 'days' | translate }}
+            </td>
+            <td>
+              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['0'] > 0">—</button>
+            </td>
+          </tr>
+          <tr class="EthAddressTable-row">
+            <td>
+              {{addr.claimed['90'] | number}}
+            </td>
+            <td>
+              {{addr.remaining['90'] | number}}
+            </td>
+            <td>
+              90 {{ 'days' | translate }}
+            </td>
+            <td>
+              <button ng-show="addr.remaining['90'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['90'] > 0">—</button>
+            </td>
+          </tr>
+          <tr class="EthAddressTable-row">
+            <td>
+              {{addr.claimed['180'] | number}}
+            </td>
+            <td>
+              {{addr.remaining['180'] | number}}
+            </td>
+            <td>
+              180 {{ 'days' | translate }}
+            </td>
+            <td>
+              <button ng-show="addr.remaining['180'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['180'] > 0">—</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+	</div>
+	</group>
+</section>

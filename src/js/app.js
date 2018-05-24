@@ -122,6 +122,24 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : true
     }
+  }).when('/ficnetwork', {
+    templateUrl : 'pages/ficnetwork_address.html',
+    controller : 'EthereumAddressCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/ficnetwork_coins', {
+    templateUrl : 'pages/ficnetwork_coins.html',
+    controller : 'FicCoinCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/ficnetwork_claim', {
+    templateUrl : 'pages/ficnetwork_claim.html',
+    controller : 'FicClaimCtrl',
+    access : {
+      requiredLogin : true
+    }
   }).otherwise({
     redirectTo : '/login'
   });

@@ -1,0 +1,91 @@
+<!-- Modal -->
+<div class="modal fade" id="contractModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="data-line">
+          {{ 'from_address' | translate }} <div class="code">{{formData.address}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'send_to' | translate }} <div class="code">{{formData.address}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'payload' | translate }} <div class="code">{{address}}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> {{ 'refresh' | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'done' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Form -->
+<section class="col-xs-102content">
+	<group>
+	<div class="so-back islandBack islandBack--t">
+    <div class="island island__form">
+      <div class="island__header">
+				{{ 'fic_address' | translate}} <strong style="word-wrap: break-word;">{{address}}</strong>
+			</div>
+
+      <div class="row center" style="margin-bottom: 0px;">
+
+				<div class="col-xs-12 col-md-6">
+					<label translate="select_eth">Select whitelisted ETH address</label>
+					<input class="form-control" type="text" ng-model="claim.address" list="addresses"/>
+					<datalist id="addresses">
+						<option ng-repeat="addr in eth_addresses[address]" value="{{addr}}">
+					</datalist>
+				</div>
+
+      </div>
+
+      <div class="row center" style="margin-bottom: 0px;">
+
+        <div class="col-xs-12 col-md-6">
+					<label translate="select_lockup">Select lockup period</label>
+					<input class="form-control" type="text" ng-model="claim.period" list="periods"/>
+					<datalist id="periods">
+						<option ng-repeat="period in periods" value="{{period}} days">
+					</datalist>
+				</div>
+
+      </div>
+
+      <div class="row center" style="margin-bottom: 0px;">
+
+        <div class="col-xs-12 col-md-6" ng-class="{'has-warning': claim.amount > maxAmount}">
+					<label translate="select_amount">Select FIC amount</label>
+					<input class="form-control" type="number" ng-model="claim.amount"/>
+          <label class="warning" ng-show="isNumber(remainingAmount)">
+            {{ 'remaining' | translate}} {{remainingAmount | number}}
+            <button class="btn btn-link" ng-click="selectAll()" ng-show="remainingAmount > 0">{{ 'select_all' | translate }}</button>
+          </label>
+				</div>
+
+      </div>
+
+      <div class="row center" style="margin-bottom: 0px;">
+
+        <div class="col-xs-12 col-md-6" ng-class="{'has-warning': claim.amount > maxAmount}">
+					<input type="checkbox" ng-model="claim.terms" id="terms"/>
+          <label for="terms">{{ 'terms' | translate }}</label>
+				</div>
+
+      </div>
+
+      <div class="row center" style="margin-bottom: 10px;">
+
+        <div class="col-xs-12 col-md-6">
+					<button class="btn btn-success" ng-click="submitClaim()" ng-disabled="!allGood" data-toggle="modal" data-target="#contractModal">{{'claim' | translate}}</button>
+				</div>
+
+      </div>
+
+    </div>
+	</div>
+	</group>
+</section>

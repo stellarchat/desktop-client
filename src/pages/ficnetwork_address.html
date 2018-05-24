@@ -1,0 +1,43 @@
+<section class="col-xs-12 content">
+	<group>
+	<div class="so-back islandBack islandBack--t">
+    <div class="island">
+      <div class="island__header">
+				{{ 'enter_address' | translate}}
+			</div>
+      <div class="eth_fields">
+        <div class="row">
+          <input class="form-control" type="text" placeholder="0xabc..." name="eth_address" ng-model="eth_address">
+          <button class="btn btn-success" ng-click="addEthAdrress(eth_address)">{{'add' | translate}}</button>
+        </div>
+        <div class="s-alert s-alert--alert" ng-show="invalid_eth">
+					<ul class="AddTrust__errorList">
+						<li>{{'invalid_eth' | translate}}</li>
+					</ul>
+				</div>
+      </div>
+      <table class="table-hover EthAddressTable" ng-show="eth_addresses">
+        <thead>
+          <tr class="EthAddressTable-header">
+            <th translate="eth_address">ETH address</th>
+            <th translate="options">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="EthAddressTable-row" ng-repeat="addr in eth_addresses[address] track by $index">
+            <td>
+              {{addr}}
+            </td>
+            <td>
+              <button class="btn btn-danger" ng-click="removeEthAdrress(addr)">{{'remove' | translate}}</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+			<div class="row center" ng-show="eth_addresses">
+				<button class="btn btn-success" ng-click="goTo('/ficnetwork_coins')">{{'next' | translate}}</button>
+			</div>
+    </div>
+	</div>
+	</group>
+</section>
