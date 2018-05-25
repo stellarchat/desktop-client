@@ -56,7 +56,9 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
             StellarApi.logout();
             $rootScope.reset();
             $rootScope.$broadcast('$authUpdate');  // workaround to refresh and get changes into effect.
-            location.reload();
+            setTimeout(function(){
+              window.location.reload();
+            },100);
 
           } catch (e) {
             console.error(e);

@@ -2,7 +2,7 @@
 /* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
-myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compileProvider) {
+myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compileProvider, $locationProvider) {
   $translateProvider.translations('cn', translate_cn);
   $translateProvider.translations('en', translate_en);
   $translateProvider.translations('fr', translate_fr);
@@ -122,21 +122,27 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : true
     }
-  }).when('/ficnetwork', {
-    templateUrl : 'pages/ficnetwork_address.html',
-    controller : 'EthereumAddressCtrl',
+  }).when('/fic_coins', {
+    templateUrl : 'pages/fic/coins.html',
+    controller : 'FICCoinCtrl',
     access : {
       requiredLogin : true
     }
-  }).when('/ficnetwork_coins', {
-    templateUrl : 'pages/ficnetwork_coins.html',
-    controller : 'FicCoinCtrl',
+  }).when('/fic_address', {
+    templateUrl : 'pages/fic/address.html',
+    controller : 'FICAddressCtrl',
     access : {
       requiredLogin : true
     }
-  }).when('/ficnetwork_claim', {
-    templateUrl : 'pages/ficnetwork_claim.html',
-    controller : 'FicClaimCtrl',
+  }).when('/fic_claim', {
+    templateUrl : 'pages/fic/claim.html',
+    controller : 'FICClaimCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/fic_history', {
+    templateUrl : 'pages/fic/history.html',
+    controller : 'FICHistoryCtrl',
     access : {
       requiredLogin : true
     }

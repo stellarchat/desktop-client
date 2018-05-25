@@ -23,10 +23,10 @@
               {{addr.remaining['0'] | number}}
             </td>
             <td>
-              0 {{ 'days' | translate }}
+              {{ 'now' | translate }}
             </td>
             <td>
-              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')" translate="claim_unlock">Claim & Unlock</button>
               <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['0'] > 0">—</button>
             </td>
           </tr>
@@ -38,10 +38,11 @@
               {{addr.remaining['90'] | number}}
             </td>
             <td>
-              90 {{ 'days' | translate }}
+              {{availableIn['90']}} {{ 'days' | translate }}
             </td>
             <td>
-              <button ng-show="addr.remaining['90'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button ng-show="addr.remaining['90'] > 0 && availableIn['90'] > 0" class="btn btn-success" ng-click="claim(key, 90)">{{'claim' | translate}}</button>
+              <button ng-show="addr.remaining['90'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')" ng-disabled="availableIn['90'] > 0">{{'unlock' | translate}}</button>
               <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['90'] > 0">—</button>
             </td>
           </tr>
@@ -53,10 +54,11 @@
               {{addr.remaining['180'] | number}}
             </td>
             <td>
-              180 {{ 'days' | translate }}
+              {{availableIn['180']}} {{ 'days' | translate }}
             </td>
             <td>
-              <button ng-show="addr.remaining['180'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')">{{'claim' | translate}}</button>
+              <button ng-show="addr.remaining['180'] > 0 && availableIn['180'] > 0" class="btn btn-success" ng-click="claim(key, 180)">{{'claim' | translate}}</button>
+              <button ng-show="addr.remaining['180'] > 0" class="btn btn-success" ng-click="claim(key, 180)" ng-disabled="availableIn['180'] > 0">{{'unlock' | translate}}</button>
               <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['180'] > 0">—</button>
             </td>
           </tr>

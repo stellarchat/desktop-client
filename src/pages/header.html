@@ -31,9 +31,8 @@
 	        </li>
 	        <li ng-class="{active:isActive('/ico')}" ng-show="currentNetwork.tabs.indexOf('ico') > -1"><a href ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
           <li ng-class="{active:isActive('/sign_offline')}" ng-show="currentNetwork.tabs.indexOf('signoffline') > -1"><a href ng-click="goTo('/sign_offline')">{{'sign_offline' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/ico')}" ng-show="currentNetwork.tabs.indexOf('ico') > -1"><a href ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
-          <li ng-class="{active:isActive('/ficnetwork') || isActive('/ficnetwork_coins') || isActive('/ficnetwork_claim')}" ng-show="currentNetwork.tabs.indexOf('ficnetwork') > -1">
-	        	<a href ng-click="goTo('/ficnetwork')">{{'ficnetwork' | translate}}</a>
+          <li ng-class="{active:isActive('/fic_coins') || isActive('/fic_address') || isActive('/fic_claim' || isActive('/fic_history'))}" ng-show="currentNetwork.tabs.indexOf('ficnetwork') > -1">
+	        	<a href="javascript:" ng-click="goTo('/fic_coins')">{{'ficnetwork' | translate}}</a>
 	        </li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
@@ -60,12 +59,12 @@
 		    </ul>
 		</div>
 	</div>
-	<div ng-show="isActive('/ficnetwork') || isActive('/ficnetwork_coins') || isActive('/ficnetwork_claim')" class="subnav">
+	<div ng-show="isActive('/fic_address') ||isActive('/fic_coins') || isActive('/fic_claim') || isActive('/fic_history')" class="subnav">
 		  <div class="container">
 		    <ul>
-		      <li ng-class="{active:isActive('/ficnetwork')}"><a href="javascript:" ng-click="goTo('/ficnetwork')">{{'ficnetwork_address' | translate}}</a></li>
-		      <li ng-class="{active:isActive('/ficnetwork_coins')}"><a href="javascript:" ng-click="goTo('/ficnetwork_coins')">{{'ficnetwork_coins' | translate}}</a></li>
-		      <li ng-class="{active:isActive('/ficnetwork_claim')}"><a href="javascript:" ng-click="goTo('/ficnetwork_claim')">{{'ficnetwork_claim' | translate}}</a></li>
+          <li ng-class="{active:isActive('/fic_coins')}"><a href="javascript:" ng-click="goTo('/fic_coins')">{{'ficnetwork_coins' | translate}}</a></li>
+          <li ng-class="{active:isActive('/fic_address')}"><a href="javascript:" ng-click="goTo('/fic_address')">{{'ficnetwork_address' | translate}}</a></li>
+		      <li ng-class="{active:isActive('/fic_history')}"><a href="javascript:" ng-click="goTo('/fic_history')">{{'ficnetwork_history' | translate}}</a></li>
 		    </ul>
 		</div>
 	</div>

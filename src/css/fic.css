@@ -75,3 +75,7 @@ input::-webkit-calendar-picker-indicator {
   background: #eee;
   margin: 5px 0 15px;
 }
+.HistoryTable-header .left {
+	text-align: left;
+	padding-left: 1em;
+}
