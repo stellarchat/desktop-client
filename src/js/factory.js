@@ -89,7 +89,11 @@ myApp.factory('SettingFactory', function($window) {
       return $window.localStorage[`network_type`] || this.setNetworkType();
     },
     getCurrentNetwork : function() {
-      return this.NETWORKS[this.getNetworkType()];
+      var network = this.NETWORKS[this.getNetworkType()];
+      if (this.getNetworkType() === 'other') {
+        network.coin.code = this.getCoin();
+      }
+      return network;
     },
     setStellarUrl : function(url) {
       return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].knownHorizons[0];
