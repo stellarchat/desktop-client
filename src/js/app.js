@@ -255,6 +255,9 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
       return StellarApi.isValidAddress(address);
     }
     $rootScope.currentNetwork = SettingFactory.getCurrentNetwork();
+    $rootScope.isPublicNetwork = function() {
+      return this.currentNetwork.name == "Stellar Public Network";
+    }
 
     $rootScope.isLangCN = function() {
       return SettingFactory.getLang() == 'cn';

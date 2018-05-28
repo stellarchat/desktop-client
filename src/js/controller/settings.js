@@ -25,20 +25,21 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
     $scope.fed_network = SettingFactory.getFedNetwork();
     $scope.fed_ripple  = SettingFactory.getFedRipple();
     $scope.fed_bitcoin = SettingFactory.getFedBitcoin();
-    $scope.set = function(network) {
-      $scope.network_type = network;
-      $scope.network_horizon = SettingFactory.NETWORKS[network].knownHorizons[0];
-      if(network === 'other') {
-        $scope.network_passphrase = undefined;
-        $scope.network_coin = undefined;
+    $scope.set = function(type) {
+      $scope.network_type = type;
+      $scope.network_horizon = SettingFactory.getStellarUrl(type);
+      $scope.network = SettingFactory.NETWORKS[type];
+      if(type === 'other') {
+        $scope.network_passphrase = SettingFactory.getNetPassphrase(type);
+        $scope.network_coin = SettingFactory.getCoin(type);
       }
     }
     $scope.save = function(mode) {
       $scope.network_error = "";
       if (mode == 'network') {
         if ($scope.active_network !== $scope.network_type ||
-            $scope.active_horizon !== $scope.network_passphrase ||
-            $scope.active_passphrase !== $scope.network_horizon ||
+            $scope.active_horizon !== $scope.network_horizon ||
+            $scope.active_passphrase !== $scope.network_passphrase ||
             $scope.active_coin !== $scope.network_coin) {
           try {
             SettingFactory.setNetworkType($scope.network_type);

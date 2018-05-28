@@ -53,10 +53,20 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
 
     var tradepair = SettingFactory.getTradepair();
 
-    $scope.base_code   = tradepair.base_code;
-    $scope.base_issuer = tradepair.base_issuer;
-    $scope.counter_code   = tradepair.counter_code;
-    $scope.counter_issuer = tradepair.counter_issuer;
+    if (validPair(tradepair.base_code, tradepair.base_issuer)) {
+      $scope.base_code   = tradepair.base_code;
+      $scope.base_issuer = tradepair.base_issuer;
+    } else {
+      $scope.base_code   = $rootScope.currentNetwork.coin.code;
+      $scope.base_issuer = null;
+    }
+    if (validPair(tradepair.counter_code, tradepair.counter_issuer)) {
+      $scope.counter_code   = tradepair.counter_code;
+      $scope.counter_issuer = tradepair.counter_issuer;
+    } else {
+      $scope.counter_code   = $rootScope.currentNetwork.coin.code;
+      $scope.counter_issuer = null;
+    }
     $scope.savePair = function() {
       SettingFactory.setTradepair($scope.base_code, $scope.base_issuer, $scope.counter_code, $scope.counter_issuer);
     }
@@ -364,5 +374,16 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
       }
       return code == $rootScope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
-
+    
+    function validPair(code, issuer) {
+      if (code == $rootScope.currentNetwork.coin.code) {
+        return true;
+      }
+      try {
+        new StellarSdk.Asset(code, issuer);
+        return true;
+      } catch(e) {
+        return false;
+      }
+    }
   } ]);

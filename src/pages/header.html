@@ -32,8 +32,7 @@
 	        <li ng-class="{active:isActive('/ico')}" ng-show="currentNetwork.tabs.indexOf('ico') > -1"><a href="javascript:" ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	      	<li ng-show="isTestNetwork()"><a href="javascript:"  ng-click="goTo('/settings')"><i class="fa fa-exclamation-triangle"></i> {{'test_net' | translate}}</a></li>
-	      	<li ng-show="isOtherNetwork()"><a href="javascript:"  ng-click="goTo('/settings')"><i class="fa fa-exclamation-triangle"></i> {{'other_net' | translate}}</a></li>
+	      	<li ng-hide="isPublicNetwork()"><a href="javascript:"  ng-click="goTo('/settings')"><i class="fa fa-exclamation-triangle"></i> {{currentNetwork.name | translate}}</a></li>
 	        <li>
 	        	<a href="javascript:"  ng-click="goTo('/security')" title="{{address}}">
 	        		<span class="glyphicon glyphicon-user"></span>
