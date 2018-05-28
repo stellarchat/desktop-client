@@ -96,22 +96,23 @@ myApp.factory('SettingFactory', function($window) {
       return network;
     },
     setStellarUrl : function(url) {
-      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url || this.NETWORKS[this.getNetworkType()].knownHorizons[0];
+      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] = url;
     },
-    getStellarUrl : function() {
-      return $window.localStorage[`network_horizon/${this.getNetworkType()}`] || this.setStellarUrl();
+    getStellarUrl : function(type) {
+      type = type || this.getNetworkType();
+      return $window.localStorage[`network_horizon/${type}`] || this.NETWORKS[type].knownHorizons[0];
     },
     setNetPassphrase : function(val) {
       return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()].networkPassphrase;
     },
-    getNetPassphrase : function() {
-      return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].networkPassphrase;
+    getNetPassphrase : function(type) {
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_passphrase/${type || this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].networkPassphrase;
     },
     setCoin : function(val) {
       return this.getNetworkType() === 'other' ? $window.localStorage[`network_coin/${this.getNetworkType()}`] = val : this.NETWORKS[this.getNetworkType()].coin.code;
     },
-    getCoin : function() {
-      return this.getNetworkType() === 'other' ? $window.localStorage[`network_coin/${this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].coin.code;
+    getCoin : function(type) {
+      return this.getNetworkType() === 'other' ? $window.localStorage[`network_coin/${type || this.getNetworkType()}`] : this.NETWORKS[this.getNetworkType()].coin.code;
     },
     getAllowHttp : function() {
       return this.NETWORKS[this.getNetworkType()].allowHTTP;
