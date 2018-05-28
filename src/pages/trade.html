@@ -69,14 +69,14 @@
 						</div>
 						<div class="row__shareOption">
 							<button class="s-button btn btn-success"
-								ng-click="pick('base', '{{currentNetwork.coin.code}}', '')"
-								ng-disabled="isBase('{{currentNetwork.coin.code}}', '')"
+								ng-click="pick('base', currentNetwork.coin.code, '')"
+								ng-disabled="isBase(currentNetwork.coin.code, '')"
 								translate="as_base">As Base Asset</button>
 						</div>
 						<div class="row__shareOption">
 							<button class="s-button btn btn-success"
-								ng-click="pick('counter', '{{currentNetwork.coin.code}}', '')"
-								ng-disabled="isCounter('{{currentNetwork.coin.code}}', '')"
+								ng-click="pick('counter', currentNetwork.coin.code, '')"
+								ng-disabled="isCounter(currentNetwork.coin.code, '')"
 								translate="as_counter">As Counter Asset</button>
 						</div>
 					</div>
