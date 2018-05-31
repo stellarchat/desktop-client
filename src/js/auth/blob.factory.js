@@ -28,6 +28,28 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     });
   };
 
+
+  // Blob operations - do NOT change the mapping of existing ops!
+  const BLOB_OPS = {
+    // Special
+    noop: 0,
+
+    // Simple ops
+    set: 16,
+    unset: 17,
+    extend: 18,
+
+    // Meta ops
+    push: 32,
+    pop: 33,
+    shift: 34,
+    unshift: 35,
+    filter: 36
+  };
+  const BLOB_OPS_REVERSE = {};
+  for (const name in BLOB_OPS) BLOB_OPS_REVERSE[BLOB_OPS[name]] = name;
+
+
   function normalizeSubcommands(subcommands, compress) {
     // Normalize parameter structure
     if ("number" === typeof subcommands[0] ||
@@ -48,7 +70,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     // Normalize op name and convert strings to numeric codes
     subcommands = subcommands.map(function (subcommand) {
       if ("string" === typeof subcommand[0]) {
-        subcommand[0] = BlobObj.ops[subcommand[0]];
+        subcommand[0] = BLOB_OPS[subcommand[0]];
       }
       if ("number" !== typeof subcommand[0]) {
         throw new Error("Invalid op in subcommand");
@@ -169,7 +191,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     applyUpdate(op, path, params, callback) {
       // Exchange from numeric op code to string
       if ("number" === typeof op) {
-        op = BlobObj.opsReverseMap[op];
+        op = BLOB_OPS_REVERSE[op];
       }
       if ("string" !== typeof op) {
         throw new Error("Blob update op code must be a number or a valid op id string");
@@ -295,31 +317,6 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
 
   }
-
-  // Blob operations
-  // Do NOT change the mapping of existing ops
-  BlobObj.ops = {
-    // Special
-    "noop": 0,
-
-    // Simple ops
-    "set": 16,
-    "unset": 17,
-    "extend": 18,
-
-    // Meta ops
-    "push": 32,
-    "pop": 33,
-    "shift": 34,
-    "unshift": 35,
-    "filter": 36
-  };
-
-  BlobObj.opsReverseMap = {};
-  for (const name in BlobObj.ops) {
-    BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
-  }
-
 
   return BlobObj;
 
