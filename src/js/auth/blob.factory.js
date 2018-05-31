@@ -7,16 +7,16 @@
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
-var fs = require('fs');
-var sjcl = require('sjcl');
+const fs = require('fs');
+const sjcl = require('sjcl');
 
 myApp.factory('BlobFactory', ['$rootScope', function ($scope){
-  var CRYPT_CONFIG = {
+  const CRYPT_CONFIG = {
     ks: 256,  // key size
     iter: 1000,  // iterations (key derivation)
   };
 
-  var unescapeToken = function(str) {
+  const unescapeToken = function(str) {
     return str.replace(/~./g, function(m) {
       switch (m) {
       case "~0":
@@ -80,7 +80,10 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
   }
 
-
+  /* class BlobObj
+   *
+   * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
+   */
   class BlobObj {
     constructor(password, walletfile){
       this.password = password;
@@ -112,8 +115,8 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
           return;
         }
 
-        var blob = new BlobObj(password, walletfile);
-        var decryptedBlob = blob.decrypt(data);
+        const blob = new BlobObj(password, walletfile);
+        const decryptedBlob = blob.decrypt(data);
 
         if (!decryptedBlob) {
           callback(new Error("Error while decrypting blob"));
@@ -136,10 +139,9 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      * @param {string} opts.account
      * @param {string} opts.masterkey
      * @param {object=} opts.oldUserBlob
-     * @param {function} callback
      */
     static create(opts, callback) {
-      var blob = new BlobObj(opts.password, opts.walletfile);
+      const blob = new BlobObj(opts.password, opts.walletfile);
       blob.data = {
         masterkey: opts.masterkey,
         account_id: opts.account,
@@ -152,18 +154,16 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
     // Store blob in a file
     persist(callback) {
-      var blob = this;
-
-      console.log('blob persist:', blob.data);
-      fs.writeFile(this.walletfile, this.encrypt(), function(err){
-        callback(err, blob);
+      console.log('blob persist:', this.data);
+      fs.writeFile(this.walletfile, this.encrypt(), (err) => {
+        callback(err, this);
       });
     }
 
     // Store regular key wallet in a file
     persistRegular(walletfile, password, callback) {
-      var self = this;
-      var regularKeyBlob = new BlobObj(password, walletfile);
+      const self = this;
+      const regularKeyBlob = new BlobObj(password, walletfile);
 
       regularKeyBlob.data = {
         regularKey: self.data.regularKey,
@@ -195,10 +195,9 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
 
     decrypt(data) {
-      var blob = this;
-      function decrypt(priv, ciphertext) {
-        blob.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
-        return blob;
+      const decrypt = (priv, ciphertext) => {
+        this.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
+        return this;
       }
 
       try {
@@ -208,15 +207,6 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
         console.log(e.stack);
         return false;
       }
-    }
-
-    static escapeToken(token) {
-      return token.replace(/[~/]/g, function (key) { return key === "~" ? "~0" : "~1"; });
-    }
-
-    // TODO: remove
-    escapeToken(token) {
-      return BlobObj.escapeToken(token);
     }
 
     applyUpdate(op, path, params, callback) {
@@ -229,9 +219,9 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       }
 
       // Separate each step in the "pointer"
-      var pointer = path.split("/");
+      const pointer = path.split("/");
 
-      var first = pointer.shift();
+      const first = pointer.shift();
       if (first !== "") {
         throw new Error("Invalid JSON pointer: "+path);
       }
@@ -246,10 +236,9 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       });
     }
 
-    _traverse(context, pointer,
-      originalPointer, op, params) {
-      var _this = this;
-      var part = unescapeToken(pointer.shift());
+    _traverse(context, pointer, originalPointer, op, params) {
+      const _this = this;
+      let part = unescapeToken(pointer.shift());
 
       if (Array.isArray(context)) {
         if (part === '-') {
@@ -314,12 +303,12 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
             if ("object" === typeof element &&
                 element.hasOwnProperty(params[0]) &&
                 element[params[0]] === params[1]) {
-              var subpointer = originalPointer+"/"+i;
-              var subcommands = normalizeSubcommands(params.slice(2));
+              const subpointer = originalPointer+"/"+i;
+              const subcommands = normalizeSubcommands(params.slice(2));
 
               subcommands.forEach(function (subcommand) {
-                var op = subcommand[0];
-                var pointer = subpointer+subcommand[1];
+                const op = subcommand[0];
+                const pointer = subpointer+subcommand[1];
                 _this.applyUpdate(op, pointer, subcommand.slice(2));
               });
             }
@@ -361,7 +350,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      * The subcommands can be any commands with the pointer parameter left out.
      */
     filter(pointer, field, value, subcommands, callback) {
-      var params = Array.prototype.slice.apply(arguments);
+      let params = Array.prototype.slice.apply(arguments);
       if ("function" === typeof params[params.length-1]) {
         callback = params.pop();
       }
@@ -395,7 +384,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   };
 
   BlobObj.opsReverseMap = {};
-  for (var name in BlobObj.ops) {
+  for (const name in BlobObj.ops) {
     BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
   }
 
