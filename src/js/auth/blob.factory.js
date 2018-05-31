@@ -3,7 +3,7 @@
  * User blob storage for desktop client
  */
 
-/* global $, angular, myApp, require */
+/* global angular, myApp, require */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
@@ -71,45 +71,22 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
   }
 
-  class BlobError extends Error {
-    constructor(message, backend) {
-      super();
-      this.name = "BlobError";
-      this.message = message || "";
-      this.backend = backend || "generic";
-    }
-  }
-
   /* class BlobObj
    *
    * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
    */
   class BlobObj {
-    constructor(password, walletfile){
+    constructor(password, walletfile, data){
       this.password = password;
       this.walletfile = walletfile;
-      this.data = {};
-    }
-
-    /**
-     * Attempts to retrieve the blob.
-     */
-    static get(walletfile, callback){
-      fs.readFile(walletfile, 'utf8', function(err, data){
-        if (err) {
-          callback(err);
-          return;
-        }
-
-        callback(null, data);
-      });
+      this.data = data;
     }
 
     /**
      * Attempts to retrieve and decrypt the blob.
      */
     static init(walletfile, password, callback) {
-      BlobObj.get(walletfile, function (err, data) {
+      fs.readFile(walletfile, 'utf8', function(err, data){
         if (err) {
           callback(err);
           return;
@@ -141,13 +118,12 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      * @param {object=} opts.oldUserBlob
      */
     static create(opts, callback) {
-      const blob = new BlobObj(opts.password, opts.walletfile);
-      blob.data = {
+      const blob = new BlobObj(opts.password, opts.walletfile, {
         masterkey: opts.masterkey,
         account_id: opts.account,
         contacts: [],
         created: (new Date()).toJSON()
-      };
+      });
 
       blob.persist(callback);
     }
@@ -160,30 +136,11 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       });
     }
 
-    // Store regular key wallet in a file
-    persistRegular(walletfile, password, callback) {
-      const self = this;
-      const regularKeyBlob = new BlobObj(password, walletfile);
-
-      regularKeyBlob.data = {
-        regularKey: self.data.regularKey,
-        sequence: self.data.sequence,
-        fee: self.data.fee,
-        defaultDirectory: self.data.defaultDirectory,
-        lastSeenTxDate: self.data.lastSeenTxDate,
-        account_id: self.data.account_id,
-        contacts: [],
-        created: (new Date()).toJSON()
-      };
-
-      regularKeyBlob.persist(callback);
-    }
-
     encrypt() {
       // Filter Angular metadata before encryption
-      if ('object' === typeof this.data &&
-          'object' === typeof this.data.contacts)
+      if ('object' === typeof this.data && 'object' === typeof this.data.contacts) {
         this.data.contacts = angular.fromJson(angular.toJson(this.data.contacts));
+      }
 
       // Encryption
       return btoa(sjcl.encrypt(""+this.password.length+'|'+this.password,
@@ -273,63 +230,38 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       }
 
       switch (op) {
-      case "set":
-        context[part] = params[0];
-        break;
-      case "unset":
-        if (Array.isArray(context)) {
-          context.splice(part, 1);
-        } else {
-          delete context[part];
+        case "unshift": {
+          if ("undefined" === typeof context[part]) {
+            context[part] = [];
+          } else if (!Array.isArray(context[part])) {
+            throw new Error("Operator 'unshift' must be applied to an array.");
+          }
+          context[part].unshift(params[0]);
+          break;
         }
-        break;
-      case "extend":
-        if ("object" !== typeof context[part]) {
-          throw new Error("Tried to extend a non-object");
-        }
-        $.extend(context[part], params[0]);
-        break;
-      case "unshift":
-        if ("undefined" === typeof context[part]) {
-          context[part] = [];
-        } else if (!Array.isArray(context[part])) {
-          throw new Error("Operator 'unshift' must be applied to an array.");
-        }
-        context[part].unshift(params[0]);
-        break;
-      case "filter":
-        if (Array.isArray(context[part])) {
-          context[part].forEach(function (element, i) {
-            if ("object" === typeof element &&
-                element.hasOwnProperty(params[0]) &&
-                element[params[0]] === params[1]) {
-              const subpointer = originalPointer+"/"+i;
-              const subcommands = normalizeSubcommands(params.slice(2));
+        case "filter": {
+          if (Array.isArray(context[part])) {
+            context[part].forEach(function (element, i) {
+              if ("object" === typeof element &&
+                  element.hasOwnProperty(params[0]) &&
+                  element[params[0]] === params[1]) {
+                const subpointer = originalPointer+"/"+i;
+                const subcommands = normalizeSubcommands(params.slice(2));
 
-              subcommands.forEach(function (subcommand) {
-                const op = subcommand[0];
-                const pointer = subpointer+subcommand[1];
-                _this.applyUpdate(op, pointer, subcommand.slice(2));
-              });
-            }
-          });
+                subcommands.forEach(function (subcommand) {
+                  const op = subcommand[0];
+                  const pointer = subpointer+subcommand[1];
+                  _this.applyUpdate(op, pointer, subcommand.slice(2));
+                });
+              }
+            });
+          }
+          break;
         }
-        break;
-      default:
-        throw new Error("Unsupported op "+op);
+        default: {
+          throw new Error("Unsupported op "+op);
+        }
       }
-    }
-
-    set(pointer, value, callback) {
-      this.applyUpdate('set', pointer, [value], callback);
-    }
-
-    unset(pointer, callback) {
-      this.applyUpdate('unset', pointer, [], callback);
-    }
-
-    extend(pointer, value, callback) {
-      this.applyUpdate('extend', pointer, [value], callback);
     }
 
     /**
@@ -387,8 +319,6 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   for (const name in BlobObj.ops) {
     BlobObj.opsReverseMap[BlobObj.ops[name]] = name;
   }
-
-  BlobObj.BlobError = BlobError;
 
 
   return BlobObj;
