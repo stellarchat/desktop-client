@@ -1,79 +1,79 @@
 /* global angular, myApp */
 
 myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
+  let _blob;
+  let _userBlob;
+  let _password;
+  let _walletfile;
+
   return {
-    isLogged: function() {
-      if ($window.sessionStorage.userBlob || $window.sessionStorage.blob) {
-        return true;
-      } else {
-        delete this.blob;
-        delete this.userBlob;
-        delete this.password;
-        delete this.walletfile;
-        return false;
-      }
-    },
-    setBlob: function(blob) {
-      this.blob       = blob;
-      this.userBlob   = JSON.stringify(blob.data);
-      this.password   = blob.password;
-      this.walletfile = blob.walletfile;
-      $window.sessionStorage.userBlob   = this.userBlob;
-      $window.sessionStorage.password   = this.password;
-      $window.sessionStorage.walletfile = this.walletfile;
-    },
-    getBlobFromSession: function(callback) {
-      this.userBlob   = $window.sessionStorage.userBlob;
-      this.password   = $window.sessionStorage.password;
-      this.walletfile = $window.sessionStorage.walletfile;
 
-      BlobFactory.init(self.walletfile, self.password, (err, blob) => {
+    get userBlob() {
+      return _userBlob;
+    },
+
+    isLogged() {
+      return 'userBlob' in $window.sessionStorage;
+    },
+
+    setBlob(blob) {
+      _blob       = blob;
+      _userBlob   = JSON.stringify(blob.data);
+      _password   = blob.password;
+      _walletfile = blob.walletfile;
+      $window.sessionStorage.userBlob   = _userBlob;
+      $window.sessionStorage.password   = _password;
+      $window.sessionStorage.walletfile = _walletfile;
+    },
+
+    getBlobFromSession(callback) {
+      _userBlob   = $window.sessionStorage.userBlob;
+      _password   = $window.sessionStorage.password;
+      _walletfile = $window.sessionStorage.walletfile;
+
+      BlobFactory.init(_walletfile, _password, (err, blob) => {
         console.log('Init blob from session', blob);
-        this.blob = blob;
-        this.userBlob = JSON.stringify(blob.data);
-        $window.sessionStorage.userBlob = this.userBlob;
-
-        if (typeof callback === 'function') callback(err, blob);
+        this.setBlob(blob);
+        if(typeof callback === 'function') callback(err, blob);
       });
     },
-    addContact: function(contact, callback){
-      this.blob.unshift("/contacts", contact, callback);
+
+    addContact(contact, callback) {
+      _blob.unshift("/contacts", contact, callback);
     },
-    updateContact: function(name, contact, callback){
-      this.blob.filter('/contacts', 'name', name, 'extend', '', contact, callback);
+
+    updateContact(name, contact, callback) {
+      _blob.filter('/contacts', 'name', name, 'extend', '', contact, callback);
     },
-    deleteContact: function(name, callback){
-      this.blob.filter('/contacts', 'name', name, 'unset', '', callback);
+
+    deleteContact(name, callback) {
+      _blob.filter('/contacts', 'name', name, 'unset', '', callback);
     },
-    getContact: function(value) {
+
+    getContact(value) {
       if (!value) return false;
-      var contacts = this.blob.data.contacts;
+      const contacts = _blob.data.contacts;
       for (const contact of contacts) {
         if (contact.name === value || contact.address === value) return contact;
       }
       return false;
-    }
-  };
-});
-
-myApp.factory('UserAuthFactory', function($window, $location, $http, AuthenticationFactory, BlobFactory) {
-  return {
-    logout: function() {
-      if (AuthenticationFactory.isLogged()) {
-        delete AuthenticationFactory.blob;
-        delete AuthenticationFactory.userBlob;
-        delete AuthenticationFactory.password;
-        delete AuthenticationFactory.walletfile;
-
-        delete $window.sessionStorage.userBlob;
-        delete $window.sessionStorage.password;
-        delete $window.sessionStorage.walletfile;
-
-        $location.path("/login");
-      }
     },
-    register: function(opts, callback){
-      var options = {
+
+    logout() {
+      if(!this.isLogged()) return;
+
+      _blob = undefined;
+      _userBlob = undefined;
+      _password = undefined;
+      _walletfile = undefined;
+
+      delete $window.sessionStorage.userBlob;
+      delete $window.sessionStorage.password;
+      delete $window.sessionStorage.walletfile;
+    },
+
+    register(opts, callback){
+      const options = {
         'account': opts.account,
         'password': opts.password,
         'masterkey': opts.masterkey,
@@ -83,11 +83,12 @@ myApp.factory('UserAuthFactory', function($window, $location, $http, Authenticat
         if (err) {
           return callback(err);
         }
-        console.log("UserAuthFactory: registration succeeded", blob);
+        console.log("AuthenticationFactory: registration succeeded", blob);
         callback(null, blob, 'local');
       });
     },
-    openfile: function(walletfile, password, callback) {
+
+    openfile(walletfile, password, callback) {
       BlobFactory.init(walletfile, password, function (err, blob) {
         if (err) {
           callback(err);
@@ -97,8 +98,11 @@ myApp.factory('UserAuthFactory', function($window, $location, $http, Authenticat
         callback(null, blob);
       });
     }
+
   }
+
 });
+
 
 myApp.factory('TokenInterceptor', function($q, $window) {
   return {
@@ -119,49 +123,46 @@ myApp.factory('TokenInterceptor', function($q, $window) {
   };
 });
 
+
 myApp.factory('FileDialog', ['$rootScope', function($scope) {
-  var callDialog = function(dialog, callback) {
-    dialog.addEventListener('change', function() {
-      var result = dialog.value;
+  const _callDialog = (dialog, callback) => {
+    dialog.addEventListener('change', () => {
+      const result = dialog.value;
       callback(result);
     }, false);
     dialog.click();
   };
 
-  var dialogs = {};
+  return {
+    saveAs(callback, defaultFilename, acceptTypes) {
+      const dialog = document.createElement('input');
+      dialog.type = 'file';
+      dialog.nwsaveas = defaultFilename || '';
+      if (angular.isArray(acceptTypes)) {
+        dialog.accept = acceptTypes.join(',');
+      } else if (angular.isString(acceptTypes)) {
+        dialog.accept = acceptTypes;
+      }
+      _callDialog(dialog, callback);
+    },
 
-  dialogs.saveAs = function(callback, defaultFilename, acceptTypes) {
-    var dialog = document.createElement('input');
-    dialog.type = 'file';
-    dialog.nwsaveas = defaultFilename || '';
-    if (angular.isArray(acceptTypes)) {
-      dialog.accept = acceptTypes.join(',');
-    } else if (angular.isString(acceptTypes)) {
-      dialog.accept = acceptTypes;
+    openFile(callback, multiple, acceptTypes) {
+      const dialog = document.createElement('input');
+      dialog.type = 'file';
+      if (multiple === true) dialog.multiple = 'multiple';
+      if (angular.isArray(acceptTypes)) {
+        dialog.accept = acceptTypes.join(',');
+      } else if (angular.isString(acceptTypes)) {
+        dialog.accept = acceptTypes;
+      }
+      _callDialog(dialog, callback);
+    },
+
+    openDir(callback) {
+      const dialog = document.createElement('input');
+      dialog.type = 'file';
+      dialog.nwdirectory = 'nwdirectory';
+      _callDialog(dialog, callback);
     }
-    callDialog(dialog, callback);
-  };
-
-  dialogs.openFile = function(callback, multiple, acceptTypes) {
-    var dialog = document.createElement('input');
-    dialog.type = 'file';
-    if (multiple === true) {
-      dialog.multiple = 'multiple';
-    }
-    if (angular.isArray(acceptTypes)) {
-      dialog.accept = acceptTypes.join(',');
-    } else if (angular.isString(acceptTypes)) {
-      dialog.accept = acceptTypes;
-    }
-    callDialog(dialog, callback);
-  };
-
-  dialogs.openDir = function(callback) {
-    var dialog = document.createElement('input');
-    dialog.type = 'file';
-    dialog.nwdirectory = 'nwdirectory';
-    callDialog(dialog, callback);
-  };
-
-  return dialogs;
+  }
 } ]);

@@ -1,7 +1,7 @@
 /* global myApp, nw */
 
-myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'UserAuthFactory', 'AuthenticationFactory',
-  function($scope, $rootScope, $window, $location, FileDialog, UserAuthFactory, AuthenticationFactory) {
+myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
+  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
     $scope.fileInputClick = function() {
       FileDialog.openFile(function(filename) {
         $scope.$apply(function() {
@@ -16,7 +16,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
         return;
       }
       $scope.backendMessages = [];
-      UserAuthFactory.openfile($scope.walletfile, $scope.password, function(err, blob){
+      AuthenticationFactory.openfile($scope.walletfile, $scope.password, function(err, blob){
         $scope.$apply(function(){
           if (err) {
             $scope.error = 'Login failed: Wallet file or password is wrong.';
@@ -37,7 +37,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
 
     $scope.submitAddress = function(){
       $scope.backendMessages = [];
-      UserAuthFactory.openfile($scope.walletfile, $scope.password, function(err, blob){
+      AuthenticationFactory.openfile($scope.walletfile, $scope.password, function(err, blob){
         $scope.$apply(function(){
           if (err) {
             $scope.error = 'Login failed: Wallet file or password is wrong.';
@@ -58,8 +58,8 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
   }
 ]);
 
-myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'UserAuthFactory', 'AuthenticationFactory', 'StellarApi',
-  function($scope, $rootScope, $window, $location, FileDialog, UserAuthFactory, AuthenticationFactory, StellarApi) {
+myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory', 'StellarApi',
+  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory, StellarApi) {
     $scope.password = '';
     $scope.passwordSet = {};
     $scope.password1 = '';
@@ -116,7 +116,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
         'walletfile': $scope.walletfile
       };
       console.log(options);
-      UserAuthFactory.register(options, function(err, blob){
+      AuthenticationFactory.register(options, function(err, blob){
         if (err) {
           console.error('Register failed!', err);
           if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
