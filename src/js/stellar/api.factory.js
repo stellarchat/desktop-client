@@ -16,7 +16,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
     };
 
     api.logout = function() {
-      this.adress = undefined;
+      this.address = undefined;
       this.seed = undefined;
       this.balances = {};
       this.subentry = 0;
