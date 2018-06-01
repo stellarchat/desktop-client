@@ -23,20 +23,17 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       $window.sessionStorage.walletfile = this.walletfile;
     },
     getBlobFromSession: function(callback) {
-      var self = this;
-      self.userBlob   = $window.sessionStorage.userBlob;
-      self.password   = $window.sessionStorage.password;
-      self.walletfile = $window.sessionStorage.walletfile;
+      this.userBlob   = $window.sessionStorage.userBlob;
+      this.password   = $window.sessionStorage.password;
+      this.walletfile = $window.sessionStorage.walletfile;
 
-      BlobFactory.init(self.walletfile, self.password, function(err, blob){
+      BlobFactory.init(self.walletfile, self.password, (err, blob) => {
         console.log('Init blob from session', blob);
-        self.blob = blob;
-        self.userBlob = JSON.stringify(blob.data);
-        $window.sessionStorage.userBlob = self.userBlob;
+        this.blob = blob;
+        this.userBlob = JSON.stringify(blob.data);
+        $window.sessionStorage.userBlob = this.userBlob;
 
-        if (typeof callback === 'function') {
-          callback(err, blob);
-        }
+        if (typeof callback === 'function') callback(err, blob);
       });
     },
     addContact: function(contact, callback){
@@ -51,10 +48,8 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     getContact: function(value) {
       if (!value) return false;
       var contacts = this.blob.data.contacts;
-      for (var i=0;i<contacts.length;i++) {
-        if (contacts[i].name === value || contacts[i].address === value) {
-          return contacts[i];
-        }
+      for (const contact of contacts) {
+        if (contact.name === value || contact.address === value) return contact;
       }
       return false;
     }

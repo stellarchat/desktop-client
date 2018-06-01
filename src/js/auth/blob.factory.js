@@ -11,23 +11,11 @@ const fs = require('fs');
 const sjcl = require('sjcl');
 
 myApp.factory('BlobFactory', ['$rootScope', function ($scope){
+
   const CRYPT_CONFIG = {
     ks: 256,  // key size
     iter: 1000,  // iterations (key derivation)
   };
-
-  const unescapeToken = function(str) {
-    return str.replace(/~./g, function(m) {
-      switch (m) {
-      case "~0":
-        return "~";
-      case "~1":
-        return "/";
-      }
-      throw("Invalid tilde escape: " + m);
-    });
-  };
-
 
   // Blob operations - do NOT change the mapping of existing ops!
   const BLOB_OPS = {
@@ -49,8 +37,19 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
   const BLOB_OPS_REVERSE = {};
   for (const name in BLOB_OPS) BLOB_OPS_REVERSE[BLOB_OPS[name]] = name;
 
+  const unescapeToken = (str) => {
+    return str.replace(/~./g, (m) => {
+      switch (m) {
+      case "~0":
+        return "~";
+      case "~1":
+        return "/";
+      }
+      throw("Invalid tilde escape: " + m);
+    });
+  };
 
-  function normalizeSubcommands(subcommands, compress) {
+  const normalizeSubcommands = (subcommands, compress) => {
     // Normalize parameter structure
     if ("number" === typeof subcommands[0] ||
         "string" === typeof subcommands[0]) {
@@ -97,7 +96,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
    *
    * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
    */
-  class BlobObj {
+  return class BlobObj {
     constructor(password, walletfile, data){
       this.password = password;
       this.walletfile = walletfile;
@@ -108,7 +107,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      * Attempts to retrieve and decrypt the blob.
      */
     static init(walletfile, password, callback) {
-      fs.readFile(walletfile, 'utf8', function(err, data){
+      fs.readFile(walletfile, 'utf8', (err, data) => {
         if (err) {
           callback(err);
           return;
@@ -174,13 +173,13 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
 
     decrypt(data) {
-      const decrypt = (priv, ciphertext) => {
+      const _decrypt = (priv, ciphertext) => {
         this.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
         return this;
       }
 
       try {
-        return decrypt(""+this.password.length+'|'+this.password, atob(data));
+        return _decrypt(""+this.password.length+'|'+this.password, atob(data));
       } catch (e) {
         console.log("client: blob: decryption failed", e.toString());
         console.log(e.stack);
@@ -190,12 +189,8 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
     applyUpdate(op, path, params, callback) {
       // Exchange from numeric op code to string
-      if ("number" === typeof op) {
-        op = BLOB_OPS_REVERSE[op];
-      }
-      if ("string" !== typeof op) {
-        throw new Error("Blob update op code must be a number or a valid op id string");
-      }
+      if ("number" === typeof op) op = BLOB_OPS_REVERSE[op];
+      if ("string" !== typeof op) throw new Error("Blob update op code must be a number or a valid op id string");
 
       // Separate each step in the "pointer"
       const pointer = path.split("/");
@@ -207,11 +202,9 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
       this._traverse(this.data, pointer, path, op, params);
 
-      this.persist(function(err, data) {
+      this.persist((err, data) => {
         console.log('Blob saved');
-        if (typeof callback === 'function') {
-          callback(err, data);
-        }
+        if (typeof callback === 'function') callback(err, data);
       });
     }
 
@@ -247,8 +240,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       }
 
       if (pointer.length !== 0) {
-        return this._traverse(context[part], pointer,
-          originalPointer, op, params);
+        return this._traverse(context[part], pointer, originalPointer, op, params);
       }
 
       switch (op) {
@@ -262,21 +254,22 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
           break;
         }
         case "filter": {
-          if (Array.isArray(context[part])) {
-            context[part].forEach(function (element, i) {
-              if ("object" === typeof element &&
-                  element.hasOwnProperty(params[0]) &&
-                  element[params[0]] === params[1]) {
-                const subpointer = originalPointer+"/"+i;
-                const subcommands = normalizeSubcommands(params.slice(2));
+          if (!Array.isArray(context[part])) break;
 
-                subcommands.forEach(function (subcommand) {
-                  const op = subcommand[0];
-                  const pointer = subpointer+subcommand[1];
-                  _this.applyUpdate(op, pointer, subcommand.slice(2));
-                });
-              }
-            });
+          for (const [i, element] of context[part].entries()) {
+            if ("object" === typeof element
+              && element.hasOwnProperty(params[0])
+              && element[params[0]] === params[1]
+            ) {
+              const subpointer = originalPointer+"/"+i;
+              const subcommands = normalizeSubcommands(params.slice(2));
+
+              subcommands.forEach((subcommand) => {
+                const op = subcommand[0];
+                const pointer = subpointer+subcommand[1];
+                _this.applyUpdate(op, pointer, subcommand.slice(2));
+              });
+            }
           }
           break;
         }
@@ -305,9 +298,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      */
     filter(pointer, field, value, subcommands, callback) {
       let params = Array.prototype.slice.apply(arguments);
-      if ("function" === typeof params[params.length-1]) {
-        callback = params.pop();
-      }
+      if ("function" === typeof params[params.length-1]) callback = params.pop();
       params.shift();
 
       // Normalize subcommands to minimize the patch size
@@ -317,7 +308,5 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     }
 
   }
-
-  return BlobObj;
 
 }]);
