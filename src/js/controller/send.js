@@ -199,54 +199,6 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
         $scope.$apply();
       });
 
-      /*
-		StellarApi.federationServer(domain).then(function(server){
-			server.resolveAddress(prestr).then(function(data){
-				console.debug(prestr, data);
-				$scope.act_loading = false;
-				$scope.send_error.message = '';
-				$scope.real_address = data.account_id;
-
-				if (data.extra_fields) {
-					$scope.extra_fields = data.extra_fields;
-					$scope.extra_assets = data.assets;
-					$scope.mulipleAsset = $scope.extra_assets.length > 1;
-					$scope.service_currency = $scope.extra_assets[0].code + "." + $scope.extra_assets[0].issuer;
-				}
-
-				if (data.memo) {
-					$scope.memo = data.memo.toString();
-					$scope.memo_type = data.memo_type;
-					$scope.memo_provided = true;
-				} else {
-					$scope.memo = '';
-					$scope.memo_provided = false;
-				}
-				$scope.resolveAccountInfo();
-				$scope.$apply();
-			}).catch(function(err){
-				if (snapshot !== $scope.full_address) {
-					return;
-				}
-				console.debug(prestr, err);
-				$scope.real_address = '';
-				if (typeof err == "string") {
-					$scope.send_error.message = err;
-				} else {
-					$scope.send_error.message = err.detail || err.message;
-				}
-				$scope.act_loading = false;
-				$scope.$apply();
-			});
-		}).catch(function(err){
-			if (snapshot !== $scope.full_address) {
-				return;
-			}
-			$scope.send_error.domain = true;
-			$scope.act_loading = false;
-			$scope.$apply();
-		});
-		*/
     };
 
     $scope.$watch('service_currency', function () { $scope.quote(); }, true);
