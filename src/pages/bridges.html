@@ -82,7 +82,7 @@
 					<a ng-switch-when="bitcoin" 
 						href="javascript:" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
-							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.png"></div>
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.svg"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin</span></div>
 						</div>
 					</a>
@@ -100,28 +100,21 @@
 							<div class="brdige_card_content"><span class="brdige_card_code">USDT</span></div>
 						</div>
 					</a>
+					<a ng-switch-when="eth" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/eth.svg"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Ethereum</span></div>
+						</div>
+					</a>
+					<a ng-switch-when="bch" 
+						href="javascript:" ng-click="changeService(svc.name)">
+						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
+							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/bch.svg"></div>
+							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin Cash</span></div>
+						</div>
+					</a>
 				</div>
-			
-				<!-- <a href="javascript:" ng-click="changeService('alipay')">
-					<div ng-class="{brdige_card:true, active:isActive('alipay')}">
-						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/alipay.png"></div>
-						<div class="brdige_card_content"><span class="brdige_card_code" translate="alipay">Alipay</span></div>
-					</div>
-				</a>
-				<a href="javascript:" ng-click="changeService('bank')">
-					<div ng-class="{brdige_card:true, active:isActive('bank')}">
-						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/unionpay.png"></div>
-						<div class="brdige_card_content"><span class="brdige_card_code" translate="bank_card">Bank</span></div>
-					</div>
-				</a>
-				
-				
-				<a href="javascript:" ng-click="changeService('ripple')">
-					<div ng-class="{brdige_card:true, active:isActive('ripple')}">
-						<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
-						<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
-					</div>
-				</a> -->
 			</div>
 			
 			<div class="island__paddedContent">

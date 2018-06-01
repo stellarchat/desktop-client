@@ -84,6 +84,9 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
           }
         }
       }).catch(function(err) {
+        if (err.data && err.data.error) {
+          $scope.deposit[code].how = err.data.error;
+        }
         console.error(err);
       });
     }

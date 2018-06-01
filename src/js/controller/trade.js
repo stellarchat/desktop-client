@@ -374,7 +374,7 @@ myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOr
       }
       return code == $rootScope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
-    
+
     function validPair(code, issuer) {
       if (code == $rootScope.currentNetwork.coin.code) {
         return true;
