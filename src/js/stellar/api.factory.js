@@ -15,25 +15,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       }
     };
 
-    api.logout = function() {
-      this.address = undefined;
-      this.secret = undefined;
-      this.balances = {};
-      this.subentry = 0;
-      this.seq.snapshot = "";
-      this.seq.time = new Date();
-      if (this.closeAccountStream) {
-        this.closeAccountStream();
-        this.closeAccountStream = undefined;
-      }
-      if (this.closeTxStream) {
-        this.closeTxStream();
-        this.closeTxStream = undefined;
-      }
-      orderbook.close();
-      path.close();
-    }
-
     api._updateSeq = function(account) {
       var self = this;
       var now = new Date();
@@ -46,63 +27,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       }
       self.seq.snapshot = account.sequence;
       self.seq.time = now;
-    }
-
-
-    api.random = function() {
-      var keypair = StellarSdk.Keypair.random();
-      this.address = keypair.publicKey();
-      this.secret = keypair.secret();
-      return {address: this.address, secret: this.secret};
-    };
-
-    api.getAddress = function(secret=this.secret) {
-      var keypair = StellarSdk.Keypair.fromSecret(secret);
-      return keypair.publicKey();
-    };
-
-    api.isValidAddress = function(address) {
-      return StellarSdk.StrKey.isValidEd25519PublicKey(address);
-    };
-
-    api.federation = function(fed_url) {
-      return StellarSdk.StellarTomlResolver.resolve(fed_url);
-    };
-
-    api.setServer = function(url, passphrase, allowHttp=false) {
-      if(!url) throw new Error('No URL')
-      console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
-      StellarSdk.Network.use(new StellarSdk.Network(passphrase));
-      this.server = new StellarSdk.Server(url, {allowHttp});
-      history.server = this.server;
-      orderbook.server = this.server;
-      path.server = this.server;
-    };
-
-    api.setAccount = function(address, secret) {
-      this.address = address;
-      this.secret = secret;
-    };
-
-    api.isValidMemo = function(type, memo) {
-      try {
-        switch (type.toUpperCase()) {
-        case 'ID':
-          StellarSdk.Memo.id(memo);
-          break;
-        case 'TEXT':
-          StellarSdk.Memo.text(memo);
-          break;
-        case 'HASH':
-          StellarSdk.Memo.hash(memo);
-          break;
-        default :
-          return 'Unkown Type';
-        }
-      } catch (e) {
-        return e.message;
-      }
-      return '';
     };
 
     api._getMemo = function(type, memo) {
@@ -202,6 +126,134 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       });
     };
 
+    api._updateRootBalance = function(balances) {
+      var self = this;
+      balances = balances || self.balances;
+      var native = 0;
+      var lines = {};
+
+      balances.forEach(function(line){
+        if (line.asset_type == 'native') {
+          native = parseFloat(line.balance);
+        } else {
+          if (!lines[line.asset_code]) {
+            lines[line.asset_code] = {};
+          }
+          var item = {
+            code : line.asset_code,
+            issuer : line.asset_issuer,
+            balance : parseFloat(line.balance),
+            limit : parseFloat(line.limit)
+          };
+          lines[line.asset_code][line.asset_issuer] = item;
+        }
+      });
+      console.log('lines', lines);
+      $scope.balance = native;
+      $scope.lines = lines;
+      $scope.$broadcast("balanceChange");
+    }
+
+    api._offer = function(selling, buying, amount, price, callback) {
+      var self = this;
+      amount = round(amount, 7);
+      console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
+      self.server.loadAccount(self.address).then(function(account){
+        self._updateSeq(account);
+        var op = StellarSdk.Operation.manageOffer({
+          selling: selling,
+          buying: buying,
+          amount: amount.toString(),
+          price : price.toString()
+        });
+        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+        tx.sign(StellarSdk.Keypair.fromSecret(self.secret));
+        return self.server.submitTransaction(tx);
+      }).then(function(txResult){
+        console.log(txResult);
+        callback(null, txResult.hash);
+      }).catch(function(err){
+        console.error('Offer Fail !', err);
+        callback(err, null);
+      });
+    };
+
+
+    api.logout = function() {
+      this.address = undefined;
+      this.secret = undefined;
+      this.balances = {};
+      this.subentry = 0;
+      this.seq.snapshot = "";
+      this.seq.time = new Date();
+      if (this.closeAccountStream) {
+        this.closeAccountStream();
+        this.closeAccountStream = undefined;
+      }
+      if (this.closeTxStream) {
+        this.closeTxStream();
+        this.closeTxStream = undefined;
+      }
+      orderbook.close();
+      path.close();
+    }
+
+    api.random = function() {
+      var keypair = StellarSdk.Keypair.random();
+      this.address = keypair.publicKey();
+      this.secret = keypair.secret();
+      return {address: this.address, secret: this.secret};
+    };
+
+    api.getAddress = function(secret=this.secret) {
+      var keypair = StellarSdk.Keypair.fromSecret(secret);
+      return keypair.publicKey();
+    };
+
+    api.isValidAddress = function(address) {
+      return StellarSdk.StrKey.isValidEd25519PublicKey(address);
+    };
+
+    api.federation = function(fed_url) {
+      return StellarSdk.StellarTomlResolver.resolve(fed_url);
+    };
+
+    api.setServer = function(url, passphrase, allowHttp=false) {
+      if(!url) throw new Error('No URL')
+      console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
+      StellarSdk.Network.use(new StellarSdk.Network(passphrase));
+      this.server = new StellarSdk.Server(url, {allowHttp});
+      history.server = this.server;
+      orderbook.server = this.server;
+      path.server = this.server;
+    };
+
+    api.setAccount = function(address, secret) {
+      this.address = address;
+      this.secret = secret;
+    };
+
+    api.isValidMemo = function(type, memo) {
+      try {
+        switch (type.toUpperCase()) {
+        case 'ID':
+          StellarSdk.Memo.id(memo);
+          break;
+        case 'TEXT':
+          StellarSdk.Memo.text(memo);
+          break;
+        case 'HASH':
+          StellarSdk.Memo.hash(memo);
+          break;
+        default :
+          return 'Unkown Type';
+        }
+      } catch (e) {
+        return e.message;
+      }
+      return '';
+    };
+
     api.send = function(target, currency, issuer, amount, memo_type, memo_value, callback) {
       amount = round(amount, 7);
       console.debug(target, currency, issuer, amount, memo_type, memo_value);
@@ -297,34 +349,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           }
         });
     };
-
-    api._updateRootBalance = function(balances) {
-      var self = this;
-      balances = balances || self.balances;
-      var native = 0;
-      var lines = {};
-
-      balances.forEach(function(line){
-        if (line.asset_type == 'native') {
-          native = parseFloat(line.balance);
-        } else {
-          if (!lines[line.asset_code]) {
-            lines[line.asset_code] = {};
-          }
-          var item = {
-            code : line.asset_code,
-            issuer : line.asset_issuer,
-            balance : parseFloat(line.balance),
-            limit : parseFloat(line.limit)
-          };
-          lines[line.asset_code][line.asset_issuer] = item;
-        }
-      });
-      console.log('lines', lines);
-      $scope.balance = native;
-      $scope.lines = lines;
-      $scope.$broadcast("balanceChange");
-    }
 
     api.getInfo = function(address, callback) {
       address = address || this.address;
@@ -502,30 +526,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         callback(null, data.records);
       }).catch(function(err){
         console.error('QueryOffer Fail !', err);
-        callback(err, null);
-      });
-    };
-
-    api._offer = function(selling, buying, amount, price, callback) {
-      var self = this;
-      amount = round(amount, 7);
-      console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
-      self.server.loadAccount(self.address).then(function(account){
-        self._updateSeq(account);
-        var op = StellarSdk.Operation.manageOffer({
-          selling: selling,
-          buying: buying,
-          amount: amount.toString(),
-          price : price.toString()
-        });
-        var tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-        tx.sign(StellarSdk.Keypair.fromSecret(self.secret));
-        return self.server.submitTransaction(tx);
-      }).then(function(txResult){
-        console.log(txResult);
-        callback(null, txResult.hash);
-      }).catch(function(err){
-        console.error('Offer Fail !', err);
         callback(err, null);
       });
     };
