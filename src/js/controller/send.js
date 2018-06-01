@@ -4,10 +4,16 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
   function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
     console.log('Send to', $routeParams);
 
+    $scope.MemoNone = StellarSdk.MemoNone;
+    $scope.MemoID = StellarSdk.MemoID;
+    $scope.MemoText = StellarSdk.MemoText;
+    $scope.MemoHash = StellarSdk.MemoHash;
+    $scope.MemoReturn = StellarSdk.MemoReturn;  // effectively equals MemoHash, thus skipped.
+
     $scope.asset = {};
     $scope.input_address;
     $scope.memo;
-    $scope.memo_type = 'Text';
+    $scope.memo_type = StellarSdk.MemoNone;
     $scope.memo_provided;
     $scope.memo_require = false;
     $scope.sending;
@@ -362,15 +368,16 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       return address;
     }
 
+      // memo_type is either of: MemoNone: "none", MemoID = "id", MemoText = "text", MemoHash = "hash"
     var special_destinations = {
-      'GCLDH6L6FBLTD3H3B23D6TIFVVTFBLZMNBC3ZOI6FGI5GPQROL4FOXIN' : {memo_type: 'Id',   name: 'RippleFox'},
-      'GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM' : {memo_type: 'Id',   name: 'Kraken'},
-      'GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2' : {memo_type: 'Id',   name: 'Poloniex'},
-      'GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3' : {memo_type: 'Text', name: 'Bittrex'},
-      'GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM' : {memo_type: 'Id',   name: 'BTC38'},
-      'GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2' : {memo_type: 'Id',   name: 'Aex.com'},
-      'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'Id',   name: 'Changelly'},
-      'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'Text', name: 'Binance'}
+      'GCLDH6L6FBLTD3H3B23D6TIFVVTFBLZMNBC3ZOI6FGI5GPQROL4FOXIN' : {memo_type: 'id',   name: 'RippleFox'},
+      'GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM' : {memo_type: 'id',   name: 'Kraken'},
+      'GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2' : {memo_type: 'id',   name: 'Poloniex'},
+      'GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3' : {memo_type: 'text', name: 'Bittrex'},
+      'GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM' : {memo_type: 'id',   name: 'BTC38'},
+      'GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2' : {memo_type: 'id',   name: 'Aex.com'},
+      'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'id',   name: 'Changelly'},
+      'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'text', name: 'Binance'}
     }
 
     function capitalizeFirstLetter(string) {

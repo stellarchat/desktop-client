@@ -39,22 +39,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _seq.time = now;
       },
 
-      _getMemo: function(type, memo) {
-        if (memo) {
-          switch (type.toUpperCase()) {
-          case 'ID':
-            return StellarSdk.Memo.id(memo);
-          case 'TEXT':
-            return StellarSdk.Memo.text(memo);
-          case 'HASH':
-            return StellarSdk.Memo.hash(memo);
-          }
-        } else {
-          return StellarSdk.Memo.none();
-        }
-        throw new Error('UnSupportMemo');
-      },
-
       _isFunded: function(address, callback) {
         _server.accounts().accountId(address).call().then((accountResult) => {
           callback(null, true);
@@ -75,8 +59,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             destination: target,
             startingBalance: amount.toString()
           });
-          var memo = this._getMemo(memo_type, memo_value);
-          var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
+          var memo = new StellarSdk.Memo(memo_type, memo_value);
+          var tx = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
           tx.sign(StellarSdk.Keypair.fromSecret(_secret));
           return _server.submitTransaction(tx);
         }).then((txResult) => {
@@ -97,7 +81,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             asset: StellarSdk.Asset.native(),
             amount: amount.toString()
           });
-          var memo = this._getMemo(memo_type, memo_value);
+          var memo = new StellarSdk.Memo(memo_type, memo_value);
           var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
           tx.sign(StellarSdk.Keypair.fromSecret(_secret));
           return _server.submitTransaction(tx);
@@ -119,7 +103,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             asset: new StellarSdk.Asset(currency, issuer),
             amount: amount.toString()
           });
-          var memo = this._getMemo(memo_type, memo_value);
+          var memo = new StellarSdk.Memo(memo_type, memo_value);
           var tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
           tx.sign(StellarSdk.Keypair.fromSecret(_secret));
           return _server.submitTransaction(tx);

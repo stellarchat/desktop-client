@@ -71,9 +71,10 @@
 						<span style="font-size: 18px; font-weight: 700;">{{'memo' | translate}}: {{memo_type}}</span> &nbsp;&nbsp;
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu" style="font-size: 18px; font-weight: 700;">
-					      <li><a ng-click="setMemoType('Id')">Memo-Id</a></li>
-					      <li><a ng-click="setMemoType('Text')">Memo-Text</a></li>
-					      <li><a ng-click="setMemoType('Hash')">Memo-Hash</a></li>
+					      <li><a ng-click="setMemoType(MemoNone)">Memo-{{MemoNone}}</a></li>
+					      <li><a ng-click="setMemoType(MemoID)">Memo-{{MemoID}}</a></li>
+					      <li><a ng-click="setMemoType(MemoText)">Memo-{{MemoText}}</a></li>
+					      <li><a ng-click="setMemoType(MemoHash)">Memo-{{MemoHash}}</a></li>
 					    </ul>
 					<input type="text" class="s-inputGroup__item S-flexItem-share"
 						ng-model="memo"
