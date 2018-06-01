@@ -1,10 +1,11 @@
-/* global angular, myApp */
+/* global angular, myApp, StellarSdk */
 
 myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
   let _blob;
-  let _userBlob;
+  let _userBlob;  // TODO: remove as it holds secret.
   let _password;
   let _walletfile;
+  let _secret;  // The only place where secret is held. See also method `signTe(te, callback)`.
 
   return {
 
@@ -21,6 +22,8 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _userBlob   = JSON.stringify(blob.data);
       _password   = blob.password;
       _walletfile = blob.walletfile;
+      _secret     = blob.data.masterkey;
+      console.log(_userBlob)
       $window.sessionStorage.userBlob   = _userBlob;
       $window.sessionStorage.password   = _password;
       $window.sessionStorage.walletfile = _walletfile;
@@ -36,6 +39,17 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
         this.setBlob(blob);
         if(typeof callback === 'function') callback(err, blob);
       });
+    },
+
+    canSign() {
+      return !!_secret;
+    },
+
+    signTe(te, callback) {
+      if(!_secret) callback(new Error('No secret provided.'));
+
+      te.sign(StellarSdk.Keypair.fromSecret(_secret));
+      callback(null, te);
     },
 
     addContact(contact, callback) {
@@ -66,6 +80,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _userBlob = undefined;
       _password = undefined;
       _walletfile = undefined;
+      _secret = undefined;
 
       delete $window.sessionStorage.userBlob;
       delete $window.sessionStorage.password;

@@ -1,7 +1,7 @@
 /* global _, myApp, round, StellarSdk */
 
-myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath',
-  function($rootScope, StellarHistory, StellarOrderbook, StellarPath) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 'AuthenticationFactory',
+  function($rootScope, StellarHistory, StellarOrderbook, StellarPath, AuthenticationFactory) {
 
     let _address;
     let _balances = {};
@@ -60,9 +60,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             startingBalance: amount.toString()
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const tx = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.debug('Funded.', txResult);
           callback(null, txResult.hash);
@@ -82,9 +83,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             amount: amount.toString()
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log(`Send ${$rootScope.currentNetwork.coin.code} done.`, txResult);
           callback(null, txResult.hash);
@@ -104,9 +106,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             amount: amount.toString()
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const tx = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log('Send Asset done.', txResult);
           callback(null, txResult.hash);
@@ -153,9 +156,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             amount: amount.toString(),
             price : price.toString()
           });
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log(txResult);
           callback(null, txResult.hash);
@@ -176,6 +180,17 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         }
       },
 
+      _sign(te) {
+          return new Promise((resolve, reject) => {
+            AuthenticationFactory.signTe(te, (err, te) => {
+              if (err) {
+                return reject(err);
+              } else {
+                resolve(te);
+              }
+            });
+          });
+      },
 
       logout() {
         _address = undefined;
@@ -276,9 +291,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             destAmount : alt.origin.destination_amount,
             path       : path
           });
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log('Send Asset done.', txResult);
           callback(null, txResult.hash);
@@ -343,9 +359,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             asset: asset,
             limit: limit.toString()
           });
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log(txResult);
           console.log('Trust updated.', txResult.hash);
@@ -363,9 +380,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _server.loadAccount(_address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.setOptions(opt);
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log('Option updated.', txResult);
           callback(null, txResult.hash);
@@ -381,9 +399,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _server.loadAccount(_address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageData(opt);
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log('Data updated.', txResult);
           callback(null, txResult.hash);
@@ -399,9 +418,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _server.loadAccount(_address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.accountMerge(opt);
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log('Account merged.', txResult);
           callback(null, txResult.hash);
@@ -535,9 +555,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             price : price,
             offerId : offer_id
           });
-          const tx = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          tx.sign(StellarSdk.Keypair.fromSecret(_secret));
-          return _server.submitTransaction(tx);
+          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
+          return this._sign(te);
+        }).then((te) => {
+          return _server.submitTransaction(te);
         }).then((txResult) => {
           console.log(txResult);
           callback(null, txResult.hash);
