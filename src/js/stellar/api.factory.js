@@ -1,7 +1,7 @@
 /* global _, myApp, round, StellarSdk */
 
 myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath',
-  function($rootScope, history, orderbook, path) {
+  function($rootScope, StellarHistory, StellarOrderbook, StellarPath) {
 
     let _address;
     let _balances = {};
@@ -185,8 +185,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _seq.snapshot = "";
         _seq.time = new Date();
         this._closeStream();
-        orderbook.close();
-        path.close();
+        StellarOrderbook.close();
+        StellarPath.close();
       },
 
       random: function() {
@@ -214,9 +214,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
         StellarSdk.Network.use(new StellarSdk.Network(passphrase));
         _server = new StellarSdk.Server(url, {allowHttp});
-        history.setServer(_server);
-        orderbook.setServer(_server);
-        path.setServer(_server);
+        StellarHistory.setServer(_server);
+        StellarOrderbook.setServer(_server);
+        StellarPath.setServer(_server);
       },
 
       setAccount: function(address, secret) {
@@ -255,14 +255,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       convert: function(alt, callback) {
         console.debug(alt.origin.source_amount + '/' + alt.src_code + ' -> ' + alt.origin.destination_amount + '/' + alt.dst_code);
-        var path = alt.origin.path.map((item) => {
+        const path = alt.origin.path.map((item) => {
           if (item.asset_type == 'native') {
             return new StellarSdk.Asset.native();
           } else {
             return new StellarSdk.Asset(item.asset_code, item.asset_issuer);
           }
         });
-        var sendMax = alt.origin.source_amount;
+        let sendMax = alt.origin.source_amount;
         if (alt.max_rate) {
           sendMax = round(alt.max_rate * sendMax, 7).toString();
         }
@@ -314,7 +314,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           .cursor("now")
           .stream({
             onmessage: (res) => {
-              var tx = history.processTx(res, _address);
+              var tx = StellarHistory.processTx(res, _address);
               console.log('tx stream', tx);
             }
           });
@@ -430,56 +430,56 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       queryPayments: function(callback) {
         console.debug('payments', _address);
-        history.payments(_address, callback);
+        StellarHistory.payments(_address, callback);
       },
 
       queryPaymentsNext: function(addressOrPage, callback) {
         console.debug('loop payments', _address);
-        history.payments(addressOrPage, callback);
+        StellarHistory.payments(addressOrPage, callback);
       },
 
       queryEffects: function(callback) {
         console.debug('effects', _address);
-        history.effects(_address, callback);
+        StellarHistory.effects(_address, callback);
       },
 
       queryEffectsNext: function(addressOrPage, callback) {
         console.debug('loop effects', _address);
-        history.effects(addressOrPage, callback);
+        StellarHistory.effects(addressOrPage, callback);
       },
 
       queryTransactions: function(callback) {
         console.debug('transactions', _address);
-        history.transactions(_address, callback);
+        StellarHistory.transactions(_address, callback);
       },
 
       queryTransactionsNext: function(page, callback) {
         console.debug('loop transactions');
-        history.transactions(page, callback);
+        StellarHistory.transactions(page, callback);
       },
 
       queryBook: function(baseBuy, counterSell, callback) {
-        orderbook.get(baseBuy, counterSell, callback);
+        StellarOrderbook.get(baseBuy, counterSell, callback);
       },
 
       listenOrderbook: function(baseBuying, counterSelling, handler) {
-        orderbook.listen(baseBuying, counterSelling, handler);
+        StellarOrderbook.listen(baseBuying, counterSelling, handler);
       },
 
       closeOrderbook: function() {
-        orderbook.close();
+        StellarOrderbook.close();
       },
 
       queryPath: function(src, dest, code, issuer, amount, callback) {
-        path.get(src, dest, code, issuer, amount, callback);
+        StellarPath.get(src, dest, code, issuer, amount, callback);
       },
 
       listenPath: function(src, dest, code, issuer, amount, handler) {
-        path.listen(src, dest, code, issuer, amount, handler);
+        StellarHistory.listen(src, dest, code, issuer, amount, handler);
       },
 
       closePath: function() {
-        path.close();
+        StellarHistory.close();
       },
 
       queryOffer: function(callback) {
