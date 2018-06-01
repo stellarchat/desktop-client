@@ -1,15 +1,15 @@
 /* global _, myApp, round, StellarSdk */
 
 myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath',
-  function($scope, history, orderbook, path) {
+  function($rootScope, history, orderbook, path) {
 
-    let _address = undefined;
+    let _address;
     let _balances = {};
-    let _closeAccountStream = undefined;  // function that closes a stream.
-    let _closeTxStream = undefined;  // function that closes a stream.
-    let _secret = undefined;
+    let _closeAccountStream;  // function that closes a stream.
+    let _closeTxStream;  // function that closes a stream.
+    let _secret;
     let _subentry = 0;
-    let _server = undefined;
+    let _server;
     const _seq = {
       snapshot : "",
       time : new Date()
@@ -20,7 +20,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         issuer = code.issuer;
         code = code.code;
       }
-      return code == $scope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
+      return code == $rootScope.currentNetwork.coin.code ? new StellarSdk.Asset.native() : new StellarSdk.Asset(code, issuer);
     }
 
 
@@ -86,7 +86,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           tx.sign(StellarSdk.Keypair.fromSecret(_secret));
           return _server.submitTransaction(tx);
         }).then((txResult) => {
-          console.log(`Send ${$scope.currentNetwork.coin.code} done.`, txResult);
+          console.log(`Send ${$rootScope.currentNetwork.coin.code} done.`, txResult);
           callback(null, txResult.hash);
         }).catch((err) => {
           console.error('Send Fail !', err);
@@ -137,9 +137,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           }
         });
         console.log('lines', lines);
-        $scope.balance = native;
-        $scope.lines = lines;
-        $scope.$broadcast("balanceChange");
+        $rootScope.balance = native;
+        $rootScope.lines = lines;
+        $rootScope.$broadcast("balanceChange");
       },
 
       _offer: function(selling, buying, amount, price, callback) {
@@ -214,9 +214,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         console.debug("Use Network: " + url + ', Passphrase: ' + passphrase);
         StellarSdk.Network.use(new StellarSdk.Network(passphrase));
         _server = new StellarSdk.Server(url, {allowHttp});
-        history.server = _server;
-        orderbook.server = _server;
-        path.server = _server;
+        history.setServer(_server);
+        orderbook.setServer(_server);
+        path.setServer(_server);
       },
 
       setAccount: function(address, secret) {
@@ -236,7 +236,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       send: function(target, currency, issuer, amount, memo_type, memo_value, callback) {
         amount = round(amount, 7);
         console.debug(target, currency, issuer, amount, memo_type, memo_value);
-        if (currency == $scope.currentNetwork.coin.code) {
+        if (currency == $rootScope.currentNetwork.coin.code) {
           this._isFunded(target, (err, isFunded) => {
             if (err) {
               return callback(err, null);
@@ -297,14 +297,14 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             if (_subentry !== res.subentry_count) {
               console.debug('subentry: ' + _subentry + ' -> ' + res.subentry_count);
               _subentry = res.subentry_count;
-              $scope.reserve = _subentry * 0.5 + 1;
-              $scope.$apply();
+              $rootScope.reserve = _subentry * 0.5 + 1;
+              $rootScope.$apply();
             }
             if(!_.isEqual(_balances, res.balances)) {
               console.debug('balances: ', _balances, res.balances);
               _balances = res.balances;
               this._updateRootBalance();
-              $scope.$apply();
+              $rootScope.$apply();
             }
           }
         });
@@ -420,9 +420,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           }
           _balances = data.balances;
           _subentry = data.subentry_count;
-          $scope.reserve = _subentry * 0.5 + 1;
+          $rootScope.reserve = _subentry * 0.5 + 1;
           this._updateRootBalance();
-          $scope.$apply();
+          $rootScope.$apply();
           if (callback) { callback(); }
           return;
         });
