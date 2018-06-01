@@ -9,7 +9,7 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootS
       _server = server;
     },
 
-    payments: function(addressOrPage, callback) {
+    payments(addressOrPage, callback) {
       let page;
       let address;
       if ('string' === typeof addressOrPage) {
@@ -62,7 +62,7 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootS
       });
     },
 
-    effects: function(addressOrPage, callback) {
+    effects(addressOrPage, callback) {
       let page;
       let address;
       if ('string' === typeof addressOrPage) {
@@ -86,7 +86,7 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootS
       });
     },
 
-    transactions: function(addressOrPage, callback) {
+    transactions(addressOrPage, callback) {
       let page;
       let address;
       if ('string' === typeof addressOrPage) {
@@ -114,7 +114,7 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootS
       });
     },
 
-    processTx: function(record, address) {
+    processTx(record, address) {
       let tx = new StellarSdk.Transaction(record.envelope_xdr);
       let resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(record.result_xdr, 'base64');
 
