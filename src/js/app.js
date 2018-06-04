@@ -165,7 +165,6 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
         $rootScope.address = data.account_id;
         $rootScope.contacts = data.contacts;
         $rootScope.resolveFed();
-        StellarApi.setAccount(data.account_id, data.masterkey);
         StellarApi.listenStream();
         StellarApi.queryAccount();
       }

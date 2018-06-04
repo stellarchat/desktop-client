@@ -58,8 +58,8 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
   }
 ]);
 
-myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory', 'StellarApi',
-  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory, StellarApi) {
+myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
+  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
     $scope.password = '';
     $scope.passwordSet = {};
     $scope.password1 = '';
@@ -106,16 +106,17 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
     };
 
     $scope.submitForm = function() {
-      $scope.masterkey = $scope.masterkey ? $scope.masterkey : StellarApi.random().secret;
-      $scope.address = StellarApi.getAddress($scope.masterkey);
+      if($scope.masterkey) {
+        AuthenticationFactory.setSecret($scope.masterkey);
+        delete $scope.masterkey;
+      } else {
+        AuthenticationFactory.random();
+      }
 
       var options = {
-        'account': $scope.address,
         'password': $scope.password1,
-        'masterkey': $scope.masterkey,
         'walletfile': $scope.walletfile
       };
-      console.log(options);
       AuthenticationFactory.register(options, function(err, blob){
         if (err) {
           console.error('Register failed!', err);
@@ -130,11 +131,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
           return;
         }
         $scope.password = new Array($scope.password1.length+1).join("*");
-        $scope.keyOpen = $scope.masterkey;
-        $scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");
-
-        console.log('key:', $scope.masterkey);
-        console.log($scope.password, $scope.key)
+        $scope.key = `S${new Array(56).join("*")}`;
 
         AuthenticationFactory.setBlob(blob);
         $rootScope.$broadcast('$blobUpdate');

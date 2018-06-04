@@ -6,6 +6,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
   let _password;
   let _walletfile;
   let _secret;  // The only place where secret is held. See also method `signTe(te, callback)`.
+  let _address;
 
   return {
 
@@ -23,6 +24,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _password   = blob.password;
       _walletfile = blob.walletfile;
       _secret     = blob.data.masterkey;
+      _address    = blob.data.account_id;
       console.log(_userBlob)
       $window.sessionStorage.userBlob   = _userBlob;
       $window.sessionStorage.password   = _password;
@@ -41,6 +43,10 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       });
     },
 
+    getAddress() {
+      return _address;
+    },
+
     canSign() {
       return !!_secret;
     },
@@ -50,6 +56,18 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
 
       te.sign(StellarSdk.Keypair.fromSecret(_secret));
       callback(null, te);
+    },
+
+    setSecret(secret) {
+      if(!StellarSdk.StrKey.isValidEd25519SecretSeed(secret)) throw new Error('Invalid Secret.');
+      _secret = secret;
+      _address = StellarSdk.Keypair.fromSecret(_secret).publicKey();
+    },
+
+    random() {
+        const keypair = StellarSdk.Keypair.random();
+        _address = keypair.publicKey();
+        _secret = keypair.secret();
     },
 
     addContact(contact, callback) {
@@ -81,6 +99,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _password = undefined;
       _walletfile = undefined;
       _secret = undefined;
+      _address = undefined;
 
       delete $window.sessionStorage.userBlob;
       delete $window.sessionStorage.password;
@@ -89,15 +108,14 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
 
     register(opts, callback){
       const options = {
-        'account': opts.account,
+        'account': _address,
         'password': opts.password,
-        'masterkey': opts.masterkey,
+        'masterkey': _secret,
         'walletfile': opts.walletfile
       };
       BlobFactory.create(options, function (err, blob) {
-        if (err) {
-          return callback(err);
-        }
+        if (err) return callback(err);
+
         console.log("AuthenticationFactory: registration succeeded", blob);
         callback(null, blob, 'local');
       });
@@ -115,7 +133,6 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     }
 
   }
-
 });
 
 

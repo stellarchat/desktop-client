@@ -3,11 +3,9 @@
 myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 'AuthenticationFactory',
   function($rootScope, StellarHistory, StellarOrderbook, StellarPath, AuthenticationFactory) {
 
-    let _address;
     let _balances = {};
     let _closeAccountStream;  // function that closes a stream.
     let _closeTxStream;  // function that closes a stream.
-    let _secret;
     let _subentry = 0;
     let _server;
     const _seq = {
@@ -53,7 +51,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       _fund(target, amount, memo_type, memo_value, callback) {
         amount = round(amount, 7);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const payment = StellarSdk.Operation.createAccount({
             destination: target,
@@ -75,7 +73,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       _sendCoin(target, amount, memo_type, memo_value, callback) {
         amount = round(amount, 7);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const payment = StellarSdk.Operation.payment({
             destination: target,
@@ -98,7 +96,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       _sendToken(target, currency, issuer, amount, memo_type, memo_value, callback) {
         amount = round(amount, 7);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const payment = StellarSdk.Operation.payment({
             destination: target,
@@ -148,7 +146,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       _offer(selling, buying, amount, price, callback) {
         amount = round(amount, 7);
         console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageOffer({
             selling: selling,
@@ -191,10 +189,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             });
           });
       },
-
       logout() {
-        _address = undefined;
-        _secret = undefined;
+        this.address = undefined;
         _balances = {};
         _subentry = 0;
         _seq.snapshot = "";
@@ -205,15 +201,16 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       },
 
       random() {
-        const keypair = StellarSdk.Keypair.random();
-        _address = keypair.publicKey();
-        _secret = keypair.secret();
-        return {address: _address, secret: _secret};
+        AuthenticationFactory.random();
+        return this.getAddress();
       },
 
-      getAddress(secret) {
-        const keypair = StellarSdk.Keypair.fromSecret(secret||_secret);
-        return keypair.publicKey();
+      get address() {
+        return AuthenticationFactory.getAddress();
+      },
+
+      getAddress() {  // TODO: Depreciate
+        return AuthenticationFactory.getAddress();
       },
 
       isValidAddress(address) {
@@ -232,11 +229,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         StellarHistory.setServer(_server);
         StellarOrderbook.setServer(_server);
         StellarPath.setServer(_server);
-      },
-
-      setAccount(address, secret) {
-        _address = address;
-        _secret = secret;
       },
 
       isValidMemo(type, memo) {
@@ -281,10 +273,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         if (alt.max_rate) {
           sendMax = round(alt.max_rate * sendMax, 7).toString();
         }
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const pathPayment = StellarSdk.Operation.pathPayment({
-            destination: _address,
+            destination: this.address,
             sendAsset  : getAsset(alt.src_code, alt.src_issuer),
             sendMax    : sendMax,
             destAsset  : getAsset(alt.dst_code, alt.dst_issuer),
@@ -307,8 +299,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       listenStream() {
         this._closeStream();
 
-        console.log(_address, _server.accounts().accountId(_address))
-        _closeAccountStream = _server.accounts().accountId(_address).stream({
+        console.log(this.address, _server.accounts().accountId(this.address))
+        _closeAccountStream = _server.accounts().accountId(this.address).stream({
           onmessage: (res) => {
             if (_subentry !== res.subentry_count) {
               console.debug('subentry: ' + _subentry + ' -> ' + res.subentry_count);
@@ -326,18 +318,18 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         });
 
         // TODO: parse the tx and do action
-        _closeTxStream = _server.transactions().forAccount(_address)
+        _closeTxStream = _server.transactions().forAccount(this.address)
           .cursor("now")
           .stream({
             onmessage: (res) => {
-              const tx = StellarHistory.processTx(res, _address);
+              const tx = StellarHistory.processTx(res, this.address);
               console.log('tx stream', tx);
             }
           });
       },
 
       getInfo(address, callback) {
-        _server.accounts().accountId(address||_address).call().then((data) => {
+        _server.accounts().accountId(address||this.address).call().then((data) => {
           callback(null, data);
         }).catch((err) => {
           if (err.name == 'NotFoundError') {
@@ -353,7 +345,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       changeTrust(code, issuer, limit, callback) {
         const asset = new StellarSdk.Asset(code, issuer);
         console.debug('Turst asset', asset, limit);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.changeTrust({
             asset: asset,
@@ -377,7 +369,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         const opt = {};
         opt[name] = value
         console.debug('set option:', name, '-', value);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.setOptions(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
@@ -396,7 +388,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       setData(name, value, callback) {
         const opt = {name: name, value: value? value : null};
         console.debug('manageData:', name, '-', value);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageData(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
@@ -414,8 +406,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       merge(destAccount, callback) {
         const opt = {destination: destAccount};
-        console.debug('merge:', _address, '->', destAccount);
-        _server.loadAccount(_address).then((account) => {
+        console.debug('merge:', this.address, '->', destAccount);
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.accountMerge(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
@@ -432,8 +424,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       },
 
       queryAccount(callback) {
-        console.debug('query', _address);
-        this.getInfo(_address, (err, data) => {
+        console.debug('query', this.address);
+        this.getInfo(this.address, (err, data) => {
           if (err) {
             if (callback) { callback(err); }
             return;
@@ -449,28 +441,28 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       },
 
       queryPayments(callback) {
-        console.debug('payments', _address);
-        StellarHistory.payments(_address, callback);
+        console.debug('payments', this.address);
+        StellarHistory.payments(this.address, callback);
       },
 
       queryPaymentsNext(addressOrPage, callback) {
-        console.debug('loop payments', _address);
+        console.debug('loop payments', this.address);
         StellarHistory.payments(addressOrPage, callback);
       },
 
       queryEffects(callback) {
-        console.debug('effects', _address);
-        StellarHistory.effects(_address, callback);
+        console.debug('effects', this.address);
+        StellarHistory.effects(this.address, callback);
       },
 
       queryEffectsNext(addressOrPage, callback) {
-        console.debug('loop effects', _address);
+        console.debug('loop effects', this.address);
         StellarHistory.effects(addressOrPage, callback);
       },
 
       queryTransactions(callback) {
-        console.debug('transactions', _address);
-        StellarHistory.transactions(_address, callback);
+        console.debug('transactions', this.address);
+        StellarHistory.transactions(this.address, callback);
       },
 
       queryTransactionsNext(page, callback) {
@@ -503,8 +495,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       },
 
       queryOffer(callback) {
-        console.debug('offers', _address);
-        _server.offers('accounts', _address).limit(200).call().then((data) => {
+        console.debug('offers', this.address);
+        _server.offers('accounts', this.address).limit(200).call().then((data) => {
           console.log('offers', data.records);
           callback(null, data.records);
         }).catch((err) => {
@@ -541,12 +533,12 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           offer_id = offer.id;
         } else {
           selling = StellarSdk.Asset.native();
-          buying  = new StellarSdk.Asset('DUMMY', _address);
+          buying  = new StellarSdk.Asset('DUMMY', this.address);
           price   = "1";
           offer_id = offer;
         }
         console.debug('Cancel Offer', offer_id);
-        _server.loadAccount(_address).then((account) => {
+        _server.loadAccount(this.address).then((account) => {
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageOffer({
             selling: selling,
@@ -573,9 +565,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           return server.resolveAccountId(address);
         })
         .then((data) => {
-          if(data.stellar_address) {
-            const index = data.stellar_address.indexOf("*");
-            const fed_name = data.stellar_address.substring(0, index);
+          if(data.stellarthis.address) {
+            const index = data.stellarthis.address.indexOf("*");
+            const fed_name = data.stellarthis.address.substring(0, index);
             return callback(null, fed_name);
           }
         }).catch((err) => {
