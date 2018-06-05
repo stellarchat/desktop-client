@@ -180,7 +180,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       _sign(te) {
           return new Promise((resolve, reject) => {
-            AuthenticationFactory.signTe(te, (err, te) => {
+            AuthenticationFactory.sign(te, (err, te) => {
               if (err) {
                 return reject(err);
               } else {
@@ -202,15 +202,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       random() {
         AuthenticationFactory.random();
-        return this.getAddress();
+        return this.address;
       },
 
       get address() {
-        return AuthenticationFactory.getAddress();
-      },
-
-      getAddress() {  // TODO: Depreciate
-        return AuthenticationFactory.getAddress();
+        return AuthenticationFactory.address;
       },
 
       isValidAddress(address) {

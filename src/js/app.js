@@ -19,8 +19,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : false
     }
-  }).when('/registry', {
-    templateUrl : 'pages/registry.html',
+  }).when('/register', {
+    templateUrl : 'pages/register.html',
     controller : 'RegisterCtrl',
     access : {
       requiredLogin : false

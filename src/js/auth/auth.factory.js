@@ -5,10 +5,12 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
   let _userBlob;  // TODO: remove as it holds secret.
   let _password;
   let _walletfile;
-  let _secret;  // The only place where secret is held. See also method `signTe(te, callback)`.
   let _address;
+  const _secrets = [];  // The only place where secret is held. See also method `sign(te, callback)`.
 
   return {
+
+
 
     get userBlob() {
       return _userBlob;
@@ -23,8 +25,8 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _userBlob   = JSON.stringify(blob.data);
       _password   = blob.password;
       _walletfile = blob.walletfile;
-      _secret     = blob.data.masterkey;
       _address    = blob.data.account_id;
+      _secrets.splice(0, _secrets.length, blob.data.masterkey);
       console.log(_userBlob)
       $window.sessionStorage.userBlob   = _userBlob;
       $window.sessionStorage.password   = _password;
@@ -43,31 +45,60 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       });
     },
 
-    getAddress() {
+    get address() {
       return _address;
     },
 
-    canSign() {
-      return !!_secret;
+    teThresholds(te) {
+      // TODO #1: parse "te" to get list of source accounts.
+      // TODO #2: fetch horizon to lookup actual signers for them.
+
+      // For now assume that account has default signers.
+      return Promise.resolve({
+        [this.address]: {  // Account.
+          requiredThreshold: 1,
+          attainedThreshold: 0,
+          availableSigners: {
+            [this.address]: 1,  // Public Key.
+          }
+        },
+      });
     },
 
-    signTe(te, callback) {
-      if(!_secret) callback(new Error('No secret provided.'));
+    requiredSigners(thresholds) {
+      return Object.entries(thresholds)
+        .map(([account, thresholds]) => thresholds.attainedThreshold > thresholds.requiredThreshold ? thresholds.availableSigners : {})
+        .reduce((all, signers)=>Object.entries(signers).forEach(([signer, weight])=>all[signer] = Math.max(weight, all[signer])), Object.create(null))
+        .map((mapOfAllSignersAndWeights)=>Object.entries(mapOfAllSignersAndWeights))
+        .sort((a, b) => a[1] > b[1])  // Biggest weight first.
+        .map((signerAndWeight) => signerAndWeight[0])
+    },
 
-      te.sign(StellarSdk.Keypair.fromSecret(_secret));
+    sign(te, callback) {
+      const availablePKs = _secrets.reduce((map, secret)=>map[StellarSdk.Keypair.fromSecret(secret)] = secret, Object.create(null));
+      // Sign all we can automatically.
+      let nextSigner;
+      do {
+        nextSigner = this.requiredSigners(this.teThresholds(te)).filter((pk) => pk in availablePKs).pop();
+        if(nextSigner) te.sign(availablePKs[nextSigner]);
+      } while(nextSigner)
+
       callback(null, te);
     },
 
-    setSecret(secret) {
-      if(!StellarSdk.StrKey.isValidEd25519SecretSeed(secret)) throw new Error('Invalid Secret.');
-      _secret = secret;
-      _address = StellarSdk.Keypair.fromSecret(_secret).publicKey();
+    setAccount(address, secrets) {
+      if(!StellarSdk.StrKey.isValidEd25519PublicKey(address)) throw new Error('Invalid Address.');
+      if(!secrets.every((secret)=>StellarSdk.StrKey.isValidEd25519SecretSeed(secret))) throw new Error('Invalid Secret.');
+
+      _secrets.splice(0, _secrets.length, ...secrets);
+      _address = address;
     },
 
     random() {
         const keypair = StellarSdk.Keypair.random();
         _address = keypair.publicKey();
-        _secret = keypair.secret();
+        _secrets.splice(0, _secrets.length, keypair.secret());
+        return _secrets[0];  // To display when creating the wallet.
     },
 
     addContact(contact, callback) {
@@ -98,8 +129,8 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       _userBlob = undefined;
       _password = undefined;
       _walletfile = undefined;
-      _secret = undefined;
       _address = undefined;
+      _secrets.splice(0, _secrets.length);
 
       delete $window.sessionStorage.userBlob;
       delete $window.sessionStorage.password;
@@ -110,7 +141,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       const options = {
         'account': _address,
         'password': opts.password,
-        'masterkey': _secret,
+        'masterkey': _secrets[0],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
         'walletfile': opts.walletfile
       };
       BlobFactory.create(options, function (err, blob) {

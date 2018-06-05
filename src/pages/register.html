@@ -76,7 +76,7 @@
         <p class="important" translate="stellar_address">Stellar address</p>
         <p class="key">{{address}}</p>
         <p class="important" translate="secret_key">Secret key:</p>
-        <p class="key" ng-show="showSecret==true">{{keyOpen}}</p>
+        <p class="key" ng-show="showSecret==true">{{masterkey}}</p>
         <p class="key" ng-hide="showSecret==true">{{key}}</p>
         <p ng-hide="showSecret==true">
             <button class="btn btn-info btn-sm" ng-really-message="{{'are_you_sure_secret' | translate}}" ng-really-click="showSec(true)" translate="show_secret">Show secret key</button>

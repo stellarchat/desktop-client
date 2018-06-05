@@ -1,4 +1,4 @@
-/* global myApp, nw */
+/* global myApp, nw, StellarSdk */
 
 myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
   function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
@@ -6,7 +6,6 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
     $scope.passwordSet = {};
     $scope.password1 = '';
     $scope.password2 = '';
-    $scope.master = '';
     $scope.key = '';
     $scope.mode = 'register_new_account';
     $scope.showMasterKeyInput = false;
@@ -49,10 +48,11 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 
     $scope.submitForm = function() {
       if($scope.masterkey) {
-        AuthenticationFactory.setSecret($scope.masterkey);
-        delete $scope.masterkey;
+        // TODO: Add UI support for mismatching address and secret pairs.
+        // `AuthenticationFactory.setAccount($scope.address, [$scope.masterkey]);`
+        AuthenticationFactory.setAccount(StellarSdk.Keypair.fromSecret($scope.masterkey), [$scope.masterkey]);
       } else {
-        AuthenticationFactory.random();
+        $scope.masterkey = AuthenticationFactory.random();
       }
 
       var options = {
