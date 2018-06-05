@@ -2,9 +2,9 @@
   <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" ng-show="mode=='register_new_account'">
     <div class="auth-form-wrapper">
       <h2 translate="create_new_account">Create new account</h2>
-      <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/login')" translate="open_existed_account">Open existing account</a></div>
       <div class="form-group"><a class="btn btn-block btn-default" ng-click="fileInputClick()" translate="create_blank">Create an empty account</a></div>
       <div class="form-group"><a class="btn btn-block btn-default" ng-click="changeMode('register_with_secret')" translate="create_by_secret">Create a new account with a secret key</a></div>
+      <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/login')" translate="back">back</a></div>
     </div>
   </div>
   <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" ng-show="mode=='register_empty_wallet'">
@@ -13,7 +13,7 @@
       <p>{{'encrypt_new_file' | translate}}: {{walletfile}}</p>
       <form name="registerForm" ng-submit="submitForm()">
         <label class="hide" for="password" translate="wallet_file">Wallet file</label>
-        
+
         <div class="form-group" ng-class="{'field-error': 'weak' === strength}">
           <label for="password" translate="password">Password</label>
           <input class="form-control" id="password1" name="password1" type="password" autocomplete="off" ng-model="password1" strong-password="strong-password" required="required"/>
@@ -26,7 +26,7 @@
           <p ng-show="save_error"><span>{{save_error}}</span></p>
           <div ng-show=""></div>
         </div>
-        
+
         <div class="form-group">
           <div class="strength {{strength}}">{{strength}}</div>
         </div>
