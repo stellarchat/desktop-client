@@ -10,7 +10,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
       return $scope.mode = mode;
     }
 
-    $scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;
+    $scope.keyOpen = JSON.parse(AuthenticationFactory.userBlob).masterkey;  // TODO: keep secret only in Auth.
     $scope.keyQRCode = $scope.keyOpen;
 
     $scope.key = $scope.keyOpen[0] + new Array($scope.keyOpen.length).join("*");

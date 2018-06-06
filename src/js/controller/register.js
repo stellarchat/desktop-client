@@ -59,7 +59,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
         'password': $scope.password1,
         'walletfile': $scope.walletfile
       };
-      AuthenticationFactory.register(options, function(err, blob){
+      AuthenticationFactory.register(options, function(err){
         if (err) {
           console.error('Register failed!', err);
           if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
@@ -75,7 +75,6 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
         $scope.password = new Array($scope.password1.length+1).join("*");
         $scope.key = `S${new Array(56).join("*")}`;
 
-        AuthenticationFactory.setBlob(blob);
         $rootScope.$broadcast('$blobUpdate');
 
         $scope.$apply(function(){

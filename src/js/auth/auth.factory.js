@@ -1,52 +1,74 @@
 /* global angular, myApp, StellarSdk */
 
 myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
+  let _type;
   let _blob;
-  let _userBlob;  // TODO: remove as it holds secret.
-  let _password;
-  let _walletfile;
   let _address;
   const _secrets = [];  // The only place where secret is held. See also method `sign(te, callback)`.
 
   return {
 
+    // Read-only constants.
+    get TYPE() { return {
+        get TEMPORARY() { return 'temporary' },
+        get FILESYSTEM() { return 'filesystem' },
+    } },
 
-
-    get userBlob() {
-      return _userBlob;
+    get isInMemory() {
+      return !!_type;
     },
 
-    isLogged() {
-      return 'userBlob' in $window.sessionStorage;
+    get isInSession() {
+      return !!$window.sessionStorage.type;
     },
 
-    setBlob(blob) {
-      _blob       = blob;
-      _userBlob   = JSON.stringify(blob.data);
-      _password   = blob.password;
-      _walletfile = blob.walletfile;
-      _address    = blob.data.account_id;
-      _secrets.splice(0, _secrets.length, blob.data.masterkey);
-      console.log(_userBlob)
-      $window.sessionStorage.userBlob   = _userBlob;
-      $window.sessionStorage.password   = _password;
-      $window.sessionStorage.walletfile = _walletfile;
-    },
+    restoreFromSession() {
+      if(this.isInMemory) return;  // Restore only once: Skip if already initiated or restored from session.
 
-    getBlobFromSession(callback) {
-      _userBlob   = $window.sessionStorage.userBlob;
-      _password   = $window.sessionStorage.password;
-      _walletfile = $window.sessionStorage.walletfile;
+      try {
+        switch($window.sessionStorage.type) {
+          case(this.TYPE.TEMPORARY): {
+            throw new Error('TODO');
+            // _type = this.TYPE.TEMPORARY;
+          }
+          case(this.TYPE.FILESYSTEM): {
+            _type    = this.TYPE.FILESYSTEM;
+            _blob = BlobFactory.fromSession();
+            _address = _blob.data.account_id;
+            _secrets.splice(0, _secrets.length, _blob.data.masterkey);
+            break;
+          }
+          case(undefined): {
+            _type = undefined;
+            break;
+          }
+          default: {
+            throw new Error(`Unsupported type "${$window.sessionStorage.type}"`);
+          }
+        }
+      } catch(e) {
+        console.warn(`Got error while restoring from session, cleaning up!`, e)
+        _blob    = undefined;
+        _type    = undefined;
+        _address = undefined;
+        _secrets.splice(0, _secrets.length);
+      }
 
-      BlobFactory.init(_walletfile, _password, (err, blob) => {
-        console.log('Init blob from session', blob);
-        this.setBlob(blob);
-        if(typeof callback === 'function') callback(err, blob);
-      });
+      delete $window.sessionStorage.type;
+      if(_type) $window.sessionStorage.type = _type;
     },
 
     get address() {
       return _address;
+    },
+
+    get contacts() {
+      switch(_type) {
+        case(this.TYPE.TEMPORARY): return [];
+        case(this.TYPE.FILESYSTEM): return _blob.data.contacts;
+        case(undefined): return [];
+        default: throw new Error(`Unsupported type "${_type}"`);
+      }
     },
 
     teThresholds(te) {
@@ -123,28 +145,25 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
     },
 
     logout() {
-      if(!this.isLogged()) return;
+      if(!this.isInMemory) return;
 
+      _type = undefined;
       _blob = undefined;
-      _userBlob = undefined;
-      _password = undefined;
-      _walletfile = undefined;
       _address = undefined;
       _secrets.splice(0, _secrets.length);
 
-      delete $window.sessionStorage.userBlob;
-      delete $window.sessionStorage.password;
+      delete $window.sessionStorage.type;
       delete $window.sessionStorage.walletfile;
     },
 
     register(opts, callback){
       const options = {
-        'account': _address,
+        'account_id': _address,
         'password': opts.password,
         'masterkey': _secrets[0],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
         'walletfile': opts.walletfile
       };
-      BlobFactory.create(options, function (err, blob) {
+      BlobFactory.create(options, (err, blob) => {
         if (err) return callback(err);
 
         console.log("AuthenticationFactory: registration succeeded", blob);
@@ -152,14 +171,19 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       });
     },
 
-    openfile(walletfile, password, callback) {
-      BlobFactory.init(walletfile, password, function (err, blob) {
-        if (err) {
-          callback(err);
-          return;
-        }
+    openfile(password, walletfile, callback) {
+      BlobFactory.open(password, walletfile, (err, blob) => {
+        if (err) callback(err);
+
+        _blob    = blob;
+        _type    = this.TYPE.FILESYSTEM;
+        _address = _blob.data.account_id;
+        _secrets.splice(0, _secrets.length, _blob.data.masterkey);
+
+        $window.sessionStorage.type = _type;
+
         console.log("client: authflow: login succeeded", blob);
-        callback(null, blob);
+        callback(null);
       });
     }
 
@@ -167,9 +191,9 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
 });
 
 
-myApp.factory('TokenInterceptor', function($q, $window) {
+myApp.factory('TokenInterceptor', ($q, $window) => {
   return {
-    request: function(config) {
+    request: (config) => {
       config.headers = config.headers || {};
       if ($window.sessionStorage.token) {
         config.headers['X-Access-Token'] = $window.sessionStorage.token;
@@ -180,7 +204,7 @@ myApp.factory('TokenInterceptor', function($q, $window) {
       return config || $q.when(config);
     },
 
-    response: function(response) {
+    response: (response) => {
       return response || $q.when(response);
     }
   };

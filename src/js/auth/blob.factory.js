@@ -10,7 +10,7 @@
 const fs = require('fs');
 const sjcl = require('sjcl');
 
-myApp.factory('BlobFactory', ['$rootScope', function ($scope){
+myApp.factory('BlobFactory', ['$rootScope', '$window', function ($scope, $window){
 
   const CRYPT_CONFIG = {
     ks: 256,  // key size
@@ -101,27 +101,35 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       this.password = password;
       this.walletfile = walletfile;
       this.data = data;
+
+      if(!this.data) throw new Error("Error while decrypting blob");
+    }
+
+    static fromBlob(password, walletfile, rawData){
+      if(!password) throw new Error('No password.')
+      if(!walletfile) throw new Error('No path to wallet file.')
+      if(!rawData) throw new Error('No rawData.')
+
+      const blob = new BlobObj(password, walletfile, BlobObj._decrypt(password, rawData));
+      if (!blob.data) throw new Error("Error while decrypting blob");
+      return blob;
     }
 
     /**
      * Attempts to retrieve and decrypt the blob.
      */
-    static init(walletfile, password, callback) {
-      fs.readFile(walletfile, 'utf8', (err, data) => {
-        if (err) {
-          callback(err);
-          return;
+    static open(password, walletfile, callback) {
+      fs.readFile(walletfile, 'utf8', (err, blob) => {
+        if (err) return callback(err);
+
+        try {
+          const o = BlobObj.fromBlob(password, walletfile, blob);
+          o._saveToSession();
+          callback(null, o);
+        } catch(e) {
+          callback(e);
         }
 
-        const blob = new BlobObj(password, walletfile);
-        const decryptedBlob = blob.decrypt(data);
-
-        if (!decryptedBlob) {
-          callback(new Error("Error while decrypting blob"));
-          return;
-        }
-
-        callback(null, decryptedBlob);
       });
     }
 
@@ -141,53 +149,70 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
     static create(opts, callback) {
       const blob = new BlobObj(opts.password, opts.walletfile, {
         masterkey: opts.masterkey,
-        account_id: opts.account,
+        account_id: opts.account_id,
         contacts: [],
         created: (new Date()).toJSON()
       });
 
-      blob.persist(callback);
+      blob._saveToSession();
+      blob._saveToFile(callback);
+    }
+
+    _saveToSession() {
+      $window.sessionStorage.walletfile = JSON.stringify({
+        blob: this.blob,
+        password: this.password,
+        path: this.walletfile,
+      });
+    }
+
+    static fromSession() {
+      if(!$window.sessionStorage.walletfile) throw new Error('No file wallet in session.');
+      try {
+        const {password, path, blob} = JSON.parse($window.sessionStorage.walletfile);
+        return BlobObj.fromBlob(password, path, blob);
+      } catch(e) {
+        const {walletfile} = $window.sessionStorage;
+        delete $window.sessionStorage.walletfile;
+        throw new Error(`File wallet in session corrupted, cleaned up!\n${walletfile}\n${e}`)
+      }
     }
 
     // Store blob in a file
-    persist(callback) {
+    _saveToFile(callback) {
       console.log('blob persist:', this.data);
-      fs.writeFile(this.walletfile, this.encrypt(), (err) => {
+
+      fs.writeFile(this.walletfile, this.blob, (err) => {
+
+        this._saveToSession();
         callback(err, this);
       });
     }
 
-    encrypt() {
+    get blob() {
+      return BlobObj._encrypt(this.password, this.data);
+    }
+
+    static _encrypt(password, data) {
       // Filter Angular metadata before encryption
-      if ('object' === typeof this.data && 'object' === typeof this.data.contacts) {
-        this.data.contacts = angular.fromJson(angular.toJson(this.data.contacts));
+      if ('object' === typeof data && 'object' === typeof data.contacts) {
+        data.contacts = angular.fromJson(angular.toJson(data.contacts));
       }
 
-      // Encryption
-      return btoa(sjcl.encrypt(""+this.password.length+'|'+this.password,
-        JSON.stringify(this.data), {
+      const plaintext = JSON.stringify(data)
+      const blob = btoa(sjcl.encrypt(`${password.length}|${password}`, plaintext, {
           ks: CRYPT_CONFIG.ks,
           iter: CRYPT_CONFIG.iter
-        }
-      ));
+      }));
+      return blob;
     }
 
-    decrypt(data) {
-      const _decrypt = (priv, ciphertext) => {
-        this.data = JSON.parse(sjcl.decrypt(priv, ciphertext));
-        return this;
-      }
-
-      try {
-        return _decrypt(""+this.password.length+'|'+this.password, atob(data));
-      } catch (e) {
-        console.log("client: blob: decryption failed", e.toString());
-        console.log(e.stack);
-        return false;
-      }
+    static _decrypt(password, blob) {
+      const plaintext = sjcl.decrypt(`${password.length}|${password}`, atob(blob));
+      return JSON.parse(plaintext);
     }
 
-    applyUpdate(op, path, params, callback) {
+    _applyUpdate(op, path, params, callback) {
       // Exchange from numeric op code to string
       if ("number" === typeof op) op = BLOB_OPS_REVERSE[op];
       if ("string" !== typeof op) throw new Error("Blob update op code must be a number or a valid op id string");
@@ -202,14 +227,13 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
 
       this._traverse(this.data, pointer, path, op, params);
 
-      this.persist((err, data) => {
+      this._saveToFile((err, data) => {
         console.log('Blob saved');
         if (typeof callback === 'function') callback(err, data);
       });
     }
 
     _traverse(context, pointer, originalPointer, op, params) {
-      const _this = this;
       let part = unescapeToken(pointer.shift());
 
       if (Array.isArray(context)) {
@@ -267,7 +291,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
               subcommands.forEach((subcommand) => {
                 const op = subcommand[0];
                 const pointer = subpointer+subcommand[1];
-                _this.applyUpdate(op, pointer, subcommand.slice(2));
+                this._applyUpdate(op, pointer, subcommand.slice(2));
               });
             }
           }
@@ -285,7 +309,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
      * This method adds an entry to the beginning of an array.
      */
     unshift(pointer, value, callback) {
-      this.applyUpdate('unshift', pointer, [value], callback);
+      this._applyUpdate('unshift', pointer, [value], callback);
     }
 
     /**
@@ -304,7 +328,7 @@ myApp.factory('BlobFactory', ['$rootScope', function ($scope){
       // Normalize subcommands to minimize the patch size
       params = params.slice(0, 2).concat(normalizeSubcommands(params.slice(2), true));
 
-      this.applyUpdate('filter', pointer, params, callback);
+      this._applyUpdate('filter', pointer, params, callback);
     }
 
   }
