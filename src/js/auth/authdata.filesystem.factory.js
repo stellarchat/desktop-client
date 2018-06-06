@@ -184,7 +184,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, A
         account_id: object.account_id,
         contacts: object.contacts,
         created: object.created,
-        masterkey: object.masterkey,
+        masterkey: [object.masterkey],
       }
     }
 

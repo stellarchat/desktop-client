@@ -97,6 +97,7 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
 
     //
     // Account address and signing.
+    // It's also partly implemented for later multi-signature support.
     //
 
     get address() {
@@ -111,7 +112,7 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
       return Promise.resolve({
         [this.address]: {  // Account.
           requiredThreshold: 1,
-          attainedThreshold: 0,
+          attainedThreshold: te.signatures.length,  // Assumes no multisignatures. TODO: upgrade.
           availableSigners: {
             [this.address]: 1,  // Public Key.
           }
@@ -120,24 +121,46 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
     }
 
     requiredSigners(thresholds) {
-      return Object.entries(thresholds)
-        .map(([account, thresholds]) => thresholds.attainedThreshold > thresholds.requiredThreshold ? thresholds.availableSigners : {})
-        .reduce((all, signers)=>Object.entries(signers).forEach(([signer, weight])=>all[signer] = Math.max(weight, all[signer])), Object.create(null))
-        .map((mapOfAllSignersAndWeights)=>Object.entries(mapOfAllSignersAndWeights))
+      const allUsefulSignersAndWeights = Object.entries(thresholds)
+        .filter(([account, thresholds]) => thresholds.attainedThreshold < thresholds.requiredThreshold)
+        .reduce((all, [account, signers])=> {
+            Object.entries(signers.availableSigners).forEach(([signer, weight])=>all[signer] = Math.max(weight, all[signer] || 0));
+            return all;
+          },
+          Object.create(null))
+
+      return Object.entries(allUsefulSignersAndWeights)
         .sort((a, b) => a[1] > b[1])  // Biggest weight first.
         .map((signerAndWeight) => signerAndWeight[0])
     }
 
-    sign(te, callback) {
-      const availablePKs = _data.secrets.reduce((map, secret)=>map[StellarSdk.Keypair.fromSecret(secret)] = secret, Object.create(null));
-      // Sign all we can automatically.
-      let nextSigner;
-      do {
-        nextSigner = this.requiredSigners(this.teThresholds(te)).filter((pk) => pk in availablePKs).pop();
-        if(nextSigner) te.sign(availablePKs[nextSigner]);
-      } while(nextSigner)
+    get availablePKs() {
+      return _data.secrets.reduce((map, secret)=>{
+          const kp = StellarSdk.Keypair.fromSecret(secret);
+          map[kp.publicKey()] = kp;
+          return map;
+        },
+        Object.create(null));
+    }
 
-      callback(null, te);
+    // Sign with all available and useful secrets we can automatically.
+    sign(te) {
+      return Promise.resolve()
+        .then(()=>{
+          return this.teThresholds(te);
+        })
+        .then((thresholds)=>{
+          const usefulSignature = this.requiredSigners(thresholds).filter((pk) => pk in this.availablePKs).pop();
+
+          if(usefulSignature) {
+            const kp = this.availablePKs[usefulSignature];
+            te.sign(kp);
+            console.info(`Automatically signed Tx ${te.hash} with Keypair ${kp.publicKey()}`);
+            return this.sign(te);
+          } else {
+            return te;
+          }
+        })
     }
 
     //

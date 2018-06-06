@@ -24,6 +24,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
     return {
 
+      get address() {
+        return AuthenticationFactory.address;
+      },
+
       _updateSeq(account) {
         const now = new Date();
         // In the same ledger
@@ -59,7 +63,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -82,7 +86,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -105,7 +109,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -155,7 +159,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             price : price.toString()
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -178,17 +182,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         }
       },
 
-      _sign(te) {
-          return new Promise((resolve, reject) => {
-            AuthenticationFactory.sign(te, (err, te) => {
-              if (err) {
-                return reject(err);
-              } else {
-                resolve(te);
-              }
-            });
-          });
-      },
       logout() {
         this.address = undefined;
         _balances = {};
@@ -203,10 +196,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       random() {
         AuthenticationFactory.random();
         return this.address;
-      },
-
-      get address() {
-        return AuthenticationFactory.address;
       },
 
       isValidAddress(address) {
@@ -280,7 +269,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             path       : path
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -348,7 +337,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             limit: limit.toString()
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -369,7 +358,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.setOptions(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -388,7 +377,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageData(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -407,7 +396,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.accountMerge(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
@@ -544,7 +533,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             offerId : offer_id
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._sign(te);
+          return AuthenticationFactory.sign(te);
         }).then((te) => {
           return _server.submitTransaction(te);
         }).then((txResult) => {
