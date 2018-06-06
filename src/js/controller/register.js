@@ -47,17 +47,13 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
     };
 
     $scope.submitForm = function() {
-      if($scope.masterkey) {
-        // TODO: Add UI support for mismatching address and secret pairs.
-        // `AuthenticationFactory.setAccount($scope.address, [$scope.masterkey]);`
-        AuthenticationFactory.setAccount(StellarSdk.Keypair.fromSecret($scope.masterkey), [$scope.masterkey]);
-      } else {
-        $scope.masterkey = AuthenticationFactory.random();
-      }
+      if(!$scope.masterkey) $scope.masterkey = StellarSdk.Keypair.random().secret();
 
-      var options = {
-        'password': $scope.password1,
-        'walletfile': $scope.walletfile
+      const options = {
+        address: StellarSdk.Keypair.fromSecret($scope.masterkey).publicKey(),  // ignored until blob format v2.
+        secrets: $scope.masterkey,  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
+        password: $scope.password1,
+        path: $scope.walletfile
       };
       AuthenticationFactory.register(options, function(err){
         if (err) {

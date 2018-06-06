@@ -1,75 +1,107 @@
 /* global angular, myApp, StellarSdk */
 
-myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
+// Auth - singleton that manages account.
+myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
+                                function($window ,  AuthData ,  AuthDataFilesystem ,  AuthDataInmemory) {
   let _type;
-  let _blob;
-  let _address;
-  const _secrets = [];  // The only place where secret is held. See also method `sign(te, callback)`.
+  let _data;  // `_dta.secrets` is the only place where secret is held. See also method `sign(te, callback)`.
 
-  return {
+  class Auth {
 
-    // Read-only constants.
+    get SESSION_KEY() { return 'authtype'; }
     get TYPE() { return {
         get TEMPORARY() { return 'temporary' },
         get FILESYSTEM() { return 'filesystem' },
-    } },
+    }}
+    get AUTH_DATA() { return {
+        get [this.TYPE.TEMPORARY]() { return AuthDataFilesystem; },
+        get [this.TYPE.FILESYSTEM]() { return AuthDataInmemory; },
+    }}
+
+    //
+    // Lifecycle.
+    //
 
     get isInMemory() {
       return !!_type;
-    },
+    }
 
     get isInSession() {
-      return !!$window.sessionStorage.type;
-    },
+      return !!$window.sessionStorage[this.SESSION_KEY];
+    }
 
-    restoreFromSession() {
+    create(opts, callback){
+      AuthDataFilesystem.create(opts)
+        .then((authdata) => {
+          console.log("AuthenticationFactory: registration succeeded", authdata);
+          callback(null, authdata, 'local');
+        }).catch(callback);
+    }
+
+    load(type, opts, callback) {
+      const Authdata = this.AUTH_DATA[type];
+      if(!Authdata) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
+
+      AuthDataFilesystem.load(opts)
+        .then((authdata) => {
+          _type = type;
+          _data = authdata;
+          this._store();
+          console.warn(`Restored "${type}" authdata from session.`)
+          callback(null);
+        })
+      .catch(callback);
+
+    }
+
+    restore() {
       if(this.isInMemory) return;  // Restore only once: Skip if already initiated or restored from session.
 
+      const type = $window.sessionStorage[this.SESSION_KEY];
+      const Authdata = this.AUTH_DATA[type];
+      if(!Authdata) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
+
       try {
-        switch($window.sessionStorage.type) {
-          case(this.TYPE.TEMPORARY): {
-            throw new Error('TODO');
-            // _type = this.TYPE.TEMPORARY;
-          }
-          case(this.TYPE.FILESYSTEM): {
-            _type    = this.TYPE.FILESYSTEM;
-            _blob = BlobFactory.fromSession();
-            _address = _blob.data.account_id;
-            _secrets.splice(0, _secrets.length, _blob.data.masterkey);
-            break;
-          }
-          case(undefined): {
-            _type = undefined;
-            break;
-          }
-          default: {
-            throw new Error(`Unsupported type "${$window.sessionStorage.type}"`);
-          }
-        }
+        const authdata = AuthDataFilesystem.restore();
+
+        _type = type;
+        _data = authdata;
+        console.warn(`Restored "${type}" authdata from session.`)
       } catch(e) {
-        console.warn(`Got error while restoring from session, cleaning up!`, e)
-        _blob    = undefined;
         _type    = undefined;
-        _address = undefined;
-        _secrets.splice(0, _secrets.length);
+        _data    = undefined;
+        console.warn(`Got error while restoring from session, cleaned up!`, e)
       }
 
-      delete $window.sessionStorage.type;
-      if(_type) $window.sessionStorage.type = _type;
-    },
+      delete $window.sessionStorage[this.SESSION_KEY];
+      if(_type) this._store();
+    }
+
+    // No need to store or save as Auth does it automatically when neccessary.
+    _store() {
+      if(!this.isInMemory) throw new Error('Nothing in memory to store to session');
+
+      $window.sessionStorage[this.SESSION_KEY] = _type;
+      _data.store();
+    }
+
+    logout() {
+      if(!this.isInMemory) return;
+
+      _type = undefined;
+      _data = undefined;
+
+      delete $window.sessionStorage[this.SESSION_KEY];
+      delete $window.sessionStorage[AuthData.SESSION_KEY];
+    }
+
+    //
+    // Account address and signing.
+    //
 
     get address() {
-      return _address;
-    },
-
-    get contacts() {
-      switch(_type) {
-        case(this.TYPE.TEMPORARY): return [];
-        case(this.TYPE.FILESYSTEM): return _blob.data.contacts;
-        case(undefined): return [];
-        default: throw new Error(`Unsupported type "${_type}"`);
-      }
-    },
+      return _data ? _data.address : undefined;
+    }
 
     teThresholds(te) {
       // TODO #1: parse "te" to get list of source accounts.
@@ -85,7 +117,7 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
           }
         },
       });
-    },
+    }
 
     requiredSigners(thresholds) {
       return Object.entries(thresholds)
@@ -94,10 +126,10 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
         .map((mapOfAllSignersAndWeights)=>Object.entries(mapOfAllSignersAndWeights))
         .sort((a, b) => a[1] > b[1])  // Biggest weight first.
         .map((signerAndWeight) => signerAndWeight[0])
-    },
+    }
 
     sign(te, callback) {
-      const availablePKs = _secrets.reduce((map, secret)=>map[StellarSdk.Keypair.fromSecret(secret)] = secret, Object.create(null));
+      const availablePKs = _data.secrets.reduce((map, secret)=>map[StellarSdk.Keypair.fromSecret(secret)] = secret, Object.create(null));
       // Sign all we can automatically.
       let nextSigner;
       do {
@@ -106,89 +138,46 @@ myApp.factory('AuthenticationFactory', function($window, BlobFactory) {
       } while(nextSigner)
 
       callback(null, te);
-    },
+    }
 
-    setAccount(address, secrets) {
-      if(!StellarSdk.StrKey.isValidEd25519PublicKey(address)) throw new Error('Invalid Address.');
-      if(!secrets.every((secret)=>StellarSdk.StrKey.isValidEd25519SecretSeed(secret))) throw new Error('Invalid Secret.');
+    //
+    // COntact Management.
+    //
 
-      _secrets.splice(0, _secrets.length, ...secrets);
-      _address = address;
-    },
-
-    random() {
-        const keypair = StellarSdk.Keypair.random();
-        _address = keypair.publicKey();
-        _secrets.splice(0, _secrets.length, keypair.secret());
-        return _secrets[0];  // To display when creating the wallet.
-    },
+    get contacts() {
+      switch(_type) {
+        case(this.TYPE.TEMPORARY): return [];
+        case(this.TYPE.FILESYSTEM): return _data.contacts;
+        case(undefined): return [];
+        default: throw new Error(`Unsupported type "${_type}"`);
+      }
+    }
 
     addContact(contact, callback) {
-      _blob.unshift("/contacts", contact, callback);
-    },
+      _data.unshift("/_contacts", contact, callback);
+    }
 
     updateContact(name, contact, callback) {
-      _blob.filter('/contacts', 'name', name, 'extend', '', contact, callback);
-    },
+      _data.filter('/_contacts', 'name', name, 'extend', '', contact, callback);
+    }
 
     deleteContact(name, callback) {
-      _blob.filter('/contacts', 'name', name, 'unset', '', callback);
-    },
+      _data.filter('/_contacts', 'name', name, 'unset', '', callback);
+    }
 
     getContact(value) {
       if (!value) return false;
-      const contacts = _blob.data.contacts;
+      const contacts = _data.data.contacts;
       for (const contact of contacts) {
         if (contact.name === value || contact.address === value) return contact;
       }
       return false;
-    },
-
-    logout() {
-      if(!this.isInMemory) return;
-
-      _type = undefined;
-      _blob = undefined;
-      _address = undefined;
-      _secrets.splice(0, _secrets.length);
-
-      delete $window.sessionStorage.type;
-      delete $window.sessionStorage.walletfile;
-    },
-
-    register(opts, callback){
-      const options = {
-        'account_id': _address,
-        'password': opts.password,
-        'masterkey': _secrets[0],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
-        'walletfile': opts.walletfile
-      };
-      BlobFactory.create(options, (err, blob) => {
-        if (err) return callback(err);
-
-        console.log("AuthenticationFactory: registration succeeded", blob);
-        callback(null, blob, 'local');
-      });
-    },
-
-    openfile(password, walletfile, callback) {
-      BlobFactory.open(password, walletfile, (err, blob) => {
-        if (err) callback(err);
-
-        _blob    = blob;
-        _type    = this.TYPE.FILESYSTEM;
-        _address = _blob.data.account_id;
-        _secrets.splice(0, _secrets.length, _blob.data.masterkey);
-
-        $window.sessionStorage.type = _type;
-
-        console.log("client: authflow: login succeeded", blob);
-        callback(null);
-      });
     }
 
   }
-});
+
+  return new Auth();
+}]);
 
 
 myApp.factory('TokenInterceptor', ($q, $window) => {

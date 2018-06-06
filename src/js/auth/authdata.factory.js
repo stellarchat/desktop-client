@@ -3,19 +3,12 @@
  * User blob storage for desktop client
  */
 
-/* global angular, myApp, require */
+/* global myApp */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
-const fs = require('fs');
-const sjcl = require('sjcl');
 
-myApp.factory('BlobFactory', ['$rootScope', '$window', function ($scope, $window){
-
-  const CRYPT_CONFIG = {
-    ks: 256,  // key size
-    iter: 1000,  // iterations (key derivation)
-  };
+myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
 
   // Blob operations - do NOT change the mapping of existing ops!
   const BLOB_OPS = {
@@ -92,125 +85,66 @@ myApp.factory('BlobFactory', ['$rootScope', '$window', function ($scope, $window
     }
   }
 
-  /* class BlobObj
+  /* abstract class AuthData
    *
-   * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
+   * Handles persistence of data for Auth. Various subclasses handles various long-term storages.
    */
-  return class BlobObj {
-    constructor(password, walletfile, data){
-      this.password = password;
-      this.walletfile = walletfile;
-      this.data = data;
-
-      if(!this.data) throw new Error("Error while decrypting blob");
+  return class AuthData {
+    constructor(address, secrets, contacts){
+      if(!address) throw new Error('No address provided.');
+      if(!secrets) throw new Error('No secrets provided.');
+      if(!contacts) throw new Error('No contacts provided.');
+      this._address = address;
+      this._secrets = secrets || [];
+      this._contacts = contacts || [];
     }
 
-    static fromBlob(password, walletfile, rawData){
-      if(!password) throw new Error('No password.')
-      if(!walletfile) throw new Error('No path to wallet file.')
-      if(!rawData) throw new Error('No rawData.')
+    static get SESSION_KEY() { return 'authdata'; }
 
-      const blob = new BlobObj(password, walletfile, BlobObj._decrypt(password, rawData));
-      if (!blob.data) throw new Error("Error while decrypting blob");
-      return blob;
+    // create(...params:any[]) => Promise<AuthData> -- create in persistent storage and return Promise of instance.
+    static create() {
+      throw new Error('Implement .create()');
+      // blob.save(callback);
     }
 
-    /**
-     * Attempts to retrieve and decrypt the blob.
-     */
-    static open(password, walletfile, callback) {
-      fs.readFile(walletfile, 'utf8', (err, blob) => {
-        if (err) return callback(err);
-
-        try {
-          const o = BlobObj.fromBlob(password, walletfile, blob);
-          o._saveToSession();
-          callback(null, o);
-        } catch(e) {
-          callback(e);
-        }
-
-      });
+    // restore() => AuthData -- restore from sessionStorage and return instance.
+    static restore() {
+      throw new Error('Implement .restore()');
     }
 
-    /**
-     * Create a blob object
-     *
-     * @param {object} opts
-     * @param {string} opts.url
-     * @param {string} opts.id
-     * @param opts.crypt
-     * @param opts.unlock
-     * @param {string} opts.username
-     * @param {string} opts.account
-     * @param {string} opts.masterkey
-     * @param {object=} opts.oldUserBlob
-     */
-    static create(opts, callback) {
-      const blob = new BlobObj(opts.password, opts.walletfile, {
-        masterkey: opts.masterkey,
-        account_id: opts.account_id,
-        contacts: [],
-        created: (new Date()).toJSON()
-      });
-
-      blob._saveToSession();
-      blob._saveToFile(callback);
+    // load(...params:any[]) => Promise<AuthData> -- load from long-term storage (e.g. filesystem) and return Promise of instance.
+    static load() {
+      throw new Error('Implement .load()');
     }
 
-    _saveToSession() {
-      $window.sessionStorage.walletfile = JSON.stringify({
-        blob: this.blob,
-        password: this.password,
-        path: this.walletfile,
-      });
+    // store() => AuthData -- store in sessionStorage and return current instance.
+    store() {
+      throw new Error('Implement .store()');
     }
 
-    static fromSession() {
-      if(!$window.sessionStorage.walletfile) throw new Error('No file wallet in session.');
-      try {
-        const {password, path, blob} = JSON.parse($window.sessionStorage.walletfile);
-        return BlobObj.fromBlob(password, path, blob);
-      } catch(e) {
-        const {walletfile} = $window.sessionStorage;
-        delete $window.sessionStorage.walletfile;
-        throw new Error(`File wallet in session corrupted, cleaned up!\n${walletfile}\n${e}`)
-      }
+    // save() => Promise<AuthData> -- save to long-term storage (e.g. filesystem) and return Promise with current instance.
+    save() {
+      throw new Error('Implement .save()');
     }
 
-    // Store blob in a file
-    _saveToFile(callback) {
-      console.log('blob persist:', this.data);
-
-      fs.writeFile(this.walletfile, this.blob, (err) => {
-
-        this._saveToSession();
-        callback(err, this);
-      });
+    // string -- address of the account.
+    get address() {
+      return this._address;
     }
 
-    get blob() {
-      return BlobObj._encrypt(this.password, this.data);
+    // Array<string> -- array of secrets.
+    get secrets() {
+      return this._secrets.slice();
     }
 
-    static _encrypt(password, data) {
-      // Filter Angular metadata before encryption
-      if ('object' === typeof data && 'object' === typeof data.contacts) {
-        data.contacts = angular.fromJson(angular.toJson(data.contacts));
-      }
-
-      const plaintext = JSON.stringify(data)
-      const blob = btoa(sjcl.encrypt(`${password.length}|${password}`, plaintext, {
-          ks: CRYPT_CONFIG.ks,
-          iter: CRYPT_CONFIG.iter
-      }));
-      return blob;
+    // Array<Contact> -- array of Contacts.
+    get contacts() {
+      return this._contacts.slice();
     }
 
-    static _decrypt(password, blob) {
-      const plaintext = sjcl.decrypt(`${password.length}|${password}`, atob(blob));
-      return JSON.parse(plaintext);
-    }
+    //
+    // Magical methods to opererate on contacts. I don't want to break old wallet files and left as is. TODO: simplify or explain.
+    //
 
     _applyUpdate(op, path, params, callback) {
       // Exchange from numeric op code to string
@@ -225,9 +159,9 @@ myApp.factory('BlobFactory', ['$rootScope', '$window', function ($scope, $window
         throw new Error("Invalid JSON pointer: "+path);
       }
 
-      this._traverse(this.data, pointer, path, op, params);
+      this._traverse(this, pointer, path, op, params);  // it was `this.data` instead of `this`.
 
-      this._saveToFile((err, data) => {
+      this.save((err, data) => {
         console.log('Blob saved');
         if (typeof callback === 'function') callback(err, data);
       });

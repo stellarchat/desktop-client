@@ -16,13 +16,16 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
         return;
       }
       $scope.backendMessages = [];
-      AuthenticationFactory.openfile($scope.password, $scope.walletfile, function(err){
-        $scope.$apply(function(){
+
+      const type = AuthenticationFactory.TYPE.FILESYSTEM;
+      AuthenticationFactory.load(type, {path: $scope.walletfile, password: $scope.password}, (err) => {
+        $scope.$apply(() => {
           if (err) {
             console.error(err)
             $scope.error = 'Login failed: Wallet file or password is wrong.';
             return;
           }
+          console.log(AuthenticationFactory)
           if (AuthenticationFactory.address.substring(0, 1) == "r") {
             console.error(AuthenticationFactory.address);
             $scope.error = 'Login failed: Wallet file is a Ripple file.';
