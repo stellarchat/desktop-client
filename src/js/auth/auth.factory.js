@@ -14,8 +14,8 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
         get FILESYSTEM() { return 'filesystem' },
     }}
     get AUTH_DATA() { return {
-        get [this.TYPE.TEMPORARY]() { return AuthDataFilesystem; },
-        get [this.TYPE.FILESYSTEM]() { return AuthDataInmemory; },
+        get [this.TYPE.FILESYSTEM]() { return AuthDataFilesystem; },
+        get [this.TYPE.TEMPORARY]() { return AuthDataInmemory; },
     }}
 
     //
@@ -39,10 +39,10 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
     }
 
     load(type, opts, callback) {
-      const Authdata = this.AUTH_DATA[type];
-      if(!Authdata) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
+      const AuthData = this.AUTH_DATA[type];
+      if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
 
-      AuthDataFilesystem.load(opts)
+      AuthData.load(opts)
         .then((authdata) => {
           _type = type;
           _data = authdata;
@@ -58,11 +58,11 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
       if(this.isInMemory) return;  // Restore only once: Skip if already initiated or restored from session.
 
       const type = $window.sessionStorage[this.SESSION_KEY];
-      const Authdata = this.AUTH_DATA[type];
-      if(!Authdata) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
+      const AuthData = this.AUTH_DATA[type];
+      if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
 
       try {
-        const authdata = AuthDataFilesystem.restore();
+        const authdata = AuthData.restore();
 
         _type = type;
         _data = authdata;
@@ -141,7 +141,7 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
     }
 
     //
-    // COntact Management.
+    // Contact Management. Implicitly saves and stores AuthData.
     //
 
     get contacts() {
@@ -167,8 +167,7 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
 
     getContact(value) {
       if (!value) return false;
-      const contacts = _data.data.contacts;
-      for (const contact of contacts) {
+      for (const contact of _data.contacts) {
         if (contact.name === value || contact.address === value) return contact;
       }
       return false;

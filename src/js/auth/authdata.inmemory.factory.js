@@ -15,7 +15,7 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', function ($window, Aut
 
     // create(opts:Map<string, any>) => Promise<AuthDataInmemory> -- create and return Promise of instance.
     static create(opts) {
-      const authData = new AuthDataInmemory(opts.account_id, opts.masterkey);
+      const authData = new AuthDataInmemory({address: opts.address, secrets: [], contacts: []});
 
       return authData.save();
     }
@@ -32,15 +32,10 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', function ($window, Aut
       }
     }
 
-    // load(...params:any[]) => Promise<AuthDataInmemory> -- fake-load from sessionStorage and return Promise of instance.
-    static load(password, walletfile) {
-      return new Promise((resolve, reject) => {
-        try {
-          resolve(this.restore());
-        } catch(e) {
-          reject(e)
-        }
-      })
+    // load(...opts:any[]) => Promise<AuthDataInmemory> -- fake-load from sessionStorage and return Promise of instance.
+    static load(opts) {
+      console.log(opts)
+      return AuthDataInmemory.create(opts)
     }
 
     // store() => AuthDataInmemory -- store in sessionStorage and return instance.
@@ -50,6 +45,7 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', function ($window, Aut
         contacts: this.contacts,
         secrets: this.secrets,
       });
+      return this;
     }
 
     // save() => Promise<AuthDataInmemory> -- fake-save and return Promise of current instance.

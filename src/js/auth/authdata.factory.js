@@ -92,8 +92,8 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
   return class AuthData {
     constructor(address, secrets, contacts){
       if(!address) throw new Error('No address provided.');
-      if(!secrets) throw new Error('No secrets provided.');
-      if(!contacts) throw new Error('No contacts provided.');
+      if(!Array.isArray(secrets)) throw new Error('Secrets is not array.');
+      if(!Array.isArray(contacts)) throw new Error('Contacts is not array.');
       this._address = address;
       this._secrets = secrets || [];
       this._contacts = contacts || [];
@@ -101,10 +101,9 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
 
     static get SESSION_KEY() { return 'authdata'; }
 
-    // create(...params:any[]) => Promise<AuthData> -- create in persistent storage and return Promise of instance.
-    static create() {
+    // create(...opts:any[]) => Promise<AuthData> -- create in persistent storage and return Promise of instance.
+    static create(opts) {
       throw new Error('Implement .create()');
-      // blob.save(callback);
     }
 
     // restore() => AuthData -- restore from sessionStorage and return instance.
@@ -112,8 +111,8 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
       throw new Error('Implement .restore()');
     }
 
-    // load(...params:any[]) => Promise<AuthData> -- load from long-term storage (e.g. filesystem) and return Promise of instance.
-    static load() {
+    // load(...opts:any[]) => Promise<AuthData> -- load from long-term storage (e.g. filesystem) and return Promise of instance.
+    static load(opts) {
       throw new Error('Implement .load()');
     }
 

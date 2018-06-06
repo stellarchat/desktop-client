@@ -39,8 +39,21 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
     }
 
     $scope.submitAddress = function(){
-      $scope.backendMessages = ['TODO: implement.'];
-      $scope.error = 'TODO: implement.';
+      const type = AuthenticationFactory.TYPE.TEMPORARY;
+      AuthenticationFactory.load(type, {address: $scope.address}, (err) => {
+        $scope.$apply(() => {
+          if (err) {
+            console.error(err)
+            $scope.error = `Login failed: ${err}`;
+            return;
+          }
+
+          console.log(AuthenticationFactory)
+          $rootScope.$broadcast('$blobUpdate');
+          $location.path('/');
+
+        });
+      });
     }
   }
 ]);
