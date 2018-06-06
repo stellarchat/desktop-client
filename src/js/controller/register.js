@@ -51,11 +51,11 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
 
       const options = {
         address: StellarSdk.Keypair.fromSecret($scope.masterkey).publicKey(),  // ignored until blob format v2.
-        secrets: $scope.masterkey,  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
+        secrets: [$scope.masterkey],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
         password: $scope.password1,
         path: $scope.walletfile
       };
-      AuthenticationFactory.register(options, function(err){
+      AuthenticationFactory.create(options, function(err){
         if (err) {
           console.error('Register failed!', err);
           if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {

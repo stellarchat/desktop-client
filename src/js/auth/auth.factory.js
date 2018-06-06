@@ -104,6 +104,15 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
       return _data ? _data.address : undefined;
     }
 
+    get secretAmount() {
+      return _data ? _data.secrets.length : 0;
+    }
+
+    get secrets() {
+      console.warn(`Your ${this.secretAmount} secret(s) were revealed!`)
+      return _data ? _data.secrets : undefined;
+    }
+
     teThresholds(te) {
       // TODO #1: parse "te" to get list of source accounts.
       // TODO #2: fetch horizon to lookup actual signers for them.
