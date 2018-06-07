@@ -3,7 +3,7 @@
  * User blob storage for desktop client
  */
 
-/* global angular, myApp, require */
+/* global angular, myApp, nw, require */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
@@ -76,7 +76,16 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, A
         created: (new Date()).toJSON(),
       });
 
-      return authData.save();
+      return authData.save()
+        .catch((err)=>{
+          //The default folder is the root of HD when the first time user save file on Mac.
+          // EACCES: permission denied
+          if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
+            throw new Error("Permission denied. Please choose another location.");
+          }
+
+          throw err;
+        });
     }
 
     // restore() => AuthDataFilesystem -- restore from sessionStorage and return instance.

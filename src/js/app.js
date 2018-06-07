@@ -136,10 +136,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
           $location.search({}); // clean params
         }
         // check if user object exists else fetch it. This is incase of a page refresh
-        if(AuthenticationFactory.isInSession) {
-          AuthenticationFactory.restore();
-          $rootScope.$broadcast('$blobUpdate');
-        }
+        if(AuthenticationFactory.isInSession) AuthenticationFactory.restore();
       }
     });
 
@@ -151,8 +148,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
       }
     });
 
-    $rootScope.$on('$blobUpdate', function(){
-      console.log('$blobUpdate', AuthenticationFactory.isInMemory, $rootScope.address, AuthenticationFactory.address);
+    $rootScope.$on('$authUpdate', function(){
+      console.log('$authUpdate', AuthenticationFactory.isInMemory, $rootScope.address, AuthenticationFactory.address);
 
       if (AuthenticationFactory.isInMemory) {
         $rootScope.address = AuthenticationFactory.address;

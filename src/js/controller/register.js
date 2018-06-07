@@ -55,27 +55,18 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
         password: $scope.password1,
         path: $scope.walletfile
       };
-      AuthenticationFactory.create(options, function(err){
+      AuthenticationFactory.create(AuthenticationFactory.TYPE.FILESYSTEM, options, (err) => {
         if (err) {
-          console.error('Register failed!', err);
-          if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
-            //The default folder is the root of HD when the first time user save file on Mac.
-            // EACCES: permission denied
-            $scope.save_error = "Permission denied. Please choose another location.";
-          } else {
-            $scope.save_error = err.message;
-          }
+          console.error('Registration failed!', err);
+          $scope.save_error = err.message;
           $scope.$apply();
           return;
         }
+
         $scope.password = new Array($scope.password1.length+1).join("*");
         $scope.key = `S${new Array(56).join("*")}`;
-
-        $rootScope.$broadcast('$blobUpdate');
-
-        $scope.$apply(function(){
-          $scope.mode = 'welcome';
-        });
+        $scope.mode = 'welcome';
+        $scope.$apply();
       });
     };
 

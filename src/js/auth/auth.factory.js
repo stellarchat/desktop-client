@@ -1,8 +1,8 @@
 /* global angular, myApp, StellarSdk */
 
 // Auth - singleton that manages account.
-myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
-                                function($window ,  AuthData ,  AuthDataFilesystem ,  AuthDataInmemory) {
+myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
+                                function($rootScope ,  $window ,  AuthData ,  AuthDataFilesystem ,  AuthDataInmemory) {
   let _type;
   let _data;  // `_dta.secrets` is the only place where secret is held. See also method `sign(te, callback)`.
 
@@ -30,10 +30,17 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
       return !!$window.sessionStorage[this.SESSION_KEY];
     }
 
-    create(opts, callback){
-      AuthDataFilesystem.create(opts)
+    create(type, opts, callback){
+      const AuthData = this.AUTH_DATA[type];
+      if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
+
+      AuthData.create(opts)
         .then((authdata) => {
           console.log("AuthenticationFactory: registration succeeded", authdata);
+
+          _type = type;
+          _data = authdata;
+          this._store();
           callback(null, authdata, 'local');
         }).catch(callback);
     }
@@ -44,10 +51,13 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
 
       AuthData.load(opts)
         .then((authdata) => {
+          if (authdata.address.substring(0, 1) == "r") throw new Error(`Login failed: Wallet file is a Ripple file.`);
+
           _type = type;
           _data = authdata;
           this._store();
-          console.warn(`Restored "${type}" authdata from session.`)
+
+          console.info(`Restored "${type}" authdata from session.`)
           callback(null);
         })
       .catch(callback);
@@ -77,12 +87,13 @@ myApp.factory('AuthenticationFactory', ['$window', 'AuthData', 'AuthDataFilesyst
       if(_type) this._store();
     }
 
-    // No need to store or save as Auth does it automatically when neccessary.
+    // No need to explicitly store or save, because Auth does it automatically when neccessary. Thus private method.
     _store() {
       if(!this.isInMemory) throw new Error('Nothing in memory to store to session');
 
       $window.sessionStorage[this.SESSION_KEY] = _type;
       _data.store();
+      $rootScope.$broadcast('$authUpdate');
     }
 
     logout() {

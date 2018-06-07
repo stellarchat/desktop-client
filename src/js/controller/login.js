@@ -25,14 +25,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
             $scope.error = 'Login failed: Wallet file or password is wrong.';
             return;
           }
-          console.log(AuthenticationFactory)
-          if (AuthenticationFactory.address.substring(0, 1) == "r") {
-            console.error(AuthenticationFactory.address);
-            $scope.error = 'Login failed: Wallet file is a Ripple file.';
-            return;
-          }
 
-          $rootScope.$broadcast('$blobUpdate');
           $location.path('/');
         });
       });
@@ -48,10 +41,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
             return;
           }
 
-          console.log(AuthenticationFactory)
-          $rootScope.$broadcast('$blobUpdate');
           $location.path('/');
-
         });
       });
     }
