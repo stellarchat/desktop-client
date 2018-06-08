@@ -193,11 +193,6 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         StellarPath.close();
       },
 
-      random() {
-        AuthenticationFactory.random();
-        return this.address;
-      },
-
       isValidAddress(address) {
         return StellarSdk.StrKey.isValidEd25519PublicKey(address);
       },
