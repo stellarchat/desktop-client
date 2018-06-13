@@ -55,7 +55,7 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
             StellarApi.setServer($scope.active_horizon, $scope.active_passphrase, SettingFactory.getAllowHttp());
             StellarApi.logout();
             $rootScope.reset();
-            $rootScope.$broadcast('$blobUpdate');
+            $rootScope.$broadcast('$authUpdate');  // workaround to refresh and get changes into effect.
             location.reload();
 
           } catch (e) {

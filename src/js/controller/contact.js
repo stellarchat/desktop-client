@@ -61,12 +61,11 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
         contact.memo     = $scope.contact.memo;
       }
 
-      AuthenticationFactory.addContact(contact, function(err, blob){
+      AuthenticationFactory.addContact(contact, function(err){
         if (err) {
           $scope.error['memo'] = err.message;	// just find some place to show err
         } else {
-          AuthenticationFactory.setBlob(blob);
-          $rootScope.contacts = blob.data.contacts;
+          $rootScope.contacts = AuthenticationFactory.contacts;
         }
         $scope.$apply();
       });
@@ -141,13 +140,11 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
         contact.memo     = $scope.editmemo;
       }
 
-      AuthenticationFactory.updateContact($scope.entry.name, contact, function(err, blob){
+      AuthenticationFactory.updateContact($scope.entry.name, contact, function(err){
         if (err) {
           $scope.error['memo'] = err.message; // just find some place to show err
         } else {
-          console.log('updatedCallback', blob.data.contacts);
-          AuthenticationFactory.setBlob(blob);
-          $rootScope.contacts = blob.data.contacts;
+          $rootScope.contacts = AuthenticationFactory.contacts;
         }
         $scope.$apply();
       });
@@ -156,13 +153,11 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
     };
 
     $scope.remove = function (index){
-      AuthenticationFactory.deleteContact($scope.entry.name, function(err, blob){
+      AuthenticationFactory.deleteContact($scope.entry.name, function(err){
         if (err) {
           $scope.error['memo'] = err.message; // just find some place to show err
         } else {
-          console.log('deleteCallback', blob.data.contacts);
-          AuthenticationFactory.setBlob(blob);
-          $rootScope.contacts = blob.data.contacts;
+          $rootScope.contacts = AuthenticationFactory.contacts;
         }
         $scope.$apply();
       });

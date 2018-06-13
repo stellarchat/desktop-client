@@ -19,8 +19,8 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : false
     }
-  }).when('/registry', {
-    templateUrl : 'pages/registry.html',
+  }).when('/register', {
+    templateUrl : 'pages/register.html',
     controller : 'RegisterCtrl',
     access : {
       requiredLogin : false
@@ -124,7 +124,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
   function($rootScope, $window, $location, $translate, AuthenticationFactory, StellarApi, SettingFactory, RemoteFactory, AnchorFactory) {
 
     $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
-      if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged()) {
+      if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isInSession) {
         $location.path("/login");
       } else {
         if (currentRoute && currentRoute.originalPath == '/trade') {
@@ -136,38 +136,30 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
           $location.search({}); // clean params
         }
         // check if user object exists else fetch it. This is incase of a page refresh
-        if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
-        if (!AuthenticationFactory.userRole) AuthenticationFactory.userRole = $window.sessionStorage.userRole;
-        if (!AuthenticationFactory.userBlob && $window.sessionStorage.userBlob) {
-          //AuthenticationFactory.userBlob = $window.sessionStorage.userBlob;
-          AuthenticationFactory.getBlobFromSession(function(err, blob){
-            $rootScope.$broadcast('$blobUpdate');
-          });
-        }
+        if(AuthenticationFactory.isInSession) AuthenticationFactory.restore();
       }
     });
 
     $rootScope.$on('$routeChangeSuccess', function(event, nextRoute, currentRoute) {
-      $rootScope.showMenu = AuthenticationFactory.isLogged();
-      $rootScope.role = AuthenticationFactory.userRole;
+      $rootScope.showMenu = AuthenticationFactory.isInSession;
       // if the user is already logged in, take him to the home page
-      if (AuthenticationFactory.isLogged() == true && $location.path() == '/login') {
+      if (AuthenticationFactory.isInSession && $location.path() == '/login') {
         $location.path('/');
       }
     });
 
-    $rootScope.$on('$blobUpdate', function(){
-      console.log($rootScope.address, AuthenticationFactory.blob);
+    $rootScope.$on('$authUpdate', function(){
+      console.log('$authUpdate', AuthenticationFactory.isInMemory, $rootScope.address, AuthenticationFactory.address);
 
-      if ($rootScope.address && AuthenticationFactory.userBlob) {
-        var data = JSON.parse(AuthenticationFactory.userBlob);
-        console.log('$blobUpdate', data);
-        $rootScope.address = data.account_id;
-        $rootScope.contacts = data.contacts;
+      if (AuthenticationFactory.isInMemory) {
+        $rootScope.address = AuthenticationFactory.address;
+        $rootScope.contacts = AuthenticationFactory.contacts;
         $rootScope.resolveFed();
-        StellarApi.setAccount(data.account_id, data.masterkey);
         StellarApi.listenStream();
         StellarApi.queryAccount();
+      } else {
+        delete $rootScope.address;
+        delete $rootScope.contacts;
       }
     });
 
