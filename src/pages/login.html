@@ -7,11 +7,15 @@
      login information locally on your computer, so your account
      is as safe as the security of your personal computer.
   </div>
-  <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
-    <div class="auth-form-wrapper">
+  <div class="row">
+    <h1 translate="open_account">Open account</h2>
+    <div class="col-xs-12 col-sm-4 auth-form-wrapper">
+      <h2>Create Wallet</h2>
+      <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/register')" translate="create_new_account">Create new account</a></div>
+    </div>
+    <div class="col-xs-12 col-sm-4 auth-form-wrapper">
+      <h2>Open Wallet</h2>
       <form name="loginForm" ng-disabled="loginForm.$invalid" ng-submit="submitForm()">
-        <h2 translate="open_account">Open account</h2>
-        <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/registry')" translate="create_new_account">Create new account</a></div>
         <div class="form-group"><a class="btn btn-block btn-default" id="walletfile" ng-click="fileInputClick()">{{'select_file' | translate}} {{walletfile}}</a></div>
         <div class="form-group hide">
           <label for="login_walletfile" translate="select_file">Select account file</label>
@@ -27,6 +31,18 @@
         </div>
         <div class="submit-btn-container">
           <button class="btn btn-submit btn-block btn-success" type="submit" ng-disabled="loginForm.$invalid"><span translate="open_account">Open account</span></button>
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-12 col-sm-4 auth-form-wrapper">
+      <h2>Temporary Wallet</h2>
+      <form name="loginAddress" ng-disabled="loginAddress.$invalid" ng-submit="submitAddress()">
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input class="form-control" id="address" name="address" type="text" ng-model="address" required="required" autocomplete="disabled" />
+        </div>
+        <div class="submit-btn-container">
+          <button class="btn btn-submit btn-block btn-success" type="submit"><span>Continue</span></button>
         </div>
       </form>
     </div>

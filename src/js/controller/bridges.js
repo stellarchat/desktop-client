@@ -161,7 +161,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
 
           if (data.memo) {
             $scope.memo = data.memo.toString();
-            $scope.memo_type = data.memo_type;
+            $scope.memo_type = data.memo_type;  // either of: MemoID = "id", MemoText = "text", MemoHash = "hash"
             $scope.memo_provided = true;
           } else {
             $scope.memo = '';

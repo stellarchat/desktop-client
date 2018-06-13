@@ -1,14 +1,15 @@
 /* global myApp, round */
 
-myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'UserAuthFactory', 'SettingFactory', 'StellarApi',
-  function($scope, $rootScope, $location, UserAuthFactory, SettingFactory, StellarApi) {
+myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'StellarApi',
+  function($scope, $rootScope, $location, AuthenticationFactory, SettingFactory, StellarApi) {
 
     $scope.isActive = function(route) {
       return route === $location.path();
     }
 
     $scope.logout = function () {
-      UserAuthFactory.logout();
+      AuthenticationFactory.logout();
+      $location.path("/login");
       StellarApi.logout();
       $rootScope.reset();
     }
