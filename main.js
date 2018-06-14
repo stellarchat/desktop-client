@@ -7,8 +7,6 @@
   const os = require('os')
   const BrowserWindow = electron.BrowserWindow
   const Tray = electron.Tray
-  // initialize service finder module
-  const ServiceFinder = require('node-servicefinder').ServiceFinder
   const appName = app.getName()
   const appVersion = app.getVersion()
   const dataDir = app.getPath('userData') + path.sep
@@ -136,18 +134,6 @@
       electronDevTools.default(electronDevTools.ANGULARJS_BATARANG);
     }
   })
-  /**
-   * serviceFinder function - description
-   *
-   * @param  {type} serviceName  description
-   * @param  {type} protocol     description
-   * @param  {type} subTypes     description
-   * @param  {type} includeLocal description
-   * @return {type}              description
-   */
-  app.serviceFinder = function (serviceName, protocol, subTypes, includeLocal) {
-    return new ServiceFinder(serviceName, protocol, subTypes, includeLocal)
-  }
   /**
    * sysConfig function - description
    *
