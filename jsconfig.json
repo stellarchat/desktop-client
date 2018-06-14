@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "charset": "utf-8",
+    "target": "ES5",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": [
+    "build",
+    "dist",
+    "node_modules",
+    "app/node_modules"
+  ]
+}

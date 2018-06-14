@@ -65,13 +65,13 @@ myApp.factory('SettingFactory', function($window) {
       if ($window.localStorage['lang']) {
         return $window.localStorage['lang'];
       } else {
-        if (nw.global.navigator.language.indexOf('zh') >= 0) {
-          return 'cn';
-        } else if (nw.global.navigator.language.indexOf('fr') >= 0) {
-          return 'fr';
-        } else {
-          return 'en';
-        }
+      //   if (nw.global.navigator.language.indexOf('zh') >= 0) {
+      //     return 'cn';
+      //   } else if (nw.global.navigator.language.indexOf('fr') >= 0) {
+      //     return 'fr';
+      //   } else {
+        return 'en';
+      // }
       }
     },
 
