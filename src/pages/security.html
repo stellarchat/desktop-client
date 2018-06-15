@@ -2,16 +2,11 @@
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="settingPage">
-				<a href="javascript:" ng-class="{active: isMode('security')}" ng-click="setMode('security')"
-					translate="security">Security</a>
-				<a href="javascript:" ng-class="{active: isMode('inflation')}" ng-click="setMode('inflation')"
-					translate="inflation">Inflation</a>
-				<a href="javascript:" ng-class="{active: isMode('domain')}" ng-click="setMode('domain')"
-					translate="home_domain">Home Domain</a>
-				<a href="javascript:" ng-class="{active: isMode('data')}" ng-click="setMode('data')"
-					translate="manage_data">Manage Data</a>
-				<a href="javascript:" ng-class="{active: isMode('merge')}" ng-click="setMode('merge')"
-					translate="delete_account">Delete Account</a>
+				<a href ng-class="{active: isMode('security')}" ng-click="setMode('security')" translate="security">Security</a>
+				<a href ng-class="{active: isMode('inflation')}" ng-click="setMode('inflation')" translate="inflation">Inflation</a>
+				<a href ng-class="{active: isMode('domain')}" ng-click="setMode('domain')" translate="home_domain">Home Domain</a>
+				<a href ng-class="{active: isMode('data')}" ng-click="setMode('data')" translate="manage_data">Manage Data</a>
+				<a href ng-class="{active: isMode('merge')}" ng-click="setMode('merge')" translate="delete_account">Delete Account</a>
 			</div>
 		</div>
 
@@ -41,7 +36,9 @@
 			</p>
 			<label translate="save_safe">Have you saved your secret key somewhere safe?</label>
 			<div class="row">
-				<div class="col-xs-12 col-sm-5 col-lg-4"><a class="btn btn-info btn-block btn-big" href="javascript:" ng-click="goTo('/balance')" translate="yes_save">Yes, I saved my secret key</a></div>
+				<div class="col-xs-12 col-sm-5 col-lg-4">
+					<a href class="btn btn-info btn-block btn-big" ng-click="goTo('/balance')" translate="yes_save">Yes, I saved my secret key</a>
+				</div>
 			</div>
 		  </div>
 		</div>
@@ -64,8 +61,7 @@
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflation()" translate="save">Save</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflation()" translate="save">Save</a>
 				</div>
 			</div>
 
@@ -74,16 +70,14 @@
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-6 col-sm-4">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working"
 					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
 				</div>
 				<div class="col-xs-6 col-sm-4">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
 				</div>
 				<div class="col-xs-12 col-sm-4">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
 				</div>
 			</div>
 			
@@ -91,8 +85,7 @@
 			<p class="hint" translate="inflation_donation_desc">You can join one of the following inflation pools.</p>
 			<div class="row">
 				<div class="col-xs-6 col-sm-4">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="inflation_working"
-						ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationFox()" translate="inflation_fox">Vote to RippleFox</a>
 				</div>
 			</div>
 		</div>
@@ -115,8 +108,7 @@
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="domain_working"
-						ng-click="setDomain()" translate="save">Save</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="domain_working" ng-click="setDomain()" translate="save">Save</a>
 				</div>
 			</div>
 		</div>
@@ -143,8 +135,7 @@
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="data_working"
-						ng-click="setData()" translate="save">Save</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="data_working" ng-click="setData()" translate="save">Save</a>
 				</div>
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
@@ -177,18 +168,15 @@
 			</div>
 			<div class="row" style="margin-bottom: 20px;" ng-show="delete_warning">
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-warning btn-block btn-big" href="javascript:"
-						ng-click="toggleWarning()" translate="delete_warning">I KNOW　EVERYTHING >></a>
+					<a href class="btn btn-warning btn-block btn-big" ng-click="toggleWarning()" translate="delete_warning">I KNOW　EVERYTHING >></a>
 				</div>
 			</div>
 			<div class="row" style="margin-bottom: 20px;" ng-hide="delete_warning" >
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-info btn-block btn-big" href="javascript:" ng-disabled="merge_working"
-						ng-click="toggleWarning()" translate="back">Back</a>
+					<a href class="btn btn-info btn-block btn-big" ng-disabled="merge_working" ng-click="toggleWarning()" translate="back">Back</a>
 				</div>
 				<div class="col-xs-12 col-sm-5">
-					<a class="btn btn-danger btn-block btn-big" href="javascript:" ng-disabled="merge_working"
-						ng-click="merge()" translate="delete_account">Delete Account</a>
+					<a href class="btn btn-danger btn-block btn-big" ng-disabled="merge_working" ng-click="merge()" translate="delete_account">Delete Account</a>
 				</div>
 			</div>
 		</div>

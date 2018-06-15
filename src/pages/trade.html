@@ -30,7 +30,7 @@
 							</div>
 						</div>
 						<div style="font-size: 20px;">
-							<a href="javascript:" ng-click="flip()"><span class="glyphicon glyphicon-transfer"></span></a>
+							<a href ng-click="flip()"><span class="glyphicon glyphicon-transfer"></span></a>
 						</div>
 						<div class="AssetPair__card">
 							<div class="AssetCard AssetCard--fixed">
@@ -51,10 +51,10 @@
 					</div>
 				</div>
 				<div class="PairPicker__auxInfo" ng-show="!show_pair">
-					{{'pick_book' | translate}} <a href="javascript:" ng-click="choosePair()">{{'trade_pair' | translate}}</a>
+					{{'pick_book' | translate}} <a href ng-click="choosePair()">{{'trade_pair' | translate}}</a>
 				</div>
 				<div class="PairPicker__auxInfo" ng-show="show_pair">
-					{{'pick_trade' | translate}} <a href="javascript:" ng-click="choosePair()">{{'trade_page' | translate}}</a>
+					{{'pick_trade' | translate}} <a href ng-click="choosePair()">{{'trade_page' | translate}}</a>
 				</div>
 		</div>
 		
@@ -254,7 +254,7 @@
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id, 'bid')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<a href ng-click="cancel(item.id, 'bid')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
 									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
@@ -274,7 +274,7 @@
 								<td class="ManageOffers__table__row__item">{{item.amount | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">{{item.volume | number: precise}}</td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id, 'ask')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<a href ng-click="cancel(item.id, 'ask')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
 									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
@@ -297,7 +297,7 @@
 								<td class="ManageOffers__table__row__left">{{item.buy_code}}<span class="issuer" ng-show="item.buy_issuer">({{item.buy_issuer | shortaddress}})</span></td>
 								<td class="ManageOffers__table__row__left">{{item.sell_code}}<span class="issuer" ng-show="item.sell_issuer">({{item.sell_issuer | shortaddress}})</span></td>
 								<td class="ManageOffers__table__row__item">
-									<a href="javascript:" ng-click="cancel(item.id, 'all')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
+									<a href ng-click="cancel(item.id, 'all')" translate="offer_cancel" ng-hide="item.canceling">Cancel</a>
 									<span ng-show="item.canceling" translate="offer_canceling">Canceling...</span>
 								</td>
 							</tr>
