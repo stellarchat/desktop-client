@@ -4,7 +4,7 @@ let horizon = new StellarSdk.Server('https://horizon-testnet.stellar.org');  // 
 StellarSdk.Network.useTestNetwork();
 
 const MIN_AMOUNT = 31;  // TODO doublecheck min amount
-const FIC_DISTRIBUTOR = 'GCQJHZKTAO6P3PCIHPKJ55ZC25MS54OIIM7B6YBYH2Y54RFN3IL6WV54';
+const FIC_DISTRIBUTOR = 'GC2PJQNVOMRYGK7DCDHZTBSXAT6W5HSCSUAGTHL7KPHFSBBFVXNPQRJ5';
 
 const Unlock = (ficAddress, lockupAddress) => async () => {
   const SUBMIT = async (te) => horizon.submitTransaction(te).catch((e)=>e).then((res)=>res);
@@ -344,6 +344,11 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window
   }
   $scope.$on("$destroy", function(){
     $location.search({});
+  });
+
+  $('#contractModal').on('hidden.bs.modal', function () {
+    $location.path('/fic_history').search('key', null);
+    $scope.$apply();
   });
 
 }]);
