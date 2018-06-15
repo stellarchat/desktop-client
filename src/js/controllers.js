@@ -23,7 +23,7 @@ myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory', 'Remo
       SettingFactory.setLang(key);
     };
 
-    $scope.version = '4.1';
+    $scope.version = '5.0';
     $scope.new_version = false;
     $scope.diff = false;
     RemoteFactory.getClientVersion(function(err, data){

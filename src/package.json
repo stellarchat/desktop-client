@@ -1,25 +1,21 @@
 {
   "name": "foxlet",
-  "version": "4.0",
+  "version": "5.0.0",
   "license": "MIT",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
-    "angular": "^1.6.0",
+    "angular": "^1.7.2",
     "angular-chart.js": "^1.1.1",
     "angular-qrcode": "^7.2.0",
-    "angular-route": "^1.6.1",
-    "angular-translate": "^2.13.1",
+    "angular-route": "^1.7.2",
+    "angular-translate": "^2.18.1",
     "bootstrap": "^3.3.7",
-    "chart.js": "^2.6.0",
+    "chart.js": "^2.7.2",
     "electron-notifications": "^1.0.0",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.1.1",
-    "nw-builder": "^3.1.3",
-    "qrcode-generator": "^1.3.1",
-    "sjcl": "^1.0.6",
-    "stellar-sdk": "^0.8.0",
-    "underscore": "^1.8.3"
+    "jquery": "^3.3.1",
+    "qrcode-generator": "^1.4.0",
+    "sjcl": "^1.0.7",
+    "stellar-sdk": "^0.8.2",
+    "underscore": "^1.9.1"
   }
 }
