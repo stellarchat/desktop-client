@@ -1,0 +1,36 @@
+{
+  "productName": "Foxlet",
+  "artifactName": "foxlet-${version}.${ext}",
+  "appId": "com.ripplefox.foxlet",
+    "npmRebuild": true,
+    "npmArgs": "--help",
+    "buildDependenciesFromSource": true,
+  "files": [
+      "main.js",
+      "src/",
+      "node_modules/",
+      "package.json",
+      "build/**"
+  ],
+  "mac": {
+      "target": [ "zip" ],
+      "category": "public.app-category.finance"
+  },
+  "linux": {
+      "target": [ "deb" ],
+      "executableName": "foxlet",
+      "category": "Office",
+      "icon": "./build"
+  },
+  "win": {
+      "target": [ "nsis" ]
+  },
+  "nsis": {
+      "oneClick": false,
+      "perMachine": true
+  },
+  "directories": {
+      "buildResources": "./build",
+      "output": "dist"
+  }
+}

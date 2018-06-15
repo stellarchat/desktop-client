@@ -1,7 +1,6 @@
 (function () {
   'use strict'
   const electron = require('electron')
-  const electronDevTools = require('electron-devtools-installer')
   const app = electron.app
   const path = require('path')
   const os = require('os')
@@ -18,7 +17,6 @@
   // report crashes to the Electron project
   // require('crash-reporter').start()
   // adds debug features like hotkeys for triggering dev tools and reload
-  require('electron-debug')()
   process.on('uncaughtException', onCrash)
   // add this switch for the notification window
   app.commandLine.appendSwitch('--enable-transparent-visuals')
@@ -128,10 +126,16 @@
    * @return {type}  description
    */
   app.on('ready', function () {
-    mainWindow = createMainWindow()
-    const isDev = require('electron-is-dev')
-    if (isDev) {
-      electronDevTools.default(electronDevTools.ANGULARJS_BATARANG);
+    mainWindow = createMainWindow();
+    try {
+      const isDev = require('electron-is-dev')
+      if (isDev) {
+        require('electron-debug')()
+        const electronDevTools = require('electron-devtools-installer')
+        electronDevTools.default(electronDevTools.ANGULARJS_BATARANG);
+      }
+    } catch(e) {
+      console.log(`Skipped dev dependencies`)
     }
   })
   /**

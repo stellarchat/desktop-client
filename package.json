@@ -4,11 +4,15 @@
   "productName": "Foxlet",
   "description": "Stellar desktop client",
   "main": "main.js",
+  "homepage": "https://wallet.stellar.chat/",
   "repository": {
     "type": "git",
     "url": "https://github.com/stellarchat/desktop-client.git"
   },
-  "author": "stellarchat",
+  "author": {
+    "name": "stellarchat",
+    "email": "stellar@ripplefox.com"
+  },
   "license": "MIT",
   "keywords": [
     "stellar",
@@ -20,10 +24,10 @@
     "postinstall": "yarn run app-install",
     "start": "electron .",
     "app-install": "cd src && yarn install --ignore-optional",
-    "build": "yarn run -s build-linux || yarn run -s build-mac || yarn run -s build-win",
-    "build-linux": "build --x64 --linux",
-    "build-mac": "build --x64 --mac",
-    "build-win": "build --x64 --win",
+    "build": "yarn run -s build-linux && yarn run -s build-mac && yarn run -s build-win",
+    "build-linux": "electron-builder --x64 --linux",
+    "build-mac": "electron-builder --x64 --mac",
+    "build-win": "electron-builder --x64 --win",
     "lint": "eslint . --ext=js,html",
     "lintfix": "eslint . --ext=js,html --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -37,54 +41,5 @@
     "electron-packager": "^12.1.0",
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3"
-  },
-  "build": {
-    "appId": "com.appelgriebsch.electron-boilerplate",
-    "compression": "maximum",
-    "dmg": {
-      "iconSize": 80,
-      "contents": [
-        {
-          "x": 100,
-          "y": 220
-        },
-        {
-          "x": 280,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "linux": {
-      "category": "Utility",
-      "packageCategory": "utils",
-      "remoteReleases": "https://github.com/appelgriebsch/electron-boilerplate",
-      "publish": [
-        "github"
-      ],
-      "target": [
-        "AppImage"
-      ],
-      "depends": []
-    },
-    "mac": {
-      "category": "",
-      "target": [
-        "dmg"
-      ]
-    },
-    "squirrelWindows": {
-      "iconUrl": "https://raw.githubusercontent.com/appelgriebsch/electron-boilerplate/angularjs/build/icon.ico"
-    },
-    "win": {
-      "remoteReleases": "https://github.com/appelgriebsch/electron-boilerplate",
-      "publish": [
-        "github"
-      ],
-      "target": [
-        "squirrel"
-      ]
-    }
   }
 }
