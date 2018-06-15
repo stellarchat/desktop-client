@@ -51,7 +51,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
       AuthData.load(opts)
         .then((authdata) => {
-          if (authdata.address.substring(0, 1) == "r") throw new Error(`Login failed: Wallet file is a Ripple file.`);
+          if (authdata.address.charAt(0) == "r") throw new Error(`Login failed: Wallet file is a Ripple file.`);
 
           _type = type;
           _data = authdata;

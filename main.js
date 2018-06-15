@@ -1,3 +1,5 @@
+/*global __dirname, Buffer, process, require */
+
 (function () {
   'use strict'
   const electron = require('electron')
@@ -137,6 +139,25 @@
     } catch(e) {
       console.log(`Skipped dev dependencies`)
     }
+
+    electron.ipcMain.on('writeFile', (event, id, path, dataString) => {
+      const fs = require('fs');
+      fs.writeFile(path, dataString, (err) => {
+        if(err) mainWindow.webContents.send('writeFile', id, err.toString());
+        mainWindow.webContents.send('writeFile', id);
+      })
+    })
+
+    electron.ipcMain.on('readFile', (event, id, path) => {
+      const fs = require('fs');
+      console.log(id, path)
+      fs.readFile(path, 'utf-8', (err, data) => {
+        if(err) mainWindow.webContents.send('readFile', id, err.toString());
+        mainWindow.webContents.send('readFile', id, null, data);
+      })
+    })
+
+
   })
   /**
    * sysConfig function - description
@@ -208,4 +229,5 @@
       mainWindow.hide()
     }
   }
+
 })()

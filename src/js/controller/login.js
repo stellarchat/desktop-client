@@ -1,13 +1,19 @@
-/* global myApp */
+/* global myApp, require */
 
 myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
   function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
     $scope.fileInputClick = function() {
-      FileDialog.openFile(function(filename) {
-        $scope.$apply(function() {
-          $scope.walletfile = filename;
-        });
-      }, false);
+      const remote = require('electron').remote;
+      var dialog = remote.dialog;
+
+      dialog.showOpenDialog({
+          properties: [ 'openFile' ]
+        }, function ( filenames ) {
+          $scope.$apply(function() {
+            $scope.walletfile = filenames.shift();
+          });
+        }
+      );
     };
 
     $scope.submitForm = function(){
