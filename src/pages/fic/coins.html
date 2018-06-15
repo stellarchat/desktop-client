@@ -26,7 +26,7 @@
               {{ 'now' | translate }}
             </td>
             <td>
-              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')" translate="claim_unlock">Claim & Unlock</button>
+              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success"  ng-click="claim(key, 0)" translate="claim_unlock">Claim & Unlock</button>
               <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['0'] > 0">—</button>
             </td>
           </tr>

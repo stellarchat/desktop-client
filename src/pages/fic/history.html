@@ -4,8 +4,8 @@
 		<div class="island">
 			<div class="island__header">Claim transactions
 				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}</a>
-
+					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
+				</a>
 			</div>
 			<div class="AddTrustFromDirectory">
 				<div class="s-alert s-alert--alert" ng-show="error_msg">
@@ -25,7 +25,7 @@
           		</thead>
           		<tbody ng-repeat="tx in ficTxs">
           			<tr class="HistoryTable-row">
-                  <td class="address">{{tx.ethAddressPart}}</td>
+                  <td class="address">0x{{tx.ethAddress}}</td>
             			<td>
                    	<span class="credit">{{tx.amount}}</span>
                    	<strong>FIC</strong>
@@ -42,35 +42,6 @@
                     </span>
                   </td>
           			</tr>
-                <!-- <tr class="HistoryTable-row" ng-if="tx.tx2">
-          				<td>{{tx.tx2.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          				<td class="address">{{tx.ethAddressPart}}</td>
-					        <td ng-if="tx.tx1">Lockup account is created</td>
-                  <td>{{tx.lockup}}</td>
-            			<td class="amount">
-                   	-
-					        </td>
-          			</tr>
-                <tr class="HistoryTable-row" ng-if="tx.tx3">
-          				<td>{{tx.tx3.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          				<td class="address">{{tx.ethAddressPart}}</td>
-					        <td ng-if="tx.tx1">Your account was funded to create wallet account</td>
-                  <td>{{tx.lockup}}</td>
-            			<td class="amount">
-                   	<span class="credit"><span class="bold">+</span>{{tx.amount}}</span>
-                   	<strong>FIC</strong>
-					        </td>
-          			</tr>
-                <tr class="HistoryTable-row" ng-if="tx.tx4">
-          				<td>{{tx.tx4.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          				<td class="address">{{tx.ethAddressPart}}</td>
-					        <td ng-if="tx.tx1">Funds has been transfered to your wallet</td>
-                  <td>{{tx.lockup}}</td>
-            			<td class="amount">
-                   	<span class="credit"><span class="bold">+</span>{{tx.amount}}</span>
-                   	<strong>FIC</strong>
-					        </td>
-          			</tr> -->
           		</tbody>
           	</table>
         	</div>
