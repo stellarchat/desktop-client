@@ -160,9 +160,12 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
 
       this._traverse(this, pointer, path, op, params);  // it was `this.data` instead of `this`.
 
-      this.save((err, data) => {
+      this.save().then((data)=>{
         console.log('Blob saved');
-        if (typeof callback === 'function') callback(err, data);
+        if (typeof callback === 'function') callback(null, data);
+      }).catch((err)=>{
+        console.error('Blob save failed!', err);
+        if (typeof callback === 'function') callback(err);
       });
     }
 
@@ -201,6 +204,22 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
       }
 
       switch (op) {
+        case "set":
+          context[part] = params[0];
+          break;
+        case "unset":
+          if (Array.isArray(context)) {
+            context.splice(part, 1);
+          } else {
+            delete context[part];
+          }
+          break;
+        case "extend":
+          if ("object" !== typeof context[part]) {
+            throw new Error("Tried to extend a non-object");
+          }
+          $.extend(context[part], params[0]);
+          break;
         case "unshift": {
           if ("undefined" === typeof context[part]) {
             context[part] = [];
