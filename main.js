@@ -1,4 +1,4 @@
-/*global __dirname, Buffer, process, require */
+/*global __dirname, process, require */
 
 (function () {
   'use strict'

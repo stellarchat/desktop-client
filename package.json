@@ -22,7 +22,8 @@
   ],
   "scripts": {
     "start": "electron .",
-    "build": "concurrently --kill-others-on-fail -n LINUX,MAC__,WIN__ 'yarn run build:linux' 'yarn run build:mac' 'yarn run build:win'",
+    "build": "electron-builder --x64 ",
+    "build:all": "electron-builder --x64 --all",
     "build:linux": "electron-builder --x64 --linux",
     "build:mac": "electron-builder --x64 --mac",
     "build:win": "electron-builder --x64 --win",

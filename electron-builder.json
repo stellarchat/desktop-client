@@ -46,6 +46,9 @@
   },
   "directories": {
       "buildResources": "./build",
-      "output": "dist"
+      "output": "./dist"
+  },
+  "electronDownload": {
+      "cache": "~/.cache/electron-builder"
   }
 }
