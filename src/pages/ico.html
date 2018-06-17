@@ -22,7 +22,8 @@
 					</div>
 				</div>
 				<div class="row no-top">
-					<p><a class="AssetCard__federation" href="{{ico.website}}" target="_blank" ng-show="ico.website">{{ico.website}}</a></p>
+					<p><a class="AssetCard__federation" href="javascript:
+require('electron').shell.openExternal('{{ico.website}}')'" ng-show="ico.website">{{ico.website}}</a></p>
 					<p>{{ico.p1}}</p>
 					<p>{{ico.p2}}</p>
 				</div>	
