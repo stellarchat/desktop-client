@@ -1,4 +1,4 @@
-/* global myApp, nw, StellarSdk */
+/* global myApp, StellarSdk */
 
 myApp.factory('SettingFactory', function($window) {
   return {

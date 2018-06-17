@@ -24,6 +24,7 @@
       "node_modules/qrcode-generator/qrcode.js",
       "node_modules/qrcode-generator/qrcode_UTF8.js",
       "node_modules/angular-qrcode/angular-qrcode.js",
+      "lib/",
       "build/"
   ],
   "mac": {

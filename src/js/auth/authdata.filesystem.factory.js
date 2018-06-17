@@ -3,7 +3,7 @@
  * User blob storage for desktop client
  */
 
-/* global angular, Buffer, myApp, require */
+/* global angular, myApp, require */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
