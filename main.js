@@ -135,6 +135,10 @@
         require('electron-debug')()
         const electronDevTools = require('electron-devtools-installer')
         electronDevTools.default(electronDevTools.ANGULARJS_BATARANG);
+        Promise.resolve()
+          .then(()=>require('devtron').install())
+          .then(()=>console.log('Devtron installed'))
+          .catch(()=>console.log('Devtron failed to install'));
       }
     } catch(e) {
       console.log(`Skipped dev dependencies`)
