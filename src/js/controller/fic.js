@@ -7,27 +7,32 @@ const MIN_AMOUNT = 31;  // TODO doublecheck min amount
 const FIC_DISTRIBUTOR = 'GC2PJQNVOMRYGK7DCDHZTBSXAT6W5HSCSUAGTHL7KPHFSBBFVXNPQRJ5';
 
 const Unlock = (ficAddress, lockupAddress) => async () => {
-  const SUBMIT = async (te) => horizon.submitTransaction(te).catch((e)=>e).then((res)=>res);
+  const SUBMIT = async (te) => horizon.submitTransaction(te).catch((e)=>e).then((res)=>res)
+    .then((res)=>{
+      console.log(res);
+      return res;
+    });
 
   let lockupAccount;
   try {
     lockupAccount = await horizon.loadAccount(lockupAddress);
+    lockupAccount._baseAccount.sequence.minus(2);
   } catch(e) {
-    if(e instanceof NotFoundError) throw new Error(`Already unlocked (${lockupAddress})`);
+    if(e instanceof StellarSdk.NotFoundError) throw new Error(`Already unlocked (${lockupAddress})`);
     throw e;
   }
-  console.log(`Lockup account ${lockupAddress} sequence & balance:`, lockupAccount.sequenceNumber(), lockupAccount.balances)
+  // console.log(`Lockup account ${lockupAddress} sequence & balance:`, lockupAccount.sequenceNumber(), lockupAccount.balances)
 
-  const prete1 = new TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
-    .addOperation(Operation.createAccount({
+  const prete1 = new StellarSdk.TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
+    .addOperation(StellarSdk.Operation.createAccount({
       source: lockupAddress,
       destination: ficAddress,
-      startingBalance: String(MIN_AMOUNT),
+      startingBalance: '30',
     }))
     .build();
 
-  const prete2 = new TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
-    .addOperation(Operation.accountMerge({
+  const prete2 = new StellarSdk.TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
+    .addOperation(StellarSdk.Operation.accountMerge({
       source: lockupAddress,
       destination: ficAddress,
     }))
@@ -46,10 +51,10 @@ const getTxs = async (ficAddress)=>{
   const directoryResponse = await fetch(`https://horizon-testnet.stellar.org/accounts/${FIC_DISTRIBUTOR}`);
   const directory = await directoryResponse.json();
   const lockupAddressMap = directory.data;
-  //console.log(lockupAddressMap);
 
   const userLockups = Object.keys(lockupAddressMap).filter((key)=>key.slice(0,56) === ficAddress);
-  const responses = {};
+  const responses = [];
+
 
   for(const key of userLockups) {
 
@@ -61,14 +66,12 @@ const getTxs = async (ficAddress)=>{
     const transactions = json._embedded.records;
     transactions.forEach((transaction) => transaction.envelope = new StellarSdk.Transaction(transaction.envelope_xdr));
 
-    console.log(transactions)
-
     const creationTransation = transactions.find((tx)=>tx.source_account==FIC_DISTRIBUTOR && tx.envelope.operations.find((op)=>op.type === 'createAccount'))
     const setupTransaction = transactions.find((tx)=>tx.source_account==FIC_DISTRIBUTOR && tx.envelope.operations.find((op)=>op.type === 'setOptions'));
     const createTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'createAccount'));
     const mergeTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'accountMerge'));
 
-    responses[lockupAddress] = {
+    r = {
       lockupAddress,
       ficNonce: key.slice(57),
       ethAddress: creationTransation.envelope.memo.value.slice(0, 20).toString('hex'),
@@ -81,9 +84,9 @@ const getTxs = async (ficAddress)=>{
       tx4: mergeTransaction   && {timestamp: mergeTransaction.created_at  , txId: mergeTransaction.id  },
       unlock: Unlock(ficAddress, lockupAddress),
     };
+    responses.push(r);
 
   }
-
   return responses;
 };
 
@@ -221,7 +224,7 @@ myApp.controller("FICAddressCtrl", [ '$scope', '$rootScope', '$window', 'Stellar
       $scope.invalid_eth = false;
       $scope.eth_addresses = JSON.parse($window.localStorage[`eth_address`]);
 
-      var wallet = new EthWallet('0x0345547ae60f65c16f183a654a98bd36090180ad'),
+      var wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef'),
           current_coins = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`] ) : {});
 
       wallet.getTokens(funcAddress).then(function(res){
@@ -260,7 +263,7 @@ myApp.controller("FICCoinCtrl", [ '$scope', '$location', '$rootScope', '$window'
   $scope.FicCoins = coin_data;
   var all_addresses = JSON.parse($window.localStorage[`eth_address`]),
       eth_addresses = all_addresses[$scope.address],
-      wallet = new EthWallet('0x0345547ae60f65c16f183a654a98bd36090180ad'),
+      wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef'),
       current_coins = {};
 
   (async ()=>{
@@ -337,7 +340,7 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window
     var amount = $scope.claim.amount,
         publicKey = $scope.address,
         lockup = $scope.claim.period.split(" ")[0],
-        wallet = new EthWallet('0x0345547ae60f65c16f183a654a98bd36090180ad');
+        wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef');
 
     $scope.formData.payload = wallet.getWithdrawPayload(publicKey, amount.toString(), lockup.toString());
 
@@ -379,11 +382,20 @@ myApp.controller("FICHistoryCtrl", [ '$scope', '$location', '$rootScope', '$wind
     $scope.loading = true;
 
     getTxs($scope.address).then((res)=>{
+      Object.values(res).map((r)=>{
+        if(r.lockup == 0 && r.tx1 && r.tx2 && !r.tx4) {
+          r.unlock().then((res)=>{
+            getTxs($scope.address).then((res)=>{
+              $scope.ficTxs = res;
+              $scope.$apply();
+            });
+          });
+        }
+      })
       $scope.loading = false;
       $scope.ficTxs = res;
       $scope.$apply();
     });
-
   };
   $scope.refresh();
 

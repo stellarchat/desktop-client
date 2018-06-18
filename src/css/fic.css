@@ -80,3 +80,6 @@ input::-webkit-calendar-picker-indicator {
 	text-align: left;
 	padding-left: 1em;
 }
+.HistoryTable-row .address .credit {
+	color: #0c0dff;
+}

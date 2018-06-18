@@ -2,7 +2,7 @@
 	<group>
 	<div class="so-back islandBack islandBack--t">
 		<div class="island">
-			<div class="island__header">Claim transactions
+			<div class="island__header">Claim history
 				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
 					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
 				</a>
@@ -23,7 +23,7 @@
             			<th class="left">Unlocked</th>
             		</tr>
           		</thead>
-          		<tbody ng-repeat="tx in ficTxs">
+          		<tbody ng-repeat="tx in ficTxs | orderBy:'-tx1.timestamp' ">
           			<tr class="HistoryTable-row">
                   <td class="address">0x{{tx.ethAddress}}</td>
             			<td>
@@ -38,7 +38,9 @@
                      	<strong>FIC</strong></span>
                     </span>
                     <span ng-if="tx.tx4 == undefined">
-                      <span ng-if="availableIn['90'] > 0">In {{availableIn['90']}} days</span>
+                      <span ng-if="tx.lockup == 0">{{ 'now' | translate }}</span>
+											<span ng-if="tx.lockup == 90">In {{availableIn['90']}} {{ 'days' | translate }}</span>
+											<span ng-if="tx.lockup == 180">In {{availableIn['180']}} {{ 'days' | translate }}</span>
                     </span>
                   </td>
           			</tr>
