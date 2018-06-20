@@ -1,4 +1,4 @@
-/* global myApp, nw, StellarSdk */
+/* global myApp, require, StellarSdk */
 
 myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
   function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
@@ -35,15 +35,23 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
     };
 
     $scope.fileInputClick = function() {
+      const remote = require('electron').remote;
+      var dialog = remote.dialog;
+
       var dt = new Date();
       var datestr = (''+dt.getFullYear()+(dt.getMonth()+1)+dt.getDate()+'_'+dt.getHours()+dt.getMinutes()+dt.getSeconds()).replace(/([-: ])(\d{1})(?!\d)/g,'$10$2');
-      FileDialog.saveAs(function(filename) {
-        $scope.$apply(function() {
-          $scope.walletfile = filename;
-          $scope.mode = 'register_empty_wallet';
-          $scope.save_error = '';
-        });
-      }, 'wallet' + datestr + '.txt');
+
+      dialog.showSaveDialog({
+          properties: [ 'openFile' ],
+          defaultPath: 'wallet' + datestr + '.txt',
+        }, function ( filename ) {
+          $scope.$apply(function() {
+            $scope.walletfile = filename;
+            $scope.mode = 'register_empty_wallet';
+            $scope.save_error = '';
+          });
+        }
+      );
     };
 
     $scope.submitForm = function() {

@@ -3,11 +3,11 @@
  * User blob storage for desktop client
  */
 
-/* global angular, myApp, nw, require */
+/* global angular, myApp, require */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
-const fs = require('fs');
+const {ipcRenderer} = require('electron')
 const sjcl = require('sjcl');
 
 myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, AuthData){
@@ -80,7 +80,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, A
         .catch((err)=>{
           //The default folder is the root of HD when the first time user save file on Mac.
           // EACCES: permission denied
-          if (nw.global.navigator.platform.indexOf('Mac') >= 0 && err.message.indexOf('permission denied') >= 0) {
+          if (/* nw.global.navigator.platform.indexOf('Mac') >= 0 &&  */err.message.indexOf('permission denied') >= 0) {
             throw new Error("Permission denied. Please choose another location.");
           }
 
@@ -104,17 +104,20 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, A
     // load(...params:any[]) => Promise<AuthDataFilesystem> -- load from filesystem and return Promise of instance.
     static load(opts) {
       return new Promise((resolve, reject) => {
-        fs.readFile(opts.path, 'utf8', (err, blob) => {
-          if (err) return reject(err);
+        const _id = Math.floor(Math.random()*10000);
+        const listener = (event, id, err, dataUTF8) => {
+          if(_id !== id) return;
+          ipcRenderer.removeListener('readFile', listener)
 
+          if (err) return reject(err);
           try {
-            resolve(AuthDataFilesystem.fromBlob(opts.password, opts.path, blob));
+            resolve(AuthDataFilesystem.fromBlob(opts.password, opts.path, dataUTF8));
           } catch(e) {
             reject(e);
           }
-
-        });
-
+        }
+        ipcRenderer.on('readFile', listener)
+        ipcRenderer.send('readFile', _id, opts.path)
       })
     }
 
@@ -131,15 +134,20 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, A
     // save() => Promise<void> -- save to long-term storage (e.g. filesystem) and return Promise of current instance.
     save() {
       return new Promise((resolve, reject) => {
-        fs.writeFile(this._path, this.blob, (err) => {
-          if(err) return reject(err);
+        const _id = Math.floor(Math.random()*10000);
+        const listener = (event, id, err) => {
+          if(_id !== id) return;
+          ipcRenderer.removeListener('writeFile', listener)
 
+          if (err) return reject(err);
           try {
             resolve(this.store());
           } catch(e) {
             reject(e);
           }
-        });
+        }
+        ipcRenderer.on('writeFile', listener)
+        ipcRenderer.send('writeFile', _id, this._path, this.blob)
       })
     }
 

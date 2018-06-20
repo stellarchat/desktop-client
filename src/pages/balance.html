@@ -39,14 +39,14 @@
 						<td>
 							<span class="BalancesTable__row__limit">{{line.limit | number : 0}}</span><br/>
 							<span class="BalancesTable__row__removeLink" translate="trust_remove_desc" ng-show="line.balance>0">Trust is removable when balance is 0</span>
-							<a class="BalancesTable__row__removeLink" href="javascript:"
+							<a href class="BalancesTable__row__removeLink"
 								ng-hide="line.balance > 0 || isRemoving(line.code, line.issuer)"
 								ng-click="delTrust(line.code, line.issuer)"
 								translate="trust_remove">Remove trust</a>
 							<span class="BalancesTable__row__removeLink"
 								ng-show="isRemoving(line.code, line.issuer)"
 								translate="trust_removeing">Removing</span><br>
-							<a class="BalancesTable__row__removeLink" href="javascript:"
+							<a href class="BalancesTable__row__removeLink"
 								ng-show="deposit_info[code][issuer].resolved"
 								ng-click="toggleDepositInfo(code, issuer)">
 								{{'deposit' | translate}}

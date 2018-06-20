@@ -1,0 +1,54 @@
+{
+  "productName": "Foxlet",
+  "artifactName": "foxlet-${version}.${ext}",
+  "appId": "com.ripplefox.foxlet",
+    "npmRebuild": true,
+    "npmArgs": "--help",
+    "buildDependenciesFromSource": true,
+  "files": [
+      "main.js",
+      "src/",
+      "package.json",
+      "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "node_modules/font-awesome/css/font-awesome.min.css",
+      "node_modules/jquery/dist/jquery.min.js",
+      "node_modules/bootstrap/dist/js/bootstrap.min.js",
+      "node_modules/angular/angular.min.js",
+      "node_modules/angular-route/angular-route.min.js",
+      "node_modules/angular-translate/dist/angular-translate.min.js",
+      "node_modules/chart.js/dist/Chart.min.js",
+      "node_modules/angular-chart.js/dist/angular-chart.min.js",
+      "node_modules/underscore/underscore-min.js",
+      "node_modules/ripple-lib/build/ripple-0.12.5-rc2-min.js",
+      "node_modules/stellar-sdk/dist/stellar-sdk.min.js",
+      "node_modules/qrcode-generator/qrcode.js",
+      "node_modules/qrcode-generator/qrcode_UTF8.js",
+      "node_modules/angular-qrcode/angular-qrcode.js",
+      "lib/",
+      "build/"
+  ],
+  "mac": {
+      "target": [ "zip" ],
+      "category": "public.app-category.finance"
+  },
+  "linux": {
+      "target": [ "deb" ],
+      "executableName": "foxlet",
+      "category": "Office",
+      "icon": "./build"
+  },
+  "win": {
+      "target": [ "nsis" ]
+  },
+  "nsis": {
+      "oneClick": false,
+      "perMachine": true
+  },
+  "directories": {
+      "buildResources": "./build",
+      "output": "./dist"
+  },
+  "electronDownload": {
+      "cache": "~/.cache/electron-builder"
+  }
+}

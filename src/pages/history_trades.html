@@ -30,7 +30,7 @@
 
 			<div class="txfoot">
 				<div translate="loading" ng-show="loading">Loading...</div>
-				<a href="" ng-click="load_more()" translate="load_more" ng-show="next && !loading">Load more</a>
+				<a href ng-click="load_more()" translate="load_more" ng-show="next && !loading">Load more</a>
 				<div translate="no_more" ng-show="!next && !loading">No more transactions left</div>
 			</div>
 		</div>

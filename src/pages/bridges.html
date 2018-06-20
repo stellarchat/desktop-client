@@ -17,7 +17,7 @@
 					</button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
 						<li role="presentation" ng-repeat="(name, anchor) in bridges">
-							<a role="menuitem" tabindex="-1" href="javascript:" ng-click="changeBridge(anchor.name)">
+							<a href role="menuitem" tabindex="-1" ng-click="changeBridge(anchor.name)">
 								<div class="brdige_card">
 									<div class="brdige_card_logo"><img class="brdige_card_logo_image" data-ng-src="{{anchor.logo}}"></div>
 									<div class="brdige_card_content"><span class="brdige_card_code">{{anchor.name}}</span></div>
@@ -65,50 +65,43 @@
 			<div class="island__header" translate="withdraw">Withdraw</div>
 			<div class="row bridge">
 				<div ng-repeat="svc in anchor.service" ng-switch="svc.type">
-					<a ng-switch-when="alipay" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="alipay" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/alipay.png"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code" translate="alipay">Alipay</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="unionpay" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="unionpay" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/unionpay.png"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code" translate="bank_card">Bank</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="bitcoin" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="bitcoin" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/btc.svg"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="xrp" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="xrp" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/xrp.png"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">Ripple</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="usdt" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="usdt" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/usdt.svg"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">USDT</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="eth" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="eth" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/eth.svg"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">Ethereum</span></div>
 						</div>
 					</a>
-					<a ng-switch-when="bch" 
-						href="javascript:" ng-click="changeService(svc.name)">
+					<a href ng-switch-when="bch" ng-click="changeService(svc.name)">
 						<div ng-class="{brdige_card:true, active:isActive(svc.name)}">
 							<div class="brdige_card_logo"><img class="brdige_card_logo_image" src="../img/bch.svg"></div>
 							<div class="brdige_card_content"><span class="brdige_card_code">Bitcoin Cash</span></div>

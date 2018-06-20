@@ -85,6 +85,23 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
     }
   }
 
+  function extend(){
+    for(var i=1; i<arguments.length; i++) {
+      for(var key in arguments[i]) {
+        if(arguments[i].hasOwnProperty(key)) {
+          if (typeof arguments[0][key] === 'object'
+              && typeof arguments[i][key] === 'object'
+          ) {
+              extend(arguments[0][key], arguments[i][key]);
+          } else {
+              arguments[0][key] = arguments[i][key];
+          }
+        }
+      }
+    }
+    return arguments[0];
+  }
+
   /* abstract class AuthData
    *
    * Handles persistence of data for Auth. Various subclasses handles various long-term storages.
@@ -218,7 +235,7 @@ myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
           if ("object" !== typeof context[part]) {
             throw new Error("Tried to extend a non-object");
           }
-          $.extend(context[part], params[0]);
+          extend(context[part], params[0]);
           break;
         case "unshift": {
           if ("undefined" === typeof context[part]) {

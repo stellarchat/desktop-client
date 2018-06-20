@@ -6,7 +6,7 @@
 		<div class="AssetCard__content">
 			<div class="AssetCard__header">
 				<span class="AssetCard__code">{{__code}}</span> 
-				<a class="AssetCard__federation" href="{{__website}}" target="_blank" ng-show="__website">{{__name}}</a>
+				<a class="AssetCard__federation" href="javascript:require('electron').shell.openExternal('{{__website}}')'" ng-show="__website">{{__name}}</a>
 				<span class="AssetCard__federation" ng-show="!__website">{{__name}}</span>
 			</div>
 			<p class="AssetCard__issuerAccountId" title="{{__address}}">{{__address | shortaddress}}</p>
