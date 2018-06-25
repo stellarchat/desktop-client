@@ -31,7 +31,9 @@
     var win = new BrowserWindow({
       width: 1280,
       height: 800,
-      frame: false
+      frame: true,
+      minWidth: 800,
+      minHeight: 600
     })
     win.loadURL('file://' + __dirname + '/src/index.html')
     win.on('closed', onClosed)
