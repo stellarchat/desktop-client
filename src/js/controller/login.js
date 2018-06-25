@@ -1,7 +1,13 @@
 /* global myApp */
 
-myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
-  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
+myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory', 'StellarApi',
+  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory, StellarApi) {
+    $scope.address="";
+    $scope.showTemp = false;
+    $scope.toggleTemp = function() {
+      $scope.showTemp = !$scope.showTemp;
+    }
+    
     $scope.fileInputClick = function() {
       FileDialog.openFile(function(filename) {
         $scope.$apply(function() {
@@ -32,6 +38,10 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
     }
 
     $scope.submitAddress = function(){
+      $scope.invalidAddress = !StellarApi.isValidAddress($scope.address);
+      if ($scope.invalidAddress) {
+        return;
+      }
       const type = AuthenticationFactory.TYPE.TEMPORARY;
       AuthenticationFactory.load(type, {address: $scope.address}, (err) => {
         $scope.$apply(() => {
