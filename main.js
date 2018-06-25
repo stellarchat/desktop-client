@@ -16,6 +16,11 @@
   const homeDir = app.getPath('home') + path.sep
   const hostname = os.hostname()
   const username = (process.platform === 'win32') ? process.env.USERNAME : process.env.USER
+
+  const HardwareWallet = require('./src/main/hardwareWalletLedger');
+  const {HWW_API} = require('./src/common/constants')
+  const HardwareWalletLedger = HardwareWallet.Ledger;
+
   // report crashes to the Electron project
   // require('crash-reporter').start()
   // adds debug features like hotkeys for triggering dev tools and reload
@@ -146,23 +151,8 @@
       console.log(`Skipped dev dependencies`)
     }
 
-    electron.ipcMain.on('writeFile', (event, id, path, dataString) => {
-      const fs = require('fs');
-      fs.writeFile(path, dataString, (err) => {
-        if(err) mainWindow.webContents.send('writeFile', id, err.toString());
-        mainWindow.webContents.send('writeFile', id);
-      })
-    })
-
-    electron.ipcMain.on('readFile', (event, id, path) => {
-      const fs = require('fs');
-      console.log(id, path)
-      fs.readFile(path, 'utf-8', (err, data) => {
-        if(err) mainWindow.webContents.send('readFile', id, err.toString());
-        mainWindow.webContents.send('readFile', id, null, data);
-      })
-    })
-
+    HardwareWalletLedger.listeners.push((...args) => mainWindow.webContents.send(HWW_API.LISTEN, ...args));
+    HardwareWalletLedger.init();
 
   })
   /**
@@ -235,5 +225,52 @@
       mainWindow.hide()
     }
   }
+
+
+  electron.ipcMain.on('writeFile', (event, id, path, dataString) => {
+    const fs = require('fs');
+    fs.writeFile(path, dataString, (err) => {
+      if(err) event.sender.send('writeFile', id, err.toString());
+      event.sender.send('writeFile', id);
+    })
+  })
+
+  electron.ipcMain.on('readFile', (event, id, path) => {
+    const fs = require('fs');
+    console.log(id, path)
+    fs.readFile(path, 'utf-8', (err, data) => {
+      if(err) event.sender.send('readFile', id, err.toString());
+      event.sender.send('readFile', id, null, data);
+    })
+  })
+
+  electron.ipcMain.on(HWW_API.SUPPORT, (event, reqId) => {
+    HardwareWalletLedger.isSupported()
+      .then((res) =>event.sender.send(HWW_API.SUPPORT, reqId, null, res))
+      .catch((err)=>event.sender.send(HWW_API.SUPPORT, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: ${err.message}`))
+  })
+
+  electron.ipcMain.on(HWW_API.LIST, (event, id) => {
+    event.sender.send(HWW_API.LIST, id, null, HardwareWalletLedger.list());
+  })
+
+  const wrapHwwMethod = (method, channel, callback) => {
+    electron.ipcMain.on(channel, (event, reqId, hwwId, ...args) => {
+      if(!reqId) return event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: No request ID provided. Consider passing a random number.`)
+      if(!hwwId) return event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: No hardwallet ID provided. Consider using 'HWW_API.LIST'.`)
+
+      HardwareWalletLedger.listOfLedgers.get(hwwId)[method](...args)
+        .then((res) =>callback ? callback(res) : res)
+        .then((res) =>event.sender.send(channel, reqId, null, res))
+        .catch((err)=>event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: ${err.message}`))
+    })
+  }
+
+  wrapHwwMethod('getAppConfig'      , HWW_API.CONFIG    /*, (res)=>console.log(res) || res */)
+  wrapHwwMethod('selectSubaccount'  , HWW_API.SELECT    /*, (res)=>console.log(res) || res */)
+  wrapHwwMethod('deselectSubaccount', HWW_API.DESELECT  /*, (res)=>console.log(res) || res */)
+  wrapHwwMethod('getPublicKey'      , HWW_API.PK        /*, (res)=>console.log(res) || res */)
+  wrapHwwMethod('signTe'            , HWW_API.SIGN_TE   /*, (res)=>console.log(res) || res */)
+  wrapHwwMethod('signHash'          , HWW_API.SIGN_HASH /*, (res)=>console.log(res) || res */)
 
 })()

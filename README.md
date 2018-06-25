@@ -48,6 +48,20 @@ Foxlet Wallet uses [Electron](http://electronjs.org/) to create an application. 
 - reload UI with CTRL+R to refresh front-end code
 - restart `yarn start` process to refresh back-end code
 
+## Ledger
+
+If you have permission problems on Linux, this may help:
+```sh
+echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="plugdev"' | sudo tee /etc/udev/rules.d/99-hidraw-permissions.rules
+```
+
+If you have more problems, make sure that:
+1. Ledger is connected.
+2. Ledger is unlocked.
+3. Ledger has Stellar app installed.
+4. Ledger currently is in the Stellar app.
+5. Ledger Stellar app settings has "browser support" set to "No".
+
 
 # Foxlet恒星钱包 🚀
 
