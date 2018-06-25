@@ -105,10 +105,11 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
     $scope.send_asset = function() {
       $scope.sending = true;
       $scope.send_done = false;
+      $scope.send_result = null;
       $scope.send_error = '';
 
       $scope.asset.max_rate = 1.0001;
-      StellarApi.convert($scope.asset, function(err, hash){
+      StellarApi.convert($scope.asset, function(err, result){
         $scope.sending = false;
 
         if (err) {
@@ -118,6 +119,7 @@ myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingF
           $scope.paths = {};
           $scope.asset = {};
           $scope.send_done = true;
+          $scope.send_result = result;
         }
         $rootScope.$apply();
       });

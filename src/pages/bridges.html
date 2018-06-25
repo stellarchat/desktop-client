@@ -200,7 +200,8 @@
 				</div>
 				
 				<div class="service_success" ng-show="send_done">
-					<div translate="send_done">Asset successfully sent.</div>
+					<stellarguard-result ng-if="send_result.stellarGuard" result="send_result"></stellarguard-result>
+					<div ng-hide="send_result.stellarGuard" translate="send_done">Asset successfully sent.</div>
 				</div>
 				
 			</div>

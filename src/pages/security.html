@@ -56,7 +56,10 @@
 			<div class="s-alert s-alert--alert row__message" ng-show="inflation_error">
 				{{inflation_error}}
 			</div>
-			<div class="s-alert s-alert--success row__message" ng-show="inflation_done" translate="inflation_done">
+			<div class="s-alert s-alert--success row__message" ng-if="inflation_done && inflation_result.stellarGuard">
+				<stellarguard-result result="inflation_result"></stellarguard-result>
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="inflation_done && !inflation_result.stellarGuard" translate="inflation_done">
 				Inflation Destination was set.
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
@@ -103,7 +106,10 @@
 			<div class="s-alert s-alert--alert row__message" ng-show="domain_error">
 				{{domain_error}}
 			</div>
-			<div class="s-alert s-alert--success row__message" ng-show="domain_done" translate="domain_done">
+			<div class="s-alert s-alert--success row__message" ng-if="domain_done && domain_result.stellarGuard">
+				<stellarguard-result result="domain_result"></stellarguard-result>
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="domain_done && !domain_result.stellarGuard" translate="domain_done">
 				Home Domain was set.
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
@@ -130,7 +136,10 @@
 			<div class="s-alert s-alert--alert row__message" ng-show="data_error">
 				{{data_error}}
 			</div>
-			<div class="s-alert s-alert--success row__message" ng-show="data_done" translate="data_done">
+			<div class="s-alert s-alert--success row__message" ng-if="data_done && data_result.stellarGuard">
+				<stellarguard-result result="domain_result"></stellarguard-result>
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="data_done && !data_result.stellarGuard" translate="data_done">
 				Data entry was set.
 			</div>
 			<div class="row" style="margin-bottom: 20px;">
@@ -163,7 +172,10 @@
 			<div class="s-alert s-alert--alert row__message" ng-show="merge_error">
 				{{merge_error}}
 			</div>
-			<div class="s-alert s-alert--success row__message" ng-show="merge_done" translate="merge_done">
+			<div class="s-alert s-alert--success row__message" ng-if="merge_done && merge_result.stellarGuard">
+				<stellarguard-result result="merge_result"></stellarguard-result>
+			</div>
+			<div class="s-alert s-alert--success row__message" ng-show="merge_done && !merge_result.stellarGuard" translate="merge_done">
 				Your account was merged to destination.
 			</div>
 			<div class="row" style="margin-bottom: 20px;" ng-show="delete_warning">
