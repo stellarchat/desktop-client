@@ -3,6 +3,7 @@ var translate_cn = {
   header_wellcome : '恒星，分布式的全球支付网络',
   login_desc : '本钱包使用秘钥来登录已有的账户。你的秘钥加密保存在了你的电脑里，所以账户像你的个人电脑一样安全。请务必做好密钥的备份。',
   open_account : '打开账户',
+  open_temp_act: '打开临时账户',
   select_file : '选择账户文件',
   create_new_account : '创建新账户',
   account_password : '账户密码',
