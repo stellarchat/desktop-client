@@ -119,6 +119,10 @@ code {
 	text-align: right;
 }
 
+.center {
+  text-align: center;
+}
+
 .nowrap {
 	white-space:nowrap;
 }
