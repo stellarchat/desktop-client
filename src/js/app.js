@@ -9,6 +9,7 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
   $translateProvider.preferredLanguage('cn');
   $translateProvider.useSanitizeValueStrategy('escape');
 
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(http|https|javascript)/);
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(local|http|https|app|tel|ftp|file|blob|content|ms-appx|x-wmapp0|cdvfile|chrome-extension):|data:image\//);
 
   $httpProvider.interceptors.push('TokenInterceptor');

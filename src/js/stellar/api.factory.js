@@ -1,7 +1,7 @@
 /* global _, myApp, round, StellarSdk */
 
-myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 'AuthenticationFactory',
-  function($rootScope, StellarHistory, StellarOrderbook, StellarPath, AuthenticationFactory) {
+myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 'AuthenticationFactory', 'StellarGuard',
+  function($rootScope, StellarHistory, StellarOrderbook, StellarPath, AuthenticationFactory, StellarGuard) {
 
     let _balances = {};
     let _closeAccountStream;  // function that closes a stream.
@@ -63,12 +63,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.debug('Funded.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Fund Fail !', err);
           callback(err, null);
@@ -86,12 +84,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log(`Send ${$rootScope.currentNetwork.coin.code} done.`, txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Send Fail !', err);
           callback(err, null);
@@ -109,12 +105,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
           const memo = new StellarSdk.Memo(memo_type, memo_value);
           const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log('Send Asset done.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Send Fail !', err);
           callback(err, null);
@@ -159,12 +153,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             price : price.toString()
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log(txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Offer Fail !', err);
           callback(err, null);
@@ -264,12 +256,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             path       : path
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log('Send Asset done.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Send Fail !', err);
           callback(err, null);
@@ -332,13 +322,11 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             limit: limit.toString()
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log(txResult);
-          console.log('Trust updated.', txResult.hash);
-          callback(null, txResult.hash);
+          console.log('Trust updated.', txResult);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Trust Fail !', err);
           callback(err, null);
@@ -353,12 +341,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.setOptions(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log('Option updated.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Option Fail !', err);
           callback(err, null);
@@ -372,12 +358,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.manageData(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log('Data updated.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('manageData Fail !', err);
           callback(err, null);
@@ -391,12 +375,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           this._updateSeq(account);
           const op = StellarSdk.Operation.accountMerge(opt);
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log('Account merged.', txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('accountMerge Fail !', err);
           callback(err, null);
@@ -528,15 +510,23 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
             offerId : offer_id
           });
           const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return AuthenticationFactory.sign(te);
-        }).then((te) => {
-          return _server.submitTransaction(te);
+          return this._submitTransaction(te, account);
         }).then((txResult) => {
           console.log(txResult);
-          callback(null, txResult.hash);
+          callback(null, txResult);
         }).catch((err) => {
           console.error('Cancel Offer Fail !', err);
           callback(err, null);
+        });
+      },
+
+      _submitTransaction(transaction, account) {
+        return AuthenticationFactory.sign(transaction).then(te => {
+          if(StellarGuard.hasStellarGuard(account)) {
+            return StellarGuard.submitTransaction(te);
+          } else {
+            return _server.submitTransaction(te);
+          }
         });
       },
 

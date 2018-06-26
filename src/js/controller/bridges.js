@@ -139,6 +139,7 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
       $scope.asset = {};
       $scope.quote_error = "";
       $scope.send_done = false;
+      $scope.send_result = null;
       $scope.send_error = '';
     }
 
@@ -268,13 +269,14 @@ myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingF
       $scope.send_error = '';
 
       StellarApi.send($scope.destination, $scope.asset.code, $scope.asset.issuer,
-        $scope.asset.amount, $scope.memo_type, $scope.memo, function(err, hash){
+        $scope.asset.amount, $scope.memo_type, $scope.memo, function(err, result){
           $scope.sending = false;
           if (err) {
             $scope.send_error = StellarApi.getErrMsg(err);
           } else {
             $scope.service_amount = 0;
             $scope.send_done = true;
+            $scope.send_result = result;
           }
           $rootScope.$apply();
         });

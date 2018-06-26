@@ -136,7 +136,10 @@
 							<div class="OfferMaker__youHave">
 								{{'you_have' | translate}} {{getBalance(counter_code, counter_issuer)}} {{counter_code}}
 							</div>
-							<div class="s-alert s-alert--success OfferMaker__message" ng-show="buy_ok" translate="offer_success">Offer successfully created</div>
+							<div class="s-alert s-alert--success OfferMaker__message" ng-if="buy_ok && buy_result.stellarGuard">
+								<stellarguard-result result="buy_result"></stellarguard-result>
+							</div>
+							<div class="s-alert s-alert--success OfferMaker__message" ng-show="buy_ok && !buy_result.stellarGuard" translate="offer_success">Offer successfully created</div>
 							<div class="s-alert s-alert--error OfferMaker__message" ng-show="buy_fail">{{buy_fail}}</div>
 							<button class="s-button btn btn-success" ng-click="offer('buy')" ng-disabled="buying">{{'buy' | translate}} {{base_code}}</button>
 						</div>
@@ -172,7 +175,10 @@
 							<div class="OfferMaker__youHave">
 								{{'you_have' | translate}} {{getBalance(base_code, base_issuer)}} {{base_code}}
 							</div>
-							<div class="s-alert s-alert--success OfferMaker__message" ng-show="sell_ok" translate="offer_success">Offer successfully created</div>
+							<div class="s-alert s-alert--success OfferMaker__message" ng-if="sell_ok && sell_result.stellarGuard">
+								<stellarguard-result result="sell_result"></stellarguard-result>
+							</div>
+							<div class="s-alert s-alert--success OfferMaker__message" ng-show="sell_ok && !sell_result.stellarGuard" translate="offer_success">Offer successfully created</div>
 							<div class="s-alert s-alert--error OfferMaker__message" ng-show="sell_fail">{{sell_fail}}</div>
 							<button class="s-button btn btn-success" ng-click="offer('sell')" ng-disabled="selling">{{'sell' | translate}} {{base_code}}</button>
 						</div>

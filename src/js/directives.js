@@ -275,3 +275,9 @@ myApp.directive('strongPassword', function () {
   };
 });
 
+myApp.component('stellarguardResult', {
+  templateUrl: 'directive/stellarguard-result.html',
+  bindings: {
+    result: '<'
+  }
+});

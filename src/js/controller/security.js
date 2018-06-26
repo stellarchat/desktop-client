@@ -45,13 +45,15 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
     $scope.setInflation = function() {
       $scope.inflation_error = '';
       $scope.inflation_done = false;
+      $scope.inflation_result = null;
       $scope.inflation_working = true;
-      StellarApi.setOption('inflationDest', $scope.inflation, function(err, hash){
+      StellarApi.setOption('inflationDest', $scope.inflation, function(err, result){
         $scope.inflation_working = false;
         if (err) {
           $scope.inflation_error = StellarApi.getErrMsg(err);
         } else {
           $scope.inflation_done = true;
+          $scope.inflation_result = result;
         }
         $scope.$apply();
       });
@@ -81,13 +83,15 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
     $scope.setDomain = function() {
       $scope.domain_error = '';
       $scope.domain_done = false;
+      $scope.domain_result = null;
       $scope.domain_working = true;
-      StellarApi.setOption('homeDomain', $scope.domain, function(err, hash){
+      StellarApi.setOption('homeDomain', $scope.domain, function(err, result){
         $scope.domain_working = false;
         if (err) {
           $scope.domain_error = StellarApi.getErrMsg(err);
         } else {
           $scope.domain_done = true;
+          $scope.domain_result = result;
         }
         $scope.$apply();
       });
@@ -103,7 +107,8 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
       $scope.data_error = '';
       $scope.data_done = false;
       $scope.data_working = true;
-      StellarApi.setData($scope.data_key, $scope.data_value, function(err, hash){
+      $scope.data_result = null;
+      StellarApi.setData($scope.data_key, $scope.data_value, function(err, result){
         $scope.data_working = false;
         if (err) {
           $scope.data_error = StellarApi.getErrMsg(err);
@@ -114,6 +119,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
             delete $scope.data_attr[$scope.data_key];
           }
           $scope.data_done = true;
+          $scope.data_result = result;
         }
         $scope.$apply();
       });
@@ -127,7 +133,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
       $scope.merge_error = '';
       $scope.merge_done = false;
       $scope.merge_working = true;
-      StellarApi.merge($scope.dest_account, function(err, hash){
+      StellarApi.merge($scope.dest_account, function(err, result){
         $scope.merge_working = false;
         if (err) {
           $scope.merge_error = StellarApi.getErrMsg(err);
@@ -135,6 +141,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
           $rootScope.balance = 0;
           $rootScope.reserve = 0;
           $scope.merge_done = true;
+          $scope.merge_result = result;
         }
         $scope.$apply();
       });
