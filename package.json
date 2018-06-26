@@ -48,6 +48,9 @@
     "underscore": "^1.9.1"
   },
   "devDependencies": {
+    "@ledgerhq/hw-app-str": "^4.15.0",
+    "@ledgerhq/hw-transport-node-hid": "^4.15.0",
+    "babel-runtime": "^6.26.0",
     "concurrently": "^3.5.1",
     "devtron": "^1.4.0",
     "electron": "2.0.2",
