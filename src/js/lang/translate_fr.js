@@ -255,6 +255,10 @@ var translate_fr = {
   logout : 'Se déconnecter',
   new_version_available: 'Nouvelle version disponible',
 
+  /** StellarGuard **/
+  stellarguard_submitted: 'Votre transaction a été soumise à StellarGuard et est en attente d\'autorisation.',
+  stellarguard_authorize: 'Autoriser la transaction',
+
   /** Error **/
   NotFoundError : 'La ressource n\'a pas été trouvée. Vous devez avoir au moins 1 {{name}} dans votre compte pour qu\'il soit actif! Chaque ligne de confiance ou offre nécessite une réserve de 0.5 {{name}}s suplémentaires. Pour faciliter les choses, envoyez au moins 3 {{name}}s au compte.',
   changeTrustLowReserve : 'Pas assez de fonds pour créer une nouvelle ligne de confiance. Chaque ligne de confiance nécessite une réserve de 0.5 {{name}}s suplémentaires.'

@@ -255,6 +255,10 @@ var translate_cn = {
   logout : '注销',
   new_version_available: '发现新版本',
 
+  /** StellarGuard **/
+  stellarguard_submitted: '交易已经提交至StellarGuard，正在等待授权。',
+  stellarguard_authorize: '授权交易',
+
   /** Error **/
   NotFoundError : '恒星网络未找到该账号，请先激活此账号。激活需要至少1 {{code}}。每个授信和委托单需要额外冻结0.5 {{code}}，建议至少用3 {{code}}完成激活。',
   changeTrustLowReserve : '恒星资金不足，无法授信新资产。每个授信需要额外冻结0.5 {{code}}。'
