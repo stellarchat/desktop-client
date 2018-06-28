@@ -255,19 +255,6 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
     $rootScope.isLangCN = function() {
       return SettingFactory.getLang() == 'cn';
     }
-    $rootScope.invokeIPC = async (channel, ...args) => {
-      const _id = Math.floor(Math.random()*10000);
-      const promise = new Promise((resolve, reject)=>{
-        const cb = (event, id, err, result) => {
-          if(id!==_id) return;
-          ipcRenderer.removeListener(channel, cb);
-          if(err) { reject(err) } else { resolve(result) }
-        }
-        ipcRenderer.on(channel, cb)
-      })
-      ipcRenderer.send(channel, _id, ...args)
-      return promise;
-    }
 
     $translate.use(SettingFactory.getLang());
     try {
