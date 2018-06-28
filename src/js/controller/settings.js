@@ -2,7 +2,7 @@
 
 myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi',
   function($scope, $rootScope, $location, SettingFactory, StellarApi) {
-    $scope.mode = 'network';
+    $scope.mode = 'federation';
     $scope.isMode = function(mode) {
       return $scope.mode === mode;
     }
