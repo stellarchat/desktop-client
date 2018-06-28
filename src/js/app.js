@@ -1,4 +1,4 @@
-/* globals angular, gateways, ipcRenderer, nw, translate_cn, translate_en, translate_fr, */
+/* globals angular, gateways, nw, translate_cn, translate_en, translate_fr, */
 /* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
@@ -113,6 +113,12 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
   }).when('/settings', {
     templateUrl : 'pages/settings.html',
     controller : 'SettingsCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/sign_offline', {
+    templateUrl : 'pages/sign_offline.html',
+    controller : 'signOfflineCtrl',
     access : {
       requiredLogin : true
     }
