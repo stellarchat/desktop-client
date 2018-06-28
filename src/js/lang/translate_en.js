@@ -172,6 +172,11 @@ var translate_en = {
   ico_note: 'Note: Before becoming involved in an ICO, cryptocurrency investors and enthusiasts need to consider the risks involved when participating. We do NOT endorse any of these projects.',
   ico_instruction: 'After adding the trust line, select "Trade - Convert". You can use any currency to purchase the ICO.',
 
+  /** SIGN OFFLINE **/
+  sign_offline: 'Sign offline',
+  paste_xdr: 'Please paste your transaction XDR',
+  sign_transaction: 'Sign transaction',
+
   /** Setting & security **/
   settings : 'Settings',
   network  : 'Network',

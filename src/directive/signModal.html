@@ -1,0 +1,103 @@
+<!-- Modal -->
+<div class="modal fade signModal" id="{{handler}}" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="signModalCtrl">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="loading" ng-show="loading">
+          <h3>{{loadingState}}</h3>
+          <img src="img/loading.gif">
+        </div>
+        <div ng-hide="loading">
+          <div class="row" style="margin-bottom: 20px;">
+            <div class="col-xs-12 col-sm-12">
+              <h2>More signatures required</h2>
+              <p>{{title}}</p>
+              <p>Keypairs that already have signed: {{signedSigners}}</p>
+              <p>
+                Keypairs that are useful to finish signing the transaction, sorted starting with most important one.
+                [Probably not all of them are required, so it's a good idea to start with first one and then see the list.]
+                The list: {{requiredSigners}}
+              </p>
+            </div>
+          </div>
+          <!-- TABS -->
+          <ul class="nav nav-tabs" id="nav-tab" role="tablist">
+            <li class="nav-item active">
+              <a class="nav-item nav-link active" id="nav-plain-secret-tab" data-toggle="tab" href="#nav-plain-secret" role="tab" aria-controls="nav-home" aria-selected="true">Plain secret</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link" id="nav-hardware-wallet-tab" data-toggle="tab" href="#nav-hardware-wallet" role="tab" aria-controls="nav-profile" aria-selected="false">Hardware wallet</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-item nav-link" id="nav-offline-wallet-tab" data-toggle="tab" href="#nav-offline-wallet" role="tab" aria-controls="nav-contact" aria-selected="false" >Offline wallet</a>
+            </li>
+          </ul>
+
+          <!-- TAB CONTENT -->
+          <div class="tab-content" id="nav-tabContent">
+
+            <!-- PLAIN SECRET -->
+            <div class="tab-pane fade active in" id="nav-plain-secret" role="tabpanel" aria-labelledby="nav-plain-secret-tab">
+              <div class="row" style="margin-bottom: 20px;">
+                <div class="col-xs-12 col-sm-12">
+                  <h3>Plain secret</h3>
+                  <p>Simply paste a valid secret to sign the transaction.</p>
+                  <div class="form-group">
+                    <input ng-model="plainSecret" class="form-control plainSecretInput" placeholder="ABCDEF..." />
+                  </div>
+                  <button class="btn btn-success plainSecretSign" ng-click="plainSecretSign(); loading=true"><span>Sign</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- HARDWARE WALLET -->
+            <div class="tab-pane fade" id="nav-hardware-wallet" role="tabpanel" aria-labelledby="nav-hardware-wallet-tab">
+              <div class="row" style="margin-bottom: 20px;">
+                <div class="col-xs-12 col-sm-12">
+                  <h3>Hardware wallet</h3>
+                  <p>Securely sign transaction using Ledger hardware wallet.</p>
+
+                  <div class="s-alert s-alert--alert" ng-show="walletError">
+                    <ul class="AddTrust__errorList">
+                      <li>{{walletError}}</li>
+                    </ul>
+                  </div>
+
+                  <button class="btn btn-success" ng-click="hardwareWalletSign()" ng-disabled="walletInvalid"><span>{{signWithLedger}}</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- OFFLINE WALLET -->
+            <div class="tab-pane fade" id="nav-offline-wallet" role="tabpanel" aria-labelledby="nav-offline-wallet-tab">
+              <div class="row" style="margin-bottom: 20px;">
+                <div class="col-xs-12 col-sm-12">
+                  <h3>Offline wallet</h3>
+                  <p>To sign transaction on offline device, copy transaction XDR to it. Then, paste below the signed transaction, or only the signature.</p>
+                  <p>Copy</p>
+                  <pre style="white-space: pre-wrap;">{{teXDR}}</pre>
+                  <p>Paste</p>
+
+                  <div class="form-group">
+                    <input ng-model="signatureXDRs" class="form-control signatureXDRInput" placeholder="[...]" />
+                  </div>
+                  <button class="btn btn-success" ng-click="offlineSignatureAdd(); loading=true" ng-disabled="signatureInvalid"><span>Add signature</span></button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- <div class="modal-footer">
+          <div class="col-xs-12 col-sm-12">
+            <p>Your transaction:</p>
+            <pre>{{teXDR}}</pre>
+          </div>
+        </div> -->
+        </div>
+
+    </div>
+  </div>
+</div>

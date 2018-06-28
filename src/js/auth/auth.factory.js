@@ -1,4 +1,4 @@
-/* global angular, myApp, StellarSdk */
+/* global Buffer, angular, myApp, StellarSdk */
 
 // Auth - singleton that manages account.
 myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
@@ -132,7 +132,6 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       return Promise.resolve({
         [this.address]: {  // Account.
           requiredThreshold: 1,
-          attainedThreshold: te.signatures.length,  // Assumes no multisignatures. TODO: upgrade.
           availableSigners: {
             [this.address]: 1,  // Public Key.
           }
@@ -140,47 +139,85 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       });
     }
 
-    requiredSigners(thresholds) {
+    requiredSigners(te, thresholds) {
       const allUsefulSignersAndWeights = Object.entries(thresholds)
-        .filter(([account, thresholds]) => thresholds.attainedThreshold < thresholds.requiredThreshold)
+        .filter(([address, account]) => {
+          let totalWeight = 0;
+          for(const [signer, weight] of Object.entries(account.availableSigners)) {
+            if(te.signatures.some((sig) => StellarSdk.Keypair.fromPublicKey(signer).verify(te.hash(), sig.signature()))) {
+              totalWeight = totalWeight + weight;
+            }
+          }
+          return totalWeight < account.requiredThreshold;
+        })
         .reduce((all, [account, signers])=> {
             Object.entries(signers.availableSigners).forEach(([signer, weight])=>all[signer] = Math.max(weight, all[signer] || 0));
             return all;
           },
-          Object.create(null))
+          Object.create(null)
+        )
 
       return Object.entries(allUsefulSignersAndWeights)
         .sort((a, b) => a[1] > b[1])  // Biggest weight first.
         .map((signerAndWeight) => signerAndWeight[0])
     }
 
-    get availablePKs() {
-      return _data.secrets.reduce((map, secret)=>{
-          const kp = StellarSdk.Keypair.fromSecret(secret);
-          map[kp.publicKey()] = kp;
-          return map;
-        },
-        Object.create(null));
-    }
+    sign(te, thresholds, signatureXDRs, plainSecrets) {
+      // Note to myself - TL;DR operations of signatures.
+      //     decoratedSignature           = keypair.signDecorated(transaction.hash())
+      //     serializedDecoratedSignature = decoratedSignature.toXDR().toString('base64')
+      //     decoratedSignature           = StellarSdk.xdr.DecoratedSignature.fromXDR(Buffer.from(serializedDecoratedSignature, 'base64'))
+      //     isOk = StellarSdk.verify(transaction.hash(), decoratedSignature.signature(), keypair.rawPublicKey())
+      te = typeof te === 'object' ? te : new StellarSdk.Transaction(te);
+      if(signatureXDRs === undefined) signatureXDRs = []
+      if(plainSecrets === undefined) plainSecrets = []
 
-    // Sign with all available and useful secrets we can automatically.
-    sign(te) {
-      return Promise.resolve()
-        .then(()=>{
-          return this.teThresholds(te);
-        })
-        .then((thresholds)=>{
-          const usefulSignature = this.requiredSigners(thresholds).filter((pk) => pk in this.availablePKs).pop();
+      const requiredSignatures = this.requiredSigners(te, thresholds)
+      let mostUsefulSignature;
+      for(const requiredPublicKey of requiredSignatures) {
+        const requiredKeypair = StellarSdk.Keypair.fromPublicKey(requiredPublicKey);
 
-          if(usefulSignature) {
-            const kp = this.availablePKs[usefulSignature];
-            te.sign(kp);
-            console.info(`Automatically signed Tx ${te.hash} with Keypair ${kp.publicKey()}`);
-            return this.sign(te);
-          } else {
-            return te;
+        // If applicable, sign with stored secrets.
+        const rightStoredSecretKp = _data.secrets
+          .map((storedSecret)=>StellarSdk.Keypair.fromSecret(storedSecret))
+          .find((kp)=>kp.publicKey() === requiredPublicKey);
+        if(rightStoredSecretKp) {
+          console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with stored secret of ${requiredPublicKey}`);
+          mostUsefulSignature = rightStoredSecretKp.signDecorated(te.hash());
+          break;
+        }
+
+        // If applicable, sign with given signatures.
+        for(const signatureXDR of signatureXDRs) {
+          console.log(signatureXDR)
+          console.log(Buffer.from(signatureXDR, 'base64'))
+          const signature = StellarSdk.xdr.DecoratedSignature.fromXDR(Buffer.from(signatureXDR, 'base64'));
+          if(StellarSdk.verify(te.hash(), signature.signature(), requiredKeypair.rawPublicKey())) {
+            console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with given signature of ${requiredPublicKey}`);
+            mostUsefulSignature = signature;
+            break;
           }
-        })
+        }
+
+        // If applicable, sign with given plain secrets.
+        const rightPlainSecretKp = plainSecrets
+          .map((plainSecret)=>StellarSdk.Keypair.fromSecret(plainSecret))
+          .find((kp)=>kp.publicKey() === requiredPublicKey);
+        if(rightPlainSecretKp) {
+          console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with given secret of ${requiredPublicKey}`);
+          mostUsefulSignature = rightPlainSecretKp.signDecorated(te.hash());
+          break;
+        }
+
+      }
+
+      if(mostUsefulSignature) {
+        te.signatures.push(mostUsefulSignature);
+        console.log(mostUsefulSignature, te, te.toEnvelope().toXDR().toString('base64'))
+        return this.sign(te, thresholds, signatureXDRs, plainSecrets);
+      } else {
+        return te;
+      }
     }
 
     //

@@ -38,7 +38,7 @@ myApp.factory('hardwareWalletDaemon', [
         const cb = (event, id, err, result) => {
           if(id!==_id) return;
           ipcRenderer.removeListener(channel, cb);
-          if(err) { reject(err) } else { resolve(result) }
+          if(err) { reject(new Error(err)) } else { resolve(result) }
         }
         ipcRenderer.on(channel, cb)
       })
