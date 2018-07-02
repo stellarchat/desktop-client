@@ -256,13 +256,13 @@
 
   const wrapHwwMethod = (method, channel, callback) => {
     electron.ipcMain.on(channel, (event, reqId, hwwId, ...args) => {
-      if(!reqId) return event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: No request ID provided. Consider passing a random number.`)
-      if(!hwwId) return event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: No hardwallet ID provided. Consider using 'HWW_API.LIST'.`)
+      if(!reqId) return event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: No request ID provided. Consider passing a random number.`)
+      if(!hwwId) return event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: No hardwallet ID provided. Consider using 'HWW_API.LIST'.`)
 
       HardwareWalletLedger.listOfLedgers.get(hwwId)[method](...args)
         .then((res) =>callback ? callback(res) : res)
         .then((res) =>event.sender.send(channel, reqId, null, res))
-        .catch((err)=>event.sender.send(channel, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: ${err.message}`))
+        .catch((err)=>event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: ${err.message}`))
     })
   }
 

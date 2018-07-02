@@ -82,9 +82,9 @@ module.exports = (()=>{
         }
       }
 
-      await Promise.all([HardwareWalletLedger.listeners.map((cb)=>cb(this.uid, newState, this.state, HardwareWalletLedger.list()))]);
       console.info(`Hardwallet<${this.uid}> State: ${this.state||''} -> ${newState}`)
       this.state = newState;
+      await Promise.all([HardwareWalletLedger.listeners.map((cb)=>cb(this.uid, newState, this.state, HardwareWalletLedger.list()))]);
     }
 
     async _goOffline() {

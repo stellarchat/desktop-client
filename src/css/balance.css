@@ -80,6 +80,12 @@
 	padding: 14px 18px;
 	border-top: 1px solid #dedfe0;
 }
+.island .row-simple {
+	display: flex;
+	margin-right: 0px;
+	margin-left: 0px;
+	padding: 14px 18px;
+}
 .island .no-top {
 	display: block;
 	border-top: 0px;
@@ -197,7 +203,6 @@
 }
 
 .BalancesTable__row__amount {
-	font-family: 'OpenSansLight';
 	text-align: right;
 	font-size: 22px;
 }
@@ -302,4 +307,8 @@ a.AssetCard__federation:hover {
 	{
 	border: 1px solid #5CDA63;
 	box-shadow: 0 0 1px rgba(#5CDA63, 0.3);
+}
+
+.loading {
+	text-align: center;
 }

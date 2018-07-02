@@ -1,0 +1,39 @@
+<!-- TODO:
+- please paste xdr
+- verify it's ok & signable by you & not already signed & cool
+- [sign]
+- copy your signature
+ -->
+<section class="col-xs-12 content">
+  <group>
+    <div class="so-back islandBack islandBack--t">
+      <div class="island">
+        <div class="island__header">
+          {{ 'paste_xdr' | translate }}
+        </div>
+        <div class="s-alert s-alert--alert" ng-show="signingError">
+          <ul class="AddTrust__errorList">
+            <li>{{signingError}}</li>
+          </ul>
+        </div>
+        <div>
+          <div class="row">
+            <textarea name="teXDR" ng-model="teXDR" class="form-control" placeholder="ABCDEF.."></textarea>
+          </div>
+          <div class="row-simple">
+            <button class="btn btn-success" ng-click="readyToSign(teXDR)" ng-disabled="invalid_xdr">{{'sign_transaction' | translate}}</button>
+          </div>
+        </div>
+        <div ng-show="signed">
+          <div class="row">
+            <h4>Please paste this signature in your signing window</h4><br>
+          </div>
+          <div class="row-simple">
+            <pre>{{signed}}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <sign-modal handler="signModal" te="te" offline="true" callback="callbackToSignModal"/>
+  </group>
+</section>

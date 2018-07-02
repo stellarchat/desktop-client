@@ -195,7 +195,8 @@
 						</ul>
 					</div>
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
-						{{'sending_to' | translate}} {{real_address | shortaddress}}
+						<h3>{{'sending_to' | translate}} {{real_address | shortaddress}}</h3>
+						<img src="img/loading.gif" alt="">
 					</div>
 
 					<!-- <div class="AddTrust__confirmation__assetCard" ng-show="asset.code">
@@ -238,6 +239,9 @@
 		</div>
 	</div>
 
+  <div>
+    <sign-modal handler="signModal" te="te" callback="callbackToSignModal" />
+  </div>
 
 	</group>
 </section>

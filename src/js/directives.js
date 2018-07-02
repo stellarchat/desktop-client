@@ -79,7 +79,29 @@ myApp.directive('txDefault', [ function() {
     replace : true
   }
 } ]);
-
+myApp.directive('networkModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@'
+    },
+    templateUrl : 'directive/networkModal.html',
+    transclude: true
+  };
+});
+myApp.directive('signModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@',
+      te: '=',
+      offline: '@',
+      callback: '='
+    },
+    templateUrl : 'directive/signModal.html',
+    transclude: true
+  };
+});
 
 /**
  * A generic confirmation for risky actions. Usage: Add attributes:

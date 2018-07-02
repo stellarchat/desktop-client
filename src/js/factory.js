@@ -22,7 +22,7 @@ myApp.factory('SettingFactory', function($window) {
           logo: "img/rocket.png"
         },
         allowHTTP: false,
-        tabs: ["history", "trade", "balance", "send", "trust", "service", "ico"]
+        tabs: ["history", "trade", "balance", "send", "trust", "service", "ico", "signoffline"]
       },
       xlmTest: {
         name: "Stellar Test Network",
@@ -39,7 +39,7 @@ myApp.factory('SettingFactory', function($window) {
           logo: "img/rocket.png"
         },
         allowHTTP: true,
-        tabs: ["history", "trade", "balance", "send", "trust"]
+        tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
       },
       other: {
         name: "User defined",
@@ -55,7 +55,7 @@ myApp.factory('SettingFactory', function($window) {
           logo: "img/rocket.png",  // TODO: ask in settings
         },
         allowHTTP: true,
-        tabs: ["history", "trade", "balance", "send", "trust"]
+        tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
       }
     },
     setLang : function(lang) {

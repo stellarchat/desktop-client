@@ -41,78 +41,52 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _seq.time = now;
       },
 
-      _isFunded(address, callback) {
-        _server.accounts().accountId(address).call().then((accountResult) => {
-          callback(null, true);
-        }).catch((err) => {
-          if (err.name === 'NotFoundError') {
-            callback(null, false);
-          } else {
-            callback(err, false);
-          }
-        });
+      async _isFunded(address) {
+        try {
+          await _server.accounts().accountId(address).call()
+          return true;
+        } catch(err) {
+          if (err.name === 'NotFoundError') return false;
+          throw err
+        }
       },
 
-      _fund(target, amount, memo_type, memo_value, callback) {
+      async _fund(target, amount, memo_type, memo_value) {
         amount = round(amount, 7);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const payment = StellarSdk.Operation.createAccount({
-            destination: target,
-            startingBalance: amount.toString()
-          });
-          const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const te = new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.debug('Funded.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Fund Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const payment = StellarSdk.Operation.createAccount({
+          destination: target,
+          startingBalance: amount.toString()
         });
+        const memo = new StellarSdk.Memo(memo_type, memo_value);
+        return new StellarSdk.TransactionBuilder(account, {memo}).addOperation(payment).build();
       },
 
-      _sendCoin(target, amount, memo_type, memo_value, callback) {
+      async _sendCoin(target, amount, memo_type, memo_value) {
         amount = round(amount, 7);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const payment = StellarSdk.Operation.payment({
-            destination: target,
-            asset: StellarSdk.Asset.native(),
-            amount: amount.toString()
-          });
-          const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log(`Send ${$rootScope.currentNetwork.coin.code} done.`, txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Send Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const payment = StellarSdk.Operation.payment({
+          destination: target,
+          asset: StellarSdk.Asset.native(),
+          amount: amount.toString()
         });
+        const memo = new StellarSdk.Memo(memo_type, memo_value);
+        return new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
       },
 
-      _sendToken(target, currency, issuer, amount, memo_type, memo_value, callback) {
+      async _sendToken(target, currency, issuer, amount, memo_type, memo_value) {
         amount = round(amount, 7);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const payment = StellarSdk.Operation.payment({
-            destination: target,
-            asset: new StellarSdk.Asset(currency, issuer),
-            amount: amount.toString()
-          });
-          const memo = new StellarSdk.Memo(memo_type, memo_value);
-          const te = new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log('Send Asset done.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Send Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const payment = StellarSdk.Operation.payment({
+          destination: target,
+          asset: new StellarSdk.Asset(currency, issuer),
+          amount: amount.toString()
         });
+        const memo = new StellarSdk.Memo(memo_type, memo_value);
+        return new StellarSdk.TransactionBuilder(account, {memo:memo}).addOperation(payment).build();
       },
 
       _updateRootBalance(balances = _balances) {
@@ -141,26 +115,18 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         $rootScope.$broadcast("balanceChange");
       },
 
-      _offer(selling, buying, amount, price, callback) {
+      async _offer(selling, buying, amount, price) {
         amount = round(amount, 7);
         console.debug('Sell', amount, selling.code, 'for', buying.code, '@', price);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.manageOffer({
-            selling: selling,
-            buying: buying,
-            amount: amount.toString(),
-            price : price.toString()
-          });
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log(txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Offer Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.manageOffer({
+          selling: selling,
+          buying: buying,
+          amount: amount.toString(),
+          price : price.toString()
         });
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
       _closeStream() {
@@ -171,6 +137,18 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         if (_closeTxStream) {
           _closeTxStream();
           _closeTxStream = undefined;
+        }
+      },
+
+      async submitTransaction(te, msg) {
+        console.info(`Submitting transaction ${te.hash().toString('base64')} ...`)
+        try {
+          const txResult = await _server.submitTransaction(te)
+          console.info(`Transaction ${msg} submitted.`, txResult);
+          return txResult.hash;
+        } catch(err) {
+          console.error('Send Fail !', err);
+          throw err;
         }
       },
 
@@ -212,27 +190,22 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         }
       },
 
-      send(target, currency, issuer, amount, memo_type, memo_value, callback) {
+      async send(target, currency, issuer, amount, memo_type, memo_value) {
         amount = round(amount, 7);
         console.debug(target, currency, issuer, amount, memo_type, memo_value);
-        if (currency == $rootScope.currentNetwork.coin.code) {
-          this._isFunded(target, (err, isFunded) => {
-            if (err) {
-              return callback(err, null);
-            } else {
-              if (isFunded) {
-                this._sendCoin(target, amount, memo_type, memo_value, callback);
-              } else {
-                this._fund(target, amount, memo_type, memo_value, callback);
-              }
-            }
-          });
+        if (currency !== $rootScope.currentNetwork.coin.code) {
+          return this._sendToken(target, currency, issuer, amount, memo_type, memo_value);
+        }
+
+        const isFunded = await this._isFunded(target)
+        if (isFunded) {
+          return this._sendCoin(target, amount, memo_type, memo_value);
         } else {
-          this._sendToken(target, currency, issuer, amount, memo_type, memo_value, callback);
+          return this._fund(target, amount, memo_type, memo_value);
         }
       },
 
-      convert(alt, callback) {
+      async convert(alt) {
         console.debug(alt.origin.source_amount + '/' + alt.src_code + ' -> ' + alt.origin.destination_amount + '/' + alt.dst_code);
         const path = alt.origin.path.map((item) => {
           if (item.asset_type == 'native') {
@@ -245,25 +218,17 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         if (alt.max_rate) {
           sendMax = round(alt.max_rate * sendMax, 7).toString();
         }
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const pathPayment = StellarSdk.Operation.pathPayment({
-            destination: this.address,
-            sendAsset  : getAsset(alt.src_code, alt.src_issuer),
-            sendMax    : sendMax,
-            destAsset  : getAsset(alt.dst_code, alt.dst_issuer),
-            destAmount : alt.origin.destination_amount,
-            path       : path
-          });
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log('Send Asset done.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Send Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const pathPayment = StellarSdk.Operation.pathPayment({
+          destination: this.address,
+          sendAsset  : getAsset(alt.src_code, alt.src_issuer),
+          sendMax    : sendMax,
+          destAsset  : getAsset(alt.dst_code, alt.dst_issuer),
+          destAmount : alt.origin.destination_amount,
+          path       : path
         });
+        return new StellarSdk.TransactionBuilder(account).addOperation(pathPayment).build();
       },
 
       listenStream() {
@@ -298,91 +263,59 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           });
       },
 
-      getInfo(address, callback) {
-        _server.accounts().accountId(address||this.address).call().then((data) => {
+      async getInfo(address, callback) {
+        try {
+          const data = await _server.accounts().accountId(address||this.address).call()
           callback(null, data);
-        }).catch((err) => {
+        } catch(err) {
           if (err.name == 'NotFoundError') {
             console.warn(address, err.name);
-            callback(new Error(err.name));
+            callback(new Error(err.name), null);
           } else {
             console.error(err);
             callback(err, null);
           }
-        });
+        }
       },
 
-      changeTrust(code, issuer, limit, callback) {
+      async changeTrust(code, issuer, limit) {
         const asset = new StellarSdk.Asset(code, issuer);
         console.debug('Turst asset', asset, limit);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.changeTrust({
-            asset: asset,
-            limit: limit.toString()
-          });
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log(txResult);
-          console.log('Trust updated.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Trust Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.changeTrust({
+          asset: asset,
+          limit: limit.toString()
         });
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
-      setOption(name, value, callback) {
+      async setOption(name, value) {
         const opt = {};
         opt[name] = value
         console.debug('set option:', name, '-', value);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.setOptions(opt);
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log('Option updated.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Option Fail !', err);
-          callback(err, null);
-        });
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.setOptions(opt);
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
-      setData(name, value, callback) {
+      async setData(name, value) {
         const opt = {name: name, value: value? value : null};
         console.debug('manageData:', name, '-', value);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.manageData(opt);
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log('Data updated.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('manageData Fail !', err);
-          callback(err, null);
-        });
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.manageData(opt);
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
-      merge(destAccount, callback) {
+      async merge(destAccount) {
         const opt = {destination: destAccount};
         console.debug('merge:', this.address, '->', destAccount);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.accountMerge(opt);
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log('Account merged.', txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('accountMerge Fail !', err);
-          callback(err, null);
-        });
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.accountMerge(opt);
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
       queryAccount(callback) {
@@ -397,8 +330,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           $rootScope.reserve = _subentry * 0.5 + 1;
           this._updateRootBalance();
           $rootScope.$apply();
+
           if (callback) { callback(); }
-          return;
         });
       },
 
@@ -456,18 +389,19 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         StellarHistory.close();
       },
 
-      queryOffer(callback) {
+      async queryOffer(callback) {
         console.debug('offers', this.address);
-        _server.offers('accounts', this.address).limit(200).call().then((data) => {
+        try {
+          const data = await _server.offers('accounts', this.address).limit(200).call()
           console.log('offers', data.records);
           callback(null, data.records);
-        }).catch((err) => {
+        } catch(err) {
           console.error('QueryOffer Fail !', err);
           callback(err, null);
-        });
+        }
       },
 
-      offer(option, callback) {
+      async offer(option) {
         console.debug('%s %s %s use %s@ %s', option.type, option.amount, option.currency, option.base, option.price);
         let buying, selling;
         let selling_amount, selling_price;
@@ -483,10 +417,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           selling_amount = option.amount;
           selling_price = option.price;
         }
-        this._offer(selling, buying, selling_amount, selling_price, callback);
+        return this._offer(selling, buying, selling_amount, selling_price);
       },
 
-      cancel(offer, callback) {
+      async cancel(offer) {
         let selling, buying, price, offer_id;
         if (typeof offer === 'object') {
           selling = offer.selling;
@@ -500,49 +434,39 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           offer_id = offer;
         }
         console.debug('Cancel Offer', offer_id);
-        _server.loadAccount(this.address).then((account) => {
-          this._updateSeq(account);
-          const op = StellarSdk.Operation.manageOffer({
-            selling: selling,
-            buying: buying,
-            amount: "0",
-            price : price,
-            offerId : offer_id
-          });
-          const te = new StellarSdk.TransactionBuilder(account).addOperation(op).build();
-          return this._submitTransaction(te, account);
-        }).then((txResult) => {
-          console.log(txResult);
-          callback(null, txResult);
-        }).catch((err) => {
-          console.error('Cancel Offer Fail !', err);
-          callback(err, null);
+        const account = await _server.loadAccount(this.address)
+        this._updateSeq(account);
+        const op = StellarSdk.Operation.manageOffer({
+          selling: selling,
+          buying: buying,
+          amount: "0",
+          price : price,
+          offerId : offer_id
         });
+        return new StellarSdk.TransactionBuilder(account).addOperation(op).build();
       },
 
-      _submitTransaction(transaction, account) {
-        return AuthenticationFactory.sign(transaction).then(te => {
-          if(StellarGuard.hasStellarGuard(account)) {
-            return StellarGuard.submitTransaction(te);
-          } else {
-            return _server.submitTransaction(te);
-          }
-        });
+      async _submitTransaction(transaction, account) {
+        const te = AuthenticationFactory.sign(transaction)
+        if(StellarGuard.hasStellarGuard(account)) {
+          return StellarGuard.submitTransaction(te);
+        } else {
+          return _server.submitTransaction(te);
+        }
       },
 
       getFedName(domain, address, callback) {
-        StellarSdk.FederationServer.createForDomain(domain).then((server) => {
-          return server.resolveAccountId(address);
-        })
-        .then((data) => {
+        try {
+          const server = StellarSdk.FederationServer.createForDomain(domain);
+          const data = server.resolveAccountId(address);
           if(data.stellarthis.address) {
             const index = data.stellarthis.address.indexOf("*");
             const fed_name = data.stellarthis.address.substring(0, index);
             return callback(null, fed_name);
           }
-        }).catch((err) => {
+        } catch(err) {
           return callback(err);
-        });
+        }
       },
 
       getErrMsg(err) {

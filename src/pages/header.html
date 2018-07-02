@@ -30,6 +30,7 @@
 	        	<a href ng-click="goTo('/bridges')">{{'service' | translate}}</a>
 	        </li>
 	        <li ng-class="{active:isActive('/ico')}" ng-show="currentNetwork.tabs.indexOf('ico') > -1"><a href ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
+          <li ng-class="{active:isActive('/sign_offline')}" ng-show="currentNetwork.tabs.indexOf('signoffline') > -1"><a href ng-click="goTo('/sign_offline')">{{'sign_offline' | translate}}</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	      	<li ng-hide="isPublicNetwork()"><a href ng-click="goTo('/settings')"><i class="fa fa-exclamation-triangle"></i> {{currentNetwork.name | translate}}</a></li>

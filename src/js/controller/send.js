@@ -1,4 +1,4 @@
-/* global myApp, StellarSdk, ripple */
+/* global $, myApp, StellarSdk, ripple */
 
 myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'AuthenticationFactory', '$http',
   function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
@@ -339,19 +339,51 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       $scope.send_error.message = '';
 
       StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer,
-        $scope.asset.amount, $scope.memo_type, $scope.memo, function(err, result){
-          $scope.sending = false;
+        $scope.asset.amount, $scope.memo_type, $scope.memo)
+        // .then((te) => AuthenticationFactory.sign(te, [], []))
+        // .then((te) => AuthenticationFactory.requiredSigners(te).then((requiredSigners)=>[te, requiredSigners]))
+        // .then(([te, requiredSigners]) => {
+        //   if(requiredSigners.length === 0) return te;
+        .then((te) => {
+          $scope.te = te;
+          // $scope.requiredSigners = requiredSigners;
+          $scope.teXDR = te.toEnvelope().toXDR().toString('base64');
+          $(`#signModal`).modal();
+          $scope.$apply();
 
-          if (err) {
-            $scope.send_error.message = StellarApi.getErrMsg(err);
-          } else {
-            $scope.send_result = result;
-            $scope.service_amount = 0;
-            $scope.asset.amount = 0;
-            $scope.send_done = true;
-          }
+          return new Promise((resolve, reject) => {
+            $scope.callbackToSignModal = (err, te) => {
+              if(err) reject(err);
+              resolve(te);
+            }
+            $scope.$apply();
+            // $scope.$watch('te', function(newValue){
+            //   console.log('send.js', newValue.signatures.length == 1);
+            // },true);
+            // blah.watch((err, te) => {
+            //   if(err) reject(err)
+            //   resolve(te)
+            // })
+          })
+          // throw new Error(`Not enough signature! ${requiredSigners}`);
+        })
+        .then((te)=>{
+          $('#signModal').modal('toggle');
+          return te;
+        })
+        .then((te) => StellarApi.submitTransaction(te))
+        .then((res)=> {
+          $scope.service_amount = 0;
+          $scope.asset.amount = 0;
+          $scope.send_done = true;
+          $scope.sending = false;
           $rootScope.$apply();
-        });
+        })
+        .catch((err) => {
+          console.error(err)
+          $scope.send_error.message = StellarApi.getErrMsg(err);
+          $rootScope.$apply();
+        })
     };
 
     function autoCompleteURL(address) {
@@ -389,4 +421,3 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
     $scope.initSend();
 
   } ]);
-

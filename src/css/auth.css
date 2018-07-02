@@ -4,7 +4,6 @@
   padding: 15px 20px;
   border: 1px solid #ccccca;
   margin-bottom: 5px;
-  margin: 0 auto 10px;
 }
 .auth-form-wrapper label {
   font-weight: 400;
@@ -15,7 +14,7 @@
   height: 100px;
   background: #346aa9;
   text-align: center;
-  font: 26px 'OpenSansLight';
+  font-size: 26px;
   font-weight: 300;
   line-height: 100px;
   color: #ffffff;
@@ -38,10 +37,13 @@
   color: #1e3f78;
   border: 1px solid #ccccca;
   padding: 15px;
-} 
+}
 
 .form-group p.error-text {
   display: none;
+}
+.form-group pre {
+  width: 100%;
 }
 .form-group .form-control {
   margin-bottom: 0;
@@ -134,4 +136,23 @@
 .editing {
   background: #f7f7f7;
   margin-right: 0px;
+}
+
+.login-content ul.nav-tabs li.nav-item a.nav-link {
+  color: #fff;
+}
+.login-content ul.nav-tabs li.nav-item.active a.nav-link {
+  color: #23527c;
+}
+.login-content ul.nav-tabs li.nav-item a.nav-link:hover {
+  color: #23527c;
+}
+.login-options {
+  width: 100%;
+  margin-top: 10px;
+}
+.login-options .large {
+  font-size: 16px;
+  padding-top: 5px;
+  display: block;
 }
