@@ -1,9 +1,12 @@
-/* global myApp */
+/* global $, angular, Buffer, moment, myApp, StellarSdk, Web3 */
 
 let horizon = new StellarSdk.Server('https://horizon-testnet.stellar.org');  // Testing on testnet
 StellarSdk.Network.useTestNetwork();
 
-const MIN_AMOUNT = 31;  // TODO doublecheck min amount
+const LOCKUP_DATE_0 = moment("2018-05-15 23:00+00:00");
+const LOCKUP_DATE_90 = LOCKUP_DATE_0.add(90, 'days');
+const LOCKUP_DATE_180 = LOCKUP_DATE_0.add(180, 'days');
+// const MIN_AMOUNT = 1000;  // Real minimal amount is 600.00002 FIC.
 const FIC_DISTRIBUTOR = 'GC2PJQNVOMRYGK7DCDHZTBSXAT6W5HSCSUAGTHL7KPHFSBBFVXNPQRJ5';
 
 const Unlock = (ficAddress, lockupAddress) => async () => {
@@ -71,7 +74,7 @@ const getTxs = async (ficAddress)=>{
     const createTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'createAccount'));
     const mergeTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'accountMerge'));
 
-    r = {
+    const r = {
       lockupAddress,
       ficNonce: key.slice(57),
       ethAddress: creationTransation.envelope.memo.value.slice(0, 20).toString('hex'),
@@ -90,105 +93,90 @@ const getTxs = async (ficAddress)=>{
   return responses;
 };
 
-var abi = [{'constant':true,'inputs':[{'name':'_holder','type':'address'}],'name':'getBalances','outputs':[{'name':'','type':'uint256'},{'name':'','type':'uint256'},{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'}, {'anonymous':false,'inputs':[{'indexed':true,'name':'who','type':'address'},{'indexed':true,'name':'beneficiary','type':'address'},{'indexed':true,'name':'publicKey','type':'bytes32'},{'indexed':false,'name':'amount','type':'uint256'},{'indexed':false,'name':'lockup','type':'uint8'}],'name':'Withdraw','type':'event'}];
-
-function EthWallet(crowdsaleAddress, web3) {
-  this.web3 = web3 ? web3 : this.createWeb3();
-  this.crowdsaleAddress = crowdsaleAddress;
-  this.crowdsale = new this.web3.eth.Contract(abi, this.crowdsaleAddress);
-}
-
-EthWallet.prototype.createWeb3 = function() {
-  return new Web3('https://ropsten.infura.io/3UOYQzA23QIkrf3lZUEX');
-};
-
-EthWallet.prototype.getWithdrawPayload = function(publicKey, amount, lockup) {
-  try {
-    var utils = this.web3.utils;
-    var methodHash = utils.sha3('withdraw(bytes32,uint256,uint8)').slice(2, 10);
-    var pk = StellarSdk.StrKey.decodeEd25519PublicKey(publicKey).toString('hex');
-    var tokens = this.bn(utils.toWei(amount, 'ether'));
-
-    var hexData = [
-      methodHash,
-      pk,
-      utils.leftPad(tokens.toString(16), 64, 0),
-      utils.leftPad(this.bn(lockup).toString(16), 64, 0)
-    ].join('');
-
-    return '0x' + hexData;
-  } catch (e) {
-    console.error(e);
+class EthWallet {
+  constructor(crowdsaleAddress) {
+    this.crowdsaleAddress = crowdsaleAddress;
+    this.crowdsale = new EthWallet.web3.eth.Contract(EthWallet.abi, this.crowdsaleAddress);
   }
-};
-
-EthWallet.prototype.bn = function(value) {
-  return this.web3.utils.toBN(value);
-};
-
-EthWallet.prototype.getTokens = function(address) {
-  var self = this;
-  return Promise.all([
-    this.crowdsale.methods.getBalances(address).call(),
-    this.crowdsale.getPastEvents('Withdraw', {
-      fromBlock: 0,
-      toBlock:'latest',
-      filter: {beneficiary: address}
-    })
-  ]).then(function(data) {
-    var balances = data[0];
-    var events = data[1];
-
-    var _0 = self.bn(balances[0]).div(self.bn(1e18)).toString();
-    var _90 = self.bn(balances[1]).div(self.bn(1e18)).toString();
-    var _180 = self.bn(balances[2]).div(self.bn(1e18)).toString();
-
-    var result = {
-      total: {
-        '0': _0,
-        '90': _90,
-        '180': _180
-      },
-      claimed: {'0': 0, '90': 0, '180': 0},
-      remaining : {
-        '0': _0,
-        '90': _90,
-        '180': _180
-      },
-      txs: []
-    };
-
-    var claimed = result.claimed;
-    var total = result.total;
-
-    for (var i = 0, n = events.length; i < n; i++) {
-      var tx = self._createTxFromEvent(events[i]);
-      var amount = self.bn(tx.amount);
-      claimed[tx.lockup] = self.bn(claimed[tx.lockup]).add(amount).toString();
-      total[tx.lockup] = self.bn(total[tx.lockup]).add(amount).toString();
-      result.txs.push(tx);
+  getWithdrawPayload(publicKey, amount, lockup) {
+    try {
+      const utils = EthWallet.web3.utils;
+      const methodHash = utils.sha3('withdraw(bytes32,uint256,uint8)').slice(2, 10);
+      const pk = StellarSdk.StrKey.decodeEd25519PublicKey(publicKey).toString('hex');
+      const tokens = this.bn(utils.toWei(amount, 'ether'));
+      const hexData = [
+        methodHash,
+        pk,
+        utils.leftPad(tokens.toString(16), 64, 0),
+        utils.leftPad(this.bn(lockup).toString(16), 64, 0)
+      ].join('');
+      return '0x' + hexData;
     }
+    catch (e) {
+      console.error(e);
+    }
+  }
+  bn(value) {
+    return EthWallet.web3.utils.toBN(value);
+  }
+  getTokens(address) {
+    const self = this;
+    return Promise.all([
+      this.crowdsale.methods.getBalances(address).call(),
+      this.crowdsale.getPastEvents('Withdraw', {
+        fromBlock: 0,
+        toBlock: 'latest',
+        filter: { beneficiary: address }
+      })
+    ]).then(function (data) {
+      const balances = data[0];
+      const events = data[1];
+      const _0 = self.bn(balances[0]).div(self.bn(1e18)).toString();
+      const _90 = self.bn(balances[1]).div(self.bn(1e18)).toString();
+      const _180 = self.bn(balances[2]).div(self.bn(1e18)).toString();
+      const result = {
+        total: {
+          '0': _0,
+          '90': _90,
+          '180': _180
+        },
+        claimed: { '0': 0, '90': 0, '180': 0 },
+        remaining: {
+          '0': _0,
+          '90': _90,
+          '180': _180
+        },
+        txs: []
+      };
+      const claimed = result.claimed;
+      const total = result.total;
+      for (const event of events) {
+        const tx = self._createTxFromEvent(event);
+        const amount = self.bn(tx.amount);
+        claimed[tx.lockup] = self.bn(claimed[tx.lockup]).add(amount).toString();
+        total[tx.lockup] = self.bn(total[tx.lockup]).add(amount).toString();
+        result.txs.push(tx);
+      }
+      return result;
+    });
+  }
+  _createTxFromEvent(event) {
+    const eventValues = event.returnValues;
+    const tx = Object.create(null);
+    tx.who = eventValues.who;
+    tx.beneficiary = eventValues.beneficiary;
+    tx.publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(EthWallet.web3.utils.hexToBytes(eventValues.publicKey));
+    tx.amount = this.bn(eventValues.amount).div(this.bn(1e18)).toString();
+    tx.lockup = eventValues.lockup;
+    tx.txHash = event.transactionHash;
+    return tx;
+  }
+}
+EthWallet.web3 = new Web3('https://ropsten.infura.io/3UOYQzA23QIkrf3lZUEX');
+EthWallet.abi = [{'constant':true,'inputs':[{'name':'_holder','type':'address'}],'name':'getBalances','outputs':[{'name':'','type':'uint256'},{'name':'','type':'uint256'},{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'}, {'anonymous':false,'inputs':[{'indexed':true,'name':'who','type':'address'},{'indexed':true,'name':'beneficiary','type':'address'},{'indexed':true,'name':'publicKey','type':'bytes32'},{'indexed':false,'name':'amount','type':'uint256'},{'indexed':false,'name':'lockup','type':'uint8'}],'name':'Withdraw','type':'event'}];
 
-    return result;
-  });
-};
-
-EthWallet.prototype._createTxFromEvent = function(event) {
-  var eventValues = event.returnValues;
-  var tx = Object.create(null);
-  tx.who = eventValues.who;
-  tx.beneficiary = eventValues.beneficiary;
-  tx.publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(this.web3.utils.hexToBytes(eventValues.publicKey));
-  tx.amount = this.bn(eventValues.amount).div(this.bn(1e18)).toString();
-  tx.lockup = eventValues.lockup;
-  tx.txHash = event.transactionHash;
-  return tx;
-};
-
-var ethereum_address = require('ethereum-address');
-var moment = require('moment');
-
-myApp.controller("FICAddressCtrl", [ '$scope', '$rootScope', '$window', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory', function($scope, $rootScope, $window, StellarApi, FedNameFactory, AuthenticationFactory) {
+myApp.controller("FICAddressCtrl", [ '$scope', '$window',
+                            function( $scope ,  $window ) {
 
   $scope.eth_address = '';
   $scope.invalid_eth = false;
@@ -197,23 +185,20 @@ myApp.controller("FICAddressCtrl", [ '$scope', '$rootScope', '$window', 'Stellar
   $scope.currentEthAddressCoins = '';
 
   $scope.addEthAdrress = function(eth_address) {
-    var currentAddresses = {},
-        localAddresses = {},
-        walletAdresses = [],
-        allAdresses = [],
-        coin_data = {},
-        funcAddress = eth_address;
+    const currentAddresses = {};
+    const allAdresses = [];
+    const funcAddress = eth_address;
 
     if($window.localStorage[`eth_address`]) {
       currentAddresses[`${$scope.address}`] = [`${JSON.parse($window.localStorage[`eth_address`])}`];
     }
 
-    if (ethereum_address.isAddress(eth_address)) {
+    if (EthWallet.web3.utils.isAddress(eth_address)) {
       console.log('Valid ethereum address.');
       if($window.localStorage[`eth_address`]) {
-        localAddresses = JSON.parse($window.localStorage[`eth_address`]);
-        walletAdresses = localAddresses[$scope.address];
-        for(var addr in walletAdresses) {
+        const localAddresses = JSON.parse($window.localStorage[`eth_address`]);
+        const walletAdresses = localAddresses[$scope.address];
+        for(const addr in walletAdresses) {
           allAdresses.push(walletAdresses[addr]);
         }
       }
@@ -224,7 +209,7 @@ myApp.controller("FICAddressCtrl", [ '$scope', '$rootScope', '$window', 'Stellar
       $scope.invalid_eth = false;
       $scope.eth_addresses = JSON.parse($window.localStorage[`eth_address`]);
 
-      var wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef'),
+      const wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef'),
           current_coins = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`] ) : {});
 
       wallet.getTokens(funcAddress).then(function(res){
@@ -243,30 +228,40 @@ myApp.controller("FICAddressCtrl", [ '$scope', '$rootScope', '$window', 'Stellar
     }
   }
 
-  var lockupDate = moment("2018-05-15 23:00+00:00"),
-      lockup90 = moment("2018-05-15 23:00+00:00").add(90, 'days'),
-      lockup180 = moment("2018-05-15 23:00+00:00").add(180, 'days'),
-      now = moment(new Date()),
-      duration90 = moment.duration(now.diff(lockup90)),
-      days90 = duration90.asDays(),
-      duration180 = moment.duration(now.diff(lockup180)),
-      days180 = duration180.asDays();
+  const now = moment(new Date());
+  const duration90 = moment.duration(now.diff(LOCKUP_DATE_90));
+  const days90 = duration90.asDays();
+  const duration180 = moment.duration(now.diff(LOCKUP_DATE_180));
+  const days180 = duration180.asDays();
 
   $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
 
 }]);
 
 
-myApp.controller("FICCoinCtrl", [ '$scope', '$location', '$rootScope', '$window', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory', function($scope, $location, $rootScope, $window, StellarApi, FedNameFactory, AuthenticationFactory) {
+myApp.controller("FICCoinCtrl", [ '$scope', '$location', '$window',
+                         function( $scope ,  $location ,  $window ) {
 
-  var coin_data = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`]) : '' );
-  $scope.FicCoins = coin_data;
-  var all_addresses = JSON.parse($window.localStorage[`eth_address`]),
-      eth_addresses = all_addresses[$scope.address],
-      wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef'),
-      current_coins = {};
+  $scope.FicCoins = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`]) : '' );
+  const all_addresses = JSON.parse($window.localStorage[`eth_address`] || '{}');
+  const eth_addresses = all_addresses[$scope.address];
+  const wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef');
+  const current_coins = {};
+
+  const now = moment(new Date());
+  const duration90 = moment.duration(now.diff(LOCKUP_DATE_90));
+  const days90 = duration90.asDays();
+  const duration180 = moment.duration(now.diff(LOCKUP_DATE_180));
+  const days180 = duration180.asDays();
+
+  $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
+
+  $scope.claim = function(address, period) {
+    $location.path('/fic_claim').search({address: address, period: period});
+  };
 
   (async ()=>{
+    if(!eth_addresses) return;
     for(const address of eth_addresses) {
       const res = await wallet.getTokens(address);
       current_coins[address] = res;
@@ -276,29 +271,15 @@ myApp.controller("FICCoinCtrl", [ '$scope', '$location', '$rootScope', '$window'
     }
   })();
 
-  var lockupDate = moment("2018-05-15 23:00+00:00"),
-      lockup90 = moment("2018-05-15 23:00+00:00").add(90, 'days'),
-      lockup180 = moment("2018-05-15 23:00+00:00").add(180, 'days'),
-      now = moment(new Date()),
-      duration90 = moment.duration(now.diff(lockup90)),
-      days90 = duration90.asDays(),
-      duration180 = moment.duration(now.diff(lockup180)),
-      days180 = duration180.asDays();
-
-  $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
-
-  $scope.claim = function(address, period) {
-    $location.path('/fic_claim').search({address: address, period: period});
-  }
-
 }]);
 
 
-myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory', function($scope, $location, $rootScope, $window, StellarApi, FedNameFactory, AuthenticationFactory) {
+myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$window',
+                          function( $scope ,  $location ,  $window  ) {
 
-  var urlParams = $location.search();
+  const urlParams = $location.search();
 
-  var coin_data = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`]) : '' );
+  const coin_data = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`]) : '' );
 
   $scope.isNumber = angular.isNumber;
   $scope.eth_addresses = ( $window.localStorage[`eth_address`] ? JSON.parse($window.localStorage[`eth_address`]) : '' );
@@ -312,7 +293,7 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window
   $scope.allGood = false;
 
   $scope.$watch('claim', function(newValue) {
-    var period = $scope.claim.period.split(" "),
+    const period = $scope.claim.period.split(" "),
         remaining = (coin_data[$scope.claim.address] ? coin_data[$scope.claim.address].remaining[period[0]] : ''),
         remains = remaining - $scope.claim.amount;
 
@@ -330,14 +311,14 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window
   }, true);
 
   $scope.selectAll = function() {
-    var period = $scope.claim.period.split(" ");
+    const period = $scope.claim.period.split(" ");
     $scope.claim.amount = coin_data[$scope.claim.address].remaining[period[0]];
   }
 
   $scope.submitClaim = function() {
     $scope.formData = $scope.claim;
 
-    var amount = $scope.claim.amount,
+    const amount = $scope.claim.amount,
         publicKey = $scope.address,
         lockup = $scope.claim.period.split(" ")[0],
         wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef');
@@ -357,21 +338,19 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$rootScope', '$window
 }]);
 
 
-myApp.controller("FICHistoryCtrl", [ '$scope', '$location', '$rootScope', '$window', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory', function($scope, $location, $rootScope, $window, StellarApi, FedNameFactory, AuthenticationFactory) {
+myApp.controller("FICHistoryCtrl", [ '$scope',
+                            function( $scope ) {
 
   getTxs($scope.address).then((res)=>{
     $scope.ficTxs = res;
     $scope.$apply();
   });
 
-  var lockupDate = moment("2018-05-15 23:00+00:00"),
-      lockup90 = moment("2018-05-15 23:00+00:00").add(90, 'days'),
-      lockup180 = moment("2018-05-15 23:00+00:00").add(180, 'days'),
-      now = moment(new Date()),
-      duration90 = moment.duration(now.diff(lockup90)),
-      days90 = duration90.asDays(),
-      duration180 = moment.duration(now.diff(lockup180)),
-      days180 = duration180.asDays();
+  const now = moment(new Date());
+  const duration90 = moment.duration(now.diff(LOCKUP_DATE_90));
+  const days90 = duration90.asDays();
+  const duration180 = moment.duration(now.diff(LOCKUP_DATE_180));
+  const days180 = duration180.asDays();
 
   $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
 
