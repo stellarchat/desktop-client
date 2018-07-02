@@ -1,4 +1,4 @@
-/* global $, angular, Buffer, moment, myApp, StellarSdk, Web3 */
+/* global $, angular, Buffer, moment, myApp, require, StellarSdk, Web3 */
 
 let horizon = new StellarSdk.Server('https://horizon-testnet.stellar.org');  // Testing on testnet
 StellarSdk.Network.useTestNetwork();
@@ -281,6 +281,7 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$window',
 
   const coin_data = ( $window.localStorage[`coins`] ? JSON.parse($window.localStorage[`coins`]) : '' );
 
+  $scope.contractAddress = '0x559d3be0e5818eca8d6894b4080ffc37a2058aef';
   $scope.isNumber = angular.isNumber;
   $scope.eth_addresses = ( $window.localStorage[`eth_address`] ? JSON.parse($window.localStorage[`eth_address`]) : '' );
   $scope.periods = ["0", "90", "180"];
@@ -324,7 +325,9 @@ myApp.controller("FICClaimCtrl", [ '$scope', '$location', '$window',
         wallet = new EthWallet('0x559d3be0e5818eca8d6894b4080ffc37a2058aef');
 
     $scope.formData.payload = wallet.getWithdrawPayload(publicKey, amount.toString(), lockup.toString());
-
+  }
+  $scope.openMyEtherWallet = function() {
+    require('electron').shell.openExternal(`https://www.myetherwallet.com/?to=${$scope.contractAddress}&sendMode=ether&value=0&data=${$scope.formData.payload}#send-transaction`);
   }
   $scope.$on("$destroy", function(){
     $location.search({});

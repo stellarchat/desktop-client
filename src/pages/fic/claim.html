@@ -7,13 +7,14 @@
           {{ 'from_address' | translate }} <div class="code">{{formData.address}}</div>
         </div>
         <div class="data-line">
-          {{ 'send_to' | translate }} <div class="code">0x559d3be0e5818eca8d6894b4080ffc37a2058aef</div>
+          {{ 'send_to' | translate }} <div class="code">{{contractAddress}}</div>
         </div>
         <div class="data-line">
           {{ 'payload' | translate }} <div class="code">{{formData.payload}}</div>
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn" ng-click="openMyEtherWallet()">{{ 'sendMyEtherWallet' | translate }}</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'done' | translate }}</button>
       </div>
     </div>
