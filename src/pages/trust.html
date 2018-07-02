@@ -72,7 +72,7 @@
 					<button class="s-button btn btn-success" ng-hide="hasLine(asset.code, asset.issuer)" ng-click="addTrust(asset.code, asset.issuer)" ng-disabled="isChanging(asset.code, asset.issuer)">{{'trust_add' | translate}} {{asset.code}}</button>
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 
@@ -131,6 +131,10 @@
 			</div>
 
 		</div>
+	</div>
+
+	<div>
+		<sign-modal handler="signModal" te="te" callback="callbackToSignModal" />
 	</div>
 
 	</group>
