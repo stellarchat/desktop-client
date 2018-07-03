@@ -1,11 +1,9 @@
 <section class="col-xs-12 content">
-  <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" ng-show="mode=='register_new_account'">
-    <div class="auth-form-wrapper">
-      <h2 translate="create_new_account">Create new account</h2>
-      <div class="form-group"><a class="btn btn-block btn-default" ng-click="fileInputClick()" translate="create_blank">Create an empty account</a></div>
-      <div class="form-group"><a class="btn btn-block btn-default" ng-click="changeMode('register_with_secret')" translate="create_by_secret">Create a new account with a secret key</a></div>
-      <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/login')" translate="back">back</a></div>
-    </div>
+  <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 auth-form-wrapper" ng-show="mode=='register_new_account'">
+    <h2 translate="create_new_account">Create new account</h2>
+    <div class="form-group"><a class="btn btn-block btn-default" ng-click="fileInputClick()" translate="create_blank">Create an empty account</a></div>
+    <div class="form-group"><a class="btn btn-block btn-default" ng-click="changeMode('register_with_secret')" translate="create_by_secret">Create a new account with a secret key</a></div>
+    <div class="form-group"><a class="btn btn-block btn-link" ng-click="goTo('/login')" translate="back">back</a></div>
   </div>
   <div class="row col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6" ng-show="mode=='register_empty_wallet'">
     <div class="auth-form-wrapper">
@@ -53,7 +51,7 @@
       </form>
     </div>
   </div>
-  
+
   <div class="row mode-welcome" ng-show="mode=='welcome'">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
       <p class="important" translate="important">Important:</p>

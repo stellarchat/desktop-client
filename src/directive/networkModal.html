@@ -3,59 +3,55 @@
 
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Network settings</h3>
+      </div>
       <div class="modal-body">
-
-
         <div class="row" style="margin-bottom: 20px;">
-          <div class="col-xs-12 col-md-10">
-            <label translate="selected_net">Selected Stellar Network</label>
-            <ul>
-              <!-- <li><strong>Type: </strong><tt>{{active_network | translate}}</tt></li> -->
-              <li><strong>Passphrase: </strong><tt>{{active_passphrase}}</tt></li>
-              <li><strong>Coin: </strong><tt>{{active_coin}}</tt></li>
-              <li><strong>Horizon: </strong><tt>{{active_horizon}}</tt></li>
+          <div class="col-xs-12">
+            <h4 translate="selected_net">Current Network</h4>
+            <ul class="list-group">
+              <!-- <li class="list-group-item"><strong>Type: </strong><tt>{{active_network | translate}}</tt></li> -->
+              <li class="list-group-item"><strong>Passphrase: </strong><tt>{{active_passphrase}}</tt></li>
+              <li class="list-group-item"><strong>Coin: </strong><tt>{{active_coin}}</tt></li>
+              <li class="list-group-item"><strong>Horizon: </strong><tt>{{active_horizon}}</tt></li>
             </ul>
           </div>
         </div>
         <div class="row" style="margin-bottom: 20px;">
-          <div class="col-xs-12 col-md-10">
-            <label translate="switch_net">Switch Stellar Network</label>
+          <div class="col-xs-12">
+            <h4 translate="switch_net">Switch Stellar Network</h4>
             <p translate="switch_net_desc">The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.</p>
-            <div class="btn-group">
-              <span ng-repeat="n in all_networks">
-                <button class="btn btn-success" ng-class="{active: network_type == n.networkType}" ng-click="set(n.networkType)">{{n.name | translate}}</button>
-              </span>
+            <div class="btn-group  btn-group-sm" role="group" aria-label="Network options">
+              <button type="button" class="btn btn-success" ng-repeat="n in all_networks" ng-class="{active: network_type == n.networkType}" ng-click="set(n.networkType)">{{n.name | translate}}</button>
             </div>
           </div>
         </div>
         <div class="row" style="margin-bottom: 20px;" ng-init="network = currentNetwork">
-          <div class="col-xs-12 col-md-10">
+          <div class="col-xs-12">
             <label translate="other_url">Network URL</label>
             <input class="form-control" type="text" ng-model="network_horizon" placeholder="{{all_networks[network_type].knownHorizons[0]}}" list="horizons"/>
             <datalist id="horizons">
               <option ng-repeat="horizon in network.knownHorizons" value="{{horizon}}">
             </datalist>
           </div>
-          <div class="col-xs-12 col-md-10" ng-show="network_type == 'other'">
+          <div class="col-xs-12" ng-show="network_type == 'other'">
             <label translate="passphrase">Passphrase or id</label>
             <input class="form-control" type="text" ng-model="network_passphrase" placeholder="My Integration Network ; mycrypto"/>
           </div>
-          <div class="col-xs-12 col-md-10" ng-show="network_type == 'other'">
+          <div class="col-xs-12" ng-show="network_type == 'other'">
             <label translate="coin_ticket">coin ticket</label>
             <input class="form-control" type="text" ng-model="network_coin" placeholder="XLM"/>
-          </div>
-        </div>
-
-        <div class="row" style="margin-bottom: 20px;">
-          <div class="col-xs-12 col-sm-5">
-            <a href class="btn btn-info btn-block btn-big" ng-click="save()" translate="save">Save</a>
           </div>
         </div>
         <div class="s-alert s-alert--alert row__message" ng-show="network_error">
           {{network_error}}
         </div>
 
-
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="save()" class="btn btn-primary" translate="save">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

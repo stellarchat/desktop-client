@@ -39,7 +39,7 @@ myApp.factory('SettingFactory', function($window) {
           logo: "img/rocket.png"
         },
         allowHTTP: true,
-        tabs: ["history", "trade", "balance", "send", "trust", "signoffline", "ficnetwork"]
+        tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
       },
       ficTest: {
        name: "FIC Test Network",
