@@ -1,7 +1,7 @@
 /* global b64DecodeUnicode, myApp */
 
 myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
-  function($scope, $rootScope, AuthenticationFactory, StellarApi) {
+                         function( $scope ,  $rootScope ,  AuthenticationFactory ,  StellarApi ) {
     $scope.mode = 'security';
     $scope.isMode = function(mode) {
       return $scope.mode === mode;

@@ -1,7 +1,7 @@
 /* global $, myApp, StellarSdk, ripple */
 
 myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'AuthenticationFactory', '$http',
-  function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
+                     function( $scope ,  $rootScope ,  $routeParams ,  StellarApi ,  SettingFactory ,  AuthenticationFactory ,  $http ) {
     console.log('Send to', $routeParams);
 
     $scope.MemoNone = StellarSdk.MemoNone;

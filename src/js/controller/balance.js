@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi', 'AnchorFactory', 'SettingFactory',
-  function($scope, $rootScope, $http, StellarApi, AnchorFactory, SettingFactory) {
+myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi', 'AnchorFactory',
+                         function( $scope ,  $rootScope ,  $http ,  StellarApi ,  AnchorFactory ) {
     $scope.working = false;
     $scope.refresh = function() {
       if ($scope.working) { return; }

@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi',
-  function($scope, $rootScope, $location, SettingFactory, StellarApi) {
+myApp.controller("SettingsCtrl", ['$scope', '$rootScope', 'SettingFactory', 'StellarApi',
+                         function( $scope ,  $rootScope ,  SettingFactory ,  StellarApi ) {
     $scope.mode = 'federation';
     $scope.isMode = function(mode) {
       return $scope.mode === mode;

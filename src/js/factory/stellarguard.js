@@ -1,6 +1,7 @@
 /* global myApp */
 
-myApp.factory('StellarGuard', ['SettingFactory', '$http', function(SettingFactory, $http) {
+myApp.factory('StellarGuard', ['SettingFactory', '$http',
+                      function( SettingFactory ,  $http ) {
   const STELLARGUARD_PUBLIC_KEY = 'GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD';
 
   return {

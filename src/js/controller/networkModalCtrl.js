@@ -1,5 +1,6 @@
 /* global myApp */
-myApp.controller('networkModalCtrl', ['$rootScope', '$scope', 'SettingFactory', 'StellarApi', '$element', '$location', function($rootScope, $scope, SettingFactory, StellarApi, $element, $location) {
+myApp.controller('networkModalCtrl', ['$rootScope', '$scope', 'SettingFactory', 'StellarApi',
+                             function( $rootScope ,  $scope ,  SettingFactory ,  StellarApi ) {
 
 
   $scope.active_network = SettingFactory.getNetworkType();

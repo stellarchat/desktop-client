@@ -1,7 +1,7 @@
 /* global $, myApp, StellarSdk */
 
 myApp.controller('signOfflineCtrl', ['$scope', 'AuthenticationFactory',
-  function($scope, AuthenticationFactory) {
+                            function( $scope ,  AuthenticationFactory ) {
 
   $scope.invalid_xdr = true;
   $scope.teXDR = '';

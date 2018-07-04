@@ -1,7 +1,7 @@
 /* global _, myApp, round, StellarSdk */
 
-myApp.controller("TradeCtrl", [ '$scope', '$rootScope', 'StellarApi', 'StellarOrderbook', 'SettingFactory',
-  function($scope, $rootScope, StellarApi, StellarOrderbook, SettingFactory) {
+myApp.controller("TradeCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory',
+                      function( $scope ,  $rootScope ,  StellarApi ,  SettingFactory ) {
     $scope.offers = {
       origin : null,
       ask : {},

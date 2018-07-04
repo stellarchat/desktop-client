@@ -1,7 +1,7 @@
 /* global myApp, require, StellarSdk */
 
-myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
-  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
+myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory',
+                         function( $scope ,  $location ,  AuthenticationFactory ) {
     $scope.password = '';
     $scope.passwordSet = {};
     $scope.password1 = '';

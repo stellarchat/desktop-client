@@ -8,7 +8,8 @@
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
 
-myApp.factory('AuthData', ['$rootScope', '$window', function ($scope, $window){
+myApp.factory('AuthData', [
+                 function (){
 
   // Blob operations - do NOT change the mapping of existing ops!
   const BLOB_OPS = {

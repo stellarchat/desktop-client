@@ -1,7 +1,7 @@
 /* global _, myApp, round, StellarSdk */
 
 myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook', 'StellarPath', 'AuthenticationFactory', 'StellarGuard',
-  function($rootScope, StellarHistory, StellarOrderbook, StellarPath, AuthenticationFactory, StellarGuard) {
+                    function( $rootScope ,  StellarHistory ,  StellarOrderbook ,  StellarPath ,  AuthenticationFactory ,  StellarGuard ) {
 
     let _balances = {};
     let _closeAccountStream;  // function that closes a stream.

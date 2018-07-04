@@ -1,6 +1,7 @@
 /* global myApp, StellarSdk */
 
-myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootScope, SettingFactory) {
+myApp.factory('StellarHistory', ['SettingFactory',
+                        function( SettingFactory ) {
   let _server;
 
   return {

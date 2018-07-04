@@ -1,6 +1,7 @@
 /* global myApp, StellarSdk */
 
-myApp.factory('StellarOrderbook', ['$rootScope', function($rootScope) {
+myApp.factory('StellarOrderbook', ['$rootScope',
+                          function( $rootScope ) {
   let _server;
   let _closeBookStream;
 

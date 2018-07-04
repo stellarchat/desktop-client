@@ -10,7 +10,8 @@
 const {ipcRenderer} = require('electron')
 const sjcl = require('sjcl');
 
-myApp.factory('AuthDataFilesystem', ['$window', 'AuthData', function ($window, AuthData){
+myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
+                            function( $window ,  AuthData ){
 
   const CRYPT_CONFIG = {
     ks: 256,  // key size

@@ -1,7 +1,7 @@
 /* global myApp, StellarSdk */
 
-myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
-  function($scope, $rootScope, StellarApi) {
+myApp.controller("TrustCtrl", ['$scope', '$rootScope', 'StellarApi',
+                      function( $scope ,  $rootScope ,  StellarApi ) {
     $scope.manual_code;
     $scope.manual_issuer;
     $scope.manual_logo = $rootScope.gateways.getSourceById($scope.manual_issuer).logo;
