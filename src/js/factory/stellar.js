@@ -27,6 +27,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
       get address() {
         return AuthenticationFactory.address;
       },
+      get server() {
+        return _server;
+      },
 
       _updateSeq(account) {
         const now = new Date();
