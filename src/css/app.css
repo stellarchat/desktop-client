@@ -9,6 +9,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
   background: linear-gradient(150deg,rgba(100,200,255,.1),rgba(255,255,0,.2)),linear-gradient(90deg,rgba(255,255,255,.2),transparent),linear-gradient(30deg,#9291e0,#96dadb);
+  font-family: 'Roboto';
 }
 
 .worldimg {
@@ -54,7 +55,7 @@ body {
 }
 
 .header .subnav ul > li.active a {
-  font-family: 'OpenSansRegular';
+  font-family: 'Roboto';
   border-bottom: 2px solid #888888;
 }
 

@@ -2,13 +2,13 @@
 
   <!-- TABS -->
   <ul class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
-    <li class="nav-item">
+    <li class="nav-item active">
       <a class="nav-item nav-link" id="nav-create-account-tab" data-toggle="tab" href="#nav-create-account" role="tab" aria-selected="false" aria-controls="nav-create">Create wallet</a>
     </li>
     <li class="nav-item">
       <a class="nav-item nav-link" id="nav-public-key-tab" data-toggle="tab" href="#nav-public-key" role="tab" aria-selected="false" aria-controls="nav-public">Browse wallet</a>
     </li>
-    <li class="nav-item active">
+    <li class="nav-item">
       <a class="nav-item nav-link" id="nav-open-wallet-tab" data-toggle="tab" href="#nav-open-wallet" role="tab" aria-selected="true" aria-controls="nav-open">Open wallet</a>
     </li>
     <li class="nav-item ">
@@ -37,23 +37,16 @@
   <div class="tab-content" id="nav-tab-content">
 
     <!-- CREATE ACCOUNT -->
-    <div class="tab-pane fade" id="nav-create-account" role="tabpanel" aria-labelledby="nav-create-account-tab">
+    <div class="tab-pane fade active in" id="nav-create-account" role="tabpanel" aria-labelledby="nav-create-account-tab">
       <div class="row" style="margin: 20px 0;">
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 auth-form-wrapper">
-          <h2>Create Wallet</h2>
 
-          <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-            Wallet will create a local file for your secret that will be encrypted with password of your choice. Encrypted file is not recommended way to access your wallet. Please consider a hardware wallet.
-          </div>
+        <ng-include src="'./pages/register.html'"></ng-include>
 
-          <div class="form-group"><a class="btn btn-block btn-success btn-lg" ng-click="goTo('/register')" translate="create_new_account">Create new account</a></div>
-        </div>
       </div>
     </div>
 
     <!-- OPEN WALLET -->
-    <div class="tab-pane fade active in" id="nav-open-wallet" role="tabpanel" aria-labelledby="nav-open-wallet-tab">
+    <div class="tab-pane fade" id="nav-open-wallet" role="tabpanel" aria-labelledby="nav-open-wallet-tab">
       <div class="row" style="margin: 20px 0;">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 auth-form-wrapper">
           <h2>Open Wallet</h2>

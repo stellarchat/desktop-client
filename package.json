@@ -49,7 +49,8 @@
     "qrcode-generator": "^1.4.0",
     "sjcl": "^1.0.7",
     "stellar-sdk": "^0.8.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
