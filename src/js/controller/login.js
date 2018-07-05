@@ -201,8 +201,8 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
     if(wallet.state !== CONST.HWW_STATE.AVAILABLE && wallet.state !== CONST.HWW_STATE.READY) {
       $scope.addressInputDisabled = true;
       if(wallet.state === CONST.HWW_STATE.OFFLINE) $scope.ledgerError = { type: 'info', error: 'Please unlock Ledger and enter PIN.' }
-      if(wallet.state === CONST.HWW_STATE.SLEEP) $scope.ledgerError = { type: 'info', error: 'Please wake Legder and enter PIN.' }
-      if(wallet.state === CONST.HWW_STATE.ONLINE) $scope.ledgerError = { type: 'info', error: 'Please open Stellar app.' }
+      if(wallet.state === CONST.HWW_STATE.SLEEP) $scope.ledgerError = { type: 'info', error: 'Please wake Ledger and enter PIN.' }
+      if(wallet.state === CONST.HWW_STATE.ONLINE) $scope.ledgerError = { type: 'info', error: 'Please open Ledger app.' }
       $scope.$apply();
       return;
     }

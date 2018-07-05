@@ -156,9 +156,9 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
 
       const wallet = await hardwareWalletDaemon.activeWallet;
       if(wallet.state !== CONST.HWW_STATE.AVAILABLE && wallet.state !== CONST.HWW_STATE.READY) {
-        $scope.walletError = 'Please open Stellar app.'
+        $scope.walletError = 'Please open Ledger app.'
         $scope.$apply();
-        throw 'Please open Stellar app';
+        throw 'Please open Ledger app';
       }
 
       $scope.walletError = '';
