@@ -458,17 +458,17 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         }
       },
 
-      getFedName(domain, address, callback) {
+      async getFedName(domain, address) {
         try {
-          const server = StellarSdk.FederationServer.createForDomain(domain);
-          const data = server.resolveAccountId(address);
+          const server = await StellarSdk.FederationServer.createForDomain(domain);
+          const data = await server.resolveAccountId(address);
           if(data.stellarthis.address) {
             const index = data.stellarthis.address.indexOf("*");
             const fed_name = data.stellarthis.address.substring(0, index);
-            return callback(null, fed_name);
+            return fed_name;
           }
         } catch(err) {
-          return callback(err);
+          throw err;
         }
       },
 
