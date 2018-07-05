@@ -41,22 +41,46 @@ myApp.factory('SettingFactory', function($window) {
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
       },
+      fic: {
+        name: "FIC Network",
+        translationKey: 'fict_net',
+        networkType: 'fic',
+        networkPassphrase: 'FIC Network ; 2018',
+        knownHorizons: [
+          'https://ficnetwork-apm.factury.co',
+          'https://ficnetwork-aps.factury.co',
+          'https://ficnetwork-apt.factury.co',
+          'https://ficnetwork-eua.factury.co',
+          'https://ficnetwork-euf.factury.co',
+          'https://ficnetwork-eul.factury.co',
+          'https://ficnetwork-nat.factury.co',
+          'https://ficnetwork-usa.factury.co',
+          'https://ficnetwork-ust.factury.co',
+        ],
+        coin: {
+          name: "FIC Network",
+          code: "FIC",
+          logo: "img/fic.png"
+        },
+        allowHTTP: false,
+        tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
+      },
       ficTest: {
-       name: "FIC Test Network",
-       translationKey: 'fictest_net',
-       networkType: 'ficTest',
-       networkPassphrase: 'FIC Test Network ; 2017',
-       knownHorizons: [
-         'http://testnet.factury.co:8400',
-       ],
-       coin: {
-         name: "FIC Network",
-         code: "FIC",
-         logo: "img/fic.png"
-       },
-       allowHTTP: true,
-       tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
-     },
+        name: "FIC Test Network",
+        translationKey: 'fictest_net',
+        networkType: 'ficTest',
+        networkPassphrase: 'FIC Test Network ; 2017',
+        knownHorizons: [
+          'http://testnet.factury.co:8400',
+        ],
+        coin: {
+          name: "FIC Network",
+          code: "FIC",
+          logo: "img/fic.png"
+        },
+        allowHTTP: true,
+        tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
+      },
       other: {
         name: "User defined",
         translationKey: 'other_url',
