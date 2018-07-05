@@ -153,47 +153,71 @@
 
 				<div class="island__separator"></div>
 				<div class="AddTrust__confirmation">
-					<div class="s-alert s-alert--alert" ng-show="input_address && send_error.hasError()">
-						<ul class="AddTrust__errorList">
-							<li translate="invalid_account" ng-show="send_error.invalid">Account is invalid</li>
-							<li ng-show="send_error.domain">{{target_domain}} {{'invalid_domain' | translate}}</li>
-							<li ng-show="send_error.message">{{send_error.message}}</li>
-						</ul>
+
+					<div class="alert alert-danger" role="alert" ng-hide="asset.code || quote_id">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span translate="select_asset">Please select an asset to send.</span>
 					</div>
-					<div class="s-alert s-alert--alert" ng-hide="isValidMemo()">
-						<ul class="AddTrust__errorList">
-							<li>{{'memo_invaid' | translate}} {{send_error.memo}}</li>
-						</ul>
+
+					<div class="alert alert-danger" role="alert" ng-hide="isValidMemo()">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span>{{'memo_invaid' | translate}} {{send_error.memo}}</span>
 					</div>
-					<div class="s-alert s-alert--alert" ng-hide="asset.code || quote_id">
-						<ul class="AddTrust__errorList">
-							<li translate="select_asset">Please select an asset to send.</li>
-						</ul>
+
+					<div class="alert alert-danger" role="alert" ng-show="memo_require && !memo">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span translate="require_memo">Recipient requires a memo. Please make sure it is correct.</span>
 					</div>
-					<div class="s-alert s-alert--alert" ng-show="memo_require && !memo">
-						<ul class="AddTrust__errorList">
-							<li translate="require_memo">Recipient requires a memo. Please make sure it is correct.</li>
-						</ul>
+
+					<div class="alert alert-danger" role="alert" ng-show="input_address && send_error.hasError() && send_error.invalid">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span translate="invalid_account">Account is invalid</span>
 					</div>
-					<div class="s-alert s-alert--success" ng-show="send_done">
-						<ul class="AddTrust__errorList">
-							<li ng-if="send_result.stellarGuard">
-								<stellarguard-result result="send_result"></stellarguard-result>
-							</li>
-							<li ng-hide="send_result.stellarGuard" translate="send_done">Asset successfully sent.</li>
-						</ul>
+
+					<div class="alert alert-danger" role="alert" ng-show="input_address && send_error.hasError() && send_error.domain">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span>{{target_domain}} {{'invalid_domain' | translate}}</span>
+					</div>
+
+					<div class="alert alert-danger" role="alert" ng-show="input_address && send_error.hasError() && send_error.message">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span>{{send_error.message}}</span>
+					</div>
+
+					<div class="alert alert-success" role="alert" ng-show="send_done" ng-if="send_result.stellarGuard">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						<span><stellarguard-result result="send_result"></stellarguard-result></span>
+					</div>
+
+					<div class="alert alert-success" role="alert" ng-show="send_done" ng-if="!send_result.stellarGuard">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						<span translate="send_done">Asset successfully sent.</span>
 					</div>
 
 					<div class="row__message" ng-show="act_loading">
 						<i class="fa fa-spinner fa-pulse"></i> {{'account_loading' | translate}} {{input_address}}
 					</div>
-					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
-						<ul class="AddTrust__errorList">
-							<li ng-show="is_federation || is_contact">{{real_address}}</li>
-							<li ng-show="real_not_fund" translate="not_funded">Not funded</li>
-							<li ng-show="real_accept">{{'can_accept' | translate}} {{real_accept}}</li>
-						</ul>
+
+					<div ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
+
+						<div class="alert alert-info" role="alert" ng-show="is_federation || is_contact">
+							<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+							<span>{{real_address}}</span>
+						</div>
+
+						<div class="alert alert-info" role="alert" ng-show="real_not_fund">
+							<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+							<span translate="not_funded">Not funded</span>
+						</div>
+
+						<div class="alert alert-info" role="alert" ng-show="real_accept">
+							<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+							<span>{{'can_accept' | translate}} {{real_accept}}</span>
+						</div>
+
 					</div>
+
+
 					<div class="row__message" style="margin-bottom: 10px;" ng-show="sending">
 						<h3>{{'sending_to' | translate}} {{real_address | shortaddress}}</h3>
 						<img src="img/loading.gif" alt="">

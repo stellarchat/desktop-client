@@ -8,11 +8,14 @@
 			</div>
 
 			<div class="AddTrustFromDirectory">
-				<div class="s-alert s-alert--alert" ng-show="error_msg">
-						<ul class="AddTrust__errorList">
-							<li>{{error_msg | translate:currentNetwork.coin}}</li>
-						</ul>
+
+				<div class="padding-15" ng-show="error_msg">
+					<div class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span>{{error_msg | translate:currentNetwork.coin}}</span>
+					</div>
 				</div>
+
             	<table class="table-hover HistoryTable">
             		<tbody>
             			<tr class="HistoryTable-row" ng-repeat="tx in effects">

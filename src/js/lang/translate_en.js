@@ -22,7 +22,7 @@ var translate_en = {
   enter_secret : 'Enter your secret key',
   invalid_account: 'Account is invalid',
   invalid_secret : 'Secret is invalid',
-  important : 'IMPORTANT: before you continue',
+  important : 'IMPORTANT',
   wallet_created: 'Your new account has been encrypted. Make sure to have multiple backups of this file.',
   security_notice : 'The secret key below gives access to your money in the unlikely case that you lose your password. With this secret key alone anyone can retrieve your money. So please store it somewhere PRIVATE AND SAFE.',
   show_password : 'Show password',
@@ -254,7 +254,7 @@ var translate_en = {
 
   Stellar : 'Stellar',
   stellar_desktop_client : 'Foxlet Wallet',
-  app_open_source  : 'This app is open source now.',
+  app_open_source  : '',
   app_safe_notice  : 'The client stores your login information encrypted locally on your computer. Please backup your secret carefully.',
   app_feedback     : 'Foxlet is open source now! You can reach us out at GitHub:',
   trade_volume : 'Trade Volume',

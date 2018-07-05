@@ -55,7 +55,7 @@ myApp.factory('SettingFactory', function($window) {
          logo: "img/fic.png"
        },
        allowHTTP: true,
-       tabs: ["history", "balance", "send", "ficnetwork"]
+       tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
      },
       other: {
         name: "User defined",

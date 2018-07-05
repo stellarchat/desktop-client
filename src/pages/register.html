@@ -123,8 +123,8 @@
       <div class="section">
         <div class="form-group">
           <h5 translate="password">Passphrase:</h5>
-          <input type="text" class="form-control" ng-hide="showPassword==true" value="{{password}}">
-          <input type="text" class="form-control" ng-show="showPassword==true" value="{{password1}}">
+          <input type="text" class="form-control" ng-hide="showPassword==true" value="{{password}}" disabled>
+          <input type="text" class="form-control" ng-show="showPassword==true" value="{{password1}}" disabled>
         </div>
 
         <div class="submit-btn-container" ng-hide="showPassword==true">
@@ -134,15 +134,15 @@
         <div class="submit-btn-container" ng-show="showPassword==true">
           <button class="btn btn-info" ng-click="showPass(false)" translate="hide_password">Hide password</button>
         </div>
-      </div>      
+      </div>
 
       <div class="section">
         <p translate="security_notice">The secret key below gives access to your money in the unlikely case that you lose your password. With this secret key alone anyone can retrieve your money. So please store it somewhere PRIVATE AND SAFE.
         </p>
         <div class="form-group">
           <h5 class="important" translate="secret_key">Secret key:</h5>
-          <input type="text" class="form-control" ng-hide="showSecret==true" value="{{key}}">
-          <input type="text" class="form-control" ng-show="showSecret==true" value="{{masterkey}}">
+          <input type="text" class="form-control" ng-hide="showSecret==true" value="{{key}}" disabled>
+          <input type="text" class="form-control" ng-show="showSecret==true" value="{{masterkey}}" disabled>
         </div>
 
         <div ng-hide="showSecret==true">

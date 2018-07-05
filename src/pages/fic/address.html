@@ -5,11 +5,12 @@
       <div class="island__header">
 				{{ 'enter_address' | translate}}
 			</div>
-      <div class="s-alert s-alert--alert" ng-show="invalid_eth">
-        <ul class="AddTrust__errorList">
-          <li>{{'invalid_eth' | translate}}</li>
-        </ul>
-      </div>
+			<div class="padding-15" ng-show="invalid_eth">
+				<div class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span>{{'invalid_eth' | translate}}</span>
+				</div>
+			</div>
       <div class="eth_fields">
         <div class="row">
           <input class="form-control" type="text" placeholder="0xabc..." name="eth_address" ng-model="eth_address">

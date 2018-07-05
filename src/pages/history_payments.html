@@ -8,36 +8,39 @@
 
 			</div>
 			<div class="AddTrustFromDirectory">
-				<div class="s-alert s-alert--alert" ng-show="error_msg">
-						<ul class="AddTrust__errorList">
-							<li>{{error_msg | translate:currentNetwork.coin}}</li>
-						</ul>
+
+				<div class="padding-15" ng-show="error_msg">
+					<div class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span>{{error_msg | translate:currentNetwork.coin}}</span>
+					</div>
 				</div>
-            	<table class="table-hover HistoryTable">
-            		<thead>
-            			<tr class="HistoryTable-header">
-            				<th translate="date">Date</th>
-	            			<th translate="account_id">Account ID</th>
-	            			<th translate="amount">Amount</th>
-	            			<th translate="memo">Memo</th>
-	            			<th translate="operation">Operation</th>
-	            		</tr>
-            		</thead>
-            		<tbody>
-            			<tr class="HistoryTable-row" ng-repeat="tx in payments">
-            				<td>{{tx.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-            				<td class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">{{tx.nick}}</span></td>
-	            			<td class="amount">
+
+      	<table class="table-hover HistoryTable">
+      		<thead>
+      			<tr class="HistoryTable-header">
+      				<th translate="date">Date</th>
+        			<th translate="account_id">Account ID</th>
+        			<th translate="amount">Amount</th>
+        			<th translate="memo">Memo</th>
+        			<th translate="operation">Operation</th>
+        		</tr>
+      		</thead>
+      		<tbody>
+      			<tr class="HistoryTable-row" ng-repeat="tx in payments">
+      				<td>{{tx.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+      				<td class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">{{tx.nick}}</span></td>
+        			<td class="amount">
 								<span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
-                           		<span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
-                           		<strong>{{tx.asset.code}}</strong>
-						</td>
-						<td>{{tx.memo}}<br><span class="timestamp" ng-show="tx.memo_type && tx.memo_type!='none'">memo-{{tx.memo_type}}</span></td>
-	            			<td>{{tx.id}}<br>{{tx.type}}</td>
-            			</tr>
-            		</tbody>
-            	</table>
-        	</div>
+                <span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
+                <strong>{{tx.asset.code}}</strong>
+							</td>
+							<td>{{tx.memo}}<br><span class="timestamp" ng-show="tx.memo_type && tx.memo_type!='none'">memo-{{tx.memo_type}}</span></td>
+        			<td>{{tx.id}}<br>{{tx.type}}</td>
+      			</tr>
+      		</tbody>
+      	</table>
+    	</div>
         	<div class="txfoot">
 				<div translate="loading" ng-show="loading">Loading...</div>
 				<a href ng-click="load_more()" translate="load_more" ng-show="next && !loading">Load more</a>
