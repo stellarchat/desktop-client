@@ -1,0 +1,24 @@
+<!-- Modal -->
+<div class="modal fade proxyModal" id="{{handler}}" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="proxyModalCtrl">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Proxy</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="row" style="margin-bottom: 20px;">
+          <div class="col-xs-12 col-md-12">
+            <input class="form-control" type="text" ng-model="proxy" placeholder="127.0.0.1:1080" />
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="save()" class="btn btn-primary" translate="save">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

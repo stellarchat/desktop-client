@@ -22,19 +22,21 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
 
     $scope.network_error;
     $scope.refresh = function() {
-      StellarApi.getInfo(null, function(err, data) {
-        if (err) {
-          $scope.network_error = StellarApi.getErrMsg(err);
-        } else {
-          $scope.inflation = data.inflation_destination;
-          $scope.domain = data.home_domain;
-          $scope.data_attr = {};
-          for (var key in data.data_attr) {
-            $scope.data_attr[key] = b64DecodeUnicode(data.data_attr[key]);
+      if($rootScope.currentNetwork.coin.code == 'XLM') {
+        StellarApi.getInfo(null, function(err, data) {
+          if (err) {
+            $scope.network_error = StellarApi.getErrMsg(err);
+          } else {
+            $scope.inflation = data.inflation_destination;
+            $scope.domain = data.home_domain;
+            $scope.data_attr = {};
+            for (var key in data.data_attr) {
+              $scope.data_attr[key] = b64DecodeUnicode(data.data_attr[key]);
+            }
           }
-        }
-        $scope.$apply();
-      });
+          $scope.$apply();
+        });
+      }
     };
     $scope.refresh();
 

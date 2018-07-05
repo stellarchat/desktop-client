@@ -79,6 +79,16 @@ myApp.directive('txDefault', [ function() {
     replace : true
   }
 } ]);
+myApp.directive('proxyModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@'
+    },
+    templateUrl : 'directive/proxyModal.html',
+    transclude: true
+  };
+});
 myApp.directive('networkModal', function () {
   return {
     restrict: 'EA',

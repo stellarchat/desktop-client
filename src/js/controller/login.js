@@ -69,6 +69,9 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
     });
   }
 
+  $scope.openProxySettings = function() {
+    $(`#proxyModal`).modal();
+  }
 
 
   /** START: Network settings **/

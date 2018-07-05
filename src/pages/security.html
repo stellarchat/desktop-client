@@ -17,7 +17,7 @@
 			 store it somewhere PRIVATE AND SAFE.
 		  </p>
 		  <div class="address">
-			<label translate="stellar_address">Stellar address</label>
+			<label translate="account_address">Stellar address</label>
 			<p class="key">{{address}}</p>
 			<p class="key"><qrcode data="{{address}}" size=200></qrcode></p>
 		  </div>
@@ -68,19 +68,21 @@
 				</div>
 			</div>
 
-			<label translate="inflation_options">Other options</label>
-			<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
+			<div ng-if="currentNetwork.coin.code == 'XLM'">
+				<label translate="inflation_options">Other options</label>
+				<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
 
-			<div class="row" style="margin-bottom: 20px;">
-				<div class="col-xs-6 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working"
-					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
-				</div>
-				<div class="col-xs-6 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
-				</div>
-				<div class="col-xs-12 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-6 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working"
+						   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
+					</div>
 				</div>
 			</div>
 

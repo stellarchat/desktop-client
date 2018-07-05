@@ -84,6 +84,11 @@ body > .container {
 .container .text-muted {
   margin: 20px 0;
 }
+.container .text-muted .github{
+  font-size: 18px;
+  line-height: 10px;
+  padding-right: 15px;
+}
 .footer > .container {
   padding-right: 15px;
   padding-left: 15px;
