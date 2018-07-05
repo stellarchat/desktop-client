@@ -268,7 +268,7 @@ var translate_en = {
   stellarguard_authorize: 'Authorize Transaction',
 
   /** FIC Network **/
-  ficnetwork: 'FIC Network',
+  ficnetwork: 'FIC ICO',
   ficnetwork_address: 'ETH Address',
   ficnetwork_coins: 'Coins',
   ficnetwork_claim: 'Claim',

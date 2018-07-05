@@ -192,3 +192,8 @@ meter[value="1"]::-webkit-meter-optimum-value { background: red; }
 meter[value="2"]::-webkit-meter-optimum-value { background: orange; }
 meter[value="3"]::-webkit-meter-optimum-value { background: yellow; }
 meter[value="4"]::-webkit-meter-optimum-value { background: #60cd18; }
+
+
+.overflow-hidden {
+  overflow: hidden;
+}

@@ -37,7 +37,13 @@
 	        </li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	      	<li ng-hide="isPublicNetwork()"><a href ng-click="goTo('/settings')"><i class="fa fa-exclamation-triangle"></i> {{currentNetwork.name | translate}}</a></li>
+	      	<li>
+            <a href ng-click="goTo('/settings')">
+              <i ng-hide="isPublicNetwork()" class="fa fa-exclamation-triangle"></i>
+              <i ng-show="isPublicNetwork()" class="fa fa-globe"></i>
+              {{currentNetwork.name | translate}}
+            </a>
+          </li>
 	        <li>
 	        	<a href ng-click="goTo('/security')" title="{{address}}">
 	        		<span class="glyphicon glyphicon-user"></span>
@@ -45,7 +51,6 @@
 	        		<span ng-show="fed_name">~{{fed_name}}</span>
 	        	</a>
 	        </li>
-	        <li ng-show="isPublicNetwork()"><a href ng-click="goTo('/settings')"><span class="glyphicon glyphicon-cog"></span> {{'settings' | translate}}</a></li>
 	        <li><a href ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> {{'logout' | translate}}</a></li>
 	      </ul>
 	    </div>

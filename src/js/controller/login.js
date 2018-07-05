@@ -1,7 +1,7 @@
 /* global $, CONST, myApp, require */
 
-myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon',
-                      function( $scope ,  $rootScope ,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon ) {
+myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon', 'StellarApi',
+                      function( $scope ,  $rootScope ,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon, StellarApi ) {
 
   $scope.ledgerInvalid = true;
   $scope.ledgerError = '';
@@ -40,6 +40,19 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
       });
     });
   }
+
+  $scope.invalidStellarPublickey = true;
+  $scope.$watch('walletAddress', function(newValue){
+    if(newValue != '' && newValue != undefined) {
+      if(StellarApi.isValidAddress(newValue)) {
+        $scope.invalidStellarPublickey = false;
+      } else {
+        $scope.invalidStellarPublickey = true;
+      }
+    } else {
+      $scope.invalidStellarPublickey = true;
+    }
+  }, true);
 
   $scope.submitAddress = function(){
     const type = AuthenticationFactory.TYPE.TEMPORARY;

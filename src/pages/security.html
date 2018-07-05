@@ -83,7 +83,7 @@
 					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
 				</div>
 			</div>
-			
+
 			<label translate="inflation_donation">Support us</label>
 			<p class="hint" translate="inflation_donation_desc">You can join one of the following inflation pools.</p>
 			<div class="row">
@@ -193,10 +193,13 @@
 			</div>
 		</div>
 
+
 		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
-			<div class="s-alert s-alert--alert row__message">
-				{{network_error | translate}}
+			<div class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span>{{network_error | translate}}</span>
 			</div>
 		</div>
+
 	</div>
 </section>
