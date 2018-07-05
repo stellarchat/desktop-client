@@ -233,16 +233,16 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       }
     }
 
-    addContact(contact, callback) {
-      _data.unshift("/_contacts", contact, callback);
+    async addContact(contact) {
+      return _data.unshift("/_contacts", contact);
     }
 
-    updateContact(name, contact, callback) {
-      _data.filter('/_contacts', 'name', name, 'extend', '', contact, callback);
+    async updateContact(name, contact) {
+      return _data.filter('/_contacts', 'name', name, 'extend', '', contact);
     }
 
-    deleteContact(name, callback) {
-      _data.filter('/_contacts', 'name', name, 'unset', '', callback);
+    async deleteContact(name) {
+      return _data.filter('/_contacts', 'name', name, 'unset', '');
     }
 
     getContact(value) {

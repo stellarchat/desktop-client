@@ -3,12 +3,12 @@
 myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
                         function( $scope ,  $rootScope ,  AuthenticationFactory ,  StellarApi ) {
 
-    $scope.toggle_form = function() {
+    $scope.toggle_form = () => {
       $scope.addform_visible = !$scope.addform_visible;
       $scope.reset_form();
     };
 
-    $scope.reset_form = function() {
+    $scope.reset_form = () => {
       $scope.contact = {
         name     : '',
         view     : '',
@@ -20,13 +20,13 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
     };
     $scope.reset_form();
 
-    $scope.invalid = function(obj) {
+    $scope.invalid = (obj) => {
       return $scope.error['exist'] || $scope.error['address'] || $scope.error['memo'];
     }
 
-    $scope.resolve = function() {
+    $scope.resolve = () => {
       if ($scope.contact.name) {
-        var item = $rootScope.contacts.find(function(element){
+        var item = $rootScope.contacts.find((element) => {
           return element.name == $scope.contact.name;
         });
         $scope.error['exist'] = item;
@@ -49,7 +49,7 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
       }
     };
 
-    $scope.create = function() {
+    $scope.create = async () => {
       var contact = {
         name    : $scope.contact.name,
         view    : $scope.contact.view,
@@ -61,17 +61,17 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
         contact.memo     = $scope.contact.memo;
       }
 
-      AuthenticationFactory.addContact(contact, function(err){
-        if (err) {
-          $scope.error['memo'] = err.message;	// just find some place to show err
-        } else {
-          $rootScope.contacts = AuthenticationFactory.contacts;
-        }
-        $scope.$apply();
-      });
-
       $scope.toggle_form();
       $scope.reset_form();
+
+      try {
+        await AuthenticationFactory.addContact(contact);
+        $rootScope.contacts = AuthenticationFactory.contacts;
+      } catch(err) {
+        $scope.error['memo'] = err.message;	// just find some place to show err
+      } finally {
+        $scope.$apply();
+      }
     };
 
   }]);
@@ -80,12 +80,12 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
   function($scope, $rootScope, $location, AuthenticationFactory, StellarApi) {
 
     $scope.editing = false;
-    $scope.cancel = function (index) {
+    $scope.cancel = (index) => {
       $scope.editing = false;
     };
 
     //Switch to edit mode
-    $scope.edit = function (index){
+    $scope.edit = (index) => {
       $scope.editing      = true;
       $scope.editname     = $scope.entry.name;
       $scope.editaddress  = $scope.entry.address;
@@ -95,13 +95,13 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
     };
 
     $scope.error = {};
-    $scope.invalid = function(obj) {
+    $scope.invalid = (obj) => {
       return $scope.error['exist'] || $scope.error['address'] || $scope.error['memo'];
     }
 
-    $scope.resolve = function() {
+    $scope.resolve = () => {
       if ($scope.editname && $scope.editname != $scope.entry.name) {
-        var item = $rootScope.contacts.find(function(element){
+        var item = $rootScope.contacts.find((element) => {
           return element.name == $scope.editname;
         });
         $scope.error['exist'] = item;
@@ -124,7 +124,7 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
       }
     };
 
-    $scope.update = function (index){
+    $scope.update = async (index) => {
       if ($scope.invalid()) {
         return;
       }
@@ -140,30 +140,31 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
         contact.memo     = $scope.editmemo;
       }
 
-      AuthenticationFactory.updateContact($scope.entry.name, contact, function(err){
-        if (err) {
-          $scope.error['memo'] = err.message; // just find some place to show err
-        } else {
-          $rootScope.contacts = AuthenticationFactory.contacts;
-        }
-        $scope.$apply();
-      });
-
       $scope.editing = false;
-    };
 
-    $scope.remove = function (index){
-      AuthenticationFactory.deleteContact($scope.entry.name, function(err){
-        if (err) {
-          $scope.error['memo'] = err.message; // just find some place to show err
-        } else {
-          $rootScope.contacts = AuthenticationFactory.contacts;
-        }
+      try {
+        await AuthenticationFactory.updateContact($scope.entry.name, contact);
+        $rootScope.contacts = AuthenticationFactory.contacts;
+      } catch(err) {
+        $scope.error['memo'] = err.message; // just find some place to show err
+      } finally {
         $scope.$apply();
-      });
+      }
+
     };
 
-    $scope.send = function(index){
+    $scope.remove = async (index) => {
+      try {
+        await AuthenticationFactory.deleteContact($scope.entry.name);
+        $rootScope.contacts = AuthenticationFactory.contacts;
+      } catch(err) {
+        $scope.error['memo'] = err.message; // just find some place to show err
+      } finally {
+        $scope.$apply();
+      }
+    };
+
+    $scope.send = (index) => {
       $location.path('/send').search($scope.entry);
     }
   }]);
