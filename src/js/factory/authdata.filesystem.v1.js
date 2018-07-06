@@ -3,7 +3,7 @@
  * User blob storage for desktop client
  */
 
-/* global angular, CONST, myApp, require, StellarSdk */
+/* global angular, CONST, myApp, require, StellarSdk, toContactV1, toContactV2 */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
@@ -200,6 +200,11 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
         .map((keypair)=>keypair.details);
     }
 
+    // Convert contacts to new version.
+    get contacts() {
+      return super.contacts.map(toContactV2)
+    }
+
     // store() => AuthDataFilesystem -- store in sessionStorage and return current instance.
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
@@ -241,11 +246,11 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
     }
 
     async addContact(contact) {
-      new Promise((resolve, reject) => this.unshift("/_contacts", contact, (err, res) => err ? reject(err) : resolve(res)));
+      new Promise((resolve, reject) => this.unshift("/_contacts", toContactV1(contact), (err, res) => err ? reject(err) : resolve(res)));
     }
 
     async updateContact(name, contact) {
-      new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'extend', '', contact, (err, res) => err ? reject(err) : resolve(res)));
+      new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'extend', '', toContactV1(contact), (err, res) => err ? reject(err) : resolve(res)));
     }
 
     async deleteContact(name) {
@@ -254,8 +259,8 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
 
     getContact(value) {
       if (!value) return false;
-      for (const contact of this.contacts) {
-        if (contact.name === value || contact.address === value) return contact;
+      for (const contact of super.contacts) {
+        if (contact.name === value || contact.address === value) return toContactV2(contact);
       }
       return false;
     }
@@ -298,7 +303,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
 
       const plaintext_v1 = JSON.stringify({
         account_id: data.address,
-        contacts: cleanContacts,
+        contacts: cleanContacts.map(toContactV1),
         created: data.created,
         masterkey: data.secrets[0],
       })

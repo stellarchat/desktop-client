@@ -1,4 +1,4 @@
-/* global angular, Buffer, CONST, myApp, StellarSdk */
+/* global angular, Buffer, CONST, myApp, StellarSdk, toContactV2 */
 
 // Auth - singleton that manages account.
 myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystemRouter', 'AuthDataInmemory',
@@ -228,12 +228,12 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       }
     }
 
-    async addContact(contact) {
-      return _data.addContact(contact);
+    async addContact(contact, inputV1) {
+      return _data.addContact(inputV1 ? toContactV2(contact) : contact);
     }
 
-    async updateContact(name, contact) {
-      return _data.updateContact(name, contact);
+    async updateContact(name, contact, inputV1) {
+      return _data.updateContact(name, inputV1 ? toContactV2(contact) : contact);
     }
 
     async deleteContact(name) {

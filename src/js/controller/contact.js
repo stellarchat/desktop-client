@@ -2,7 +2,6 @@
 
 myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
                         function( $scope ,  $rootScope ,  AuthenticationFactory ,  StellarApi ) {
-
     $scope.toggle_form = () => {
       $scope.addform_visible = !$scope.addform_visible;
       $scope.reset_form();
@@ -65,7 +64,7 @@ myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory'
       $scope.reset_form();
 
       try {
-        await AuthenticationFactory.addContact(contact);
+        await AuthenticationFactory.addContact(contact, true);
         $rootScope.contacts = AuthenticationFactory.contacts;
       } catch(err) {
         $scope.error['memo'] = err.message;	// just find some place to show err
@@ -143,7 +142,7 @@ myApp.controller("ContactRowCtrl", ['$scope', '$rootScope', '$location', 'Authen
       $scope.editing = false;
 
       try {
-        await AuthenticationFactory.updateContact($scope.entry.name, contact);
+        await AuthenticationFactory.updateContact($scope.entry.name, contact, true);
         $rootScope.contacts = AuthenticationFactory.contacts;
       } catch(err) {
         $scope.error['memo'] = err.message; // just find some place to show err
