@@ -59,6 +59,11 @@ myApp.factory('AuthData', [
       return this._network;
     }
 
+    // logout() => Promise<void> -- safely close outside connections and return Promise.
+    logout() {
+      throw new Error('Implement .logout()');
+    }
+
     // string -- address of the account.
     get address() {
       return this._address;

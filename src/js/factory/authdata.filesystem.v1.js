@@ -245,6 +245,11 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
       return kp.signDecorated(teHash);
     }
 
+    async logout() {
+      // Nothing to do, kill the instance and it's done.
+      return;
+    }
+
     async addContact(contact) {
       new Promise((resolve, reject) => this.unshift("/_contacts", toContactV1(contact), (err, res) => err ? reject(err) : resolve(res)));
     }

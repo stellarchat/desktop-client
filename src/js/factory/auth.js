@@ -96,9 +96,10 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       $rootScope.$broadcast('$authUpdate');
     }
 
-    logout() {
+    async logout() {
       if(!this.isInMemory) return;
 
+      await _data.logout();
       _type = undefined;
       _data = undefined;
 

@@ -7,8 +7,8 @@ myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'Authentica
       return route === $location.path();
     }
 
-    $scope.logout = function () {
-      AuthenticationFactory.logout();
+    $scope.logout = async () => {
+      await AuthenticationFactory.logout();
       $location.path("/login");
       StellarApi.logout();
       $rootScope.reset();
