@@ -1,4 +1,4 @@
-/* global Buffer, angular, myApp, StellarSdk */
+/* global angular, Buffer, CONST, myApp, StellarSdk */
 
 // Auth - singleton that manages account.
 myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystemRouter', 'AuthDataInmemory',
@@ -115,13 +115,8 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       return _data ? _data.address : undefined;
     }
 
-    get secretAmount() {
-      return _data ? _data.secrets.length : 0;
-    }
-
-    get secrets() {
-      console.warn(`Your ${this.secretAmount} secret(s) were revealed!`)
-      return _data ? _data.secrets : undefined;
+    get keypairs() {
+      return _data ? _data.keypairs : undefined;
     }
 
     teThresholds(te) {
@@ -162,7 +157,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         .map((signerAndWeight) => signerAndWeight[0])
     }
 
-    sign(te, thresholds, signatureXDRs, plainSecrets) {
+    async sign(te, thresholds, signatureXDRs, plainSecrets) {
       // Note to myself - TL;DR operations of signatures.
       //     decoratedSignature           = keypair.signDecorated(transaction.hash())
       //     serializedDecoratedSignature = decoratedSignature.toXDR().toString('base64')
@@ -178,12 +173,12 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         const requiredKeypair = StellarSdk.Keypair.fromPublicKey(requiredPublicKey);
 
         // If applicable, sign with stored secrets.
-        const rightStoredSecretKp = _data.secrets
-          .map((storedSecret)=>StellarSdk.Keypair.fromSecret(storedSecret))
-          .find((kp)=>kp.publicKey() === requiredPublicKey);
+        const rightStoredSecretKp = _data.keypairs
+          .filter((keypair)=>keypair.signingMethod === CONST.SIGNING_METHOD.ENCRYPTED_SECRET)
+          .find((keypair)=>keypair.publicKey === requiredPublicKey);
         if(rightStoredSecretKp) {
           console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with stored secret of ${requiredPublicKey}`);
-          mostUsefulSignature = rightStoredSecretKp.signDecorated(te.hash());
+          mostUsefulSignature = await _data.signWithEncryptedSecret(rightStoredSecretKp.publicKey, te.hash());
           break;
         }
 
@@ -234,15 +229,15 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
     }
 
     async addContact(contact) {
-      return _data.unshift("/_contacts", contact);
+      return _data.addContact(contact);
     }
 
     async updateContact(name, contact) {
-      return _data.filter('/_contacts', 'name', name, 'extend', '', contact);
+      return _data.updateContact(name, contact);
     }
 
     async deleteContact(name) {
-      return _data.filter('/_contacts', 'name', name, 'unset', '');
+      return _data.deleteContact(name);
     }
 
     getContact(value) {

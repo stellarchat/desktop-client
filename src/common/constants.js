@@ -2,6 +2,15 @@
 
 module.exports = {
 
+  SIGNING_METHOD: {
+    ENCRYPTED_SECRET: 'encryptedSecret',
+    EXTERNAL_SECRET : 'externalSecret',
+    COLD_MACHINE    : 'coldMachine',
+    HARDWARE_WALLET : 'hardwareWallet',
+    UNKNOWN         : 'unknown',  // Effectively everything at the same time. Default value until used first time.
+    NONE            : 'none',  // Effectively read-only. Remind user that he can't sign that.
+  },
+
   HWW_STATE: {
     OFFLINE: 'offline',  // After removing cable and "remove" event.
     SLEEP: 'sleep',  // After timeout when PIN has to be entered again.

@@ -1,4 +1,4 @@
-/* global ipcRenderer, myApp */
+/* global myApp */
 
 
 myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFilesystemV1',
@@ -26,7 +26,7 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
       if(!$window.sessionStorage[AuthData.SESSION_KEY]) throw new Error('No authdata in session.');
       try {
         const {version, password, path, blob} = JSON.parse($window.sessionStorage[AuthData.SESSION_KEY]);
-        const AuthDataFilesystem = AuthDataFilesystem.VERSION_CLASS[version];
+        const AuthDataFilesystem = AuthDataFilesystemRouter.VERSION_CLASS[version];
 
         if(!AuthDataFilesystem) throw new Error(`Unsupported version ${version}`)
 

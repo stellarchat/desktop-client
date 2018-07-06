@@ -16,13 +16,15 @@ myApp.factory('AuthData', [
    * Handles persistence of data for Auth. Various subclasses handles various long-term storages.
    */
   class AuthData {
-    constructor(address, secrets, contacts){
-      if(!address) throw new Error('No address provided.');
-      if(!Array.isArray(secrets)) throw new Error('Secrets is not array.');
+    constructor(network, address, keypairs, contacts){
+      if(typeof network !== 'string') throw new Error('No valid network provided.');
+      if(typeof address !== 'string') throw new Error('No valid address provided.');
+      if(!Array.isArray(keypairs)) throw new Error('Keypairs is not array.');
       if(!Array.isArray(contacts)) throw new Error('Contacts is not array.');
+      this._network = network;
       this._address = address;
-      this._secrets = secrets || [];
-      this._contacts = contacts || [];
+      this._keypairs = keypairs;
+      this._contacts = contacts;
     }
 
     static get SESSION_KEY() { return 'authdata'; }
@@ -52,19 +54,30 @@ myApp.factory('AuthData', [
       throw new Error('Implement .save()');
     }
 
+    // string -- network on which the account exists. Not an array because address reuse between networks is not recommended.
+    get network() {
+      return this._network;
+    }
+
     // string -- address of the account.
     get address() {
       return this._address;
     }
 
-    // Array<string> -- array of secrets.
-    get secrets() {
-      return this._secrets.slice();
+    // Array<string> -- array of keypairs.
+    get keypairs() {
+      return this._keypairs.slice();
     }
 
     // Array<Contact> -- array of Contacts.
     get contacts() {
       return this._contacts.slice();
+    }
+
+    // signWithEncryptedSecret(publicKey: string, teHash: Buffer) => Promise<string> -- sign teHash with given publicKey and return signature.
+    async signWithEncryptedSecret(publicKey, teHash) {
+      throw new Error('Implement .addContact()');
+
     }
 
     async addContact(contact) {

@@ -3,15 +3,15 @@
  * User blob storage for desktop client
  */
 
-/* global angular, myApp, require */
+/* global angular, CONST, myApp, require, StellarSdk */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
 const {ipcRenderer} = require('electron')
 const sjcl = require('sjcl');
 
-myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
-                              function( $window ,  AuthData ){
+myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
+                              function( $window ,  AuthData ,  SettingFactory ){
 
   const CRYPT_CONFIG = {
     ks: 256,  // key size
@@ -127,25 +127,33 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
     // _address
     // _contacts
     // _created
-    // _secrets
+    // _updated
+    // _keypairs
 
     constructor(data){
-      super(data.address, data.secrets, data.contacts);
+      super(data.network, data.address, data.keypairs, data.contacts);
       this._password = data.password;
       this._path = data.path;
       this._created = data.created;
+      this._updated = data.updated;
     }
 
     // create(opts:Map<string, any>) => Promise<AuthDataFilesystem> -- create in filesystem and return Promise of instance.
     static create(opts) {
       const authData = new AuthDataFilesystemV1({
+        network: SettingFactory.getCurrentNetwork().networkPassphrase,
         address: opts.address,
-        secrets: opts.secrets,
+        keypairs: opts.secrets.map((secret)=>({
+          publicKey: StellarSdk.Keypair.fromSecret(secret).publicKey(),
+          signingMethod: CONST.SIGNING_METHOD.ENCRYPTED_SECRET,
+          details: secret,
+        })),
         password: opts.password,
         path: opts.path,
 
         contacts: [],
         created: (new Date()).toJSON(),
+        updated: (new Date()).toJSON(),
       });
 
       return authData.save()
@@ -185,6 +193,13 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
       })
     }
 
+    // Backwards compatibility only.
+    get secrets() {
+      return this.keypairs
+        .filter((keypair)=>keypair.signingMethod === CONST.SIGNING_METHOD.ENCRYPTED_SECRET)
+        .map((keypair)=>keypair.details);
+    }
+
     // store() => AuthDataFilesystem -- store in sessionStorage and return current instance.
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
@@ -216,16 +231,25 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
       })
     }
 
+    async signWithEncryptedSecret(publicKey, teHash) {
+      const keypair = this.keypairs
+        .filter((keypair)=>keypair.signingMethod === CONST.SIGNING_METHOD.ENCRYPTED_SECRET)
+        .find((keypair)=>keypair.publicKey === publicKey);
+      if(!keypair) throw new Error(`No keypair found with public key ${publicKey}`)
+      const kp = StellarSdk.Keypair.fromSecret(keypair.details)
+      return kp.signDecorated(teHash);
+    }
+
     async addContact(contact) {
-      return new Promise((resolve, reject) => this.unshift("/_contacts", contact, (err, res) => err ? reject(err) : resolve(res)));
+      new Promise((resolve, reject) => this.unshift("/_contacts", contact, (err, res) => err ? reject(err) : resolve(res)));
     }
 
     async updateContact(name, contact) {
-      return new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'extend', '', contact, (err, res) => err ? reject(err) : resolve(res)));
+      new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'extend', '', contact, (err, res) => err ? reject(err) : resolve(res)));
     }
 
     async deleteContact(name) {
-      return new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'unset', '', (err, res) => err ? reject(err) : resolve(res)));
+      new Promise((resolve, reject) => this.filter('/_contacts', 'name', name, 'unset', '', (err, res) => err ? reject(err) : resolve(res)));
     }
 
     getContact(value) {
@@ -250,9 +274,15 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
 
       const authDataFileSystemV1 = new AuthDataFilesystemV1({
         address: decrypted.account_id,
-        secrets: decrypted.masterkey,
+        keypairs: decrypted.masterkeys.map((secret)=>({
+          publicKey: StellarSdk.Keypair.fromSecret(secret).publicKey(),
+          signingMethod: CONST.SIGNING_METHOD.ENCRYPTED_SECRET,
+          details: secret,
+        })),
         contacts: decrypted.contacts,
+        network: StellarSdk.Networks.PUBLIC,  // Implied default.
         created: decrypted.created,
+        updated: decrypted.created,  // There's no such value in V1, so make it up.
         password,
         path,
       });
@@ -286,7 +316,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
         account_id: object.account_id,
         contacts: object.contacts,
         created: object.created,
-        masterkey: [object.masterkey],
+        masterkeys: [object.masterkey],
       }
     }
 
@@ -313,6 +343,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
 
       this._traverse(this, pointer, path, op, params);  // it was `this.data` instead of `this`.
 
+      this._updated = (new Date()).toJSON();
       this.save().then((data)=>{
         console.log('Blob saved');
         if (typeof callback === 'function') callback(null, data);

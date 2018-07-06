@@ -7,7 +7,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
   $scope.walletError = '';
   $scope.signWithLedger = 'Sign with Ledger';
   $scope.loading = true;
-  if(AuthenticationFactory.secretAmount > 0) {
+  if(AuthenticationFactory.keypairs.length > 0) {
     $scope.loadingState = 'Signing...';
   } else {
     $scope.loadingState = 'Loading...';
@@ -32,8 +32,8 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
     }
   }, true);
 
-  $scope.plainSecretSign = () => {
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [], [$scope.plainSecret]);
+  $scope.plainSecretSign = async () => {
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [], [$scope.plainSecret]);
     $scope.refresh();
   }
   /** END: Plain secret sign **/
@@ -45,7 +45,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
       $scope.signWithLedger = 'Please confirm Transaction in Ledger...'
       $scope.refresh();
       const signature = await hardwareWalletDaemon.signTransaction($scope.te.signatureBase().toString('base64') )
-      $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [signature], []);
+      $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [signature], []);
       $scope.signWithLedger = 'Done! Sign with Ledger again'
     } catch(err) {
       if(err.message.toLowerCase().includes('reject')) {
@@ -93,20 +93,20 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
 
   }, true);
 
-  $scope.offlineSignatureAdd = () => {
+  $scope.offlineSignatureAdd = async () => {
     $scope.loading = true;
     const parsedSignatureXDRs = JSON.parse($scope.signatureXDRs);
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, parsedSignatureXDRs);
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, parsedSignatureXDRs);
     $scope.refresh();
   }
   /** END: Offline sign **/
 
 
   /** START: Refresh signing **/
-  $scope.refresh = () => {
+  $scope.refresh = async () => {
 
     // Check if all done
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [], []);
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [], []);
     $scope.requiredSigners = AuthenticationFactory.requiredSigners($scope.te, $scope.thresholds);
     if($scope.requiredSigners.length === 0) {
       $scope.callback(null, $scope.te);

@@ -2,8 +2,8 @@
 'use strict';
 
 
-myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
-                          function( $window ,  AuthData ){
+myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
+                          function( $window ,  AuthData ,  SettingFactory ){
 
   /* class BlobObj
    *
@@ -11,12 +11,17 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
    */
   return class AuthDataInmemory extends AuthData {
     constructor(data){
-      super(data.address, data.secrets, data.contacts);
+      super(data.network, data.address, data.keypairs, data.contacts);
     }
 
     // create(opts:Map<string, any>) => Promise<AuthDataInmemory> -- create and return Promise of instance.
     static create(opts) {
-      const authData = new AuthDataInmemory({address: opts.address, secrets: [], contacts: []});
+      const authData = new AuthDataInmemory({
+        network: SettingFactory.getCurrentNetwork().networkPassphrase,
+        address: opts.address,
+        keypairs: [],
+        contacts: []
+      });
 
       return authData.save();
     }
@@ -42,9 +47,10 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
     // store() => AuthDataInmemory -- store in sessionStorage and return instance.
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
+        network: this.network,
         address: this.address,
         contacts: this.contacts,
-        secrets: this.secrets,
+        keypairs: this.keypairs,
       });
       return this;
     }
