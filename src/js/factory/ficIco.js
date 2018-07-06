@@ -183,24 +183,24 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
         this.state = currentConfig.state;
         this.comment = currentConfig.comment;
         switch(this.state) {
-          case('active'):
-          case('paused'):
-          case('finished'): {
+          case('active'): // all ok
+          case('paused'): // read only
+          case('finished'): { // read only
             this.web3 = new Web3(currentConfig.ethereumNetwork);
             this.ethSmartContract = new this.web3.eth.Contract(FicIco.ETH_ABI, currentConfig.ethereumSCAddress);
             this.ficDistributorAddress = currentConfig.ficDistributorAddress;
 
             return true;
           }
-          case('pending'): {
+          case('pending'): { // nothing is ok
             return false;
           }
-          default: {
+          default: { // rip
             throw new Error(`Bad state ${this.state}`);
           }
 
         }
-      } catch(e) {
+      } catch(e) { // rip
         console.error(e)
         return false;
       }

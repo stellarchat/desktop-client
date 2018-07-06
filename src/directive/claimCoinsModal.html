@@ -1,0 +1,73 @@
+<!-- Modal -->
+<div class="modal fade claimCoinsModal" id="{{handler}}" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="claimCoinsCtrl">
+
+  <div class="modal-dialog" role="document" ng-hide="claiming">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Claim FIC</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label translate="select_eth">Select whitelisted ETH address</label>
+          <select class="form-control" name="select_address" ng-model="claim.address">
+            <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+
+          <label translate="select_lockup">Select lockup period</label>
+          <select class="form-control" name="select_lockup" ng-model="claim.period">
+            <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
+          </select>
+        </div>
+
+        <div class="form-group" ng-class="{'has-warning': claim.amount > maxAmount}">
+          <label translate="select_amount">Select FIC amount</label>
+          <input class="form-control" type="number" ng-model="claim.amount"/>
+          <label class="warning" ng-show="isNumber(remainingAmount)">
+            {{ 'remaining' | translate}} {{remainingAmount | number}}
+            <button class="btn btn-link" ng-click="selectAll()" ng-show="remainingAmount > 0">{{ 'select_all' | translate }}</button>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <input type="checkbox" ng-model="claim.terms" id="terms"/>
+          <label for="terms">I agree to <a href="javascript:require('electron').shell.openExternal('https://s3.amazonaws.com/factury-public-files/FIC+Network+Terms+of+Token+Sale.pdf')">Terms of Token Sale</a></label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="submitClaim()" class="btn btn-primary" translate="save" ng-disabled="!allGood">Claim</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-dialog" role="document" ng-show="claiming">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Please follow these steps</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="data-line">
+          {{ 'from_address' | translate }} <div class="code">{{formData.address}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'send_to' | translate }} <div class="code">{{contractAddress}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'payload' | translate }} <div class="code">{{formData.payload}}</div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" ng-click="openMyEtherWallet()">{{ 'sendMyEtherWallet' | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'done' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+</div>
