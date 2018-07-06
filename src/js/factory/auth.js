@@ -1,8 +1,8 @@
 /* global Buffer, angular, myApp, StellarSdk */
 
 // Auth - singleton that manages account.
-myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
-                                function($rootScope ,  $window ,  AuthData ,  AuthDataFilesystem ,  AuthDataInmemory) {
+myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystemRouter', 'AuthDataInmemory',
+                                function($rootScope ,  $window ,  AuthData ,  AuthDataFilesystemRouter ,  AuthDataInmemory) {
   let _type;
   let _data;  // `_dta.secrets` is the only place where secret is held. See also method `sign(te, callback)`.
 
@@ -14,7 +14,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         get FILESYSTEM() { return 'filesystem' },
     }}
     get AUTH_DATA() { return {
-        get [this.TYPE.FILESYSTEM]() { return AuthDataFilesystem; },
+        get [this.TYPE.FILESYSTEM]() { return AuthDataFilesystemRouter; },
         get [this.TYPE.TEMPORARY]() { return AuthDataInmemory; },
     }}
 

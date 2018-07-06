@@ -10,8 +10,8 @@
 const {ipcRenderer} = require('electron')
 const sjcl = require('sjcl');
 
-myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
-                            function( $window ,  AuthData ){
+myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData',
+                              function( $window ,  AuthData ){
 
   const CRYPT_CONFIG = {
     ks: 256,  // key size
@@ -120,7 +120,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
    *
    * Do not create directly because that's async, use static method `AuthDataFilesystem.create(opts, cb)`.
    */
-  return class AuthDataFilesystem extends AuthData {
+  class AuthDataFilesystemV1 extends AuthData {
     //// Pseudo-private properties:
     // _password
     // _path
@@ -138,7 +138,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
 
     // create(opts:Map<string, any>) => Promise<AuthDataFilesystem> -- create in filesystem and return Promise of instance.
     static create(opts) {
-      const authData = new AuthDataFilesystem({
+      const authData = new AuthDataFilesystemV1({
         address: opts.address,
         secrets: opts.secrets,
         password: opts.password,
@@ -162,15 +162,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
 
     // restore() => AuthDataFilesystem -- restore from sessionStorage and return instance.
     static restore() {
-      if(!$window.sessionStorage[AuthData.SESSION_KEY]) throw new Error('No authdata in session.');
-      try {
-        const {password, path, blob} = JSON.parse($window.sessionStorage[AuthData.SESSION_KEY]);
-        return AuthDataFilesystem.fromBlob(password, path, blob);
-      } catch(e) {
-        const errorMsg = `File wallet in session corrupted, cleaned up!\n${$window.sessionStorage[AuthData.SESSION_KEY]}\n${e}`;
-        delete $window.sessionStorage[AuthData.SESSION_KEY];
-        throw new Error(errorMsg)
-      }
+      throw new Error('Use AuthDataFilesystemRouter to restore conditional on version.')
     }
 
     // load(...params:any[]) => Promise<AuthDataFilesystem> -- load from filesystem and return Promise of instance.
@@ -183,7 +175,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
 
           if (err) return reject(err);
           try {
-            resolve(AuthDataFilesystem.fromBlob(opts.password, opts.path, dataUTF8));
+            resolve(AuthDataFilesystemV1.fromBlob(opts.password, opts.path, dataUTF8));
           } catch(e) {
             reject(e);
           }
@@ -196,6 +188,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
     // store() => AuthDataFilesystem -- store in sessionStorage and return current instance.
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
+        version: AuthDataFilesystemV1.VERSION,
         blob: this.blob,
         password: this._password,
         path: this._path,
@@ -252,10 +245,10 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
       if(!path) throw new Error('No path to wallet file.')
       if(!rawData) throw new Error('No rawData.')
 
-      const decrypted = AuthDataFilesystem._decrypt(password, rawData);
+      const decrypted = AuthDataFilesystemV1._decrypt(password, rawData);
       if (!decrypted) throw new Error("Error while decrypting blob");
 
-      const authDataFileSystem = new AuthDataFilesystem({
+      const authDataFileSystemV1 = new AuthDataFilesystemV1({
         address: decrypted.account_id,
         secrets: decrypted.masterkey,
         contacts: decrypted.contacts,
@@ -263,7 +256,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
         password,
         path,
       });
-      return authDataFileSystem;
+      return authDataFileSystemV1;
     }
 
     static _encrypt(password, data) {
@@ -298,7 +291,7 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
     }
 
     get blob() {
-      return AuthDataFilesystem._encrypt(this._password, this);
+      return AuthDataFilesystemV1._encrypt(this._password, this);
     }
 
     //
@@ -444,5 +437,8 @@ myApp.factory('AuthDataFilesystem', ['$window', 'AuthData',
     }
 
   }
+  AuthDataFilesystemV1.VERSION = 1;
+
+  return AuthDataFilesystemV1
 
 }]);
