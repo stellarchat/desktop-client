@@ -1,4 +1,4 @@
-/* global myApp, require, StellarSdk */
+/* global myApp, require, StellarSdk, zxcvbn */
 
 myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory',
                          function( $scope ,  $location ,  AuthenticationFactory ) {
@@ -27,7 +27,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
 
 
     //Watch for password changes
-    $scope.$watch('password1', function(newValue){
+    $scope.$watch('password1', (newValue) => {
       if(newValue == undefined) { newValue = ''; }
       let result = zxcvbn(newValue);
       meter.value = result.score;
@@ -44,17 +44,18 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
     }, true);
 
 
-    $scope.changeMode = function(mode) {
+    $scope.changeMode = (mode) => {
       $scope.mode = mode;
     };
-    $scope.showPass = function(flag) {
+    $scope.showPass = (flag) => {
       $scope.showPassword = flag;
     };
-    $scope.showSec = function(flag) {
+    $scope.showSec = (flag) => {
       $scope.showSecret = flag;
     };
 
-    $scope.reset = function() {
+    $scope.reset = () => {
+      $scope.address = '';
       $scope.password = '';
       $scope.password1 = '';
       $scope.password2 = '';
@@ -70,7 +71,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
 
 
 
-    $scope.fileInputClick = function() {
+    $scope.fileInputClick = () => {
       const remote = require('electron').remote;
       var dialog = remote.dialog;
 
@@ -80,8 +81,8 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       dialog.showSaveDialog({
           properties: [ 'openFile' ],
           defaultPath: 'wallet' + datestr + '.txt',
-        }, function ( filename ) {
-          $scope.$apply(function() {
+        }, (filename) => {
+          $scope.$apply(() => {
             $scope.walletfile = filename;
             if($scope.walletfile != '' && $scope.walletfile != undefined) {
               $scope.mode = 'register_empty_wallet';
@@ -94,7 +95,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       );
     };
 
-    $scope.submitForm = function() {
+    $scope.submitForm = async () => {
       if(!$scope.masterkey) $scope.masterkey = StellarSdk.Keypair.random().secret();
 
       const options = {
@@ -103,27 +104,26 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
         password: $scope.password1,
         path: $scope.walletfile
       };
-      AuthenticationFactory.create(AuthenticationFactory.TYPE.FILESYSTEM, options, (err) => {
-        if (err) {
-          console.error('Registration failed!', err);
-          $scope.save_error = err.message;
-          $scope.$apply();
-          return;
-        }
-
+      try {
+        await AuthenticationFactory.create(AuthenticationFactory.TYPE.FILESYSTEM, options);
         $scope.password = new Array($scope.password1.length+1).join("*");
+        $scope.address = options.address;
         $scope.key = `S${new Array(56).join("*")}`;
         $scope.mode = 'welcome';
+      } catch(err) {
+        console.error('Registration failed!', err);
+        $scope.save_error = err.message;
+      } finally {
         $scope.$apply();
-      });
+      }
     };
 
-    $scope.submitSecretKeyForm = function(){
+    $scope.submitSecretKeyForm = () => {
       $scope.masterkey = $scope.secretKey;
       $scope.fileInputClick();
     };
 
-    $scope.gotoFund = function() {
+    $scope.gotoFund = () => {
       $scope.mode = 'register_empty_wallet';
       $scope.reset();
 
