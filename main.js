@@ -2,6 +2,7 @@
 
 (function () {
   'use strict'
+  const fs = require('fs');
   const electron = require('electron')
   const app = electron.app
   const path = require('path')
@@ -17,8 +18,10 @@
   const hostname = os.hostname()
   const username = (process.platform === 'win32') ? process.env.USERNAME : process.env.USER
 
-  const HardwareWallet = require('./src/main/hardwareWalletLedger');
   const {HWW_API} = require('./src/common/constants')
+  const {AuthDataFilesystemBackendV2} = require('./src/main/authdata.filesystem.v2')
+
+  const HardwareWallet = require('./src/main/hardwareWalletLedger');
   const HardwareWalletLedger = HardwareWallet.Ledger;
 
   // report crashes to the Electron project
@@ -227,22 +230,36 @@
   }
 
 
-  electron.ipcMain.on('writeFile', (event, id, path, dataString) => {
-    const fs = require('fs');
-    fs.writeFile(path, dataString, (err) => {
-      if(err) event.sender.send('writeFile', id, err.toString());
-      event.sender.send('writeFile', id);
-    })
+
+
+  const wrapIPC = (channel, routine, postCallback) => {
+    electron.ipcMain.on(channel, async (event, reqId, ...args) => {
+      console.log(`Request<${channel}/${reqId}> arguments:`, ...args)
+      try {
+        if(!reqId) throw new Error(`No request ID provided. Consider passing a random number.`)
+        const res = await routine(...args);
+        if(postCallback) await postCallback(res);
+        event.sender.send(channel, reqId, null, res);
+      } catch(err) {
+        console.error(`Request<${channel}/${reqId}> error:`, err);
+        event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: ${err.message}`);
+      }
+    });
+  }
+
+
+  //// authdata.filesystem.v1 API
+
+  wrapIPC('writeFile', (path, dataString) => {
+    return fs.writeFileSync(path, dataString);
   })
 
-  electron.ipcMain.on('readFile', (event, id, path) => {
-    const fs = require('fs');
-    console.log(id, path)
-    fs.readFile(path, 'utf-8', (err, data) => {
-      if(err) event.sender.send('readFile', id, err.toString());
-      event.sender.send('readFile', id, null, data);
-    })
+  wrapIPC('readFile', (path) => {
+    return fs.readFileSync(path, 'utf-8');
   })
+
+
+  //// Hardware Wallet API
 
   electron.ipcMain.on(HWW_API.SUPPORT, (event, reqId) => {
     HardwareWalletLedger.isSupported()
@@ -255,16 +272,15 @@
   })
 
   const wrapHwwMethod = (method, channel, callback) => {
-    electron.ipcMain.on(channel, (event, reqId, hwwId, ...args) => {
-      if(!reqId) return event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: No request ID provided. Consider passing a random number.`)
-      if(!hwwId) return event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: No hardwallet ID provided. Consider using 'HWW_API.LIST'.`)
+    return wrapIPC(channel, async (hwwId, ...args) => {
+      if(!hwwId) throw new Error(`No hardwallet ID provided. Consider using 'HWW_API.LIST'.`)
 
-      HardwareWalletLedger.listOfLedgers.get(hwwId)[method](...args)
-        .then((res) =>callback ? callback(res) : res)
-        .then((res) =>event.sender.send(channel, reqId, null, res))
-        .catch((err)=>event.sender.send(channel, reqId, `Request<${channel}/${reqId}> failed: ${err.message}`))
-    })
-  }
+      const ledger = HardwareWalletLedger.listOfLedgers.get(hwwId);
+      const res = await ledger[method](...args);
+      if(callback) callback(res);
+      return res;
+    });
+  };
 
   wrapHwwMethod('getAppConfig'      , HWW_API.CONFIG    /*, (res)=>console.log(res) || res */)
   wrapHwwMethod('selectSubaccount'  , HWW_API.SELECT    /*, (res)=>console.log(res) || res */)
