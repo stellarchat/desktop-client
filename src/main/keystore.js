@@ -25,11 +25,11 @@ const toV3 = function (plaintext, password, opts, progressCallback) {
   }
 
   if (kdf === 'pbkdf2') {
-    kdfparams.c = opts.c || 131072 // Originally was 262144
+    kdfparams.c = opts.c || 16384 // Originally was 262144.
     kdfparams.prf = 'hmac-sha256'
     derivedKey = crypto.pbkdf2Sync(Buffer.from(password), salt, kdfparams.c, kdfparams.dklen, 'sha256')
   } else if (kdf === 'scrypt') {
-    kdfparams.n = opts.n || 131072 // Originally was 262144
+    kdfparams.n = opts.n || 16384 // Originally was 262144, MyEtherWallet has 8192.
     kdfparams.r = opts.r || 8
     kdfparams.p = opts.p || 1
     derivedKey = scryptsy(Buffer.from(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen, progressCallback)

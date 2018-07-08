@@ -125,7 +125,7 @@ class AuthDataFilesystemBackendV2 {
       updated: this._updated,
     }
     const fileContent = JSON.stringify(keystore.toV3(data, this._password, {}));
-    fs.writeFileSync(this._path, fileContent);
+    fs.writeFileSync(this._path, fileContent, 'utf-8');
   }
 
   async addContact(contact) {

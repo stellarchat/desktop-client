@@ -1,8 +1,8 @@
 /* global myApp */
 
 
-myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFilesystemV1',
-                                  function( $window ,  AuthData ,  AuthDataFilesystemV1 ){
+myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFilesystemV1', 'AuthDataFilesystemV2',
+                                  function( $window ,  AuthData ,  AuthDataFilesystemV1 ,  AuthDataFilesystemV2 ){
 
   /* class AuthDataFilesystem
    *
@@ -18,7 +18,7 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
     // create(opts:Map<string, any>) => Promise<AuthDataFilesystem> -- create in filesystem and return Promise of instance.
     static async create(opts) {
       // Create newest version by default.
-      return AuthDataFilesystemV1.create(opts);
+      return AuthDataFilesystemV2.create(opts);
     }
 
     // restore() => AuthDataFilesystem -- restore from sessionStorage and return instance.
@@ -58,6 +58,7 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
 
   }
   AuthDataFilesystemRouter.VERSION_CLASS = {  // Newest versions first.
+    [AuthDataFilesystemV2.VERSION]: AuthDataFilesystemV2,
     [AuthDataFilesystemV1.VERSION]: AuthDataFilesystemV1,
   }
 

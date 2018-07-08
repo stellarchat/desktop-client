@@ -66,6 +66,11 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
       })
     }
 
+    async logout() {
+      // Nothing to do, kill the instance and it's done.
+      return;
+    }
+
     get VERSION() { return AuthDataInmemory.VERSION; }
   }
   AuthDataInmemory.VERSION = '2.0';
