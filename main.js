@@ -18,7 +18,7 @@
   const hostname = os.hostname()
   const username = (process.platform === 'win32') ? process.env.USERNAME : process.env.USER
 
-  const {HWW_API} = require('./src/common/constants')
+  const {HWW_API, KEYSTORE_API} = require('./src/common/constants')
   const {AuthDataFilesystemBackendV2} = require('./src/main/authdata.filesystem.v2')
 
   const HardwareWallet = require('./src/main/hardwareWalletLedger');
@@ -230,8 +230,6 @@
   }
 
 
-
-
   const wrapIPC = (channel, routine, postCallback) => {
     electron.ipcMain.on(channel, async (event, reqId, ...args) => {
       console.log(`Request<${channel}/${reqId}> arguments:`, ...args)
@@ -247,7 +245,6 @@
     });
   }
 
-
   //// authdata.filesystem.v1 API
 
   wrapIPC('writeFile', (path, dataString) => {
@@ -256,6 +253,47 @@
 
   wrapIPC('readFile', (path) => {
     return fs.readFileSync(path, 'utf-8');
+  })
+
+
+
+  //// authdata.filesystem.v2 API
+
+  let authData;
+
+  wrapIPC(KEYSTORE_API.CREATE, async (opts) => {
+    authData = await AuthDataFilesystemBackendV2.create(opts);
+    return authData.toJSON();
+  })
+
+  wrapIPC(KEYSTORE_API.LOAD, async (opts) => {
+    authData = await AuthDataFilesystemBackendV2.load(opts)
+    return authData.toJSON();
+  })
+
+  wrapIPC(KEYSTORE_API.SAVE, async () => {
+    await authData.save();
+    return authData.toJSON();
+  })
+
+  wrapIPC(KEYSTORE_API.LOGOUT, async () => {
+    authData = undefined;
+    return;
+  })
+
+  wrapIPC(KEYSTORE_API.ADDCONTACT, async (contact) => {
+    await authData.addContact(contact);
+    return authData.toJSON().contacts;
+  })
+
+  wrapIPC(KEYSTORE_API.UPDATECONTACT, async (name, contact) => {
+    await authData.updateContact(name, contact);
+    return authData.toJSON().contacts;
+  })
+
+  wrapIPC(KEYSTORE_API.DELETECONTACT, async (name) => {
+    await authData.deleteContact(name);
+    return authData.toJSON().contacts;
   })
 
 

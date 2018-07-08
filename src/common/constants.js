@@ -31,4 +31,14 @@ module.exports = {
     SUPPORT: 'HardwareWallet.isSupported',
   },
 
+  KEYSTORE_API: {
+    CREATE: 'Keystore.create',
+    LOAD: 'Keystore.load',
+    SAVE: 'Keystore.save',
+    LOGOUT: 'Keystore.logout',
+    ADDCONTACT: 'Keystore.addContact',
+    UPDATECONTACT: 'Keystore.updateContact',
+    DELETECONTACT: 'Keystore.deleteContact',
+  }
+
 }
