@@ -139,7 +139,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
     }
 
     // create(opts:Map<string, any>) => Promise<AuthDataFilesystem> -- create in filesystem and return Promise of instance.
-    static create(opts) {
+    static async create(opts) {
       const authData = new AuthDataFilesystemV1({
         network: SettingFactory.getCurrentNetwork().networkPassphrase,
         address: opts.address,
@@ -170,11 +170,12 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
 
     // restore() => AuthDataFilesystem -- restore from sessionStorage and return instance.
     static restore() {
-      throw new Error('Use AuthDataFilesystemRouter to restore conditional on version.')
+      const {blob, password, path} = JSON.parse($window.sessionStorage[AuthData.SESSION_KEY]);
+      return AuthDataFilesystemV1.fromBlob(blob, password, path);
     }
 
     // load(...params:any[]) => Promise<AuthDataFilesystem> -- load from filesystem and return Promise of instance.
-    static load(opts) {
+    static async load(opts) {
       return new Promise((resolve, reject) => {
         const _id = Math.floor(Math.random()*10000);
         const listener = (event, id, err, dataUTF8) => {
@@ -183,7 +184,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
 
           if (err) return reject(err);
           try {
-            resolve(AuthDataFilesystemV1.fromBlob(opts.password, opts.path, dataUTF8));
+            resolve(AuthDataFilesystemV1.fromBlob(dataUTF8, opts.password, opts.path));
           } catch(e) {
             reject(e);
           }
@@ -274,7 +275,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
     // New methods below.
     //
 
-    static fromBlob(password, path, rawData){
+    static fromBlob(rawData, password, path){
       if(!password) throw new Error('No password.')
       if(!path) throw new Error('No path to wallet file.')
       if(!rawData) throw new Error('No rawData.')
@@ -477,8 +478,9 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
       this._applyUpdate('filter', pointer, params, callback);
     }
 
+    get VERSION() { return AuthDataFilesystemV1.VERSION; }
   }
-  AuthDataFilesystemV1.VERSION = 1;
+  AuthDataFilesystemV1.VERSION = '1.0';
 
   return AuthDataFilesystemV1
 

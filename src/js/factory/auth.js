@@ -30,19 +30,16 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       return !!$window.sessionStorage[this.SESSION_KEY];
     }
 
-    create(type, opts, callback){
+    async create(type, opts){
       const AuthData = this.AUTH_DATA[type];
       if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
 
-      AuthData.create(opts)
-        .then((authdata) => {
-          console.log("AuthenticationFactory: registration succeeded", authdata);
+      const authdata = await AuthData.create(opts);
+      console.log("AuthenticationFactory: registration succeeded", authdata);
 
-          _type = type;
-          _data = authdata;
-          this._store();
-          callback(null, authdata, 'local');
-        }).catch(callback);
+      _type = type;
+      _data = authdata;
+      this._store();
     }
 
     load(type, opts, callback) {
@@ -76,7 +73,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
         _type = type;
         _data = authdata;
-        console.warn(`Restored "${type}" authdata from session.`)
+        console.info(`Restored "${type} ${authdata.VERSION}" authdata from session.`)
       } catch(e) {
         _type    = undefined;
         _data    = undefined;

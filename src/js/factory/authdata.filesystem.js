@@ -25,12 +25,12 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
     static restore() {
       if(!$window.sessionStorage[AuthData.SESSION_KEY]) throw new Error('No authdata in session.');
       try {
-        const {version, password, path, blob} = JSON.parse($window.sessionStorage[AuthData.SESSION_KEY]);
+        const {version} = JSON.parse($window.sessionStorage[AuthData.SESSION_KEY]);
         const AuthDataFilesystem = AuthDataFilesystemRouter.VERSION_CLASS[version];
 
         if(!AuthDataFilesystem) throw new Error(`Unsupported version ${version}`)
 
-        return AuthDataFilesystem.fromBlob(password, path, blob);
+        return AuthDataFilesystem.restore();
       } catch(e) {
         const errorMsg = `File wallet in session is corrupted, cleaned up!\n${$window.sessionStorage[AuthData.SESSION_KEY]}\n${e}`;
         delete $window.sessionStorage[AuthData.SESSION_KEY];
@@ -47,7 +47,7 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
         try {
           authDataFileSystem = await AuthDataFileSystem.load(opts);
         } catch(e) {
-          console.info(`Failed to load file with version ${AuthDataFileSystem.VERSION}`);
+          console.warn(`Failed to load keystore file as version ${AuthDataFileSystem.VERSION}, trying older file format..`);
         }
         if(authDataFileSystem) break;
       }
@@ -57,8 +57,8 @@ myApp.factory('AuthDataFilesystemRouter', ['$window', 'AuthData', 'AuthDataFiles
     }
 
   }
-  AuthDataFilesystemRouter.VERSION_CLASS = {
-    1: AuthDataFilesystemV1,
+  AuthDataFilesystemRouter.VERSION_CLASS = {  // Newest versions first.
+    [AuthDataFilesystemV1.VERSION]: AuthDataFilesystemV1,
   }
 
 

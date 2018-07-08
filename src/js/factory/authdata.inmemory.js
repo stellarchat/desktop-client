@@ -9,7 +9,7 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
    *
    * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
    */
-  return class AuthDataInmemory extends AuthData {
+  class AuthDataInmemory extends AuthData {
     constructor(data){
       super(data.network, data.address, data.keypairs, data.contacts);
     }
@@ -66,6 +66,10 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
       })
     }
 
+    get VERSION() { return AuthDataInmemory.VERSION; }
   }
+  AuthDataInmemory.VERSION = '2.0';
+
+  return AuthDataInmemory;
 
 }]);
