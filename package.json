@@ -1,6 +1,6 @@
 {
   "name": "foxlet",
-  "version": "'5.0-alpha",
+  "version": "5.0.0-alpha",
   "productName": "Foxlet",
   "description": "Stellar desktop client",
   "main": "main.js",

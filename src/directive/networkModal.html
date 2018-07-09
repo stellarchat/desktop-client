@@ -23,7 +23,8 @@
             <h4 translate="switch_net">Switch Stellar Network</h4>
             <p translate="switch_net_desc">The testnet is for, well, testing. It’s occasionally reset, so don’t get attached to any balances or accounts that you have on it.</p>
             <div class="btn-group  btn-group-sm" role="group" aria-label="Network options">
-              <button type="button" class="btn btn-success" ng-repeat="n in all_networks" ng-class="{active: network_type == n.networkType}" ng-click="set(n.networkType)">{{n.name | translate}}</button>
+          <button type="button" class="btn btn-success" ng-repeat="n in all_networks" ng-class="{active: network_type == n.networkType}" ng-click="set(n.networkType)" ng-disabled="n.networkType == 'fic'">
+              {{n.name | translate}}</button>
             </div>
           </div>
         </div>

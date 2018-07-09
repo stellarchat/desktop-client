@@ -72,7 +72,6 @@ myApp.factory('SettingFactory', function($window) {
         networkPassphrase: 'FIC Test Network ; 2017',
         knownHorizons: [
           'https://ficnetwork-testnet1.factury.co',
-          'http://testnet.factury.co:8400',
         ],
         coin: {
           name: "FIC Network",
