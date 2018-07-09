@@ -59,7 +59,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       $scope.password = '';
       $scope.password1 = '';
       $scope.password2 = '';
-      $scope.masterkey = '';
+      $scope.secret = '';
       $scope.key = '';
       $scope.mode = 'register_new_account';
       $scope.showMasterKeyInput = false;
@@ -69,18 +69,29 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       if ($scope.registerForm) $scope.registerForm.$setPristine(true);
     };
 
+    const getWalletFilename = (secret, timestamp) => {
+      const address = StellarSdk.Keypair.fromSecret(secret).publicKey()
+      var ts = timestamp ? new Date(timestamp) : new Date()
 
+      return [
+        'wallet',
+        '--',
+        address.toString('hex'),
+        '--',
+        'UTC--',
+        ts.toJSON().replace(/:/g, '-').slice(0, -5),
+        '.keystore'
+      ].join('')
+    }
 
     $scope.fileInputClick = () => {
+      if(!$scope.secret) $scope.secret = StellarSdk.Keypair.random().secret();
       const remote = require('electron').remote;
       var dialog = remote.dialog;
 
-      var dt = new Date();
-      var datestr = (''+dt.getFullYear()+(dt.getMonth()+1)+dt.getDate()+'_'+dt.getHours()+dt.getMinutes()+dt.getSeconds()).replace(/([-: ])(\d{1})(?!\d)/g,'$10$2');
-
       dialog.showSaveDialog({
           properties: [ 'openFile' ],
-          defaultPath: 'wallet' + datestr + '.txt',
+          defaultPath: getWalletFilename($scope.secret),
         }, (filename) => {
           $scope.$apply(() => {
             $scope.walletfile = filename;
@@ -96,11 +107,11 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
     };
 
     $scope.submitForm = async () => {
-      if(!$scope.masterkey) $scope.masterkey = StellarSdk.Keypair.random().secret();
+      if(!$scope.secret) $scope.secret = StellarSdk.Keypair.random().secret();
 
       const options = {
-        address: StellarSdk.Keypair.fromSecret($scope.masterkey).publicKey(),  // ignored until blob format v2.
-        secrets: [$scope.masterkey],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
+        address: StellarSdk.Keypair.fromSecret($scope.secret).publicKey(),  // ignored until blob format v2.
+        secrets: [$scope.secret],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
         password: $scope.password1,
         path: $scope.walletfile
       };
@@ -119,7 +130,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
     };
 
     $scope.submitSecretKeyForm = () => {
-      $scope.masterkey = $scope.secretKey;
+      $scope.secret = $scope.secretKey;
       $scope.fileInputClick();
     };
 

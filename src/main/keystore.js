@@ -106,19 +106,7 @@ const fromV3 = function (input, password, opts, progressCallback) {
   return plaintext;
 }
 
-const getV3Filename = (address, timestamp) => {
-  var ts = timestamp ? new Date(timestamp) : new Date()
-
-  return [
-    'UTC--',
-    ts.toJSON().replace(/:/g, '-'),
-    '--',
-    address.toString('hex')
-  ].join('')
-}
-
 module.exports = {
     toV3: toV3,
     fromV3: fromV3,
-    getV3Filename: getV3Filename,
 }
