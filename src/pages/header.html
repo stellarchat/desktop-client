@@ -1,5 +1,5 @@
 <div ng-controller="HeaderCtrl" class="header">
-  <header ng-show="!showMenu" class="auth" ng-class="currentNetwork.coin.code">
+  <header ng-show="!showMenu && launched" class="auth" ng-class="currentNetwork.coin.code">
     <h1 translate="header_wellcome" ng-if="currentNetwork.coin.code != 'FIC'">Stellar is a platform that connects banks, payments systems, and people.</h1>
     <h1 ng-if="currentNetwork.coin.code == 'FIC'">FIC Network is an end-to-end decentralized fixed income securities network</h1>
   </header>
