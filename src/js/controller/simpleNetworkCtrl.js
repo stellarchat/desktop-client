@@ -44,8 +44,8 @@ myApp.controller('simpleNetworkCtrl', ['$rootScope', '$scope', '$route', '$windo
 
       StellarApi.setServer($scope.active_horizon, $scope.active_passphrase, SettingFactory.getAllowHttp());
       StellarApi.logout();
-      $rootScope.reset();
-      $rootScope.$broadcast('$authUpdate');  // workaround to refresh and get changes into effect.
+      // $rootScope.reset();
+      // $rootScope.$broadcast('$authUpdate');  // workaround to refresh and get changes into effect.
       location.reload();
 
     } catch (e) {
