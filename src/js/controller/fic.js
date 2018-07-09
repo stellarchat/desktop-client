@@ -133,6 +133,7 @@ myApp.controller("FICHistoryCtrl", ['$rootScope', '$scope', '$window', 'FicIcoFa
   const days180 = duration180.asDays();
 
   $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
+  $scope.publicKey = $rootScope.address;
 
   $scope.loading = false;
   $scope.refresh = async () => {
@@ -185,7 +186,7 @@ myApp.controller("FICHistoryCtrl", ['$rootScope', '$scope', '$window', 'FicIcoFa
 
     $scope.loading = false;
     $scope.mergedTxs = mergedTxs;
-    $scope.$apply();
+    console.log(mergedTxs);
   };
 
   $scope.refresh();

@@ -87,3 +87,22 @@ input::-webkit-calendar-picker-indicator {
 .coin-list h4 {
 	margin-top: 6px;
 }
+
+.claim-history tr {
+}
+.claim-history tr:nth-child(2n) {
+	background: #efefef;
+}
+.claim-history tr.another {
+	opacity: 0.6;
+}
+.claim-history>tbody>tr>td {
+	font-size: 14px;
+	border-top: 0;
+}
+.claim-history>tbody>tr>td.credited {
+	color: #0c0dff;
+}
+.claim-history>tbody>tr>td.large {
+	font-size: 16px;
+}

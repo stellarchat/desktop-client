@@ -1,59 +1,95 @@
 <section class="col-xs-12 content">
-	<group>
-	<div class="so-back islandBack islandBack--t">
-		<div class="island">
-			<div class="island__header">Claim history
-				<a class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
-					<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
-				</a>
-			</div>
-			<div class="AddTrustFromDirectory">
-				<div class="padding-15" ng-show="error_msg">
-					<div class="alert alert-danger" role="alert">
-						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-						<span>{{error_msg | translate:currentNetwork.coin}}</span>
-					</div>
-				</div>
-          	<table class="table-hover HistoryTable">
-          		<thead>
-          			<tr class="HistoryTable-header">
-          				<th class="left">Whitelisted ETH Address</th>
-            			<th class="left">Amount</th>
-            			<th class="left">Date</th>
-            			<th class="left">Claim processed</th>
-            			<th class="left">Unlocked</th>
-            		</tr>
-          		</thead>
-          		<tbody ng-repeat="tx in mergedTxs | orderBy:'-ethTime' ">
-          			<tr class="HistoryTable-row">
-                  <td class="address">0x{{tx.ethAddress}}</td>
-            			<td>
-                   	<span class="credit">{{tx.amount}}</span>
-                   	<strong>FIC</strong>
-					        </td>
-          				<td>{{tx.tx1.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          				<td style="font-size: 18px;"><span ng-if="tx.tx1 != undefined && tx.tx2 != undefined">☑️</span><span ng-if="tx.tx1 == undefined || tx.tx2 == undefined">🔄</span></td>
-                  <td>
-                    <span ng-if="tx.tx4 != undefined">
-                      <span class="address"><span class="credit"><span class="bold">+</span>{{tx.amount}}</span>
-                     	<strong>FIC</strong></span>
-                    </span>
-                    <span ng-if="tx.tx4 == undefined">
-                      <span ng-if="tx.lockup == 0">{{ 'now' | translate }}</span>
-											<span ng-if="tx.lockup == 90">In {{availableIn['90']}} {{ 'days' | translate }}</span>
-											<span ng-if="tx.lockup == 180">In {{availableIn['180']}} {{ 'days' | translate }}</span>
-                    </span>
-                  </td>
-          			</tr>
-          		</tbody>
-          	</table>
-        	</div>
-        	<div class="txfoot">
-				<div translate="loading" ng-show="loading">Loading...</div>
-				<a href="" ng-click="load_more()" translate="load_more" ng-show="next && !loading">Load more</a>
-				<div translate="no_more" ng-show="!next && !loading">No more transactions left</div>
-			</div>
+
+	<div class="row" style="margin: 20px 0;" ng-show="error_msg">
+  	<div class="alert alert-danger" role="alert">
+  		<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+			<span>{{error_msg | translate:currentNetwork.coin}}</span>
+  	</div>
+  </div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading text-right">
+			<h4 class="pull-left">Claim history</h4>
+			<button type="submit" class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
+				<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
+			</button>
 		</div>
+
+	  <!-- Table -->
+		<table class="table claim-history">
+			<thead>
+				<tr>
+					<th class="left">Request date</th>
+					<th class="left">Amount</th>
+					<th class="left">Status</th>
+					<th class="left">Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="tx in mergedTxs | orderBy:'-ethTime' " ng-class="{another: tx.publicKey != publicKey}">
+					<td>
+						{{tx.ethTime * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}
+					</td>
+					<td ng-class="{credited: tx.publicKey == publicKey, large: tx.publicKey == publicKey,}">
+						<span class="credit">{{tx.amount}}</span>
+						<strong>{{currentNetwork.coin.code}}</strong>
+					</td>
+					<td ng-class="{large: tx.publicKey == publicKey}">
+						<strong ng-if="tx.publicKey == publicKey">
+							<span ng-if="tx.tx1 != undefined && tx.tx2 != undefined">Claimed</span>
+							<span ng-if="tx.tx1 == undefined || tx.tx2 == undefined">Withdrawing..</span>
+						</strong>
+						<span ng-if="tx.publicKey != publicKey">Requested by:<br>{{tx.publicKey | shortaddress}}</span>
+					</td>
+					<td>
+						<strong>{{tx.ethAddress}}</strong>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-	</group>
+
 </section>
+	<!-- <table class="table claim-history">
+		<thead>
+			<tr>
+				<th class="left">Whitelisted ETH Address</th>
+				<th class="left">Amount</th>
+				<th class="left">Date</th>
+				<th class="left">Claim processed</th>
+				<th class="left">Unlocked</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="tx in mergedTxs | orderBy:'-ethTime' " ng-class="{another: tx.publicKey != publicKey}">
+				<td class="address">
+					<strong>{{tx.ethAddress}}</strong>
+					<span ng-if="tx.publicKey != publicKey"><br>Claimed by: {{tx.publicKey | shortaddress}}</span>
+				</td>
+				<td>
+					<span class="credit">{{tx.amount}}</span>
+					<strong>FIC</strong>
+				</td>
+				<td>{{tx.ethTime * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+				<td style="font-size: 18px;">
+					<span ng-if="tx.publicKey == publicKey">
+						<span ng-if="tx.tx1 != undefined && tx.tx2 != undefined">☑️</span>
+						<span ng-if="tx.tx1 == undefined || tx.tx2 == undefined">🔄</span>
+					</span>
+				</td>
+				<td>
+					<span ng-if="tx.publicKey == publicKey">
+						<span ng-if="tx.tx4 != undefined">
+							<span class="address"><span class="credit"><span class="bold">+</span>{{tx.amount}}</span>
+							<strong>FIC</strong></span>
+						</span>
+						<span ng-if="tx.tx4 == undefined">
+							<span ng-if="tx.lockup == 0">{{ 'now' | translate }}</span>
+							<span ng-if="tx.lockup == 90">In {{availableIn['90']}} {{ 'days' | translate }}</span>
+							<span ng-if="tx.lockup == 180">In {{availableIn['180']}} {{ 'days' | translate }}</span>
+						</span>
+					</span>
+				</td>
+			</tr>
+		</tbody>
+	</table> -->
