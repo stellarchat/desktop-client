@@ -76,12 +76,14 @@ myApp.factory('AuthDataFilesystemV2', ['$window', 'AuthData', 'SettingFactory',
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
         version: AuthDataFilesystemV2.VERSION,
-        network: this._network,
-        address: this._address,
-        keypairs: this._keypairs,
-        contacts: this._contacts,
-        created: this._created,
-        updated: this._updated,
+        blob: {
+          network: this._network,
+          address: this._address,
+          keypairs: this._keypairs,
+          contacts: this._contacts,
+          created: this._created,
+          updated: this._updated,
+        }
       });
       return this;
     }
