@@ -1,6 +1,7 @@
 /* global $, angular, moment, myApp, require */
 
-myApp.controller("FICCoinCtrl", [ '$rootScope', '$route', '$scope', '$location', '$window', 'FicIcoFactory', function( $rootScope, $route, $scope ,  $location ,  $window ,  FicIcoFactory ) {
+myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', '$window', 'FicIcoFactory',
+                        function( $rootScope ,  $route ,  $scope ,  $location ,  $window ,  FicIcoFactory ) {
 
   $scope.loadingFicIco = true;
   $scope.readOnlyState = true;

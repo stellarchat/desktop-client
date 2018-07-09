@@ -1,12 +1,19 @@
-myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$window', 'FicIcoFactory', function( $rootScope, $scope ,  $location ,  $window ,  FicIcoFactory  ) {
+myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$window', 'FicIcoFactory',
+                           function(  $rootScope ,  $scope ,  $location ,  $window ,  FicIcoFactory  ) {
 
   const allAddresses = JSON.parse($window.localStorage[`whitelist`]);
-  $scope.contractAddress = '0x559d3be0e5818eca8d6894b4080ffc37a2058aef';
-  $scope.isNumber = angular.isNumber;
-  $scope.periods = ["0", "90", "180"];
-  $scope.max = '';
-  $scope.allGood = false;
-  $scope.claiming = false;
+
+  (async () => {
+    await FicIcoFactory.initPromise;
+    $scope.contractAddress = FicIcoFactory.ethSmartContract._address;
+    $scope.isNumber = angular.isNumber;
+    $scope.periods = ["0", "90", "180"];
+    $scope.max = '';
+    $scope.allGood = false;
+    $scope.claiming = false;
+
+    $scope.$apply();
+  })()
 
   $scope.$watch('details', function(newValue){
     if(newValue.dist != undefined) {
