@@ -84,24 +84,35 @@
   						{{addr.coins.remaining['90'] | number}}
   					</td>
   					<td>
-  						{{availableIn['90']}} {{ 'days' | translate }}
+  						<span ng-show="availableIn['90'] > 0">{{availableIn['90']}} {{ 'days' | translate }}</span>
+              <span ng-hide="availableIn['90'] > 0">{{ 'now' | translate }}</span>
   					</td>
   					<td>
 
-  						<button
-                ng-show="addr.coins.remaining['90'] > 0 && availableIn['90'] > 0"
-                class="btn btn-success btn-sm"
-                ng-click="claimCoins(addr.address, 90)"
-                translate="claim">
-                Claim</button>
+              <span ng-show="availableIn['90'] > 0">
+    						<button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 90)"
+                  translate="claim">
+                  Claim</button>
 
-  						<button
-                ng-show="addr.coins.remaining['90'] > 0 && availableIn['90'] > 0"
-                class="btn btn-success btn-sm"
-                ng-click="unlockCoins(addr.address, 90)"
-                ng-disabled="availableIn['90'] > 0"
-                translate="unlock">
-                Unlock</button>
+    						<button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="unlockCoins(addr.address, 90)"
+                  ng-disabled="availableIn['90'] > 0"
+                  translate="unlock">
+                  Unlock</button>
+              </span>
+              <span ng-hide="availableIn['90'] > 0">
+                <button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 90)"
+                  translate="claim_unlock">
+                  Claim & Unlock</button>
+              </span>
 
   						<button
                 type="button"
@@ -119,24 +130,35 @@
   						{{addr.coins.remaining['180'] | number}}
   					</td>
   					<td>
-  						{{availableIn['180']}} {{ 'days' | translate }}
+  						<span ng-show="availableIn['180'] > 0">{{availableIn['180']}} {{ 'days' | translate }}</span>
+              <span ng-hide="availableIn['180'] > 0">{{ 'now' | translate }}</span>
   					</td>
   					<td>
 
-              <button
-                ng-show="addr.coins.remaining['180'] > 0 && availableIn['180'] > 0"
-                class="btn btn-success btn-sm"
-                ng-click="claimCoins(addr.address, 180)"
-                translate="claim">
-                Claim</button>
+              <span ng-show="availableIn['180'] > 0">
+    						<button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 180)"
+                  translate="claim">
+                  Claim</button>
 
-  						<button
-                ng-show="addr.coins.remaining['180'] > 0 && availableIn['180'] > 0"
-                class="btn btn-success btn-sm"
-                ng-click="unlockCoins(addr.address, 180)"
-                ng-disabled="availableIn['180'] > 0"
-                translate="unlock">
-                Unlock</button>
+    						<button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="unlockCoins(addr.address, 180)"
+                  ng-disabled="availableIn['180'] > 0"
+                  translate="unlock">
+                  Unlock</button>
+              </span>
+              <span ng-hide="availableIn['180'] > 0">
+                <button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 180)"
+                  translate="claim_unlock">
+                  Claim & Unlock</button>
+              </span>
 
   						<button
                 type="button"

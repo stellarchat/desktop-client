@@ -45,7 +45,7 @@
 
 		<div class="col-sm-9" ng-show="isMode('inflation')">
 			<label translate="important">Important:</label>
-			<p class="hint" translate="inflation_desc">New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.</p>
+			<p class="hint">{{ 'inflation_desc' | translate:{name:currentNetwork.coin.name} }}</p>
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">

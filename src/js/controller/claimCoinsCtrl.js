@@ -11,6 +11,7 @@ myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$wind
     $scope.max = '';
     $scope.allGood = false;
     $scope.claiming = false;
+    $scope.minAmount = 2000;
 
     $scope.$apply();
   })()
@@ -39,8 +40,9 @@ myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$wind
         $scope.maxAmount = remaining;
       } else {
         $scope.remainingAmount = '–';
+        $scope.maxAmount = 0;
       }
-      if(newValue.address != '' && newValue.period != '' && !isNaN(newValue.amount) && newValue.amount <= remaining && newValue.terms == true) {
+      if(newValue.address != '' && newValue.period != '' && !isNaN(newValue.amount) && newValue.amount <= remaining && newValue.amount >= $scope.minAmount && newValue.terms == true) {
         $scope.allGood = true;
       } else {
         $scope.allGood = false;

@@ -25,10 +25,10 @@
 
         <div class="form-group" ng-class="{'has-warning': claim.amount > maxAmount}">
           <label translate="select_amount">Select FIC amount</label>
-          <input class="form-control" type="number" ng-model="claim.amount"/>
+          <input class="form-control" type="number" ng-model="claim.amount" min="{{minAmount}}" max="{{maxAmount}}"/>
           <label class="warning" ng-show="isNumber(remainingAmount)">
-            {{ 'remaining' | translate}} {{remainingAmount | number}}
-            <button class="btn btn-link" ng-click="selectAll()" ng-show="remainingAmount > 0">{{ 'select_all' | translate }}</button>
+            {{ 'remaining' | translate}} {{remainingAmount | number}} (Min amount: 2'000)
+            <button class="btn btn-link" ng-really-message="Before claiming all it is suggested to test the process with smaller amount beforehand." ng-really-click="selectAll()" ng-show="remainingAmount > 0">{{ 'select_all' | translate }}</button>
           </label>
         </div>
 
@@ -39,7 +39,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" ng-click="submitClaim()" class="btn btn-primary" translate="save" ng-disabled="!allGood">Claim</button>
+        <button type="button" ng-click="submitClaim()" class="btn btn-primary" ng-disabled="!allGood">Continue</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>

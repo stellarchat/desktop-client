@@ -93,7 +93,11 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
       period: period,
       dist: ficDistributor
     };
-    $(`#claimCoinsModal`).modal();
+    $(`#claimCoinsModal`).modal({
+      show: true,
+      keyboard: false,
+      backdrop: 'static'
+    });
   };
 
 
@@ -120,13 +124,9 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
 }]);
 
 
-myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory',
-                            function( $scope ,  FicIcoFactory ) {
+myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory', function( $scope ,  FicIcoFactory ) {
 
-  FicIcoFactory.getFicTxs($scope.address).then((res)=>{
-    $scope.ficTxs = res;
-    $scope.$apply();
-  });
+  getFics();
 
   const now = moment(new Date());
   const duration90 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_90));
@@ -142,7 +142,15 @@ myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory',
     $scope.next = undefined;
     $scope.loading = true;
 
+    getFics();
+  };
+  $scope.refresh();
+
+
+
+  function getFics() {
     FicIcoFactory.getFicTxs($scope.address).then((res)=>{
+      $scope.loading = true;
       Object.values(res).map((r)=>{
         if(r.lockup == 0 && r.tx1 && r.tx2 && !r.tx4) {
           r.unlock().then((res)=>{
@@ -157,7 +165,6 @@ myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory',
       $scope.ficTxs = res;
       $scope.$apply();
     });
-  };
-  $scope.refresh();
+  }
 
 }]);
