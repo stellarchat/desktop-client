@@ -7,7 +7,7 @@ myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory', 'Remo
       SettingFactory.setLang(key);
     };
 
-    $scope.version = '5.0';
+    $scope.version = '5.0-alpha';
     $scope.new_version = false;
     $scope.diff = false;
     $scope.isFIC = SettingFactory.getCurrentNetwork().coin.code === 'FIC';

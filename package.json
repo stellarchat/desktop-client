@@ -1,6 +1,6 @@
 {
   "name": "foxlet",
-  "version": "5.0.0",
+  "version": "'5.0-alpha",
   "productName": "Foxlet",
   "description": "Stellar desktop client",
   "main": "main.js",
@@ -23,7 +23,7 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --x64 ",
-    "build:all": "electron-builder --x64 --all",
+    "build:all": "electron-builder --x64 -lmw",
     "build:linux": "electron-builder --x64 --linux",
     "build:mac": "electron-builder --x64 --mac",
     "build:win": "electron-builder --x64 --win",
