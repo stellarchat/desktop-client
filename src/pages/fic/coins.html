@@ -1,70 +1,185 @@
-<section class="col-xs-12 content">
-	<group>
-	<div class="so-back islandBack islandBack--t" ng-repeat="(key, addr) in FicCoins track by $index">
-    <div class="island">
-      <div class="island__header">
-				{{ 'ficnetwork_address' | translate }}: {{key}}
-			</div>
-      <table class="table-hover EthAddressTable" ng-show="FicCoins">
-        <thead>
-          <tr class="EthAddressTable-header">
-            <th translate="fic_claimed">FIC Claimed</th>
-            <th translate="fic_available">FIC Available</th>
-            <th translate="available_in">Available in</th>
-            <th translate="actions">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="EthAddressTable-row">
-            <td>
-              {{addr.claimed['0'] | number}}
-            </td>
-            <td>
-              {{addr.remaining['0'] | number}}
-            </td>
-            <td>
-              {{ 'now' | translate }}
-            </td>
-            <td>
-              <button ng-show="addr.remaining['0'] > 0" class="btn btn-success"  ng-click="claim(key, 0)" translate="claim_unlock">Claim & Unlock</button>
-              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['0'] > 0">—</button>
-            </td>
-          </tr>
-          <tr class="EthAddressTable-row">
-            <td>
-              {{addr.claimed['90'] | number}}
-            </td>
-            <td>
-              {{addr.remaining['90'] | number}}
-            </td>
-            <td>
-              {{availableIn['90']}} {{ 'days' | translate }}
-            </td>
-            <td>
-              <button ng-show="addr.remaining['90'] > 0 && availableIn['90'] > 0" class="btn btn-success" ng-click="claim(key, 90)">{{'claim' | translate}}</button>
-              <button ng-show="addr.remaining['90'] > 0" class="btn btn-success" ng-click="goTo('/ficnetwork_claim')" ng-disabled="availableIn['90'] > 0">{{'unlock' | translate}}</button>
-              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['90'] > 0">—</button>
-            </td>
-          </tr>
-          <tr class="EthAddressTable-row">
-            <td>
-              {{addr.claimed['180'] | number}}
-            </td>
-            <td>
-              {{addr.remaining['180'] | number}}
-            </td>
-            <td>
-              {{availableIn['180']}} {{ 'days' | translate }}
-            </td>
-            <td>
-              <button ng-show="addr.remaining['180'] > 0 && availableIn['180'] > 0" class="btn btn-success" ng-click="claim(key, 180)">{{'claim' | translate}}</button>
-              <button ng-show="addr.remaining['180'] > 0" class="btn btn-success" ng-click="claim(key, 180)" ng-disabled="availableIn['180'] > 0">{{'unlock' | translate}}</button>
-              <button type="button" disabled class="btn btn-default" ng-hide="addr.remaining['180'] > 0">—</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+<div class="loading center" ng-show="loadingFicIco">
+  <img src="img/loading.gif" alt="">
+</div>
+
+<div class="row" style="margin: 20px 0;" ng-show="stateError">
+  <div class="alert alert-warning" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span>{{stateError}}</span>
+  </div>
+</div>
+
+<div ng-hide="loadingFicIco">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href>FIC ICO</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <div class="navbar-right">
+  				<button type="submit" class="btn btn-link navbar-btn" ng-really-message="This will remove all information ON THIS COMPUTER about whitelisted ETH addresses and coin status. Are you sure?" ng-really-click="clearLocalData()">Clear list</button>
+          <button type="submit" class="btn btn-success navbar-btn" ng-click="addEthAddress()">Add ETH address</button>
+        </div>
+      </div>
     </div>
-	</div>
-	</group>
-</section>
+  </nav>
+  <div class="row" style="margin: 20px 0;" ng-hide="FicCoins.length > 0">
+  	<div class="alert alert-info" role="alert">
+  		<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+  		<span>Please add ETH adddress</span>
+  	</div>
+  </div>
+
+  <div class="row coin-list" style="margin: 20px 0;" ng-repeat="addr in FicCoins track by $index">
+  	<div class="panel panel-default">
+  		<div class="panel-heading text-right">
+  			<h4 class="pull-left">{{ 'ficnetwork_address' | translate }}: {{addr.address}}</h4>
+  			<button type="submit" class="btn btn-danger btn-sm" ng-click="removeEthAddress(addr.address)">
+  				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove
+  			</button>
+  		</div>
+  		<table class="coin-list-table table">
+  			<thead>
+  				<tr class="coin-list-header">
+  					<th translate="fic_claimed">FIC Claimed</th>
+  					<th translate="fic_available">FIC Available</th>
+  					<th translate="available_in">Available in</th>
+  					<th translate="actions">Actions</th>
+  				</tr>
+  			</thead>
+  			<tbody>
+  				<tr class="coin-list-row">
+  					<td>
+  						{{addr.coins.claimed['0'] | number}}
+  					</td>
+  					<td>
+  						{{addr.coins.remaining['0'] | number}}
+  					</td>
+  					<td>
+  						{{ 'now' | translate }}
+  					</td>
+  					<td>
+  						<button
+                ng-show="addr.coins.remaining['0'] > 0"
+                class="btn btn-success btn-sm"
+                ng-click="claimCoins(addr.address, 0)"
+                translate="claim_unlock">
+                Claim & Unlock</button>
+
+  						<button
+                type="button"
+                disabled
+                class="btn btn-default btn-sm"
+                ng-hide="addr.coins.remaining['0'] > 0">
+                —</button>
+
+  					</td>
+  				</tr>
+  				<tr class="coin-list-row">
+  					<td>
+  						{{addr.coins.claimed['90'] | number}}
+  					</td>
+  					<td>
+  						{{addr.coins.remaining['90'] | number}}
+  					</td>
+  					<td>
+  						<span ng-show="availableIn['90'] > 0">{{availableIn['90']}} {{ 'days' | translate }}</span>
+              <span ng-hide="availableIn['90'] > 0">{{ 'now' | translate }}</span>
+  					</td>
+  					<td>
+
+              <span ng-show="availableIn['90'] > 0">
+    						<button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 90)"
+                  translate="claim">
+                  Claim</button>
+
+    						<button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="unlockCoins(addr.address, 90)"
+                  ng-disabled="availableIn['90'] > 0"
+                  translate="unlock">
+                  Unlock</button>
+              </span>
+              <span ng-hide="availableIn['90'] > 0">
+                <button
+                  ng-show="addr.coins.remaining['90'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 90)"
+                  translate="claim_unlock">
+                  Claim & Unlock</button>
+              </span>
+
+  						<button
+                type="button"
+                disabled class="btn btn-default btn-sm"
+                ng-hide="addr.coins.remaining['90'] > 0">
+                —</button>
+
+  					</td>
+  				</tr>
+  				<tr class="coin-list-row">
+  					<td>
+  						{{addr.coins.claimed['180'] | number}}
+  					</td>
+  					<td>
+  						{{addr.coins.remaining['180'] | number}}
+  					</td>
+  					<td>
+  						<span ng-show="availableIn['180'] > 0">{{availableIn['180']}} {{ 'days' | translate }}</span>
+              <span ng-hide="availableIn['180'] > 0">{{ 'now' | translate }}</span>
+  					</td>
+  					<td>
+
+              <span ng-show="availableIn['180'] > 0">
+    						<button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 180)"
+                  translate="claim">
+                  Claim</button>
+
+    						<button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="unlockCoins(addr.address, 180)"
+                  ng-disabled="availableIn['180'] > 0"
+                  translate="unlock">
+                  Unlock</button>
+              </span>
+              <span ng-hide="availableIn['180'] > 0">
+                <button
+                  ng-show="addr.coins.remaining['180'] > 0"
+                  class="btn btn-success btn-sm"
+                  ng-click="claimCoins(addr.address, 180)"
+                  translate="claim_unlock">
+                  Claim & Unlock</button>
+              </span>
+
+  						<button
+                type="button"
+                disabled class="btn btn-default btn-sm"
+                ng-hide="addr.coins.remaining['180'] > 0">
+                —</button>
+
+  					</td>
+  				</tr>
+  			</tbody>
+  		</table>
+  	</div>
+  </div>
+
+  <div>
+  	<add-eth-address-modal handler="addEthAddressModal"/>
+  </div>
+
+  <div>
+  	<claim-coins-modal handler="claimCoinsModal" details="details"/>
+  </div>
+
+</div>
+<!-- 0x9A55Efe6ABcCa108ed55B1c1E933e3dEFF3B95Ba -->

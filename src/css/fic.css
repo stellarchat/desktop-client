@@ -83,3 +83,7 @@ input::-webkit-calendar-picker-indicator {
 .HistoryTable-row .address .credit {
 	color: #0c0dff;
 }
+
+.coin-list h4 {
+	margin-top: 6px;
+}

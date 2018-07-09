@@ -30,10 +30,19 @@
         <div class="row" style="margin-bottom: 20px;" ng-init="network = currentNetwork">
           <div class="col-xs-12">
             <label translate="other_url">Network URL</label>
-            <input class="form-control" type="text" ng-model="network_horizon" placeholder="{{all_networks[network_type].knownHorizons[0]}}" list="horizons"/>
+            <span ng-show="network.knownHorizons.length > 0">
+              <select class="form-control" name="select_lockup" ng-model="network_horizon">
+                <option ng-repeat="horizon in network.knownHorizons" value="{{horizon}}">{{horizon}}</option>
+              </select>
+            </span>
+            <span ng-hide="network.knownHorizons.length > 0">
+              <input class="form-control" type="text" ng-model="network_horizon" placeholder="{{all_networks[network_type].knownHorizons[0]}}" list="horizons"/>
+            </span>
+
+            <!-- <input class="form-control" type="text" ng-model="network_horizon" placeholder="{{all_networks[network_type].knownHorizons[0]}}" list="horizons"/>
             <datalist id="horizons">
               <option ng-repeat="horizon in network.knownHorizons" value="{{horizon}}">
-            </datalist>
+            </datalist> -->
           </div>
           <div class="col-xs-12" ng-show="network_type == 'other'">
             <label translate="passphrase">Passphrase or id</label>

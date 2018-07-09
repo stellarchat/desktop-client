@@ -1,10 +1,14 @@
 /* global $, CONST, myApp, require */
 
-myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon', 'StellarApi',
-                      function( $scope ,  $rootScope ,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon, StellarApi ) {
+myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon', 'StellarApi',
+                      function( $scope ,  $rootScope , $window,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon, StellarApi ) {
 
   $scope.ledgerInvalid = true;
   $scope.ledgerError = '';
+
+  if($window.localStorage['launched'] == undefined) {
+    $location.path("/network_settings");
+  }
 
   $scope.fileInputClick = function() {
     const remote = require('electron').remote;

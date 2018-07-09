@@ -128,23 +128,17 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : true
     }
-  }).when('/fic_address', {
-    templateUrl : 'pages/fic/address.html',
-    controller : 'FICAddressCtrl',
-    access : {
-      requiredLogin : true
-    }
-  }).when('/fic_claim', {
-    templateUrl : 'pages/fic/claim.html',
-    controller : 'FICClaimCtrl',
-    access : {
-      requiredLogin : true
-    }
   }).when('/fic_history', {
     templateUrl : 'pages/fic/history.html',
     controller : 'FICHistoryCtrl',
     access : {
       requiredLogin : true
+    }
+  }).when('/network_settings', {
+    templateUrl : 'pages/network_settings.html',
+    controller : 'simpleNetworkCtrl',
+    access : {
+      requiredLogin : false
     }
   }).otherwise({
     redirectTo : '/login'

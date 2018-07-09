@@ -5,7 +5,14 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
 
   // const MIN_AMOUNT = 1000;  // Real minimal amount is 600.00002 FIC.
 
-  const Unlock = (ficAddress, lockupAddress) => async () => {
+  const LIVE_LOCKUP_0 = 1526425200;  // May 15
+  const LIVE_LOCKUP_90 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 90; // Mon, 13 Aug 2018 23:00:00 +0000
+  const LIVE_LOCKUP_180 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 180; // Sun, 11 Nov 2018 23:00:00 +0000
+  const TEST_LOCKUP_0 = 1531116000;  // Mon, 09 Jul 2018 12:00:00 +0000
+  const TEST_LOCKUP_90 = TEST_LOCKUP_0 + (60 * 60 * 24) * 5; // Fri, 14 Jul 2018 6:00:00 +0000
+  const TEST_LOCKUP_180 = TEST_LOCKUP_0 + (60 * 60 * 24) * 10; // Wed, 19 Jul 2018 6:00:00 +0000
+
+  const Unlock = (ficAddress, lockupAddress, lockup) => async () => {
     const SUBMIT = async (te) => StellarApi.server.submitTransaction(te).catch((e)=>e).then((res)=>res)
 
     let lockupAccount;
@@ -18,15 +25,31 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
     }
     // console.log(`Lockup account ${lockupAddress} sequence & balance:`, lockupAccount.sequenceNumber(), lockupAccount.balances)
 
-    const prete1 = new StellarSdk.TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
+    let timebounds;
+    switch(SettingFactory.getCurrentNetwork().networkPassphrase) {
+      case(SettingFactory.NETWORKS.ficTest.networkPassphrase): {
+        timebounds = {minTime: ({0: TEST_LOCKUP_0, 1: TEST_LOCKUP_90, 2: TEST_LOCKUP_180})[lockup], maxTime: Number.MAX_SAFE_INTEGER}
+        break;
+      }
+      case(SettingFactory.NETWORKS.fic.networkPassphrase): {
+        timebounds = {minTime: ({0: LIVE_LOCKUP_0, 1: LIVE_LOCKUP_90, 2: LIVE_LOCKUP_180})[lockup], maxTime: Number.MAX_SAFE_INTEGER}
+        break;
+      }
+      default: {
+        timebounds = undefined;
+        break;
+      }
+    }
+
+    const prete1 = new StellarSdk.TransactionBuilder(lockupAccount, { timebounds })
       .addOperation(StellarSdk.Operation.createAccount({
         source: lockupAddress,
         destination: ficAddress,
-        startingBalance: '30',
+        startingBalance: '400',
       }))
       .build();
 
-    const prete2 = new StellarSdk.TransactionBuilder(lockupAccount/* , { timebounds: {minTime, maxTime} } */)  // for testing timebounds are ignored
+    const prete2 = new StellarSdk.TransactionBuilder(lockupAccount, { timebounds })
       .addOperation(StellarSdk.Operation.accountMerge({
         source: lockupAddress,
         destination: ficAddress,
@@ -67,19 +90,21 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
         const setupTransaction = transactions.find((tx)=>tx.source_account==this.ficDistributorAddress && tx.envelope.operations.find((op)=>op.type === 'setOptions'));
         const createTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'createAccount'));
         const mergeTransaction = transactions.find((tx)=>tx.source_account==lockupAddress && tx.envelope.operations.find((op)=>op.type === 'accountMerge'));
+        const lockupCode = creationTransation.envelope.memo.value.readInt8(31);
+        const lockup = ({0: '0', 1:'90', 2:'180'})[lockupCode];
 
         const r = {
           lockupAddress,
           ficNonce: key.slice(57),
           ethAddress: creationTransation.envelope.memo.value.slice(0, 20).toString('hex'),
-          lockup: ({0: '0', 1:'90', 2:'180'})[creationTransation.envelope.memo.value.readInt8(31)],
+          lockup,
           amount: creationTransation.envelope.operations[0].startingBalance.split('.')[0],  // Ghetto rounding to integers.
           ethTxHash: setupTransaction && setupTransaction.envelope.memo.value.toString('hex'),
           tx1: creationTransation && {timestamp: creationTransation.created_at, txId: creationTransation.id},
           tx2: setupTransaction   && {timestamp: setupTransaction.created_at  , txId: setupTransaction.id  },
           tx3: createTransaction  && {timestamp: createTransaction.created_at , txId: createTransaction.id },
           tx4: mergeTransaction   && {timestamp: mergeTransaction.created_at  , txId: mergeTransaction.id  },
-          unlock: Unlock(userAddress, lockupAddress),
+          unlock: Unlock(userAddress, lockupAddress, lockupCode),
         };
         responses.push(r);
 
@@ -148,6 +173,7 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
       if(!await this.initPromise) throw new Error('Not useful, see state and comments');
       const eventValues = event.returnValues;
       const tx = Object.create(null);
+      tx.blockNumber = event.blockNumber;
       tx.who = eventValues.who;
       tx.beneficiary = eventValues.beneficiary;
       tx.publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(this.web3.utils.hexToBytes(eventValues.publicKey));
@@ -183,34 +209,45 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
         this.state = currentConfig.state;
         this.comment = currentConfig.comment;
         switch(this.state) {
-          case('active'):
-          case('paused'):
-          case('finished'): {
+          case('active'): // all ok
+          case('paused'): // read only
+          case('finished'): { // read only
             this.web3 = new Web3(currentConfig.ethereumNetwork);
             this.ethSmartContract = new this.web3.eth.Contract(FicIco.ETH_ABI, currentConfig.ethereumSCAddress);
             this.ficDistributorAddress = currentConfig.ficDistributorAddress;
 
             return true;
           }
-          case('pending'): {
+          case('pending'): { // nothing is ok
             return false;
           }
-          default: {
+          default: { // rip
             throw new Error(`Bad state ${this.state}`);
           }
 
         }
-      } catch(e) {
+      } catch(e) { // rip
         console.error(e)
         return false;
       }
     }
 
+    static get LOCKUP_DATE_0() {
+      return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_0 : TEST_LOCKUP_0 )
+    }
+
+    static get LOCKUP_DATE_90() {
+      return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_90 : TEST_LOCKUP_90 )
+    }
+
+    static get LOCKUP_DATE_180() {
+      return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_180 : TEST_LOCKUP_180 )
+    }
+
+    static get ETH_ABI() {
+      return [{'constant':true,'inputs':[{'name':'_holder','type':'address'}],'name':'getBalances','outputs':[{'name':'','type':'uint256'},{'name':'','type':'uint256'},{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'}, {'anonymous':false,'inputs':[{'indexed':true,'name':'who','type':'address'},{'indexed':true,'name':'beneficiary','type':'address'},{'indexed':true,'name':'publicKey','type':'bytes32'},{'indexed':false,'name':'amount','type':'uint256'},{'indexed':false,'name':'lockup','type':'uint8'}],'name':'Withdraw','type':'event'}];
+    }
   }
-  FicIco.ETH_ABI = [{'constant':true,'inputs':[{'name':'_holder','type':'address'}],'name':'getBalances','outputs':[{'name':'','type':'uint256'},{'name':'','type':'uint256'},{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'}, {'anonymous':false,'inputs':[{'indexed':true,'name':'who','type':'address'},{'indexed':true,'name':'beneficiary','type':'address'},{'indexed':true,'name':'publicKey','type':'bytes32'},{'indexed':false,'name':'amount','type':'uint256'},{'indexed':false,'name':'lockup','type':'uint8'}],'name':'Withdraw','type':'event'}];
-  FicIco.LOCKUP_DATE_0 = moment("2018-05-15 23:00+00:00");
-  FicIco.LOCKUP_DATE_90 = FicIco.LOCKUP_DATE_0.add(90, 'days');
-  FicIco.LOCKUP_DATE_180 = FicIco.LOCKUP_DATE_0.add(180, 'days');
 
   return FicIco.new();
 

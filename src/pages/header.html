@@ -1,5 +1,5 @@
 <div ng-controller="HeaderCtrl" class="header">
-  <header ng-show="!showMenu" class="auth" ng-class="currentNetwork.coin.code">
+  <header ng-show="!showMenu && launched" class="auth" ng-class="currentNetwork.coin.code">
     <h1 translate="header_wellcome" ng-if="currentNetwork.coin.code != 'FIC'">Stellar is a platform that connects banks, payments systems, and people.</h1>
     <h1 ng-if="currentNetwork.coin.code == 'FIC'">FIC Network is an end-to-end decentralized fixed income securities network</h1>
   </header>
@@ -51,6 +51,7 @@
 	        		<span ng-show="fed_name">~{{fed_name}}</span>
 	        	</a>
 	        </li>
+	        <li><a href ng-click="reload()"><span class="glyphicon glyphicon-refresh"></span> Refresh</a></li>
 	        <li><a href ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> {{'logout' | translate}}</a></li>
 	      </ul>
 	    </div>
@@ -69,7 +70,6 @@
 		  <div class="container">
 		    <ul>
           <li ng-class="{active:isActive('/fic_coins')}"><a href="javascript:" ng-click="goTo('/fic_coins')">{{'ficnetwork_coins' | translate}}</a></li>
-          <li ng-class="{active:isActive('/fic_address')}"><a href="javascript:" ng-click="goTo('/fic_address')">{{'ficnetwork_address' | translate}}</a></li>
 		      <li ng-class="{active:isActive('/fic_history')}"><a href="javascript:" ng-click="goTo('/fic_history')">{{'ficnetwork_history' | translate}}</a></li>
 		    </ul>
 		</div>

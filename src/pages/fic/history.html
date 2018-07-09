@@ -24,7 +24,7 @@
             			<th class="left">Unlocked</th>
             		</tr>
           		</thead>
-          		<tbody ng-repeat="tx in ficTxs | orderBy:'-tx1.timestamp' ">
+          		<tbody ng-repeat="tx in mergedTxs | orderBy:'-ethTime' ">
           			<tr class="HistoryTable-row">
                   <td class="address">0x{{tx.ethAddress}}</td>
             			<td>
