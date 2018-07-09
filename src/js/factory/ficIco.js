@@ -173,6 +173,7 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
       if(!await this.initPromise) throw new Error('Not useful, see state and comments');
       const eventValues = event.returnValues;
       const tx = Object.create(null);
+      tx.blockNumber = event.blockNumber;
       tx.who = eventValues.who;
       tx.beneficiary = eventValues.beneficiary;
       tx.publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(this.web3.utils.hexToBytes(eventValues.publicKey));

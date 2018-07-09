@@ -1,4 +1,4 @@
-/* global $, angular, moment, myApp, require */
+/* global $, moment, myApp */
 
 myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', '$window', 'FicIcoFactory',
                         function( $rootScope ,  $route ,  $scope ,  $location ,  $window ,  FicIcoFactory ) {
@@ -69,7 +69,7 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
     if($window.localStorage[`whitelist`]) {
       const allAddresses = JSON.parse($window.localStorage[`whitelist`]);
       let allCoins = [];
-      allEthAddresses = allAddresses[ficDistributor][ficAddress];
+      const allEthAddresses = allAddresses[ficDistributor][ficAddress];
 
       for(const address of allEthAddresses) {
         const ethAddress = address.address;
@@ -80,7 +80,6 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
         }
         allAddresses[ficDistributor] = newRow;
         $window.localStorage[`whitelist`] = JSON.stringify(allAddresses);
-        console.log(allAddresses);
       }
     }
   }
@@ -124,9 +123,8 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
 }]);
 
 
-myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory', function( $scope ,  FicIcoFactory ) {
-
-  getFics();
+myApp.controller("FICHistoryCtrl", ['$rootScope', '$scope', '$window', 'FicIcoFactory',
+                           function( $rootScope ,  $scope ,  $window ,  FicIcoFactory ) {
 
   const now = moment(new Date());
   const duration90 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_90));
@@ -142,18 +140,21 @@ myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory', function( $scope
     $scope.next = undefined;
     $scope.loading = true;
 
-    getFics();
+    await getFics();
+    $scope.$apply();
   };
-  $scope.refresh();
 
 
+  const getFics = async () => {
+    await FicIcoFactory.initPromise;
+    const allAddresses = JSON.parse($window.localStorage[`whitelist`]);
+    const ethSummaries = (allAddresses[await FicIcoFactory.ficDistributorAddress][$rootScope.address] || []);
+    const ethTxs = ethSummaries.reduce((ethTxs, ethSummary) => ethTxs.concat(...ethSummary.coins.txs), [])
 
-  function getFics() {
-    FicIcoFactory.getFicTxs($scope.address).then((res)=>{
-      $scope.loading = true;
-      Object.values(res).map((r)=>{
-        if(r.lockup == 0 && r.tx1 && r.tx2 && !r.tx4) {
-          r.unlock().then((res)=>{
+    const ficTxs = await FicIcoFactory.getFicTxs($scope.address)
+    Object.values(ficTxs).map((row)=>{
+        if(row.lockup == 0 && row.tx1 && row.tx2 && !row.tx4) {
+          row.unlock().then((res)=>{
             FicIcoFactory.getFicTxs($scope.address).then((res)=>{
               $scope.ficTxs = res;
               $scope.$apply();
@@ -161,10 +162,31 @@ myApp.controller("FICHistoryCtrl", [ '$scope', 'FicIcoFactory', function( $scope
           });
         }
       })
-      $scope.loading = false;
-      $scope.ficTxs = res;
-      $scope.$apply();
-    });
-  }
 
+    const mergedTxs = await Promise.all(ethTxs.map(async(ethTx) => {
+      const ficTx = ficTxs.find((fixTx)=>`0x${fixTx.ethTxHash}` === ethTx.txHash) || {};
+      const mergedTx = {
+        amount: ethTx.amount,
+        ethBlock: ethTx.blockNumber,
+        ethTime: (await FicIcoFactory.web3.eth.getBlock(ethTx.blockNumber)).timestamp,
+        ethAddress: ethTx.beneficiary,
+        lockup: ethTx.lockup,
+        publicKey: ethTx.publicKey,
+        ethTxHash: ethTx.txHash,
+        ficNonce: ficTx.ficNonce,
+        lockupAddress: ficTx.lockupAddress,
+        tx1: ficTx.tx1,
+        tx2: ficTx.tx2,
+        tx3: ficTx.tx3,
+        tx4: ficTx.tx4,
+      }
+      return mergedTx;
+    }))
+
+    $scope.loading = false;
+    $scope.mergedTxs = mergedTxs;
+    $scope.$apply();
+  };
+
+  $scope.refresh();
 }]);
