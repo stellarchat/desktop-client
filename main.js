@@ -249,6 +249,11 @@
       .then((res) =>event.sender.send(HWW_API.SUPPORT, reqId, null, res))
       .catch((err)=>event.sender.send(HWW_API.SUPPORT, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: ${err.message}`))
   })
+  electron.ipcMain.on(HWW_API.SET_BIP44, (event, reqId, bip44) => {
+    HardwareWalletLedger.setBip44(bip44)
+      .then((res) =>event.sender.send(HWW_API.SET_BIP44, reqId, null, res))
+      .catch((err)=>event.sender.send(HWW_API.SET_BIP44, reqId, `Request<${HWW_API.SET_BIP44}/${reqId}> failed: ${err.message}`))
+  })
 
   electron.ipcMain.on(HWW_API.LIST, (event, id) => {
     event.sender.send(HWW_API.LIST, id, null, HardwareWalletLedger.list());

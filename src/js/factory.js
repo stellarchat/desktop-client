@@ -19,7 +19,8 @@ myApp.factory('SettingFactory', function($window) {
           name: "lumen",
           atom: "stroop",
           code: "XLM",
-          logo: "img/rocket.png"
+          logo: "img/rocket.png",
+          bip44: 148,
         },
         allowHTTP: false,
         tabs: ["history", "trade", "balance", "send", "trust", "service", "ico", "signoffline"]
@@ -36,7 +37,8 @@ myApp.factory('SettingFactory', function($window) {
           name: "lumen",
           atom: "stroop",
           code: "XLM",
-          logo: "img/rocket.png"
+          logo: "img/rocket.png",
+          bip44: 148,
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
@@ -60,7 +62,8 @@ myApp.factory('SettingFactory', function($window) {
         coin: {
           name: "FIC Network",
           code: "FIC",
-          logo: "img/fic.png"
+          logo: "img/fic.png",
+          bip44: 5248,
         },
         allowHTTP: false,
         tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
@@ -76,7 +79,8 @@ myApp.factory('SettingFactory', function($window) {
         coin: {
           name: "FIC Network",
           code: "FIC",
-          logo: "img/fic.png"
+          logo: "img/fic.png",
+          bip44: 5248,
         },
         allowHTTP: true,
         tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
@@ -93,6 +97,7 @@ myApp.factory('SettingFactory', function($window) {
           atom: "stroop",  // TODO: ask in settings
           code: undefined,
           logo: "img/rocket.png",  // TODO: ask in settings
+          bip44: 148,
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
