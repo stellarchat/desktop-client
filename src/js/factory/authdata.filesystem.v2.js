@@ -1,9 +1,4 @@
-/**
- * BLOB
- * User blob storage for desktop client
- */
-
-/* global CONST, invokeIPC, myApp, StellarSdk */
+/* global Buffer, CONST, invokeIPC, myApp, StellarSdk */
 
 // There's currently a code repetition between blobLocal and blobRemote..
 'use strict';
@@ -98,6 +93,12 @@ myApp.factory('AuthDataFilesystemV2', ['$window', 'AuthData', 'SettingFactory',
     async logout() {
       await invokeIPC(CONST.KEYSTORE_API.LOGOUT);
       return;
+    }
+
+    async signWithEncryptedSecret(publicKey, teHash) {
+      const serializedDecoratedSignature = await invokeIPC(CONST.KEYSTORE_API.SIGN, publicKey, teHash)
+      const signature = StellarSdk.xdr.DecoratedSignature.fromXDR(Buffer.from(serializedDecoratedSignature, 'base64'))
+      return signature;
     }
 
     // string -- address of the account.

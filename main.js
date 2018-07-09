@@ -281,6 +281,9 @@
     return;
   })
 
+  wrapIPC(KEYSTORE_API.SIGN, async (publicKey, teHash) => {
+    return authData.signWithEncryptedSecret(publicKey, teHash).toXDR().toString('base64');
+  })
   wrapIPC(KEYSTORE_API.ADDCONTACT, async (contact) => {
     await authData.addContact(contact);
     return authData.toJSON().contacts;

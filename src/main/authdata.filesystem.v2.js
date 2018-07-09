@@ -128,6 +128,17 @@ class AuthDataFilesystemBackendV2 {
     fs.writeFileSync(this._path, fileContent, 'utf-8');
   }
 
+
+  signWithEncryptedSecret(publicKey, teHash) {
+    const keypair = this._keypairs
+      .filter((keypair)=>keypair.signingMethod === SIGNING_METHOD.ENCRYPTED_SECRET)
+      .find((keypair)=>keypair.publicKey === publicKey);
+    if(!keypair) throw new Error(`No keypair found with public key ${publicKey}`)
+    const kp = StellarSdk.Keypair.fromSecret(keypair.details)
+    return kp.signDecorated(teHash);
+  }
+
+
   async addContact(contact) {
     validateContact(contact);
 

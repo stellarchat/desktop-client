@@ -36,6 +36,7 @@ module.exports = {
     LOAD: 'Keystore.load',
     SAVE: 'Keystore.save',
     LOGOUT: 'Keystore.logout',
+    SIGN: 'Keystore.sign',
     ADDCONTACT: 'Keystore.addContact',
     UPDATECONTACT: 'Keystore.updateContact',
     DELETECONTACT: 'Keystore.deleteContact',

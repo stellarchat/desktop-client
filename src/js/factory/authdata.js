@@ -81,7 +81,7 @@ myApp.factory('AuthData', [
 
     // signWithEncryptedSecret(publicKey: string, teHash: Buffer) => Promise<string> -- sign teHash with given publicKey and return signature.
     async signWithEncryptedSecret(publicKey, teHash) {
-      throw new Error('Implement .addContact()');
+      throw new Error('Implement .signWithEncryptedSecret()');
 
     }
 
