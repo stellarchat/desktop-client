@@ -35,7 +35,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
 
       const authdata = await AuthData.create(opts);
-      console.log("AuthenticationFactory: registration succeeded", authdata);
+      console.info("AuthenticationFactory: registration succeeded", authdata);
 
       _type = type;
       _data = authdata;
@@ -182,8 +182,6 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
         // If applicable, sign with given signatures.
         for(const signatureXDR of signatureXDRs) {
-          console.log(signatureXDR)
-          console.log(Buffer.from(signatureXDR, 'base64'))
           const signature = StellarSdk.xdr.DecoratedSignature.fromXDR(Buffer.from(signatureXDR, 'base64'));
           if(StellarSdk.verify(te.hash(), signature.signature(), requiredKeypair.rawPublicKey())) {
             console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with given signature of ${requiredPublicKey}`);
@@ -206,7 +204,6 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
       if(mostUsefulSignature) {
         te.signatures.push(mostUsefulSignature);
-        console.log(mostUsefulSignature, te, te.toEnvelope().toXDR().toString('base64'))
         return this.sign(te, thresholds, signatureXDRs, plainSecrets);
       } else {
         return te;

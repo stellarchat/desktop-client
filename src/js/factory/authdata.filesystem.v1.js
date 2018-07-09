@@ -356,7 +356,7 @@ myApp.factory('AuthDataFilesystemV1', ['$window', 'AuthData', 'SettingFactory',
 
       this._updated = (new Date()).toJSON();
       this.save().then((data)=>{
-        console.log('Blob saved');
+        console.info('Blob saved');
         if (typeof callback === 'function') callback(null, data);
       }).catch((err)=>{
         console.error('Blob save failed!', err);

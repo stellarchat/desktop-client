@@ -40,7 +40,6 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
 
     // load(...opts:any[]) => Promise<AuthDataInmemory> -- fake-load from sessionStorage and return Promise of instance.
     static load(opts) {
-      console.log(opts)
       return AuthDataInmemory.create(opts)
     }
 

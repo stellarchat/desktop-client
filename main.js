@@ -232,7 +232,7 @@
 
   const wrapIPC = (channel, routine, postCallback) => {
     electron.ipcMain.on(channel, async (event, reqId, ...args) => {
-      console.log(`Request<${channel}/${reqId}> arguments:`, ...args)
+      // console.log(`Request<${channel}/${reqId}> arguments:`, ...args)
       try {
         if(!reqId) throw new Error(`No request ID provided. Consider passing a random number.`)
         const res = await routine(...args);
