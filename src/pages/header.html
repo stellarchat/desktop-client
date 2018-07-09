@@ -18,20 +18,30 @@
 	    </div>
 	    <div class="collapse navbar-collapse" id="myNavbar">
 	      <ul class="nav navbar-nav">
-	        <li ng-class="{active:isActive('/hist_payments') || isActive('/hist_trades') || isActive('/hist_effects')}" ng-show="currentNetwork.tabs.indexOf('history') > -1">
-	        	<a href ng-click="goTo('/hist_payments')">{{'history' | translate}}</a>
+	        <li ng-class="{active:isActive('/hist_payments') || isActive('/hist_trades') || isActive('/hist_effects'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('history') > -1">
+	        	<a href ng-click="notFunded || goTo('/hist_payments')">{{'history' | translate}}</a>
 	        </li>
-	        <li ng-class="{active:isActive('/trade') || isActive('/convert')}" ng-show="currentNetwork.tabs.indexOf('trade') > -1"><a href ng-click="goTo('/trade')">{{'trade' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/balance')}" ng-show="currentNetwork.tabs.indexOf('balance') > -1"><a href ng-click="goTo('/balance')">{{'balance' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/send') || isActive('/contact')}" ng-show="currentNetwork.tabs.indexOf('send') > -1">
-	        	<a href ng-click="goTo('/send')">{{'send' | translate}}</a>
+	        <li ng-class="{active:isActive('/trade') || isActive('/convert'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('trade') > -1">
+            <a href ng-click="notFunded || goTo('/trade')">{{'trade' | translate}}</a>
+          </li>
+	        <li ng-class="{active:isActive('/balance'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('balance') > -1">
+            <a href ng-click="notFunded || goTo('/balance')">{{'balance' | translate}}</a>
+          </li>
+	        <li ng-class="{active:isActive('/send') || isActive('/contact'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('send') > -1">
+	        	<a href ng-click="notFunded || goTo('/send')">{{'send' | translate}}</a>
 	        </li>
-	        <li ng-class="{active:isActive('/trust')}" ng-show="currentNetwork.tabs.indexOf('trust') > -1"><a href ng-click="goTo('/trust')">{{'trust' | translate}}</a></li>
-	        <li ng-class="{active:isActive('/bridges')}" ng-show="currentNetwork.tabs.indexOf('service') > -1">
-	        	<a href ng-click="goTo('/bridges')">{{'service' | translate}}</a>
+	        <li ng-class="{active:isActive('/trust'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('trust') > -1">
+            <a href ng-click="notFunded || goTo('/trust')">{{'trust' | translate}}</a>
+          </li>
+	        <li ng-class="{active:isActive('/bridges'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('service') > -1">
+	        	<a href ng-click="notFunded || goTo('/bridges')">{{'service' | translate}}</a>
 	        </li>
-	        <li ng-class="{active:isActive('/ico')}" ng-show="currentNetwork.tabs.indexOf('ico') > -1"><a href ng-click="goTo('/ico')">{{'ico' | translate}}</a></li>
-          <li ng-class="{active:isActive('/sign_offline')}" ng-show="currentNetwork.tabs.indexOf('signoffline') > -1"><a href ng-click="goTo('/sign_offline')">{{'sign_offline' | translate}}</a></li>
+	        <li ng-class="{active:isActive('/ico'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('ico') > -1">
+            <a href ng-click="notFunded || goTo('/ico')">{{'ico' | translate}}</a>
+          </li>
+          <li ng-class="{active:isActive('/sign_offline'), disabled: notFunded}" ng-show="currentNetwork.tabs.indexOf('signoffline') > -1">
+            <a href ng-click="notFunded || goTo('/sign_offline')">{{'sign_offline' | translate}}</a>
+          </li>
           <li ng-class="{active:isActive('/fic_coins') || isActive('/fic_address') || isActive('/fic_claim' || isActive('/fic_history'))}" ng-show="currentNetwork.tabs.indexOf('ficnetwork') > -1">
 	        	<a href="javascript:" ng-click="goTo('/fic_coins')">{{'ficnetwork' | translate}}</a>
 	        </li>
