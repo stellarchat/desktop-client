@@ -21,6 +21,7 @@
     "angularjs"
   ],
   "scripts": {
+    "postinstall": "rm -rf node_modules/ed25519; electron-builder install-app-deps",
     "start": "electron .",
     "build": "electron-builder --x64 ",
     "build:all": "electron-builder --x64 --all",
