@@ -174,8 +174,8 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
       $rootScope.notFunded = true;
       (async () => {
         try {
-          const r = await StellarApi._isFunded($rootScope.address);
-          $rootScope.notFunded = false;
+          const isFunded = await StellarApi._isFunded($rootScope.address);
+          $rootScope.notFunded = !isFunded;
           $rootScope.$apply();
         } catch (e) {
           $rootScope.notFunded = true;

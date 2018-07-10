@@ -3209,4 +3209,4 @@ yauzl@2.4.1:
 
 zxcvbn@^4.4.2:
   version "4.4.2"
-  resolved "http://npm.factury.co/zxcvbn/-/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
+  resolved "https://registry.yarnpkg.com/zxcvbn/-/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"

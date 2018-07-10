@@ -1,3 +1,4 @@
+/* global $, angular, moment, myApp */
 
 myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicIcoFactory', '$route',
                             function( $rootScope, $scope ,  $window ,  FicIcoFactory, $route ) {
@@ -9,9 +10,6 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
   $scope.currentEthAddressCoins = '';
 
   $scope.addEthAdrress = async (eth_address) => {
-    const allFicAddresses = {};
-    let allEthAddresses = {};
-    let currentAddressCoins = [];
     let allCoins = [];
     const newEthAddress = angular.copy(eth_address);
     const ficAddress = angular.copy($rootScope.address);

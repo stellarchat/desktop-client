@@ -1,3 +1,5 @@
+/* global $, angular, myApp, require */
+
 myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$window', 'FicIcoFactory',
                            function(  $rootScope ,  $scope ,  $location ,  $window ,  FicIcoFactory  ) {
 

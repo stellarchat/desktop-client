@@ -1,4 +1,4 @@
-/* global myApp, require, StellarSdk */
+/* global myApp, require, StellarSdk, zxcvbn */
 
 myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory',
                          function( $scope ,  $location ,  AuthenticationFactory ) {
