@@ -11,14 +11,12 @@
         <div ng-hide="loading">
           <div class="row" style="margin-bottom: 20px;">
             <div class="col-xs-12 col-sm-12">
-              <h2>More signatures Signature required</h2>
-              <p>{{title}}</p>
-              <p>Keypairs that already have signed: {{signedSigners}}</p>
-              <p>
-                Keypairs that are useful to finish signing the transaction, sorted starting with most important one.
-                [Probably not all of them are required, so it's a good idea to start with first one and then see the list.]
-                The list: {{requiredSigners}}
-              </p>
+              <h2>Sign transaction manually</h2>
+              <p>A signature is required from one of the accounts below.</p>
+              <ul>
+                <li ng-repeat="signer in requiredSigners">{{signer}}</li>
+              </ul>
+              <p>Please choose a method to sign below:</p>
             </div>
           </div>
           <!-- TABS -->
