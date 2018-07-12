@@ -21,6 +21,15 @@
   const {HWW_API} = require('./src/common/constants')
   const HardwareWalletLedger = HardwareWallet.Ledger;
 
+  const defaultMenu = require('electron-default-menu');
+  const { Menu, shell } = electron;
+
+  app.on('ready', () => {
+    const menu = defaultMenu(app, shell);
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+  });
+
+
   // report crashes to the Electron project
   // require('crash-reporter').start()
   // adds debug features like hotkeys for triggering dev tools and reload
