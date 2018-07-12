@@ -48,7 +48,8 @@
     "qrcode-generator": "^1.4.0",
     "sjcl": "^1.0.7",
     "stellar-sdk": "^0.8.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "electron-default-menu": "^1.0.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",

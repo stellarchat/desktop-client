@@ -21,6 +21,33 @@
   const {HWW_API} = require('./src/common/constants')
   const HardwareWalletLedger = HardwareWallet.Ledger;
 
+  // Copy & Paste fix for MacOS
+  const defaultMenu = require('electron-default-menu')
+  const { Menu, shell } = electron
+  const dialog = require('electron').remote;
+
+  app.on('ready', () => {
+    // Get template for default menu
+    const menu = defaultMenu(app, shell)
+   
+    // Add custom menu
+    menu.splice(4, 0, {
+      label: 'Custom',
+      submenu: [
+        {
+          label: 'Do something',
+          click: (item, focusedWindow) => {
+            dialog.showMessageBox({message: 'Do something', buttons: ['OK'] })
+          }
+        }
+      ]
+    })
+   
+    // Set top-level application menu, using modified template
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menu))
+  })
+
+
   // report crashes to the Electron project
   // require('crash-reporter').start()
   // adds debug features like hotkeys for triggering dev tools and reload
