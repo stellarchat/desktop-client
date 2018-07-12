@@ -297,11 +297,12 @@ var translate_en = {
   days: "days",
   from_address: "From your whitelisted ETH address",
   send_to: "Send to Smart Contract address",
-  payload: "This payload",
+  payload: "This payload (as Data field)",
   checking: "checking...",
   done: "Done",
   available_in: "Available in",
   now: "Now",
+  sendMyEtherWallet: "Send via MyEtherWallet",
 
 
   /** Error **/

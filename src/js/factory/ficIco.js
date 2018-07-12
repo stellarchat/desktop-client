@@ -5,12 +5,12 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
 
   // const MIN_AMOUNT = 1000;  // Real minimal amount is 600.00002 FIC.
 
-  const LIVE_LOCKUP_0 = 1526425200;  // May 15
-  const LIVE_LOCKUP_90 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 90; // Mon, 13 Aug 2018 23:00:00 +0000
-  const LIVE_LOCKUP_180 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 180; // Sun, 11 Nov 2018 23:00:00 +0000
-  const TEST_LOCKUP_0 = 1531116000;  // Mon, 09 Jul 2018 12:00:00 +0000
-  const TEST_LOCKUP_90 = TEST_LOCKUP_0 + (60 * 60 * 24) * 5; // Fri, 14 Jul 2018 6:00:00 +0000
-  const TEST_LOCKUP_180 = TEST_LOCKUP_0 + (60 * 60 * 24) * 10; // Wed, 19 Jul 2018 6:00:00 +0000
+  const LIVE_LOCKUP_0 = 1526425200000;  // May 15
+  const LIVE_LOCKUP_90 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 90 * 1000; // Mon, 13 Aug 2018 23:00:00 +0000
+  const LIVE_LOCKUP_180 = LIVE_LOCKUP_0 + (60 * 60 * 24) * 180 * 1000; // Sun, 11 Nov 2018 23:00:00 +0000
+  const TEST_LOCKUP_0 = 1531116000000;  // Mon, 09 Jul 2018 12:00:00 +0000
+  const TEST_LOCKUP_90 = TEST_LOCKUP_0 + (60 * 60 * 24) * 5 * 1000; // Fri, 14 Jul 2018 6:00:00 +0000
+  const TEST_LOCKUP_180 = TEST_LOCKUP_0 + (60 * 60 * 24) * 10 * 1000; // Wed, 19 Jul 2018 6:00:00 +0000
 
   const Unlock = (ficAddress, lockupAddress, lockup) => async () => {
     const SUBMIT = async (te) => StellarApi.server.submitTransaction(te).catch((e)=>e).then((res)=>res)
@@ -232,15 +232,15 @@ myApp.factory('FicIcoFactory', ['$http', 'SettingFactory', 'StellarApi',
       }
     }
 
-    static get LOCKUP_DATE_0() {
+    get LOCKUP_DATE_0() {
       return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_0 : TEST_LOCKUP_0 )
     }
 
-    static get LOCKUP_DATE_90() {
+    get LOCKUP_DATE_90() {
       return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_90 : TEST_LOCKUP_90 )
     }
 
-    static get LOCKUP_DATE_180() {
+    get LOCKUP_DATE_180() {
       return moment.utc( (SettingFactory.getCurrentNetwork().networkPassphrase === SettingFactory.NETWORKS.fic.networkPassphrase) ? LIVE_LOCKUP_180 : TEST_LOCKUP_180 )
     }
 

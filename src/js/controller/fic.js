@@ -79,8 +79,8 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
           [ficAddress]: allCoins
         }
         allAddresses[ficDistributor] = newRow;
-        $window.localStorage[`whitelist`] = JSON.stringify(allAddresses);
       }
+      $window.localStorage[`whitelist`] = JSON.stringify(allAddresses);
     }
   }
 

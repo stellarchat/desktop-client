@@ -193,7 +193,6 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
     ]
     if(!knownSupportedBip44s.includes(bip44)) {
       $scope.ledgerError = { type: 'warning', error: `Ledger doesn't yet support this network's BIP44 (${bip44}).` }
-      $scope.$apply();
       return;
     }
 
