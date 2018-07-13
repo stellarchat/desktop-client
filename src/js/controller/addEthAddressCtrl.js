@@ -1,15 +1,18 @@
 /* global $, angular, moment, myApp */
 
-myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicIcoFactory', '$route',
-                            function( $rootScope, $scope ,  $window ,  FicIcoFactory, $route ) {
+myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicIcoFactory', '$route', function( $rootScope, $scope ,  $window ,  FicIcoFactory, $route ) {
 
   $scope.eth_address = '';
-  $scope.invalid_eth = false;
-  $scope.addressInvalid = true;
-  $scope.eth_addresses = ( $window.localStorage[`eth_address`] ? JSON.parse($window.localStorage[`eth_address`]) : '' );
+  $scope.invalidEth = false;
+  $scope.alreadyAdded = false;
+  $scope.addressNotFound = false;
+  $scope.noEthAddress = ( $window.localStorage[`whitelist`] ? false : true );
   $scope.currentEthAddressCoins = '';
 
   $scope.addEthAdrress = async (eth_address) => {
+    $scope.invalidEth = false;
+    $scope.alreadyAdded = false;
+    $scope.addressNotFound = false;
     let allCoins = [];
     const newEthAddress = angular.copy(eth_address);
     const ficAddress = angular.copy($rootScope.address);
@@ -17,8 +20,13 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
     let currentAddresses = {};
 
     if (FicIcoFactory.web3.utils.isAddress(newEthAddress)) {
-      console.log('Valid ETH address');
       const newCoins = await FicIcoFactory.getEthTokens(newEthAddress);
+
+      if( (newCoins.total[0] + newCoins.total[90] + newCoins.total[180]) == 0 ) {
+        $scope.addressNotFound = true;
+        $scope.$apply();
+        throw 'ETH address not found in whitelist';
+      }
 
       if($window.localStorage[`whitelist`]) {
         // If there is something
@@ -28,6 +36,12 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
           // If there is something within current distributor
           if(currentAddresses[ficDistributor][ficAddress]) {
             allCoins = currentAddresses[ficDistributor][ficAddress];
+          }
+          findIfExists = allCoins.filter(function(obj){ return obj.address == newEthAddress });
+          if (findIfExists.length > 0) {
+            $scope.alreadyAdded = true;
+            $scope.$apply();
+            throw 'address exists';
           }
           allCoins.push({address: newEthAddress, coins: newCoins});
           currentAddresses[ficDistributor][ficAddress] = allCoins;
@@ -56,7 +70,7 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
       });
 
     } else {
-      $scope.invalid_eth = true;
+      $scope.invalidEth = true;
       console.error('Invalid Ethereum address.');
     }
   }

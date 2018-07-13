@@ -33,8 +33,8 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
             $scope.data_attr[key] = b64DecodeUnicode(data.data_attr[key]);
           }
           $scope.$apply();
-        });
-      }
+        }
+      });
     };
     $scope.refresh();
 

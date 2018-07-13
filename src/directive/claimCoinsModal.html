@@ -10,17 +10,30 @@
 
         <div class="form-group">
           <label translate="select_eth">Select whitelisted ETH address</label>
-          <select class="form-control" name="select_address" ng-model="claim.address">
-            <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
-          </select>
+          <div ng-if="ethAddresses.length>1">
+            <select class="form-control" name="select_address" ng-model="claim.address">
+              <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
+            </select>
+          </div>
+          <div ng-if="ethAddresses.length==1">
+            <input type="text" name="ethaddress" value="{{ethAddresses[0].address}}" ng-model="claim.address" class="form-control" disabled>
+          </div>
+
         </div>
 
         <div class="form-group">
 
           <label translate="select_lockup">Select lockup period</label>
-          <select class="form-control" name="select_lockup" ng-model="claim.period">
-            <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
-          </select>
+
+          <div ng-if="periods.length>1">
+            <select class="form-control" name="select_lockup" ng-model="claim.period">
+              <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
+            </select>
+          </div>
+          <div ng-if="periods.length==1">
+            <input type="text" name="period" value="{{periods[0]}}" ng-model="claim.period" class="form-control" disabled>
+          </div>
+
         </div>
 
         <div class="form-group" ng-class="{'has-warning': claim.amount > maxAmount}">
