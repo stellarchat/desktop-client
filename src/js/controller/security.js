@@ -124,16 +124,11 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
         $scope.te = te;
         $scope.$apply();
 
-        $(`#signModal`).modal();
+        $(`#signModal`).modal('show');
         const teSigned = await new Promise((resolve, reject) => {
-            $scope.callbackToSignModal = (err, te) => {
-              if(err) reject(err);
-              resolve(te);
-            }
+            $scope.callbackToSignModal = (err, te) => err ? reject(err) : resolve(te);
+            $scope.$apply();
           });
-
-        $('#signModal').modal('toggle');
-        $scope.$apply();
 
         // 4. Submit teSigned
         const result = await StellarApi.submitTransaction(teSigned);

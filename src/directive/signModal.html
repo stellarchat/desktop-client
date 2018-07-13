@@ -44,6 +44,12 @@
                   <div class="form-group">
                     <input ng-model="plainSecret" class="form-control plainSecretInput" placeholder="ABCDEF..." />
                   </div>
+
+                  <div class="alert alert-danger" ng-show="plainError">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span>{{plainError}}</span>
+                  </div>
+
                   <button class="btn btn-success plainSecretSign" ng-click="plainSecretSign(); loading=true"><span>Sign</span></button>
                 </div>
               </div>
