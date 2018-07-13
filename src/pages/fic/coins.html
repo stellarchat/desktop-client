@@ -84,12 +84,12 @@
   						{{addr.coins.remaining['90'] | number}}
   					</td>
   					<td>
-  						<span ng-show="availableIn['90'] > 0">{{availableIn['90']}} {{ 'days' | translate }}</span>
-              <span ng-hide="availableIn['90'] > 0">{{ 'now' | translate }}</span>
+  						<span ng-show="availableIn['90'].count > 0">{{availableIn['90'].count}} {{availableIn['90'].part}}</span>
+              <span ng-hide="availableIn['90'].count > 0">{{ 'now' | translate }}</span>
   					</td>
   					<td>
 
-              <span ng-show="availableIn['90'] > 0">
+              <span ng-show="availableIn['90'].count > 0">
     						<button
                   ng-show="addr.coins.remaining['90'] > 0"
                   class="btn btn-success btn-sm"
@@ -101,11 +101,11 @@
                   ng-show="addr.coins.remaining['90'] > 0"
                   class="btn btn-success btn-sm"
                   ng-click="unlockCoins(addr.address, 90)"
-                  ng-disabled="availableIn['90'] > 0"
+                  ng-disabled="availableIn['90'].count > 0"
                   translate="unlock">
                   Unlock</button>
               </span>
-              <span ng-hide="availableIn['90'] > 0">
+              <span ng-hide="availableIn['90'].count > 0">
                 <button
                   ng-show="addr.coins.remaining['90'] > 0"
                   class="btn btn-success btn-sm"
@@ -130,12 +130,12 @@
   						{{addr.coins.remaining['180'] | number}}
   					</td>
   					<td>
-  						<span ng-show="availableIn['180'] > 0">{{availableIn['180']}} {{ 'days' | translate }}</span>
-              <span ng-hide="availableIn['180'] > 0">{{ 'now' | translate }}</span>
+  						<span ng-show="availableIn['180'].count > 0">{{availableIn['180'].count}} {{availableIn['180'].part}}</span>
+              <span ng-hide="availableIn['180'].count > 0">{{ 'now' | translate }}</span>
   					</td>
   					<td>
 
-              <span ng-show="availableIn['180'] > 0">
+              <span ng-show="availableIn['180'].count > 0">
     						<button
                   ng-show="addr.coins.remaining['180'] > 0"
                   class="btn btn-success btn-sm"
@@ -147,11 +147,11 @@
                   ng-show="addr.coins.remaining['180'] > 0"
                   class="btn btn-success btn-sm"
                   ng-click="unlockCoins(addr.address, 180)"
-                  ng-disabled="availableIn['180'] > 0"
+                  ng-disabled="availableIn['180'].count > 0"
                   translate="unlock">
                   Unlock</button>
               </span>
-              <span ng-hide="availableIn['180'] > 0">
+              <span ng-hide="availableIn['180'].count > 0">
                 <button
                   ng-show="addr.coins.remaining['180'] > 0"
                   class="btn btn-success btn-sm"

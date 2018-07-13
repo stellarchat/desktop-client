@@ -1,4 +1,4 @@
-/* global $, angular, moment, myApp */
+/* global $, angular, myApp */
 
 myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicIcoFactory', '$route', function( $rootScope, $scope ,  $window ,  FicIcoFactory, $route ) {
 
@@ -25,7 +25,7 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
       if( (newCoins.total[0] + newCoins.total[90] + newCoins.total[180]) == 0 ) {
         $scope.addressNotFound = true;
         $scope.$apply();
-        throw 'ETH address not found in whitelist';
+        throw new Error('ETH address not found in whitelist');
       }
 
       if($window.localStorage[`whitelist`]) {
@@ -37,11 +37,11 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
           if(currentAddresses[ficDistributor][ficAddress]) {
             allCoins = currentAddresses[ficDistributor][ficAddress];
           }
-          findIfExists = allCoins.filter(function(obj){ return obj.address == newEthAddress });
+          const findIfExists = allCoins.filter(function(obj){ return obj.address == newEthAddress });
           if (findIfExists.length > 0) {
             $scope.alreadyAdded = true;
             $scope.$apply();
-            throw 'address exists';
+            throw new Error('ETH address already exists');
           }
           allCoins.push({address: newEthAddress, coins: newCoins});
           currentAddresses[ficDistributor][ficAddress] = allCoins;
@@ -74,13 +74,5 @@ myApp.controller("addEthAddressCtrl", [ '$rootScope', '$scope', '$window', 'FicI
       console.error('Invalid Ethereum address.');
     }
   }
-
-  const now = moment(new Date());
-  const duration90 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_90));
-  const days90 = duration90.asDays();
-  const duration180 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_180));
-  const days180 = duration180.asDays();
-
-  $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
 
 }]);
