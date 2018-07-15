@@ -1,7 +1,7 @@
 /* global myApp, StellarSdk */
 
-myApp.controller("BridgesCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'AnchorFactory', 'StellarApi', '$http',
-  function($scope, $rootScope, $location, SettingFactory, AnchorFactory, StellarApi, $http) {
+myApp.controller("BridgesCtrl", ['$scope', '$rootScope', 'SettingFactory', 'AnchorFactory', 'StellarApi', '$http',
+                        function( $scope ,  $rootScope ,  SettingFactory ,  AnchorFactory ,  StellarApi ,  $http ) {
     $scope.bridges = {};
     $scope.anchor;
     $scope.anchor_name = SettingFactory.getBridgeService();

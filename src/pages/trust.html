@@ -8,7 +8,7 @@
 					{{'trust_src' | translate}}<br>{{'trust_note' | translate}}
 				</p>
 			</div>
-			
+
 			<div ng-repeat="(name, gateway) in gateways.getAllSources()">
 				<div class="row" ng-repeat="(code, asset) in gateway.assets" ng-show="asset.list || show_all">
 					<div class="row__fixedAsset">
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<a href ng-click="showHide()">
 				<div class="txfoot">
 					<span ng-show="!show_all"><i class="fa fa-angle-double-down fa-2x"></i></span>
@@ -31,7 +31,7 @@
 			</a>
 		</div>
 	</div>
-	
+
 	<div class="s-alert s-alert--alert row__message" ng-show="trust_error">
 		{{trust_error | translate}}
 	</div>
@@ -83,7 +83,7 @@
 				<p translate="manual_desc">You can add trust manually if you know the account ID and asset code</p>
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="asset_code">Asset Code</span>
-					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="manual_code" 
+					<input type="text" class="s-inputGroup__item S-flexItem-share" ng-model="manual_code"
 					placeholder="{{'example' | translate}}: CNY">
 				</label>
 				<label class="s-inputGroup AddTrust__inputGroup">
@@ -94,7 +94,7 @@
 				<label class="s-inputGroup AddTrust__inputGroup">
 					<span class="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4" translate="amount">Amount</span>
 					<input type="text" autocomplete="off"
-						class="s-inputGroup__item S-flexItem-share" 
+						class="s-inputGroup__item S-flexItem-share"
 						ng-model="manual_amount"
 						placeholder="{{'example' | translate}}: 1000000000">
 				</label>
@@ -103,11 +103,12 @@
 			<div>
 				<div class="island__separator"></div>
 				<div class="AddTrust__confirmation">
-					<div class="s-alert s-alert--alert" ng-hide="!manual_issuer || isValidAddress(manual_issuer)">
-						<ul class="AddTrust__errorList">
-							<li translate="issuer_invalid">Asset issuer account ID must be a valid account ID</li>
-						</ul>
-					</div>
+					<div class="padding-15" ng-hide="!manual_issuer || isValidAddress(manual_issuer)">
+	  				<div class="alert alert-danger" role="alert">
+	  					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  					<span translate="issuer_invalid">Asset issuer account ID must be a valid account ID</span>
+	  				</div>
+	  			</div>
 					<div class="AddTrust__confirmation__assetCard" ng-show="manual_code && isValidAddress(manual_issuer)">
 						<div class="AssetCard AssetCard--fixed">
 							<div class="AssetCard__main">
@@ -123,9 +124,9 @@
 							</div>
 						</div>
 					</div>
-					<button class="s-button btn btn-success" 
-							ng-show="manual_code && isValidAddress(manual_issuer)" 
-							ng-click="addTrust(manual_code, manual_issuer, manual_amount)" 
+					<button class="s-button btn btn-success"
+							ng-show="manual_code && isValidAddress(manual_issuer)"
+							ng-click="addTrust(manual_code, manual_issuer, manual_amount)"
 							ng-disabled="isChanging(manual_code, manual_issuer)">{{'trust_add' | translate}} {{manual_code}}</button>
 				</div>
 			</div>

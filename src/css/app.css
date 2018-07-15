@@ -9,6 +9,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
   background: linear-gradient(150deg,rgba(100,200,255,.1),rgba(255,255,0,.2)),linear-gradient(90deg,rgba(255,255,255,.2),transparent),linear-gradient(30deg,#9291e0,#96dadb);
+  font-family: 'Roboto';
 }
 
 .worldimg {
@@ -54,7 +55,7 @@ body {
 }
 
 .header .subnav ul > li.active a {
-  font-family: 'OpenSansRegular';
+  font-family: 'Roboto';
   border-bottom: 2px solid #888888;
 }
 
@@ -83,9 +84,15 @@ body > .container {
 .container .text-muted {
   margin: 20px 0;
 }
+.container .text-muted .github{
+  font-size: 18px;
+  line-height: 10px;
+  padding-right: 5px;
+}
 .footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin: 0px;
 }
 code {
   font-size: 80%;
@@ -178,3 +185,7 @@ code {
   color: #346aa9;
 }
  */
+
+.padding-15 {
+  padding: 15px;
+}

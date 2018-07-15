@@ -2,23 +2,32 @@
 myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactory', '$element', '$timeout', 'hardwareWalletDaemon',
                           function( $rootScope ,  $scope ,  AuthenticationFactory ,  $element ,  $timeout ,  hardwareWalletDaemon ) {
 
-  $scope.signatureInvalid = true;
-  $scope.walletInvalid = true;
-  $scope.walletError = '';
-  $scope.signWithLedger = 'Sign with Ledger';
-  $scope.loading = true;
-  if(AuthenticationFactory.secretAmount > 0) {
-    $scope.loadingState = 'Signing...';
-  } else {
-    $scope.loadingState = 'Loading...';
-  }
-
+  // Set default error in case user closes modal. Otherwise always override it.
+  let paramsToReturnCallback = [new Error('Signing was cancelled by user.'), null];
+  let thresholds;
 
   /** START: On modal open **/
+  $($element).on('show.bs.modal', async () => {
+    $scope.signatureInvalid = true;
+    $scope.walletInvalid = true;
+    $scope.walletError = '';
+    $scope.plainError = '';
+    $scope.signWithLedger = 'Sign with Ledger';
+    $scope.loading = true;
+    if(AuthenticationFactory.secretAmount > 0) {
+      $scope.loadingState = 'Signing...';
+    } else {
+      $scope.loadingState = 'Loading...';
+    }
+  });
   $($element).on('shown.bs.modal', async () => {
-    const thresholds = await AuthenticationFactory.teThresholds($scope.te)
-    $scope.thresholds = thresholds;
+    thresholds = await AuthenticationFactory.teThresholds($scope.te)
     $scope.refresh();
+  });
+  $($element).on('hide.bs.modal', async () => {
+  });
+  $($element).on('hidden.bs.modal', async () => {
+    $scope.callback(...paramsToReturnCallback);
   });
   /** END: Offline sign **/
 
@@ -26,15 +35,26 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
   /** START: Plain secret sign **/
   $scope.$watch('plainSecret', () => {
     if(StellarSdk.StrKey.isValidEd25519SecretSeed($scope.plainSecret)) {
+      $scope.plainError = '';
       $('.plainSecretSign').removeAttr("disabled");
     } else {
+      $scope.plainError = 'Invalid Secret.';
       $('.plainSecretSign').attr("disabled", "disabled");
     }
   }, true);
 
-  $scope.plainSecretSign = () => {
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [], [$scope.plainSecret]);
-    $scope.refresh();
+  $scope.plainSecretSign = async () => {
+    try {
+      const before = $scope.te.signatures.length;
+      $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [], [$scope.plainSecret]);
+      const after = $scope.te.signatures.length;
+      if(before === after) throw new Error('Secret is not useful for any of accounts above.');
+    } catch(err) {
+      $scope.plainError = err.message;
+      $('.plainSecretSign').attr("disabled", "disabled");
+    } finally {
+      $scope.refresh();
+    }
   }
   /** END: Plain secret sign **/
 
@@ -45,7 +65,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
       $scope.signWithLedger = 'Please confirm Transaction in Ledger...'
       $scope.refresh();
       const signature = await hardwareWalletDaemon.signTransaction($scope.te.signatureBase().toString('base64') )
-      $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [signature], []);
+      $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [signature], []);
       $scope.signWithLedger = 'Done! Sign with Ledger again'
     } catch(err) {
       if(err.message.toLowerCase().includes('reject')) {
@@ -62,8 +82,6 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
 
 
   /** START: Offline sign **/
-
-  // $scope.te.signatureBase().toXDR().toString('base64');
   $scope.$watch('signatureXDRs', (newValue) => {
     if(!newValue) return;
 
@@ -93,30 +111,34 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
 
   }, true);
 
-  $scope.offlineSignatureAdd = () => {
+  $scope.offlineSignatureAdd = async () => {
     $scope.loading = true;
     const parsedSignatureXDRs = JSON.parse($scope.signatureXDRs);
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, parsedSignatureXDRs);
+    $scope.te = AuthenticationFactory.sign($scope.te, thresholds, parsedSignatureXDRs);
     $scope.refresh();
   }
   /** END: Offline sign **/
 
 
   /** START: Refresh signing **/
-  $scope.refresh = () => {
+  $scope.refresh = async () => {
 
     // Check if all done
-    $scope.te = AuthenticationFactory.sign($scope.te, $scope.thresholds, [], []);
-    $scope.requiredSigners = AuthenticationFactory.requiredSigners($scope.te, $scope.thresholds);
+    $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [], []);
+    $scope.requiredSigners = AuthenticationFactory.requiredSigners($scope.te, thresholds);
     if($scope.requiredSigners.length === 0) {
-      $scope.callback(null, $scope.te);
+      paramsToReturnCallback = [null, $scope.te];
+      $($element).modal('hide');
+      return;
     }
+
+    //
 
     // Otherwise, calc printable information
     $scope.teXDR = $scope.te.toEnvelope().toXDR().toString('base64');
     const teBare = new StellarSdk.Transaction($scope.teXDR);
     teBare.signatures = [];
-    const allSigners = AuthenticationFactory.requiredSigners(teBare, $scope.thresholds);
+    const allSigners = AuthenticationFactory.requiredSigners(teBare, thresholds);
     $scope.signedSigners = allSigners
       .map((signerPK) => StellarSdk.Keypair.fromPublicKey(signerPK))
       .filter((signerKP) => $scope.te.signatures.some((sig)=>StellarSdk.verify($scope.te.hash(), sig.signature(), signerKP.rawPublicKey())))
@@ -125,9 +147,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
     // Apply changes
     $scope.loading = false;
     $scope.loadingState = 'Signing...';
-    $timeout(function() {
-      $scope.$apply();
-    })
+    $scope.$apply();
   }
   /** END: Refresh signing **/
 
@@ -156,9 +176,9 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
 
       const wallet = await hardwareWalletDaemon.activeWallet;
       if(wallet.state !== CONST.HWW_STATE.AVAILABLE && wallet.state !== CONST.HWW_STATE.READY) {
-        $scope.walletError = 'Please open Stellar app.'
+        $scope.walletError = 'Please open Ledger app.'
         $scope.$apply();
-        throw 'Please open Stellar app';
+        throw 'Please open Ledger app';
       }
 
       $scope.walletError = '';

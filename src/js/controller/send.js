@@ -1,7 +1,7 @@
 /* global $, myApp, StellarSdk, ripple */
 
 myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'AuthenticationFactory', '$http',
-  function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, AuthenticationFactory, $http) {
+                     function( $scope ,  $rootScope ,  $routeParams ,  StellarApi ,  SettingFactory ,  AuthenticationFactory ,  $http ) {
     console.log('Send to', $routeParams);
 
     $scope.MemoNone = StellarSdk.MemoNone;
@@ -341,21 +341,18 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
 
       try {
         // 2. Get Te
-        const te = StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer,
+        const te = await StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer,
           $scope.asset.amount, $scope.memo_type, $scope.memo)
 
         // 3. Pass te to signModal, wait for response and then close it.
         $scope.te = te;
-        $(`#signModal`).modal();
         $scope.$apply();
+
+        $(`#signModal`).modal('show');
         const teSigned = await new Promise((resolve, reject) => {
-            $scope.callbackToSignModal = (err, te) => {
-              if(err) reject(err);
-              resolve(te);
-            }
+            $scope.callbackToSignModal = (err, te) => err ? reject(err) : resolve(te);
             $scope.$apply();
           });
-        $('#signModal').modal('toggle');
 
         // 4. Submit teSigned
         await StellarApi.submitTransaction(teSigned);

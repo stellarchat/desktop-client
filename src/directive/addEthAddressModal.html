@@ -1,0 +1,42 @@
+<!-- Modal -->
+<div class="modal fade addEthAddressModal" id="{{handler}}" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="addEthAddressCtrl">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'enter_address' | translate}}</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="alert alert-danger" role="alert" ng-show="invalidEth">
+    			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    			<span>{{'invalid_eth' | translate}}</span>
+    		</div>
+
+        <div class="alert alert-danger" role="alert" ng-show="alreadyAdded">
+    			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    			<span>You've already added this address</span>
+    		</div>
+
+        <div class="alert alert-danger" role="alert" ng-show="addressNotFound">
+    			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    			<span>ETH address not found in whitelist</span>
+    		</div>
+
+        <div class="alert alert-info" role="alert" ng-show="noEthAddress">
+    			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    			To access your FIC coins purchased during the ICO, begin by entering an ETH address you whitelisted for the sale.
+    		</div>
+
+        <div class="form-group">
+    			<input class="form-control" type="text" placeholder="0xabc..." name="eth_address" ng-model="eth_address">
+    		</div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="addEthAdrress(eth_address)" class="btn btn-primary" translate="save">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("IcoCtrl", [ '$scope', '$rootScope', '$routeParams', 'StellarApi', 'SettingFactory', 'RemoteFactory',
-  function($scope, $rootScope, $routeParams, StellarApi, SettingFactory, RemoteFactory) {
+myApp.controller("IcoCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', 'RemoteFactory',
+                    function( $scope ,  $rootScope ,  StellarApi ,  SettingFactory ,  RemoteFactory ) {
     //console.log('IcoCtrl', $routeParams.type);
 
     if ($rootScope.ico_data) {

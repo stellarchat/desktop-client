@@ -17,7 +17,7 @@
 			 store it somewhere PRIVATE AND SAFE.
 		  </p>
 		  <div class="address">
-			<label translate="stellar_address">Stellar address</label>
+			<label translate="account_address">Stellar address</label>
 			<p class="key">{{address}}</p>
 			<p class="key"><qrcode data="{{address}}" size=200></qrcode></p>
 		  </div>
@@ -45,7 +45,7 @@
 
 		<div class="col-sm-9" ng-show="isMode('inflation')">
 			<label translate="important">Important:</label>
-			<p class="hint" translate="inflation_desc">New lumens are added to the network at the rate of 1% each year. Each week, the protocol distributes these lumens to any account that gets over .05% of the “votes” from other accounts in the network.</p>
+			<p class="hint">{{ 'inflation_desc' | translate:{name:currentNetwork.coin.name} }}</p>
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
@@ -68,22 +68,24 @@
 				</div>
 			</div>
 
-			<label translate="inflation_options">Other options</label>
-			<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
+			<div ng-if="currentNetwork.coin.code == 'XLM'">
+				<label translate="inflation_options">Other options</label>
+				<p class="hint" translate="inflation_options_desc">You can join one of the following inflation pools.</p>
 
-			<div class="row" style="margin-bottom: 20px;">
-				<div class="col-xs-6 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working"
-					   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
-				</div>
-				<div class="col-xs-6 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
-				</div>
-				<div class="col-xs-12 col-sm-4">
-					<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
+				<div class="row" style="margin-bottom: 20px;">
+					<div class="col-xs-6 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working"
+						   ng-click="setInflationXLMPool()" translate="inflation_xlmpool">Vote to xlmpool.com/</a>
+					</div>
+					<div class="col-xs-6 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationMoonPool()" translate="inflation_moonpool">Vote to MoonPool</a>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<a href class="btn btn-info btn-block btn-big" ng-disabled="inflation_working" ng-click="setInflationLumenaut()" translate="inflation_lumenaut">Vote to lumenaut.net</a>
+					</div>
 				</div>
 			</div>
-			
+
 			<label translate="inflation_donation">Support us</label>
 			<p class="hint" translate="inflation_donation_desc">You can join one of the following inflation pools.</p>
 			<div class="row">
@@ -193,11 +195,14 @@
 			</div>
 		</div>
 
+
 		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
-			<div class="s-alert s-alert--alert row__message">
-				{{network_error | translate}}
+			<div class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span>{{network_error | translate}}</span>
 			</div>
 		</div>
+
 	</div>
 
 	<div>

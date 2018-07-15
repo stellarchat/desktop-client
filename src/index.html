@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/history.css">
   <link rel="stylesheet" href="css/bridge.css">
   <link rel="stylesheet" href="css/trade.css">
+  <link rel="stylesheet" href="css/fic.css">
 
   <script>/*global require */ window.$ = window.jQuery = require('../node_modules/jquery/dist/jquery.min.js');</script>
   <script>/*global require */ window.CONST = require('./common/constants.js');</script>
@@ -32,7 +33,10 @@
   <script src="../node_modules/qrcode-generator/qrcode.js"></script>
   <script src="../node_modules/qrcode-generator/qrcode_UTF8.js"></script>
   <script src="../node_modules/angular-qrcode/angular-qrcode.js"></script>
+  <script src="../node_modules/moment/min/moment.min.js"></script>
   <script src="../lib/ripple-lib/ripple-0.12.5-rc2-min.js"></script>
+  <script src="../lib/web3/web3.min.js"></script>
+  <script src="../node_modules/zxcvbn/dist/zxcvbn.js"></script>
 
   <script src="js/lang/translate_cn.js"></script>
   <script src="js/lang/translate_en.js"></script>
@@ -43,7 +47,9 @@
   <script src="js/factory.js"></script>
   <script src="js/directives.js"></script>
 
-  <script src="js/controllers.js"></script>
+  <script src="js/controller/home.js"></script>
+  <script src="js/controller/header.js"></script>
+  <script src="js/controller/footer.js"></script>
   <script src="js/controller/security.js"></script>
   <script src="js/controller/settings.js"></script>
   <script src="js/controller/bridges.js"></script>
@@ -60,18 +66,23 @@
   <script src="js/controller/signModalCtrl.js"></script>
   <script src="js/controller/signOfflineCtrl.js"></script>
   <script src="js/controller/networkModalCtrl.js"></script>
+  <script src="js/controller/simpleNetworkCtrl.js"></script>
+  <script src="js/controller/proxyModalCtrl.js"></script>
+  <script src="js/controller/fic.js"></script>
+  <script src="js/controller/addEthAddressCtrl.js"></script>
+  <script src="js/controller/claimCoinsCtrl.js"></script>
 
-  <script src="js/auth/auth.factory.js"></script>
-  <script src="js/auth/authdata.factory.js"></script>
-  <script src="js/auth/authdata.filesystem.factory.js"></script>
-  <script src="js/auth/authdata.inmemory.factory.js"></script>
-  <script src="js/auth/hardwareWalletDaemon.factory.js"></script>
-
-  <script src="js/stellar/api.factory.js"></script>
-  <script src="js/stellar/history.factory.js"></script>
-  <script src="js/stellar/orderbook.factory.js"></script>
-  <script src="js/stellar/path.factory.js"></script>
-  <script src="js/stellar/stellarguard.factory.js"></script>
+  <script src="js/factory/auth.js"></script>
+  <script src="js/factory/authdata.js"></script>
+  <script src="js/factory/authdata.filesystem.js"></script>
+  <script src="js/factory/authdata.inmemory.js"></script>
+  <script src="js/factory/hardwareWalletDaemon.js"></script>
+  <script src="js/factory/stellar.js"></script>
+  <script src="js/factory/stellar.history.js"></script>
+  <script src="js/factory/stellar.orderbook.js"></script>
+  <script src="js/factory/stellar.path.js"></script>
+  <script src="js/factory/stellarguard.js"></script>
+  <script src="js/factory/ficIco.js"></script>
 
 </head>
 
@@ -80,5 +91,6 @@
   <div class="container" ng-view></div>
   <div ng-include="'pages/footer.html'"></div>
 </body>
+
 
 </html>

@@ -2,7 +2,8 @@
 'use strict';
 
 
-myApp.factory('AuthDataInmemory', ['$window', 'AuthData', function ($window, AuthData){
+myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
+                          function( $window ,  AuthData ){
 
   /* class BlobObj
    *

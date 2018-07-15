@@ -11,11 +11,12 @@
         <div class="island__header">
           {{ 'paste_xdr' | translate }}
         </div>
-        <div class="s-alert s-alert--alert" ng-show="signingError">
-          <ul class="AddTrust__errorList">
-            <li>{{signingError}}</li>
-          </ul>
-        </div>
+        <div class="padding-15" ng-show="signingError">
+  				<div class="alert alert-danger" role="alert">
+  					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  					<span>{{signingError}}</span>
+  				</div>
+  			</div>
         <div>
           <div class="row">
             <textarea name="teXDR" ng-model="teXDR" class="form-control" placeholder="ABCDEF.."></textarea>

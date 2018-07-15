@@ -1,0 +1,52 @@
+<section class="col-xs-12 content">
+
+	<div class="row" style="margin: 20px 0;" ng-show="error_msg">
+  	<div class="alert alert-danger" role="alert">
+  		<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+			<span>{{error_msg | translate:currentNetwork.coin}}</span>
+  	</div>
+  </div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading text-right">
+			<h4 class="pull-left">Claim history</h4>
+			<button type="submit" class="btn btn-success btn-sm" ng-click="refresh()" ng-disabled="loading">
+				<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
+			</button>
+		</div>
+
+	  <!-- Table -->
+		<table class="table claim-history">
+			<thead>
+				<tr>
+					<th class="left">Request date</th>
+					<th class="left">Amount</th>
+					<th class="left">Status</th>
+					<th class="left">Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="tx in mergedTxs | orderBy:'-ethTime' " ng-class="{another: tx.publicKey != publicKey}">
+					<td>
+						{{tx.ethTime * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}
+					</td>
+					<td ng-class="{credited: tx.publicKey == publicKey, large: tx.publicKey == publicKey,}">
+						<span class="credit">{{tx.amount}}</span>
+						<strong>{{currentNetwork.coin.code}}</strong>
+					</td>
+					<td ng-class="{large: tx.publicKey == publicKey}">
+						<strong ng-if="tx.publicKey == publicKey">
+							<span ng-if="tx.tx1 != undefined && tx.tx2 != undefined">Claimed</span>
+							<span ng-if="tx.tx1 == undefined || tx.tx2 == undefined">Withdrawing..</span>
+						</strong>
+						<span ng-if="tx.publicKey != publicKey">Requested by:<br>{{tx.publicKey | shortaddress}}</span>
+					</td>
+					<td>
+						<strong>{{tx.ethAddress}}</strong>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</section>

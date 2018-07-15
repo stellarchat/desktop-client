@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory',
-  function($scope, $rootScope, StellarApi, FedNameFactory, AuthenticationFactory) {
+myApp.controller("PaymentsCtrl", [ '$scope', 'StellarApi', 'FedNameFactory', 'AuthenticationFactory',
+                          function( $scope ,  StellarApi ,  FedNameFactory ,  AuthenticationFactory ) {
     $scope.payments = [];
     $scope.next = undefined;
 
@@ -101,8 +101,8 @@ myApp.controller("PaymentsCtrl", [ '$scope', '$rootScope', 'StellarApi', 'FedNam
     };
   } ]);
 
-myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
-  function($scope, $rootScope, StellarApi) {
+myApp.controller("TradesCtrl", [ '$scope', 'StellarApi',
+                        function( $scope ,  StellarApi ) {
     $scope.trades = [];
     $scope.next = undefined;
 
@@ -158,8 +158,8 @@ myApp.controller("TradesCtrl", [ '$scope', '$rootScope', 'StellarApi',
     };
   } ]);
 
-myApp.controller("EffectsCtrl", [ '$scope', '$rootScope', '$q', 'StellarApi', 'SettingFactory',
-  function($scope, $rootScope, $q, StellarApi, SettingFactory) {
+myApp.controller("EffectsCtrl", [ '$scope', '$q', 'StellarApi', 'SettingFactory',
+                         function( $scope ,  $q ,  StellarApi ,  SettingFactory ) {
     $scope.effects = [];
     $scope.parsed = {};
     $scope.next = undefined;

@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi', 'SettingFactory', '$http',
-  function($scope, $rootScope, StellarApi, SettingFactory, $http) {
+myApp.controller("ConvertCtrl", ['$scope', '$rootScope', 'StellarApi',
+                        function( $scope ,  $rootScope ,  StellarApi ) {
     $scope.send = [];
     $scope.dst_amount = 0;
     $scope.dst_currency = '';

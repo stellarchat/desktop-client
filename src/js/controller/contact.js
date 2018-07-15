@@ -1,7 +1,7 @@
 /* global myApp, ripple */
 
 myApp.controller("ContactCtrl", ['$scope', '$rootScope', 'AuthenticationFactory', 'StellarApi',
-  function($scope, $rootScope, AuthenticationFactory, StellarApi) {
+                        function( $scope ,  $rootScope ,  AuthenticationFactory ,  StellarApi ) {
 
     $scope.toggle_form = function() {
       $scope.addform_visible = !$scope.addform_visible;

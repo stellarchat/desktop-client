@@ -1,0 +1,96 @@
+<!-- Modal -->
+<div class="modal fade claimCoinsModal" id="{{handler}}" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="claimCoinsCtrl">
+
+  <div class="modal-dialog" role="document" ng-hide="claiming">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Claim FIC</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label translate="select_eth">Select whitelisted ETH address</label>
+          <div ng-if="ethAddresses.length>1">
+            <select class="form-control" name="select_address" ng-model="claim.address">
+              <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
+            </select>
+          </div>
+          <div ng-if="ethAddresses.length==1">
+            <input type="text" name="ethaddress" value="{{ethAddresses[0].address}}" ng-model="claim.address" class="form-control" disabled>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label translate="select_lockup">Select lockup period</label>
+
+          <div ng-if="periods.length>1">
+            <select class="form-control" name="select_lockup" ng-model="claim.period">
+              <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
+            </select>
+          </div>
+          <div ng-if="periods.length==1">
+            <input type="text" name="period" value="{{periods[0]}}" ng-model="claim.period" class="form-control" disabled>
+          </div>
+
+        </div>
+
+        <div class="form-group" ng-class="{'has-warning': claim.amount > maxAmount}">
+          <label translate="select_amount">Select FIC amount</label>
+          <input class="form-control" type="number" ng-model="claim.amount" min="{{minAmount}}" max="{{maxAmount}}"/>
+          <label class="warning" ng-show="isNumber(remainingAmount)">
+            {{ 'remaining' | translate}} {{remainingAmount | number}} (Min amount: 2'000)
+            <button class="btn btn-link" ng-really-message="Before claiming all it is suggested to test the process with smaller amount beforehand." ng-really-click="selectAll()" ng-show="remainingAmount > 0">{{ 'select_all' | translate }}</button>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <input type="checkbox" ng-model="claim.terms" id="terms"/>
+          <label for="terms">I agree to <a href="javascript:require('electron').shell.openExternal('https://s3.amazonaws.com/factury-public-files/FIC+Network+Terms+of+Token+Sale.pdf')">Terms of Token Sale</a></label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" ng-click="submitClaim()" class="btn btn-primary" ng-disabled="!allGood">Continue</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-dialog" role="document" ng-show="claiming">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Claiming process</h3>
+      </div>
+      <div class="modal-body">
+
+        <div class="alert alert-info" role="alert">
+    			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    			In order to finalize claim of your {{claim.amount}} FIC to this wallet one final step is required - sending a claim request to smart contract from your whitelisted ETH address.
+    		</div>
+
+        <div class="data-line">
+          {{ 'from_address' | translate }} <div class="code">{{formData.address}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'send_to' | translate }} <div class="code">{{contractAddress}}</div>
+        </div>
+        <div class="data-line">
+          {{ 'payload' | translate }} <div class="code">{{formData.payload}}</div>
+        </div>
+
+        <div class="alert alert-info" role="alert">
+    			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    			Note: Keep Amount to Send 0 ETH or otherwise your claim request will be denied and you will have to retry.
+    		</div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" ng-click="openMyEtherWallet()">{{ 'sendMyEtherWallet' | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'done' | translate }}</button>
+      </div>
+    </div>
+  </div>
+
+</div>

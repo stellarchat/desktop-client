@@ -1,7 +1,7 @@
 /* global myApp */
 
-myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'SettingFactory', 'StellarApi',
-  function($scope, $rootScope, $location, SettingFactory, StellarApi) {
+myApp.controller("SettingsCtrl", ['$scope', '$rootScope', 'SettingFactory', 'StellarApi',
+                         function( $scope ,  $rootScope ,  SettingFactory ,  StellarApi ) {
     $scope.mode = 'federation';
     $scope.isMode = function(mode) {
       return $scope.mode === mode;
@@ -56,7 +56,9 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
             StellarApi.logout();
             $rootScope.reset();
             $rootScope.$broadcast('$authUpdate');  // workaround to refresh and get changes into effect.
-            location.reload();
+            setTimeout(function(){
+              window.location.reload();
+            },100);
 
           } catch (e) {
             console.error(e);

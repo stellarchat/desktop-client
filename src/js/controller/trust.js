@@ -1,7 +1,7 @@
 /* global $, myApp, StellarSdk */
 
-myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
-                       function( $scope ,  $rootScope ,  StellarApi ) {
+myApp.controller("TrustCtrl", ['$scope', '$rootScope', 'StellarApi',
+                      function( $scope ,  $rootScope ,  StellarApi ) {
     $scope.manual_code;
     $scope.manual_issuer;
     $scope.manual_logo = $rootScope.gateways.getSourceById($scope.manual_issuer).logo;
@@ -103,16 +103,11 @@ myApp.controller("TrustCtrl", [ '$scope', '$rootScope', 'StellarApi',
         $scope.te = te;
         $scope.$apply();
 
-        $(`#signModal`).modal();
+        $(`#signModal`).modal('show');
         const teSigned = await new Promise((resolve, reject) => {
-            $scope.callbackToSignModal = (err, te) => {
-              if(err) reject(err);
-              resolve(te);
-            }
+            $scope.callbackToSignModal = (err, te) => err ? reject(err) : resolve(te);
+            $scope.$apply();
           });
-
-        $('#signModal').modal('toggle');
-        $scope.$apply();
 
         // 4. Submit teSigned
         await StellarApi.submitTransaction(teSigned);

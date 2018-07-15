@@ -8,11 +8,11 @@
 					{{'ico_instruction' | translate}}<br>{{'ico_note' | translate}}
 				</p>
 			</div>
-			
+
 			<div ng-repeat="ico in ico_data.ongoing">
 				<div class="row" >
 					<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(ico.issuer)">
-								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
+								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 									code="{{ico.code}}" address="{{ico.issuer}}"></gateway>
 					</div>
 					<div class="row__shareOption">
@@ -26,14 +26,16 @@
 require('electron').shell.openExternal('{{ico.website}}')'" ng-show="ico.website">{{ico.website}}</a></p>
 					<p>{{ico.p1}}</p>
 					<p>{{ico.p2}}</p>
-				</div>	
-			</div>
-				
-			<div class="island__paddedContent" ng-show="trust_error">
-				<div class="s-alert s-alert--alert">
-					{{trust_error | translate}}
 				</div>
 			</div>
+
+			<div class="padding-15" ng-show="trust_error">
+				<div class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span>{{trust_error | translate}}</span>
+				</div>
+			</div>
+				
 		</div>
 	</div>
 

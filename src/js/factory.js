@@ -19,7 +19,8 @@ myApp.factory('SettingFactory', function($window) {
           name: "lumen",
           atom: "stroop",
           code: "XLM",
-          logo: "img/rocket.png"
+          logo: "img/rocket.png",
+          bip44: 148,
         },
         allowHTTP: false,
         tabs: ["history", "trade", "balance", "send", "trust", "service", "ico", "signoffline"]
@@ -36,10 +37,53 @@ myApp.factory('SettingFactory', function($window) {
           name: "lumen",
           atom: "stroop",
           code: "XLM",
-          logo: "img/rocket.png"
+          logo: "img/rocket.png",
+          bip44: 148,
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]
+      },
+      fic: {
+        name: "FIC Network",
+        translationKey: 'fict_net',
+        networkType: 'fic',
+        networkPassphrase: 'FIC Network ; 2018',
+        knownHorizons: [
+          'https://ficnetwork-apm.factury.co',
+          'https://ficnetwork-aps.factury.co',
+          'https://ficnetwork-apt.factury.co',
+          'https://ficnetwork-eua.factury.co',
+          'https://ficnetwork-euf.factury.co',
+          'https://ficnetwork-eul.factury.co',
+          'https://ficnetwork-nat.factury.co',
+          'https://ficnetwork-usa.factury.co',
+          'https://ficnetwork-ust.factury.co',
+        ],
+        coin: {
+          name: "FIC Network",
+          code: "FIC",
+          logo: "img/fic.png",
+          bip44: 5248,
+        },
+        allowHTTP: false,
+        tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
+      },
+      ficTest: {
+        name: "FIC Test Network",
+        translationKey: 'fictest_net',
+        networkType: 'ficTest',
+        networkPassphrase: 'FIC Test Network ; 2017',
+        knownHorizons: [
+          'https://ficnetwork-testnet1.factury.co',
+        ],
+        coin: {
+          name: "FIC Network",
+          code: "FIC",
+          logo: "img/fic.png",
+          bip44: 5248,
+        },
+        allowHTTP: true,
+        tabs: ["history", "balance", "send", "ficnetwork", "signoffline"]
       },
       other: {
         name: "User defined",
@@ -53,6 +97,7 @@ myApp.factory('SettingFactory', function($window) {
           atom: "stroop",  // TODO: ask in settings
           code: undefined,
           logo: "img/rocket.png",  // TODO: ask in settings
+          bip44: 148,
         },
         allowHTTP: true,
         tabs: ["history", "trade", "balance", "send", "trust", "signoffline"]

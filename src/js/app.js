@@ -2,7 +2,7 @@
 /* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
-myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compileProvider) {
+myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compileProvider, $locationProvider) {
   $translateProvider.translations('cn', translate_cn);
   $translateProvider.translations('en', translate_en);
   $translateProvider.translations('fr', translate_fr);
@@ -122,6 +122,24 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
     access : {
       requiredLogin : true
     }
+  }).when('/fic_coins', {
+    templateUrl : 'pages/fic/coins.html',
+    controller : 'FICCoinCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/fic_history', {
+    templateUrl : 'pages/fic/history.html',
+    controller : 'FICHistoryCtrl',
+    access : {
+      requiredLogin : true
+    }
+  }).when('/network_settings', {
+    templateUrl : 'pages/network_settings.html',
+    controller : 'simpleNetworkCtrl',
+    access : {
+      requiredLogin : false
+    }
   }).otherwise({
     redirectTo : '/login'
   });
@@ -153,6 +171,18 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
       if (AuthenticationFactory.isInSession && $location.path() == '/login') {
         $location.path('/');
       }
+      $rootScope.notFunded = true;
+      (async () => {
+        try {
+          const isFunded = await StellarApi._isFunded($rootScope.address);
+          $rootScope.notFunded = !isFunded;
+          $rootScope.$apply();
+        } catch (e) {
+          $rootScope.notFunded = true;
+          $rootScope.$apply();
+          console.error(e);
+        }
+      })()
     });
 
     $rootScope.$on('$authUpdate', function(){

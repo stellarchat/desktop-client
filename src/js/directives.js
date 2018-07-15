@@ -79,6 +79,16 @@ myApp.directive('txDefault', [ function() {
     replace : true
   }
 } ]);
+myApp.directive('proxyModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@'
+    },
+    templateUrl : 'directive/proxyModal.html',
+    transclude: true
+  };
+});
 myApp.directive('networkModal', function () {
   return {
     restrict: 'EA',
@@ -86,6 +96,27 @@ myApp.directive('networkModal', function () {
       handler: '@'
     },
     templateUrl : 'directive/networkModal.html',
+    transclude: true
+  };
+});
+myApp.directive('addEthAddressModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@'
+    },
+    templateUrl : 'directive/addEthAddressModal.html',
+    transclude: true
+  };
+});
+myApp.directive('claimCoinsModal', function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      handler: '@',
+      details: '='
+    },
+    templateUrl : 'directive/claimCoinsModal.html',
     transclude: true
   };
 });

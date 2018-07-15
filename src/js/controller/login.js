@@ -1,10 +1,14 @@
 /* global $, CONST, myApp, require */
 
-myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon',
-                      function( $scope ,  $rootScope ,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon ) {
+myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', 'AuthenticationFactory', 'SettingFactory', 'hardwareWalletDaemon', 'StellarApi',
+                      function( $scope ,  $rootScope , $window,  $location ,  AuthenticationFactory ,  SettingFactory ,  hardwareWalletDaemon, StellarApi ) {
 
   $scope.ledgerInvalid = true;
   $scope.ledgerError = '';
+
+  if($window.localStorage['launched'] == undefined) {
+    $location.path("/network_settings");
+  }
 
   $scope.fileInputClick = function() {
     const remote = require('electron').remote;
@@ -41,6 +45,19 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
     });
   }
 
+  $scope.invalidStellarPublickey = true;
+  $scope.$watch('walletAddress', function(newValue){
+    if(newValue != '' && newValue != undefined) {
+      if(StellarApi.isValidAddress(newValue)) {
+        $scope.invalidStellarPublickey = false;
+      } else {
+        $scope.invalidStellarPublickey = true;
+      }
+    } else {
+      $scope.invalidStellarPublickey = true;
+    }
+  }, true);
+
   $scope.submitAddress = function(){
     const type = AuthenticationFactory.TYPE.TEMPORARY;
     AuthenticationFactory.load(type, {address: $scope.walletAddress}, (err) => {
@@ -56,6 +73,9 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
     });
   }
 
+  $scope.openProxySettings = function() {
+    $(`#proxyModal`).modal();
+  }
 
 
   /** START: Network settings **/
@@ -166,6 +186,16 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
 
   /** START: Communicate with Ledger **/
   const refresh = async (hardwareWalletDaemon) => {
+    const bip44 = SettingFactory.getCurrentNetwork().coin.bip44;
+    const knownSupportedBip44s = [
+      148,  // stellar.org
+      // 5248,  // ficnetwork.com, IN PROGRESS. Please follow https://github.com/LedgerHQ/ledgerjs/pull/171/files.
+    ]
+    if(!knownSupportedBip44s.includes(bip44)) {
+      $scope.ledgerError = { type: 'warning', error: `Ledger doesn't yet support this network's BIP44 (${bip44}).` }
+      return;
+    }
+
     const isSupported = await hardwareWalletDaemon.isSupported;
     if(!isSupported) {
       $scope.ledgerError = { type: 'danger', error: 'Your computer doesn\'t support Ledger!' }
@@ -185,8 +215,8 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Authenticat
     if(wallet.state !== CONST.HWW_STATE.AVAILABLE && wallet.state !== CONST.HWW_STATE.READY) {
       $scope.addressInputDisabled = true;
       if(wallet.state === CONST.HWW_STATE.OFFLINE) $scope.ledgerError = { type: 'info', error: 'Please unlock Ledger and enter PIN.' }
-      if(wallet.state === CONST.HWW_STATE.SLEEP) $scope.ledgerError = { type: 'info', error: 'Please wake Legder and enter PIN.' }
-      if(wallet.state === CONST.HWW_STATE.ONLINE) $scope.ledgerError = { type: 'info', error: 'Please open Stellar app.' }
+      if(wallet.state === CONST.HWW_STATE.SLEEP) $scope.ledgerError = { type: 'info', error: 'Please wake Ledger and enter PIN.' }
+      if(wallet.state === CONST.HWW_STATE.ONLINE) $scope.ledgerError = { type: 'info', error: 'Please open Ledger app.' }
       $scope.$apply();
       return;
     }

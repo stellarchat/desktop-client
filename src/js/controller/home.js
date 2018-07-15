@@ -1,46 +1,6 @@
 /* global myApp, round */
 
-myApp.controller("HeaderCtrl", ['$scope', '$rootScope', '$location', 'AuthenticationFactory', 'SettingFactory', 'StellarApi',
-  function($scope, $rootScope, $location, AuthenticationFactory, SettingFactory, StellarApi) {
-
-    $scope.isActive = function(route) {
-      return route === $location.path();
-    }
-
-    $scope.logout = function () {
-      AuthenticationFactory.logout();
-      $location.path("/login");
-      StellarApi.logout();
-      $rootScope.reset();
-    }
-  }
-]);
-
-myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory', 'RemoteFactory',
-  function($scope, $translate, SettingFactory, RemoteFactory) {
-    $scope.changeLanguage = function (key) {
-      $translate.use(key);
-      SettingFactory.setLang(key);
-    };
-
-    $scope.version = '5.0';
-    $scope.new_version = false;
-    $scope.diff = false;
-    RemoteFactory.getClientVersion(function(err, data){
-      if (err) {
-        console.warn('Can not get the version from github.', err);
-      } else {
-        if (data && data.version) {
-          $scope.new_version = data.version;
-          $scope.diff = ($scope.version !== $scope.new_version);
-        }
-      }
-    });
-
-  }]);
-
-myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
-  function($scope, $rootScope, RemoteFactory) {
+myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory', function( $scope,  $rootScope,  RemoteFactory) {
 
     RemoteFactory.getStellarTicker(function(err, ticker) {
       if (ticker) {
@@ -49,6 +9,10 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
         update();
       }
     });
+
+    $scope.fullReload = function() {
+      return location.reload();
+    }
 
     $scope.data = [];
     $scope.pie = {

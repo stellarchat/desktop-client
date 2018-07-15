@@ -1,15 +1,48 @@
-/* global myApp, require, StellarSdk */
+/* global myApp, require, StellarSdk, zxcvbn */
 
-myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location', 'FileDialog', 'AuthenticationFactory',
-  function($scope, $rootScope, $window, $location, FileDialog, AuthenticationFactory) {
+myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory',
+                         function( $scope ,  $location ,  AuthenticationFactory ) {
     $scope.password = '';
     $scope.passwordSet = {};
     $scope.password1 = '';
     $scope.password2 = '';
     $scope.key = '';
-    $scope.mode = 'register_new_account';
+    $scope.mode = 'register_new_account'; // register_new_account
     $scope.showMasterKeyInput = false;
     $scope.submitLoading = false;
+    $scope.weakPassword = true;
+
+    // Password strength
+    var passwordStrength = {
+      0: "Worst",
+      1: "Bad",
+      2: "Weak",
+      3: "Good",
+      4: "Strong"
+    }
+
+    // Password strength meter
+    var meter = document.getElementById('password-strength-meter');
+    var text = document.getElementById('password-strength-text');
+
+
+    //Watch for password changes
+    $scope.$watch('password1', function(newValue){
+      if(newValue == undefined) { newValue = ''; }
+      let result = zxcvbn(newValue);
+      meter.value = result.score;
+      if (newValue !== "") {
+        text.innerHTML = "Password strength: " + passwordStrength[result.score];
+      } else {
+        text.innerHTML = "Password strength: -";
+      }
+      if(result.score >= 2) {
+        $scope.weakPassword = false;
+      } else {
+        $scope.weakPassword = true;
+      }
+    }, true);
+
 
     $scope.changeMode = function(mode) {
       $scope.mode = mode;
@@ -30,9 +63,12 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
       $scope.mode = 'register_new_account';
       $scope.showMasterKeyInput = false;
       $scope.submitLoading = false;
+      $scope.weakPassword = true;
 
       if ($scope.registerForm) $scope.registerForm.$setPristine(true);
     };
+
+
 
     $scope.fileInputClick = function() {
       const remote = require('electron').remote;
@@ -47,7 +83,11 @@ myApp.controller('RegisterCtrl', ['$scope', '$rootScope', '$window', '$location'
         }, function ( filename ) {
           $scope.$apply(function() {
             $scope.walletfile = filename;
-            $scope.mode = 'register_empty_wallet';
+            if($scope.walletfile != '' && $scope.walletfile != undefined) {
+              $scope.mode = 'register_empty_wallet';
+            } else {
+              $scope.mode = 'register_new_account';
+            }
             $scope.save_error = '';
           });
         }

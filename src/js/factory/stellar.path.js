@@ -1,6 +1,7 @@
 /* global myApp, StellarSdk */
 
-myApp.factory('StellarPath', ['$rootScope', function($rootScope) {
+myApp.factory('StellarPath', ['$rootScope',
+                     function( $rootScope ) {
   let _server;
   let _closeStream;
 
