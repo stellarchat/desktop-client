@@ -922,7 +922,7 @@ electron-debug@^2.0.0:
 
 electron-default-menu@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/electron-default-menu/-/electron-default-menu-1.0.1.tgz#3173c5018eb507404fec63bdf3b78c38eedba808"
+  resolved "https://registry.yarnpkg.com/electron-default-menu/-/electron-default-menu-1.0.1.tgz#3173c5018eb507404fec63bdf3b78c38eedba808"
 
 electron-devtools-installer@^2.2.4:
   version "2.2.4"
@@ -1837,7 +1837,7 @@ jsprim@^1.2.2:
 
 keccak@^1.4.0:
   version "1.4.0"
-  resolved "http://npm.factury.co/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
+  resolved "https://registry.yarnpkg.com/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
   dependencies:
     bindings "^1.2.1"
     inherits "^2.0.3"
@@ -2630,7 +2630,7 @@ sax@^1.2.4:
 
 scryptsy@^2.0.0:
   version "2.0.0"
-  resolved "http://npm.factury.co/scryptsy/-/scryptsy-2.0.0.tgz#262c36f0231cfa7654e2363fa394cd2dec66f378"
+  resolved "https://registry.yarnpkg.com/scryptsy/-/scryptsy-2.0.0.tgz#262c36f0231cfa7654e2363fa394cd2dec66f378"
 
 semver-diff@^2.0.0:
   version "2.1.0"
@@ -3087,7 +3087,7 @@ uuid@^3.1.0:
 
 uuid@^3.3.2:
   version "3.3.2"
-  resolved "http://npm.factury.co/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.3"
