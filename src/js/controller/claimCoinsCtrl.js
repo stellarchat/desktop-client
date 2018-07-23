@@ -1,3 +1,5 @@
+/* global $, angular, myApp, require */
+
 myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$window', 'FicIcoFactory',
                            function(  $rootScope ,  $scope ,  $location ,  $window ,  FicIcoFactory  ) {
 
@@ -24,6 +26,7 @@ myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$wind
   }, true);
 
   $scope.$watch('claim', function(newValue) {
+    var newPeriods = [];
     if(newValue != undefined) {
       let period = $scope.claim.period.split(" ")[0],
           addresses = $scope.ethAddresses;
@@ -34,6 +37,12 @@ myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$wind
       let currentCoins = currentAddress[0].coins,
           remaining = currentCoins.remaining[period],
           remains = remaining - newValue.amount;
+
+
+      if(currentCoins.remaining[0] > 0) { newPeriods.push("0"); }
+      if(currentCoins.remaining[90] > 0) { newPeriods.push("90"); }
+      if(currentCoins.remaining[180] > 0) { newPeriods.push("180"); }
+      $scope.periods = newPeriods;
 
       if(newValue.address != '' && newValue.period != '') {
         $scope.remainingAmount = remains;
@@ -69,14 +78,10 @@ myApp.controller("claimCoinsCtrl", [ '$rootScope', '$scope', '$location', '$wind
     const publicKey = $rootScope.address;
     const lockup = $scope.claim.period.split(" ")[0];
 
-    console.log($scope.formData.payload)
-    $scope.formData.payload = 'creating...'
-    console.log($scope.formData.payload)
+    $scope.formData.payload = 'creating...';
     const payload = await FicIcoFactory.getEthWithdrawPayload(publicKey, amount.toString(), lockup.toString());
     $scope.formData.payload = payload;
-    console.log($scope.formData.payload)
     $scope.$apply();
-    console.log($scope.formData.payload)
   }
   $scope.openMyEtherWallet = () => {
     require('electron').shell.openExternal(`https://www.myetherwallet.com/?to=${$scope.contractAddress}&sendMode=ether&value=0&data=${$scope.formData.payload}#send-transaction`);

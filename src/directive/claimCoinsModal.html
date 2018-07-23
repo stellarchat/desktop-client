@@ -10,17 +10,30 @@
 
         <div class="form-group">
           <label translate="select_eth">Select whitelisted ETH address</label>
-          <select class="form-control" name="select_address" ng-model="claim.address">
-            <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
-          </select>
+          <div ng-if="ethAddresses.length>1">
+            <select class="form-control" name="select_address" ng-model="claim.address">
+              <option ng-repeat="addr in ethAddresses" value="{{addr.address}}">{{addr.address}}</option>
+            </select>
+          </div>
+          <div ng-if="ethAddresses.length==1">
+            <input type="text" name="ethaddress" value="{{ethAddresses[0].address}}" ng-model="claim.address" class="form-control" disabled>
+          </div>
+
         </div>
 
         <div class="form-group">
 
           <label translate="select_lockup">Select lockup period</label>
-          <select class="form-control" name="select_lockup" ng-model="claim.period">
-            <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
-          </select>
+
+          <div ng-if="periods.length>1">
+            <select class="form-control" name="select_lockup" ng-model="claim.period">
+              <option ng-repeat="period in periods" value="{{period}} days">{{period}} days</option>
+            </select>
+          </div>
+          <div ng-if="periods.length==1">
+            <input type="text" name="period" value="{{periods[0]}}" ng-model="claim.period" class="form-control" disabled>
+          </div>
+
         </div>
 
         <div class="form-group" ng-class="{'has-warning': claim.amount > maxAmount}">
@@ -48,9 +61,14 @@
   <div class="modal-dialog" role="document" ng-show="claiming">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Please follow these steps</h3>
+        <h3 class="modal-title">Claiming process</h3>
       </div>
       <div class="modal-body">
+
+        <div class="alert alert-info" role="alert">
+    			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    			In order to finalize claim of your {{claim.amount}} FIC to this wallet one final step is required - sending a claim request to smart contract from your whitelisted ETH address.
+    		</div>
 
         <div class="data-line">
           {{ 'from_address' | translate }} <div class="code">{{formData.address}}</div>
@@ -61,6 +79,11 @@
         <div class="data-line">
           {{ 'payload' | translate }} <div class="code">{{formData.payload}}</div>
         </div>
+
+        <div class="alert alert-info" role="alert">
+    			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+    			Note: Keep Amount to Send 0 ETH or otherwise your claim request will be denied and you will have to retry.
+    		</div>
 
       </div>
       <div class="modal-footer">

@@ -24,6 +24,15 @@
   const HardwareWallet = require('./src/main/hardwareWalletLedger');
   const HardwareWalletLedger = HardwareWallet.Ledger;
 
+  const defaultMenu = require('electron-default-menu');
+  const { Menu, shell } = electron;
+
+  app.on('ready', () => {
+    const menu = defaultMenu(app, shell);
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
+  });
+
+
   // report crashes to the Electron project
   // require('crash-reporter').start()
   // adds debug features like hotkeys for triggering dev tools and reload
@@ -306,6 +315,11 @@
     HardwareWalletLedger.isSupported()
       .then((res) =>event.sender.send(HWW_API.SUPPORT, reqId, null, res))
       .catch((err)=>event.sender.send(HWW_API.SUPPORT, reqId, `Request<${HWW_API.SUPPORT}/${reqId}> failed: ${err.message}`))
+  })
+  electron.ipcMain.on(HWW_API.SET_BIP44, (event, reqId, bip44) => {
+    HardwareWalletLedger.setBip44(bip44)
+      .then((res) =>event.sender.send(HWW_API.SET_BIP44, reqId, null, res))
+      .catch((err)=>event.sender.send(HWW_API.SET_BIP44, reqId, `Request<${HWW_API.SET_BIP44}/${reqId}> failed: ${err.message}`))
   })
 
   electron.ipcMain.on(HWW_API.LIST, (event, id) => {

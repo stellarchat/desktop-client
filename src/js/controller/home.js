@@ -1,7 +1,6 @@
 /* global myApp, round */
 
-myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
-                     function( $scope ,  $rootScope ,  RemoteFactory ) {
+myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory', function( $scope,  $rootScope,  RemoteFactory) {
 
     RemoteFactory.getStellarTicker(function(err, ticker) {
       if (ticker) {
@@ -10,6 +9,10 @@ myApp.controller("HomeCtrl", ['$scope', '$rootScope', 'RemoteFactory',
         update();
       }
     });
+
+    $scope.fullReload = function() {
+      return location.reload();
+    }
 
     $scope.data = [];
     $scope.pie = {

@@ -171,6 +171,18 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
       if (AuthenticationFactory.isInSession && $location.path() == '/login') {
         $location.path('/');
       }
+      $rootScope.notFunded = true;
+      (async () => {
+        try {
+          const isFunded = await StellarApi._isFunded($rootScope.address);
+          $rootScope.notFunded = !isFunded;
+          $rootScope.$apply();
+        } catch (e) {
+          $rootScope.notFunded = true;
+          $rootScope.$apply();
+          console.error(e);
+        }
+      })()
     });
 
     $rootScope.$on('$authUpdate', function(){

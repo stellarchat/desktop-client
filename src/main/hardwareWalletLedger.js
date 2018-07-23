@@ -221,11 +221,11 @@ module.exports = (()=>{
       if(_subaccount === undefined) {
         return this.publicKey;
       } else if(typeof _subaccount === 'string' || typeof _subaccount === 'number') {
-        return (await this.str.getPublicKey(`44'/148'/${parseSubaccount(_subaccount)}'`, true, display?true:false)).publicKey;
+        return (await this.str.getPublicKey(`44'/${HardwareWalletLedger.bip44}'/${parseSubaccount(_subaccount)}'`, true, display?true:false)).publicKey;
       } else if(Array.isArray(_subaccount)) {
         const all = [];
         for(const sub of _subaccount) {
-          all.push((await this.str.getPublicKey(`44'/148'/${parseSubaccount(sub)}'`, true, display?true:false)).publicKey);
+          all.push((await this.str.getPublicKey(`44'/${HardwareWalletLedger.bip44}'/${parseSubaccount(sub)}'`, true, display?true:false)).publicKey);
         }
         return all
       } else {
@@ -235,7 +235,7 @@ module.exports = (()=>{
 
     async _signTe(teSignatureBaseSerialized) {
       this.assertState(HWW_STATE.READY);
-      const signatureWrapper = await this.str.signTransaction(`44'/148'/${this.subaccount}'`, Buffer.from(teSignatureBaseSerialized, 'base64'));
+      const signatureWrapper = await this.str.signTransaction(`44'/${HardwareWalletLedger.bip44}'/${this.subaccount}'`, Buffer.from(teSignatureBaseSerialized, 'base64'));
 
       // add signature to transaction
       const keyPair = Keypair.fromPublicKey(this.publicKey);
@@ -253,7 +253,7 @@ module.exports = (()=>{
 
     async _ping() {
       // FYI If Ledger Nano is asleep, then getPublicKey errors but getAppConfig keeps working. Also without verification is 3x faster.
-      return await this.str.getPublicKey(`44'/148'/0'`, false, false);
+      return await this.str.getPublicKey(`44'/${HardwareWalletLedger.bip44}'/0'`, false, false);
     }
 
     // Wrap methods to use queue, effectively solving all "Ledger Device is busy" errors.
@@ -294,6 +294,10 @@ module.exports = (()=>{
   // Public static methods.
   HardwareWalletLedger.isSupported = async () => {
     return Transport.isSupported();
+  }
+
+  HardwareWalletLedger.setBip44 = async (bip44) => {
+    HardwareWalletLedger.bip44 = bip44;
   }
 
   HardwareWalletLedger.list = () => {

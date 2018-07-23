@@ -8,12 +8,22 @@
       </div>
       <div class="modal-body">
 
-        <div class="alert alert-danger" role="alert" ng-show="invalid_eth">
+        <div class="alert alert-danger" role="alert" ng-show="invalidEth">
     			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     			<span>{{'invalid_eth' | translate}}</span>
     		</div>
 
-        <div class="alert alert-info" role="alert">
+        <div class="alert alert-danger" role="alert" ng-show="alreadyAdded">
+    			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    			<span>You've already added this address</span>
+    		</div>
+
+        <div class="alert alert-danger" role="alert" ng-show="addressNotFound">
+    			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    			<span>ETH address not found in whitelist</span>
+    		</div>
+
+        <div class="alert alert-info" role="alert" ng-show="noEthAddress">
     			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
     			To access your FIC coins purchased during the ICO, begin by entering an ETH address you whitelisted for the sale.
     		</div>
@@ -30,5 +40,3 @@
     </div>
   </div>
 </div>
-<!-- {"GC2PJQNVOMRYGK7DCDHZTBSXAT6W5HSCSUAGTHL7KPHFSBBFVXNPQRJ5":{"GBINVIRJZCLO3L2HHKEUKJEHC64QS3HIEAYFTDO2LMR5ZTZ54VJEO5SC":["0x9A55Efe6ABcCa108ed55B1c1E933e3dEFF3B95Ba"]},"ABCDJQNVOMRYGK7DCDHZTBSXAT6W5HSCSUAGTHL7KPHFSBBFVXNPQRJ5":{"GBINVIRJZCLO3L2HHKEUKJEHC64QS3HIEAYFTDO2LMR5ZTZ54VJEO5SC":["0x9A55Efe6ABcCa108ed55B1c1E933e3dEFF3B95Ba"]}}
--->

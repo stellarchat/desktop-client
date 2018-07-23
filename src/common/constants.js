@@ -29,6 +29,7 @@ module.exports = {
     SIGN_HASH: 'hardwareWallet.signHash',
     SIGN_TE: 'hardwareWallet.signTransaction',
     SUPPORT: 'HardwareWallet.isSupported',
+    SET_BIP44: 'HardwareWallet.setBip44',
   },
 
   KEYSTORE_API: {

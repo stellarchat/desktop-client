@@ -332,58 +332,44 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       });
     };
 
-    $scope.send_asset = function() {
+    $scope.send_asset = async () => {
+      // 1. reset & start spinner.
       $scope.sending = true;
       $scope.send_done = false;
       $scope.send_result = null;
       $scope.send_error.message = '';
 
-      StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer,
-        $scope.asset.amount, $scope.memo_type, $scope.memo)
-        // .then((te) => AuthenticationFactory.sign(te, [], []))
-        // .then((te) => AuthenticationFactory.requiredSigners(te).then((requiredSigners)=>[te, requiredSigners]))
-        // .then(([te, requiredSigners]) => {
-        //   if(requiredSigners.length === 0) return te;
-        .then((te) => {
-          $scope.te = te;
-          // $scope.requiredSigners = requiredSigners;
-          $scope.teXDR = te.toEnvelope().toXDR().toString('base64');
-          $(`#signModal`).modal();
-          $scope.$apply();
+      try {
+        // 2. Get Te
+        const te = await StellarApi.send($scope.real_address, $scope.asset.code, $scope.asset.issuer,
+          $scope.asset.amount, $scope.memo_type, $scope.memo)
 
-          return new Promise((resolve, reject) => {
-            $scope.callbackToSignModal = (err, te) => {
-              if(err) reject(err);
-              resolve(te);
-            }
+        // 3. Pass te to signModal, wait for response and then close it.
+        $scope.te = te;
+        $scope.$apply();
+
+        $(`#signModal`).modal('show');
+        const teSigned = await new Promise((resolve, reject) => {
+            $scope.callbackToSignModal = (err, te) => err ? reject(err) : resolve(te);
             $scope.$apply();
-            // $scope.$watch('te', function(newValue){
-            //   console.log('send.js', newValue.signatures.length == 1);
-            // },true);
-            // blah.watch((err, te) => {
-            //   if(err) reject(err)
-            //   resolve(te)
-            // })
-          })
-          // throw new Error(`Not enough signature! ${requiredSigners}`);
-        })
-        .then((te)=>{
-          $('#signModal').modal('toggle');
-          return te;
-        })
-        .then((te) => StellarApi.submitTransaction(te))
-        .then((res)=> {
-          $scope.service_amount = 0;
-          $scope.asset.amount = 0;
-          $scope.send_done = true;
-          $scope.sending = false;
-          $rootScope.$apply();
-        })
-        .catch((err) => {
-          console.error(err)
-          $scope.send_error.message = StellarApi.getErrMsg(err);
-          $rootScope.$apply();
-        })
+          });
+
+        // 4. Submit teSigned
+        await StellarApi.submitTransaction(teSigned);
+
+        // 5a. Handle success.
+        $scope.service_amount = 0;
+        $scope.asset.amount = 0;
+        $scope.send_done = true;
+      } catch(err) {
+        // 5b. Handle error.
+        console.error(err)
+        $scope.send_error.message = StellarApi.getErrMsg(err);
+      } finally {
+        // 6. Stop spinner.
+        $scope.sending = false;
+        $rootScope.$apply();
+      }
     };
 
     function autoCompleteURL(address) {
@@ -402,7 +388,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       return address;
     }
 
-      // memo_type is either of: MemoNone: "none", MemoID = "id", MemoText = "text", MemoHash = "hash"
+    // memo_type is either of: MemoNone: "none", MemoID = "id", MemoText = "text", MemoHash = "hash"
     var special_destinations = {
       'GCLDH6L6FBLTD3H3B23D6TIFVVTFBLZMNBC3ZOI6FGI5GPQROL4FOXIN' : {memo_type: 'id',   name: 'RippleFox'},
       'GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM' : {memo_type: 'id',   name: 'Kraken'},

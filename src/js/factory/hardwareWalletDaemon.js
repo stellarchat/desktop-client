@@ -1,8 +1,8 @@
 /* global CONST, ipcRenderer, invokeIPC, myApp */
 
 // hardwareWalletDaemon - singleton that manages hardwallets.
-myApp.factory('hardwareWalletDaemon', [
-                              function() {
+myApp.factory('hardwareWalletDaemon', ['SettingFactory',
+                              function( SettingFactory ) {
   let hwws = [];
   const listeners = new Set();
 
@@ -66,6 +66,7 @@ myApp.factory('hardwareWalletDaemon', [
         ipcRenderer.on(CONST.HWW_API.LISTEN, (...args)=>this._update(...args));
         const hwwList = await invokeIPC(CONST.HWW_API.LIST);
         for(const hww of hwwList) /*await*/ this._update(null, hww.uid, hww.state, null, hwwList)
+        await invokeIPC(CONST.HWW_API.SET_BIP44, SettingFactory.getCurrentNetwork().coin.bip44);
       }
       return isSupported;
     }
@@ -82,7 +83,6 @@ myApp.factory('hardwareWalletDaemon', [
     }
 
   }
-
 
   return HardwareWalletDaemon.new();
 }]);

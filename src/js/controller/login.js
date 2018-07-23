@@ -186,6 +186,16 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
 
   /** START: Communicate with Ledger **/
   const refresh = async (hardwareWalletDaemon) => {
+    const bip44 = SettingFactory.getCurrentNetwork().coin.bip44;
+    const knownSupportedBip44s = [
+      148,  // stellar.org
+      // 5248,  // ficnetwork.com, IN PROGRESS. Please follow https://github.com/LedgerHQ/ledgerjs/pull/171/files.
+    ]
+    if(!knownSupportedBip44s.includes(bip44)) {
+      $scope.ledgerError = { type: 'warning', error: `Ledger doesn't yet support this network's BIP44 (${bip44}).` }
+      return;
+    }
+
     const isSupported = await hardwareWalletDaemon.isSupported;
     if(!isSupported) {
       $scope.ledgerError = { type: 'danger', error: 'Your computer doesn\'t support Ledger!' }

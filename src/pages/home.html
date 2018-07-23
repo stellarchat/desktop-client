@@ -1,15 +1,33 @@
 <section class="col-xs-12 content">
-	<div class="page-header">
-	    <h3 translate="stellar_desktop_client">Stellar Desktop Client</h3>
+
+
+
+	<div class="alert alert-danger" role="alert" ng-show="notFunded && currentNetwork.coin.code == 'XLM'">
+		<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+		<span>This account has not been activated on the network yet. To proceed, fund this account. </span>
 	</div>
-	
+
+	<div class="alert alert-danger" role="alert" ng-show="notFunded && currentNetwork.coin.code == 'FIC'">
+		<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+		<span>This account has not been activated on the network yet. To proceed, fund this account either from a different wallet or by claiming coins purchased during ICO.</span>
+	</div>
+
+	<div ng-show="notFunded && currentNetwork.coin.code == 'FIC'">
+		<button type="submit" class="btn btn-default btn-sm" ng-click="fullReload()">
+			<span class="glyphicon glyphicon-refresh"></span> {{'refresh' | translate}}
+		</button>
+
+		<button type="submit" class="btn btn-success btn-sm" ng-click="goTo('/fic_coins')">
+			<span class="glyphicon glyphicon-saved"></span> Claim FIC
+		</button>
+	</div>
+
+
+	<div class="page-header">
+	  <h3 translate="stellar_desktop_client">Stellar Desktop Client</h3>
+	</div>
+
 	<p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
-	
-	<p class="lead">
-		<span translate="app_open_source">钱包开源啦！ </span>
-		<span translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</span>
-		<a href="javascript:require('electron').shell.openExternal('https://github.com/stellarchat/desktop-client')"><code>https://github.com/stellarchat/desktop-client</code></a>
-	</p>
 
 	<div ng-show="isLangCN()">
 		<p class="lead">

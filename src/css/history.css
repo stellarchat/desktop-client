@@ -18,6 +18,10 @@
 	border-top: 1px solid #dedfe0;;
 }
 
+.HistoryTable-row.another {
+	opacity: 0.6;
+}
+
 .HistoryTable-row td {
 	padding: 0.5em 1em;
 	font-size: 75%;
@@ -40,7 +44,7 @@
 }
 
 .HistoryTable-row .bold {
-	font-weight: bold; 
+	font-weight: bold;
 }
 
 
@@ -74,14 +78,14 @@
 }
 
 .feed-item-comment .table {
-	display: table; 
+	display: table;
 	width:100%;
 	min-width:780px;
 }
 
 .feed-item-comment .batchtable {
 	padding-left: 10px;
-	display: table; 
+	display: table;
 	width:100%;
 	min-width:780px;
 }
@@ -140,7 +144,7 @@
 	vertical-align: middle;
 	padding-left: 16px;
 }
-    
+
 .circle {
 	border-radius: 50%;
 	border-width: 1px;
@@ -181,4 +185,3 @@
 	border-color: #8000ff;
 	color: #8000ff;
 }
-        

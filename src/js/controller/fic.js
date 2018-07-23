@@ -48,11 +48,37 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
 
   function getLockupPeriods() {
     const now = moment(new Date());
+
     const duration90 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_90));
-    const days90 = duration90.asDays();
+    const days90 = Math.abs(duration90.asDays());
+    const hours90 = Math.abs(duration90.asHours());
+    const minutes90 = Math.abs(duration90.asMinutes());
+    let left90, left180;
+    if(days90 > 1) {
+      left90 = {count: Math.round(days90), part: 'days'};
+    } else {
+      if(hours90 > 1) {
+        left90 = {count: Math.round(hours90), part: 'hours'};
+      } else {
+        left90 = {count: Math.round(minutes90), part: 'minutes'};
+      }
+    }
+
     const duration180 = moment.duration(now.diff(FicIcoFactory.LOCKUP_DATE_180));
-    const days180 = duration180.asDays();
-    $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
+    const days180 = Math.abs(duration180.asDays());
+    const hours180 = Math.abs(duration180.asHours());
+    const minutes180 = Math.abs(duration180.asMinutes());
+    if(days180 > 1) {
+      left180 = {count: Math.round(days180), part: 'days'};
+    } else {
+      if(hours180 > 1) {
+        left180 = {count: Math.round(hours180), part: 'hours'};
+      } else {
+        left180 = {count: Math.round(minutes180), part: 'minutes'};
+      }
+    }
+
+    $scope.availableIn = {"90": left90, "180": left180};
   }
 
   function getLocalCoins() {
@@ -79,8 +105,8 @@ myApp.controller("FICCoinCtrl", ['$rootScope', '$route', '$scope', '$location', 
           [ficAddress]: allCoins
         }
         allAddresses[ficDistributor] = newRow;
-        $window.localStorage[`whitelist`] = JSON.stringify(allAddresses);
       }
+      $window.localStorage[`whitelist`] = JSON.stringify(allAddresses);
     }
   }
 
@@ -133,6 +159,7 @@ myApp.controller("FICHistoryCtrl", ['$rootScope', '$scope', '$window', 'FicIcoFa
   const days180 = duration180.asDays();
 
   $scope.availableIn = {"90": Math.abs(Math.round(days90)), "180": Math.abs(Math.round(days180))};
+  $scope.publicKey = $rootScope.address;
 
   $scope.loading = false;
   $scope.refresh = async () => {
@@ -185,7 +212,7 @@ myApp.controller("FICHistoryCtrl", ['$rootScope', '$scope', '$window', 'FicIcoFa
 
     $scope.loading = false;
     $scope.mergedTxs = mergedTxs;
-    $scope.$apply();
+    console.log(mergedTxs);
   };
 
   $scope.refresh();
