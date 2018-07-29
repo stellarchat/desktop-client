@@ -10,7 +10,7 @@ myApp.controller("SecurityCtrl", ['$scope', '$rootScope', 'AuthenticationFactory
       return $scope.mode = mode;
     }
 
-    $scope.keyAmount = AuthenticationFactory.secretAmount;
+    $scope.keyAmount = AuthenticationFactory.keypairs.length;
     $scope.key = `S${new Array(56).join("*")}`;
 
     $scope.showSec = (flag) => {

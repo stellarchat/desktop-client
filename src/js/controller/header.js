@@ -7,8 +7,8 @@ myApp.controller("HeaderCtrl", ['$scope', '$route', '$window', '$rootScope', '$l
     }
     $scope.launched = $window.localStorage['launched'] ? true : false;
 
-    $scope.logout = function () {
-      AuthenticationFactory.logout();
+    $scope.logout = async () => {
+      await AuthenticationFactory.logout();
       $location.path("/login");
       StellarApi.logout();
       $rootScope.reset();

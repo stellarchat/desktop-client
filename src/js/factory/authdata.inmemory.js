@@ -2,21 +2,26 @@
 'use strict';
 
 
-myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
-                          function( $window ,  AuthData ){
+myApp.factory('AuthDataInmemory', ['$window', 'AuthData', 'SettingFactory',
+                          function( $window ,  AuthData ,  SettingFactory ){
 
   /* class BlobObj
    *
    * Do not create directly because that's async, use static method `BlobObj.create(opts, cb)`.
    */
-  return class AuthDataInmemory extends AuthData {
+  class AuthDataInmemory extends AuthData {
     constructor(data){
-      super(data.address, data.secrets, data.contacts);
+      super(data.network, data.address, data.keypairs, data.contacts);
     }
 
     // create(opts:Map<string, any>) => Promise<AuthDataInmemory> -- create and return Promise of instance.
     static create(opts) {
-      const authData = new AuthDataInmemory({address: opts.address, secrets: [], contacts: []});
+      const authData = new AuthDataInmemory({
+        network: SettingFactory.getCurrentNetwork().networkPassphrase,
+        address: opts.address,
+        keypairs: [],
+        contacts: []
+      });
 
       return authData.save();
     }
@@ -35,16 +40,16 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
 
     // load(...opts:any[]) => Promise<AuthDataInmemory> -- fake-load from sessionStorage and return Promise of instance.
     static load(opts) {
-      console.log(opts)
       return AuthDataInmemory.create(opts)
     }
 
     // store() => AuthDataInmemory -- store in sessionStorage and return instance.
     store() {
       $window.sessionStorage[AuthData.SESSION_KEY] = JSON.stringify({
+        network: this.network,
         address: this.address,
         contacts: this.contacts,
-        secrets: this.secrets,
+        keypairs: this.keypairs,
       });
       return this;
     }
@@ -60,6 +65,15 @@ myApp.factory('AuthDataInmemory', ['$window', 'AuthData',
       })
     }
 
+    async logout() {
+      // Nothing to do, kill the instance and it's done.
+      return;
+    }
+
+    get VERSION() { return AuthDataInmemory.VERSION; }
   }
+  AuthDataInmemory.VERSION = '2.0';
+
+  return AuthDataInmemory;
 
 }]);

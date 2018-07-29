@@ -27,7 +27,7 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
 
 
     //Watch for password changes
-    $scope.$watch('password1', function(newValue){
+    $scope.$watch('password1', (newValue) => {
       if(newValue == undefined) { newValue = ''; }
       let result = zxcvbn(newValue);
       meter.value = result.score;
@@ -44,21 +44,22 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
     }, true);
 
 
-    $scope.changeMode = function(mode) {
+    $scope.changeMode = (mode) => {
       $scope.mode = mode;
     };
-    $scope.showPass = function(flag) {
+    $scope.showPass = (flag) => {
       $scope.showPassword = flag;
     };
-    $scope.showSec = function(flag) {
+    $scope.showSec = (flag) => {
       $scope.showSecret = flag;
     };
 
-    $scope.reset = function() {
+    $scope.reset = () => {
+      $scope.address = '';
       $scope.password = '';
       $scope.password1 = '';
       $scope.password2 = '';
-      $scope.masterkey = '';
+      $scope.secret = '';
       $scope.key = '';
       $scope.mode = 'register_new_account';
       $scope.showMasterKeyInput = false;
@@ -68,20 +69,31 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       if ($scope.registerForm) $scope.registerForm.$setPristine(true);
     };
 
+    const getWalletFilename = (secret, timestamp) => {
+      const address = StellarSdk.Keypair.fromSecret(secret).publicKey()
+      var ts = timestamp ? new Date(timestamp) : new Date()
 
+      return [
+        'wallet',
+        '--',
+        address.toString('hex'),
+        '--',
+        'UTC--',
+        ts.toJSON().replace(/:/g, '-').slice(0, -5),
+        '.keystore'
+      ].join('')
+    }
 
-    $scope.fileInputClick = function() {
+    $scope.fileInputClick = () => {
+      if(!$scope.secret) $scope.secret = StellarSdk.Keypair.random().secret();
       const remote = require('electron').remote;
       var dialog = remote.dialog;
 
-      var dt = new Date();
-      var datestr = (''+dt.getFullYear()+(dt.getMonth()+1)+dt.getDate()+'_'+dt.getHours()+dt.getMinutes()+dt.getSeconds()).replace(/([-: ])(\d{1})(?!\d)/g,'$10$2');
-
       dialog.showSaveDialog({
           properties: [ 'openFile' ],
-          defaultPath: 'wallet' + datestr + '.txt',
-        }, function ( filename ) {
-          $scope.$apply(function() {
+          defaultPath: getWalletFilename($scope.secret),
+        }, (filename) => {
+          $scope.$apply(() => {
             $scope.walletfile = filename;
             if($scope.walletfile != '' && $scope.walletfile != undefined) {
               $scope.mode = 'register_empty_wallet';
@@ -94,36 +106,35 @@ myApp.controller('RegisterCtrl', ['$scope', '$location', 'AuthenticationFactory'
       );
     };
 
-    $scope.submitForm = function() {
-      if(!$scope.masterkey) $scope.masterkey = StellarSdk.Keypair.random().secret();
+    $scope.submitForm = async () => {
+      if(!$scope.secret) $scope.secret = StellarSdk.Keypair.random().secret();
 
       const options = {
-        address: StellarSdk.Keypair.fromSecret($scope.masterkey).publicKey(),  // ignored until blob format v2.
-        secrets: [$scope.masterkey],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
+        address: StellarSdk.Keypair.fromSecret($scope.secret).publicKey(),  // ignored until blob format v2.
+        secrets: [$scope.secret],  // TODO: blob format v2 to handle multiple secrets (and other things in upcoming commits).
         password: $scope.password1,
         path: $scope.walletfile
       };
-      AuthenticationFactory.create(AuthenticationFactory.TYPE.FILESYSTEM, options, (err) => {
-        if (err) {
-          console.error('Registration failed!', err);
-          $scope.save_error = err.message;
-          $scope.$apply();
-          return;
-        }
-
+      try {
+        await AuthenticationFactory.create(AuthenticationFactory.TYPE.FILESYSTEM, options);
         $scope.password = new Array($scope.password1.length+1).join("*");
+        $scope.address = options.address;
         $scope.key = `S${new Array(56).join("*")}`;
         $scope.mode = 'welcome';
+      } catch(err) {
+        console.error('Registration failed!', err);
+        $scope.save_error = err.message;
+      } finally {
         $scope.$apply();
-      });
+      }
     };
 
-    $scope.submitSecretKeyForm = function(){
-      $scope.masterkey = $scope.secretKey;
+    $scope.submitSecretKeyForm = () => {
+      $scope.secret = $scope.secretKey;
       $scope.fileInputClick();
     };
 
-    $scope.gotoFund = function() {
+    $scope.gotoFund = () => {
       $scope.mode = 'register_empty_wallet';
       $scope.reset();
 

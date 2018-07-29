@@ -130,7 +130,7 @@ module.exports = (()=>{
     }
 
     async _watchdogCallback() {
-      console.log(`Hardwallet<${this.uid}> Watchdog: state='${this.state}' busy='${this.busy}'`)
+      // console.log(`Hardwallet<${this.uid}> Watchdog: state='${this.state}' busy='${this.busy}'`)
       if(!this.transport) {
         try {
           const transport = await Transport.open(this.descriptor);

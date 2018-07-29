@@ -142,7 +142,7 @@
         <div class="form-group">
           <h5 class="important" translate="secret_key">Secret key:</h5>
           <input type="text" class="form-control" ng-hide="showSecret==true" value="{{key}}" disabled>
-          <input type="text" class="form-control" ng-show="showSecret==true" value="{{masterkey}}" disabled>
+          <input type="text" class="form-control" ng-show="showSecret==true" value="{{secret}}" disabled>
           <qrcode size="128" data="{{key}}" ng-show="showSecret==true" color="#FFF" background="#000" />
         </div>
 

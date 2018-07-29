@@ -1,8 +1,8 @@
-/* global Buffer, angular, myApp, StellarSdk */
+/* global angular, Buffer, CONST, myApp, StellarSdk, toContactV2 */
 
 // Auth - singleton that manages account.
-myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystem', 'AuthDataInmemory',
-                                function($rootScope ,  $window ,  AuthData ,  AuthDataFilesystem ,  AuthDataInmemory) {
+myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'AuthDataFilesystemRouter', 'AuthDataInmemory',
+                                function($rootScope ,  $window ,  AuthData ,  AuthDataFilesystemRouter ,  AuthDataInmemory) {
   let _type;
   let _data;  // `_dta.secrets` is the only place where secret is held. See also method `sign(te, callback)`.
 
@@ -14,7 +14,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         get FILESYSTEM() { return 'filesystem' },
     }}
     get AUTH_DATA() { return {
-        get [this.TYPE.FILESYSTEM]() { return AuthDataFilesystem; },
+        get [this.TYPE.FILESYSTEM]() { return AuthDataFilesystemRouter; },
         get [this.TYPE.TEMPORARY]() { return AuthDataInmemory; },
     }}
 
@@ -30,19 +30,16 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       return !!$window.sessionStorage[this.SESSION_KEY];
     }
 
-    create(type, opts, callback){
+    async create(type, opts){
       const AuthData = this.AUTH_DATA[type];
       if(!AuthData) throw new Error(`Unsupported type "${$window.sessionStorage[this.SESSION_KEY]}"`);
 
-      AuthData.create(opts)
-        .then((authdata) => {
-          console.log("AuthenticationFactory: registration succeeded", authdata);
+      const authdata = await AuthData.create(opts);
+      console.info("AuthenticationFactory: registration succeeded", authdata);
 
-          _type = type;
-          _data = authdata;
-          this._store();
-          callback(null, authdata, 'local');
-        }).catch(callback);
+      _type = type;
+      _data = authdata;
+      this._store();
     }
 
     load(type, opts, callback) {
@@ -76,7 +73,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
         _type = type;
         _data = authdata;
-        console.warn(`Restored "${type}" authdata from session.`)
+        console.info(`Restored "${type} ${authdata.VERSION}" authdata from session.`)
       } catch(e) {
         _type    = undefined;
         _data    = undefined;
@@ -96,9 +93,10 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       $rootScope.$broadcast('$authUpdate');
     }
 
-    logout() {
+    async logout() {
       if(!this.isInMemory) return;
 
+      await _data.logout();
       _type = undefined;
       _data = undefined;
 
@@ -115,13 +113,8 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       return _data ? _data.address : undefined;
     }
 
-    get secretAmount() {
-      return _data ? _data.secrets.length : 0;
-    }
-
-    get secrets() {
-      console.warn(`Your ${this.secretAmount} secret(s) were revealed!`)
-      return _data ? _data.secrets : undefined;
+    get keypairs() {
+      return _data ? _data.keypairs : undefined;
     }
 
     teThresholds(te) {
@@ -162,7 +155,7 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         .map((signerAndWeight) => signerAndWeight[0])
     }
 
-    sign(te, thresholds, signatureXDRs, plainSecrets) {
+    async sign(te, thresholds, signatureXDRs, plainSecrets) {
       // Note to myself - TL;DR operations of signatures.
       //     decoratedSignature           = keypair.signDecorated(transaction.hash())
       //     serializedDecoratedSignature = decoratedSignature.toXDR().toString('base64')
@@ -178,19 +171,17 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
         const requiredKeypair = StellarSdk.Keypair.fromPublicKey(requiredPublicKey);
 
         // If applicable, sign with stored secrets.
-        const rightStoredSecretKp = _data.secrets
-          .map((storedSecret)=>StellarSdk.Keypair.fromSecret(storedSecret))
-          .find((kp)=>kp.publicKey() === requiredPublicKey);
+        const rightStoredSecretKp = _data.keypairs
+          .filter((keypair)=>keypair.signingMethod === CONST.SIGNING_METHOD.ENCRYPTED_SECRET)
+          .find((keypair)=>keypair.publicKey === requiredPublicKey);
         if(rightStoredSecretKp) {
           console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with stored secret of ${requiredPublicKey}`);
-          mostUsefulSignature = rightStoredSecretKp.signDecorated(te.hash());
+          mostUsefulSignature = await _data.signWithEncryptedSecret(rightStoredSecretKp.publicKey, te.hash());
           break;
         }
 
         // If applicable, sign with given signatures.
         for(const signatureXDR of signatureXDRs) {
-          console.log(signatureXDR)
-          console.log(Buffer.from(signatureXDR, 'base64'))
           const signature = StellarSdk.xdr.DecoratedSignature.fromXDR(Buffer.from(signatureXDR, 'base64'));
           if(StellarSdk.verify(te.hash(), signature.signature(), requiredKeypair.rawPublicKey())) {
             console.info(`Sign Transaction ${te.toEnvelope().toXDR().toString('base64')} with given signature of ${requiredPublicKey}`);
@@ -213,7 +204,6 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
 
       if(mostUsefulSignature) {
         te.signatures.push(mostUsefulSignature);
-        console.log(mostUsefulSignature, te, te.toEnvelope().toXDR().toString('base64'))
         return this.sign(te, thresholds, signatureXDRs, plainSecrets);
       } else {
         return te;
@@ -233,16 +223,16 @@ myApp.factory('AuthenticationFactory', ['$rootScope', '$window', 'AuthData', 'Au
       }
     }
 
-    addContact(contact, callback) {
-      _data.unshift("/_contacts", contact, callback);
+    async addContact(contact, inputV1) {
+      return _data.addContact(inputV1 ? toContactV2(contact) : contact);
     }
 
-    updateContact(name, contact, callback) {
-      _data.filter('/_contacts', 'name', name, 'extend', '', contact, callback);
+    async updateContact(name, contact, inputV1) {
+      return _data.updateContact(name, inputV1 ? toContactV2(contact) : contact);
     }
 
-    deleteContact(name, callback) {
-      _data.filter('/_contacts', 'name', name, 'unset', '', callback);
+    async deleteContact(name) {
+      return _data.deleteContact(name);
     }
 
     getContact(value) {

@@ -44,17 +44,8 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
   }, true);
 
   $scope.plainSecretSign = async () => {
-    try {
-      const before = $scope.te.signatures.length;
-      $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [], [$scope.plainSecret]);
-      const after = $scope.te.signatures.length;
-      if(before === after) throw new Error('Secret is not useful for any of accounts above.');
-    } catch(err) {
-      $scope.plainError = err.message;
-      $('.plainSecretSign').attr("disabled", "disabled");
-    } finally {
-      $scope.refresh();
-    }
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [], [$scope.plainSecret]);
+    $scope.refresh();
   }
   /** END: Plain secret sign **/
 
@@ -65,7 +56,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
       $scope.signWithLedger = 'Please confirm Transaction in Ledger...'
       $scope.refresh();
       const signature = await hardwareWalletDaemon.signTransaction($scope.te.signatureBase().toString('base64') )
-      $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [signature], []);
+      $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [signature], []);
       $scope.signWithLedger = 'Done! Sign with Ledger again'
     } catch(err) {
       if(err.message.toLowerCase().includes('reject')) {
@@ -114,7 +105,7 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
   $scope.offlineSignatureAdd = async () => {
     $scope.loading = true;
     const parsedSignatureXDRs = JSON.parse($scope.signatureXDRs);
-    $scope.te = AuthenticationFactory.sign($scope.te, thresholds, parsedSignatureXDRs);
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, parsedSignatureXDRs);
     $scope.refresh();
   }
   /** END: Offline sign **/
@@ -124,8 +115,8 @@ myApp.controller('signModalCtrl', ['$rootScope', '$scope', 'AuthenticationFactor
   $scope.refresh = async () => {
 
     // Check if all done
-    $scope.te = AuthenticationFactory.sign($scope.te, thresholds, [], []);
-    $scope.requiredSigners = AuthenticationFactory.requiredSigners($scope.te, thresholds);
+    $scope.te = await AuthenticationFactory.sign($scope.te, $scope.thresholds, [], []);
+    $scope.requiredSigners = AuthenticationFactory.requiredSigners($scope.te, $scope.thresholds);
     if($scope.requiredSigners.length === 0) {
       paramsToReturnCallback = [null, $scope.te];
       $($element).modal('hide');
