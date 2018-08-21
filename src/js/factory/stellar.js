@@ -49,7 +49,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
           await _server.accounts().accountId(address).call()
           return true;
         } catch(err) {
-          if (err.name == 'NotFoundError') return false;
+          if (err.name === 'NotFoundError' || err.message === 'Request failed with status code 404') return false;
           throw err
         }
       },
