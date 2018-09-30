@@ -35,7 +35,6 @@ var translate_br = {
     are_you_sure_secret: 'Você está em um local seguro onde ninguém ou câmeras estão visualizando sua tela?',
     save_safe: 'Você já salvou sua chave secreta em um local seguro?',
     yes_save: 'Sim, Eu salvei minha chave secreta.',
-
     /** Balance & Trust **/
     balance : 'Saldo',
     estimated : 'Valor estimado em ativos:',
@@ -61,7 +60,6 @@ var translate_br = {
     issuer_invalid : 'O ID da conta do emissor do ativo deve ser um ID de conta válido',
     memo_invaid    : 'Memo inválido.',
     trust_granted  : 'Confiança concedida!',
-
     /** send **/
     send : 'Transferir',
     send_pick : 'Escolha um ativo para transferir',
@@ -76,7 +74,6 @@ var translate_br = {
     send_done    : 'Ativo enviado com sucesso.',
     not_funded   : 'Não consolidado. Para criar esta conta, envie pelo menos 1 {{name}}s ({{code}}).',
     can_accept   : 'A conta pode aceitar',
-
     contacts : 'Contatos',
     contact  : 'Contato',
     address  : 'Endereço',
@@ -91,7 +88,6 @@ var translate_br = {
     error_need_address : 'Informe um endereço.',
     error_invalid_address : 'Endereço inválido.',
     error_already_name    : 'Você já possui um outro contato com este mesmo nome.',
-
     /** Convert **/
     convert       : 'Conversões',
     convert_title : 'Converta uma moeda em outra',
@@ -100,7 +96,6 @@ var translate_br = {
     receive       : 'Receber',
     calculating   : 'Calculando...',
     path          : 'Caminho:',
-
     /** History **/
     history: 'Histórico',
     payments: 'Pagamentos',
@@ -121,7 +116,6 @@ var translate_br = {
     batch       : 'Batch',
     source_account : 'Source Account',
     inflation_op   : 'Inflation',
-
     choose : 'Escolher',
     example : 'exemplo',
     refresh : 'Atualizar',
@@ -131,7 +125,6 @@ var translate_br = {
     optional : 'Opcional',
     required : 'Obrigatório',
     require_memo : 'Destinatário requer um memo. Por favor, verifique se está correto.',
-
     trade : 'Negociar',
     normal: 'Normal',
     sent  : 'Enviado',
@@ -167,18 +160,15 @@ var translate_br = {
     advanced   : 'Avançado',
     buying     : 'Comprando',
     selling    : 'Vendendo',
-
     /** ICO **/
     ico : 'ICO',
     ico_stellar : 'Utilizando Stellar para ICOs',
     ico_note: 'Nota: Antes de se envolver em uma OIC, investidores e entusiastas em criptomoedas precisam considerar os riscos envolvidos ao participar. NÃO recomendamos nenhum desses projetos.',
     ico_instruction: 'Depois de adicionar a linha de confiança, selecione "Negociar - Conversões". Você pode usar qualquer moeda para comprar o ICO.',
-
     /** SIGN OFFLINE **/
     sign_offline: 'Offline',
     paste_xdr: 'Por favor, cole sua transação XDR',
     sign_transaction: 'Assinar transação',
-
     /** Setting & security **/
     settings : 'Configurações',
     network  : 'Rede',
@@ -218,7 +208,6 @@ var translate_br = {
     inflation_donation : 'Nos apoie',
     inflation_donation_desc : 'A RippleFox não pede doações, mas ao invés disso, pedimos por votos.',
     inflation_fox  : 'Vote to RippleFox',
-
     home_domain : 'Gerenciador de domínios',
     domain_desc : 'Um nome de domínio que pode ser adicionado opcionalmente à conta. Os clientes podem procurar mais detalhes neste domínio.',
     domain_done : 'Home Domain was set.',
@@ -234,7 +223,6 @@ var translate_br = {
     delete_warning : 'ESTOU CIENTE E QUERO CONTINUAR >>',
     back           : 'Voltar',
     merge_done     : 'Sua conta foi mesclada ao destino.',
-
     /** Deposit & withdrawl **/
     service : 'Serviços',
     deposit_withdraw : 'Depositos/Retiradas',
@@ -251,7 +239,6 @@ var translate_br = {
     analyzing : 'Analisando ...',
     will_recv : 'O destinatário receberá',
     can_send  : 'Você pode enviar',
-
     Stellar : 'Stellar',
     stellar_desktop_client : 'Carteira Foxlet',
     app_open_source  : '',
