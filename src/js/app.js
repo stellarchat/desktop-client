@@ -1,4 +1,4 @@
-/* globals angular, gateways, nw, translate_cn, translate_en, translate_fr, */
+/* globals angular, gateways, nw, translate_cn, translate_en, translate_fr, translate_br */
 /* exported myApp */
 var myApp = angular.module('myApp', ['ngRoute', 'pascalprecht.translate', 'chart.js', 'monospaced.qrcode']);
 
@@ -6,6 +6,7 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
   $translateProvider.translations('cn', translate_cn);
   $translateProvider.translations('en', translate_en);
   $translateProvider.translations('fr', translate_fr);
+  $translateProvider.translations('br', translate_br);
   $translateProvider.preferredLanguage('cn');
   $translateProvider.useSanitizeValueStrategy('escape');
 
