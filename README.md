@@ -62,6 +62,9 @@ If you have more problems, make sure that:
 4. Ledger currently is in the Stellar app.
 5. Ledger Stellar app settings has "browser support" set to "No".
 
+## Electron version download
+
+[https://github.com/stellarchat/desktop-client/issues/274#issuecomment-406983778](https://github.com/stellarchat/desktop-client/issues/274#issuecomment-406983778)
 
 # Foxlet恒星钱包 🚀
 
@@ -84,4 +87,4 @@ Foxlet钱包也称为恒星桌面钱包或恒星离线钱包。它是一个注�
 
 ## TODO
 
-TODO
+目前我们提供的是4.x版本，基于nwjs分支的下载。但社区有人编译了electron版本的[下载](https://github.com/stellarchat/desktop-client/issues/274#issuecomment-406983778)。
