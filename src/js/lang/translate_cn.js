@@ -247,9 +247,9 @@ var translate_cn = {
 
   Stellar : '恒星',
   stellar_desktop_client : '恒星桌面钱包',
-  app_open_source  : '钱包开源啦！',
-  app_safe_notice  : '密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。',
-  app_feedback     : '有修改建议请到社区QQ群676552869里讨论。',
+  app_open_source  : '钱包开源。',
+  app_safe_notice  : '密钥保存在本地，丢失不可恢复！一定要备份，安全自己负责。',
+  app_feedback     : '有建议可到社区QQ群676552869里讨论。',
   trade_volume : '24小时交易量',
   wallet : '钱包',
   version: '版本',
