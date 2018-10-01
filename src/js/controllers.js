@@ -23,10 +23,10 @@ myApp.controller("FooterCtrl", [ '$scope', '$translate', 'SettingFactory', 'Remo
       SettingFactory.setLang(key);
     };
 
-    $scope.version = '4.1';
+    $scope.version = '4.2';
     $scope.new_version = false;
     $scope.diff = false;
-    RemoteFactory.getClientVersion(function(err, data){
+    RemoteFactory.getNwjsClientVersion(function(err, data){
       if (err) {
         console.warn('Can not get the version from github.', err);
       } else {

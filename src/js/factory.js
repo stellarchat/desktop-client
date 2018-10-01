@@ -268,6 +268,12 @@ myApp.factory('RemoteFactory', function($http) {
     var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/master/src/package.json";
     getResource(url, callback);
   }
+  
+  remote.getNwjsClientVersion = function(callback) {
+    var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/nwjs/src/package.json";
+    getResource(url, callback);
+  }
+  
   return remote;
 });
 
