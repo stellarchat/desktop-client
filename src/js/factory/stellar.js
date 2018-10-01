@@ -462,9 +462,9 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         try {
           const server = await StellarSdk.FederationServer.createForDomain(domain);
           const data = await server.resolveAccountId(address);
-          if(data.stellarthis.address) {
-            const index = data.stellarthis.address.indexOf("*");
-            const fed_name = data.stellarthis.address.substring(0, index);
+          if(data.stellar_address) {
+            const index = data.stellar_address.indexOf("*");
+            const fed_name = data.stellar_address.substring(0, index);
             return fed_name;
           }
         } catch(err) {
