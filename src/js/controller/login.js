@@ -7,7 +7,7 @@ myApp.controller('LoginCtrl', ['$scope', '$rootScope', '$window', '$location', '
     $scope.toggleTemp = function() {
       $scope.showTemp = !$scope.showTemp;
     }
-    
+
     $scope.fileInputClick = function() {
       FileDialog.openFile(function(filename) {
         $scope.$apply(function() {
