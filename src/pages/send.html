@@ -78,7 +78,7 @@
 					    </ul>
 					<input type="text" class="s-inputGroup__item S-flexItem-share"
 						ng-model="memo"
-						ng-disabled="memo_provided || quote_id"
+						ng-disabled="memo_provided || quote_id || memo_type=='none'"
 						placeholder="{{memo_require ? 'required' : 'optional' | translate}}">
 				</label>
 			</div>

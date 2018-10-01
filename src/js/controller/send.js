@@ -13,7 +13,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
     $scope.asset = {};
     $scope.input_address;
     $scope.memo;
-    $scope.memo_type = StellarSdk.MemoNone;
+    $scope.memo_type = 'none';
     $scope.memo_provided;
     $scope.memo_require = false;
     $scope.sending;
@@ -112,7 +112,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
         $scope.full_address = contact.address;
         $scope.real_address = $scope.full_address;
         if (contact.memo) {
-          $scope.memo_type = capitalizeFirstLetter(contact.memotype);
+          $scope.memo_type = contact.memotype;
           $scope.memo = contact.memo;
         }
       } else {
@@ -397,7 +397,9 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       'GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM' : {memo_type: 'id',   name: 'BTC38'},
       'GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2' : {memo_type: 'id',   name: 'Aex.com'},
       'GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7' : {memo_type: 'id',   name: 'Changelly'},
-      'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'text', name: 'Binance'}
+      'GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A' : {memo_type: 'text', name: 'Binance'},
+      'GDP34WXZRCSHVUDQLGKJKOBMS5LOQPHCIADZU5POEF3IICZ7XNQJ65Y6' : {memo_type: 'text', name: 'Huobi'},
+      'GBGII2C7M4TOEC2MVAZYG3TRFM3ATCCEWANSN4Q3AHEX3NRKXJCVZDEV' : {memo_type: 'id',   name: 'OKEX'},
     }
 
     function capitalizeFirstLetter(string) {
