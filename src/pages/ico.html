@@ -30,7 +30,7 @@
 				
 			<div class="island__paddedContent" ng-show="trust_error">
 				<div class="s-alert s-alert--alert">
-					{{trust_error | translate}}
+					{{trust_error | translate:currentNetwork.coin}}
 				</div>
 			</div>
 		</div>
