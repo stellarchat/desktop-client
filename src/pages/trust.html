@@ -33,7 +33,7 @@
 	</div>
 
 	<div class="s-alert s-alert--alert row__message" ng-show="trust_error">
-		{{trust_error | translate}}
+		{{trust_error | translate:currentNetwork.coin}}
 	</div>
 	<div class="s-alert s-alert--success row__message" ng-show="trust_done" translate="trust_granted">
 		Trust is granted!

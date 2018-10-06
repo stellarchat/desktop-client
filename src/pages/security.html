@@ -45,7 +45,7 @@
 
 		<div class="col-sm-9" ng-show="isMode('inflation')">
 			<label translate="important">Important:</label>
-			<p class="hint">{{ 'inflation_desc' | translate:{name:currentNetwork.coin.name} }}</p>
+			<p class="hint">{{ 'inflation_desc' | translate:currentNetwork.coin }}</p>
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
@@ -123,7 +123,7 @@
 
 		<div class="col-sm-9" ng-show="isMode('data')">
 			<label translate="important">Important:</label>
-			<p class="hint" translate="data_desc1">Allows you to set,modify or delete a Data Entry (name/value pair) that is attached to a particular account. An account can have an arbitrary amount of DataEntries attached to it. Each DataEntry increases the minimum balance needed to be held by the account.</p>
+			<p class="hint" translate="data_desc1" translate-values="currentNetwork.coin">Allows you to set,modify or delete a Data Entry (name/value pair) that is attached to a particular account. An account can have an arbitrary amount of DataEntries attached to it. Each DataEntry increases the minimum balance needed to be held by the account.</p>
 			<p class="hint" translate="data_desc2">DataEntries can be used for application specific things. They are not used by the core Stellar protocol.</p>
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-6 col-md-5">
@@ -163,7 +163,7 @@
 
 		<div class="col-sm-9" ng-show="isMode('merge')">
 			<label translate="important">Important:</label>
-			<p class="hint" translate="merge_desc">Danger operation! It transfers the native balance (the amount of XLM an account holds) to another account and removes the source account from the ledger.</p>
+			<p class="hint" translate="merge_desc" translate-values="currentNetwork.coin">Danger operation! It transfers the native balance (the amount of XLM an account holds) to another account and removes the source account from the ledger.</p>
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-md-10">
@@ -199,7 +199,7 @@
 		<div class="col-sm-12" style="margin-top: 20px;" ng-show="network_error">
 			<div class="alert alert-danger" role="alert">
 				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-				<span>{{network_error | translate}}</span>
+				<span>{{network_error | translate:currentNetwork.coin}}</span>
 			</div>
 		</div>
 

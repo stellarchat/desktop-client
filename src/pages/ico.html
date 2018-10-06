@@ -32,7 +32,7 @@ require('electron').shell.openExternal('{{ico.website}}')'" ng-show="ico.website
 			<div class="padding-15" ng-show="trust_error">
 				<div class="alert alert-danger" role="alert">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span>{{trust_error | translate}}</span>
+					<span>{{trust_error | translate:currentNetwork.coin}}</span>
 				</div>
 			</div>
 				
