@@ -45,7 +45,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _server.accounts().accountId(address).call().then((accountResult) => {
           callback(null, true);
         }).catch((err) => {
-          if (err.name === 'NotFoundError') {
+          if (err instanceof StellarSdk.NotFoundError) {
             callback(null, false);
           } else {
             callback(err, false);
@@ -312,13 +312,10 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         _server.accounts().accountId(address||this.address).call().then((data) => {
           callback(null, data);
         }).catch((err) => {
-          if (err.name == 'NotFoundError') {
-            console.warn(address, err.name);
-            callback(new Error(err.name));
-          } else {
-            console.error(err);
-            callback(err, null);
+          if (!(err instanceof StellarSdk.NotFoundError)) {
+            console.error(address, err);
           }
+          callback(err, null);
         });
       },
 
@@ -557,7 +554,7 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
 
       getErrMsg(err) {
         let message = "";
-        if (err.name == "NotFoundError") {
+        if (err instanceof StellarSdk.NotFoundError) {
           message = "NotFoundError";
         } else if (err.data && err.data.extras && err.data.extras.result_xdr) {
           const resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.data.extras.result_xdr, 'base64');

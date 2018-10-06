@@ -281,9 +281,11 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
         return;
       }
       console.debug('resolve ' + $scope.real_address);
+      $scope.act_loading = true;
       StellarApi.getInfo($scope.real_address, function(err, data) {
+        $scope.act_loading = false;
         if (err) {
-          if (err.message == "NotFoundError") {
+          if (err instanceof StellarSdk.NotFoundError) {
             $scope.real_not_fund = true;
             $scope.send.unshift({
               code   : $rootScope.currentNetwork.coin.code,
@@ -296,6 +298,7 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
               $scope.pickCoin();
             }
           } else {
+            $scope.send_error.message = StellarApi.getErrMsg(err);
             console.error('resolveAccountInfo', err);
           }
         } else {
