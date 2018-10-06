@@ -376,7 +376,7 @@ myApp.factory('AnchorFactory', ['$rootScope', 'StellarApi',
         $scope.$broadcast("anchorUpdate");
       }).catch(function(err){
         self.anchor[domain].parsing = false;
-        console.error(err);
+        console.error('Parse ' + domain + ' fail.', err);
       });
 
     }
