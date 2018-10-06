@@ -187,7 +187,7 @@
 					<div class="s-alert s-alert--info" style="margin-bottom: 10px;" ng-show="(is_federation || real_not_fund || real_accept) && real_address && !sending && !send_done">
 						<ul class="AddTrust__errorList">
 							<li ng-show="is_federation || is_contact">{{real_address}}</li>
-							<li ng-show="real_not_fund" translate="not_funded">Not funded</li>
+							<li ng-show="real_not_fund" translate="not_funded" translate-values="currentNetwork.coin">Not funded</li>
 							<li ng-show="real_accept">{{'can_accept' | translate}} {{real_accept}}</li>
 						</ul>
 					</div>
