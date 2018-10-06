@@ -402,10 +402,6 @@ myApp.controller("SendCtrl", ['$scope', '$rootScope', '$routeParams', 'StellarAp
       'GBGII2C7M4TOEC2MVAZYG3TRFM3ATCCEWANSN4Q3AHEX3NRKXJCVZDEV' : {memo_type: 'id',   name: 'OKEX'},
     }
 
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
     $scope.initSend();
 
   } ]);

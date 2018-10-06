@@ -2,10 +2,13 @@
 var translate_en = {
   header_wellcome : 'Stellar is a platform that connects banks, payments systems, and people.',
   login_desc : 'You can only use a secret key to access an existing account. This is because the desktop client stores your login information locally on your computer, so your account is as safe as the security of your personal computer.',
+  open_wallet: 'Open wallet',
+  create_wallet: 'Create wallet',
   open_account : 'Open account',
   open_temp_act: 'Temporary Wallet',
   select_file : 'Select account file',
   create_new_account : 'Create new account',
+  create_new_account_info : 'Wallet will create a local file for your secret that will be encrypted with password of your choice. Encrypted file is not recommended way to access your wallet. Please consider a hardware wallet.',
   account_password : 'Account password',
   open_existed_account : 'Open existing account',
   create_blank : 'Generate a new account',
@@ -35,7 +38,8 @@ var translate_en = {
   are_you_sure_secret: 'Are you in a safe place where no person or camera can see your screen?',
   save_safe: 'Have you saved your secret key somewhere safe?',
   yes_save: 'Yes, I saved my secret key',
-
+  ledger_wallet: 'Ledger Wallet',
+  ledger_wallet_connect: 'Please connect Ledger.',
   /** Balance & Trust **/
   balance : 'Balance',
   estimated : 'Estimated value of holdings:',

@@ -2,10 +2,13 @@
 var translate_fr = {
   header_wellcome : 'Stellar est une plateforme de connection pour les institutions, systèmes bancaire, et les individus.',
   login_desc : 'Vous ne pouvez utiliser qu\'une clé secrète pour accéder à un compte existant. Celà est dû au fait que le client de bureau stocke vos informations de connexion localement sur votre ordinateur, de sorte que votre compte soit aussi sûr que la sécurité de votre ordinateur personnel.',
+  open_wallet: 'Accéder à un portefeuille',
+  create_wallet: 'Créer à un portefeuille',
   open_account : 'Accéder à un compte',
   open_temp_act: 'Portefeuille temporaire',
   select_file : 'Choisir un fichier de compte',
   create_new_account : 'Créer un nouveau compte',
+  create_new_account_info : 'Wallet will create a local file for your secret that will be encrypted with password of your choice. Encrypted file is not recommended way to access your wallet. Please consider a hardware wallet.',
   account_password : 'Mot de passe du compte',
   open_existed_account : 'Ouvrir un compte existant',
   create_blank : 'Créer un compte vide',
@@ -33,7 +36,8 @@ var translate_fr = {
   are_you_sure_secret: 'Êtes-vous dans un endroit sûr où aucune(s) personne(s) ou appareil(s) photo ne peut voir votre écran?',
   save_safe: 'Avez-vous enregistré votre clé secrète quelque part en sécurité?',
   yes_save: 'Oui, j\'ai sauvé ma clé secrète',
-
+  ledger_wallet: 'Ledger Wallet',
+  ledger_wallet_connect: 'Please connect Ledger.',
   /** Balance & Trust **/
   balance : 'Solde',
   estimated : 'Estimation de votre solde',

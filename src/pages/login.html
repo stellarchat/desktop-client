@@ -3,16 +3,16 @@
   <!-- TABS -->
   <ul class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
     <li class="nav-item ">
-      <a class="nav-item nav-link" id="nav-create-account-tab" data-toggle="tab" href="#nav-create-account" role="tab" aria-selected="false" aria-controls="nav-create">Create wallet</a>
+      <a class="nav-item nav-link" id="nav-create-account-tab" data-toggle="tab" translate="create_wallet" href="#nav-create-account" role="tab" aria-selected="false" aria-controls="nav-create">Create wallet</a>
     </li>
     <li class="nav-item">
       <a class="nav-item nav-link" id="nav-public-key-tab" data-toggle="tab" href="#nav-public-key" role="tab" aria-selected="false" aria-controls="nav-public">Browse wallet</a>
     </li>
     <li class="nav-item active">
-      <a class="nav-item nav-link" id="nav-open-wallet-tab" data-toggle="tab" href="#nav-open-wallet" role="tab" aria-selected="true" aria-controls="nav-open">Open wallet</a>
+      <a class="nav-item nav-link" id="nav-open-wallet-tab" data-toggle="tab" translate="open_wallet" href="#nav-open-wallet" role="tab" aria-selected="true" aria-controls="nav-open">Open wallet</a>
     </li>
     <li class="nav-item ">
-      <a class="nav-item nav-link" id="nav-ledger-wallet-tab" data-toggle="tab" href="#nav-ledger-wallet" role="tab" aria-selected="false" aria-controls="nav-ledger">Ledger wallet</a>
+      <a class="nav-item nav-link" id="nav-ledger-wallet-tab" data-toggle="tab" translate="ledger_wallet" href="#nav-ledger-wallet" role="tab" aria-selected="false" aria-controls="nav-ledger">Ledger wallet</a>
     </li>
   </ul>
 
@@ -51,7 +51,7 @@
     <div class="tab-pane fade active in" id="nav-open-wallet" role="tabpanel" aria-labelledby="nav-open-wallet-tab">
       <div class="row" style="margin: 20px 0;">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 auth-form-wrapper">
-          <h2>Open Wallet</h2>
+          <h2 translate="open_wallet">Open Wallet</h2>
           <form name="loginForm" ng-disabled="loginForm.$invalid" ng-submit="submitForm()">
             <div class="form-group"><a class="btn overflow-hidden btn-block btn-default" id="walletfile" ng-click="fileInputClick()">{{'select_file' | translate}} {{walletfile}}</a></div>
             <div class="form-group hide">
@@ -102,14 +102,14 @@
     <div class="tab-pane fade" id="nav-ledger-wallet" role="tabpanel" aria-labelledby="nav-ledger-wallet-tab">
       <div class="row" style="margin: 20px 0;">
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 auth-form-wrapper">
-          <h2>Ledger Wallet</h2>
+          <h2 translate="ledger_wallet">Ledger Wallet</h2>
 
           <div class="alert alert-{{ledgerError.type}}" role="alert" ng-show="ledgerError.type">
             {{ledgerError.error}}
           </div>
 
           <div class="submit-btn-container hide" ng-hide="ledgerError.type">
-            <button type="button" class="btn-connect btn btn-submit btn-lg btn-block btn-success" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Unlocking">Connect with Ledger wallet</button>
+            <button type="button" class="btn-connect btn btn-submit btn-lg btn-block btn-success" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Unlocking" translate="ledger_wallet_connect">Connect with Ledger wallet</button>
           </div>
 
           <form name="HWAddress" ng-disabled="HWAddress.$invalid" ng-submit="HWAddressLogin()" class="" ng-hide="ledgerError.type">
