@@ -2,10 +2,13 @@
 var translate_cn = {
   header_wellcome : '恒星，分布式的全球支付网络',
   login_desc : '本钱包使用秘钥来登录已有的账户。你的秘钥加密保存在了你的电脑里，所以账户像你的个人电脑一样安全。请务必做好密钥的备份。',
+  open_wallet: '打开钱包',
+  create_wallet: '创造钱包',
   open_account : '打开账户',
   open_temp_act: '打开临时账户',
   select_file : '选择账户文件',
   create_new_account : '创建新账户',
+  create_new_account_info : 'Wallet will create a local file for your secret that will be encrypted with password of your choice. Encrypted file is not recommended way to access your wallet. Please consider a hardware wallet.',
   account_password : '账户密码',
   open_existed_account : '打开已有账户',
   create_blank : '创建一个全新账户',
@@ -33,7 +36,8 @@ var translate_cn = {
   are_you_sure_secret: '你在一个安全的地方？没有人或摄相头在看你吧？',
   save_safe: '你把密钥保存在安全的地方了吗？',
   yes_save: '是，我已经保存好了！',
-
+  ledger_wallet: 'Ledger Wallet',
+  ledger_wallet_connect: 'Please connect Ledger.',
   /** Balance & Trust **/
   balance : '余额',
   estimated : '资产折合：',
