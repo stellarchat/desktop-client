@@ -23,7 +23,7 @@ var nw = new NwBuilder({
     ],
     platforms: ['win32', 'win64', 'osx64', 'linux64', 'linux32'],
     flavor : 'normal',
-    version: '0.28.1',
+    version: '0.33.4',
     appName: 'StellarWallet',
     appVersion : VERSION,
     macIcns: 'src/img/rocket.icns',
