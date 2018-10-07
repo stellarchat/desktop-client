@@ -11,6 +11,7 @@ myApp.config(function($routeProvider, $httpProvider, $translateProvider, $compil
   $translateProvider.useSanitizeValueStrategy('escape');
 
   $compileProvider.imgSrcSanitizationWhitelist(/^\s*(local|http|https|app|tel|ftp|file|blob|content|ms-appx|x-wmapp0|cdvfile|chrome-extension):|data:image\//);
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
   $httpProvider.interceptors.push('TokenInterceptor');
 
