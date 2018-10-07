@@ -2,10 +2,13 @@
 var translate_br = {
     header_wellcome : 'Stellar é uma plataforma que conecta bancos, sistemas de pagamentos, e pessoas.',
     login_desc : 'Você poderá utilizar uma chave secreta apenas para contas já existentes. Isso é devido ao cliente desktop armazenar suas informações de login em seu computador, então sua conta estará tão segura quanto seu computador.',
+    open_wallet: 'Acessar Carteira',
+    create_wallet: 'Criar Carteira',
     open_account : 'Acessar conta',
     open_temp_act: 'Carteira temporária',
     select_file : 'Selecionar arquivo da conta',
     create_new_account : 'Criar conta',
+    create_new_account_info : 'Sua carteira criará um arquivo local para a senha de sua escolha. O arquivo será criptografado, porém não é uma maneira recomendada de acessar sua carteira. Por favor, considere uma carteira de hardware.',
     account_password : 'Senha da conta',
     open_existed_account : 'Acessar conta existente',
     create_blank : 'Gerar conta',
@@ -35,7 +38,8 @@ var translate_br = {
     are_you_sure_secret: 'Você está em um local seguro onde ninguém ou câmeras estão visualizando sua tela?',
     save_safe: 'Você já salvou sua chave secreta em um local seguro?',
     yes_save: 'Sim, Eu salvei minha chave secreta.',
-
+    ledger_wallet: 'Carteira Ledger',
+    ledger_wallet_connect: 'Por favor, conecte a carteira Ledger.',
     /** Balance & Trust **/
     balance : 'Saldo',
     estimated : 'Valor estimado em ativos:',
