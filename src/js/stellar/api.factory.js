@@ -556,8 +556,8 @@ myApp.factory('StellarApi', ['$rootScope', 'StellarHistory', 'StellarOrderbook',
         let message = "";
         if (err instanceof StellarSdk.NotFoundError) {
           message = "NotFoundError";
-        } else if (err.data && err.data.extras && err.data.extras.result_xdr) {
-          const resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.data.extras.result_xdr, 'base64');
+        } else if (err.response && err.response.data && err.response.data.extras && err.response.data.extras.result_xdr) {
+          const resultXdr = StellarSdk.xdr.TransactionResult.fromXDR(err.response.data.extras.result_xdr, 'base64');
           if (resultXdr.result().results()) {
             message = resultXdr.result().results()[0].value().value().switch().name;
           } else {
