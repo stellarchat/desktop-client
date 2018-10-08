@@ -57,7 +57,7 @@ Foxlet钱包也称为恒星桌面钱包或恒星离线钱包。它是一个注�
 
 ## 开发和运行
 
-Node.js是必须的(建议4.8.x)。没有安装的话，推荐使用[Node version manager](https://github.com/creationix/nvm)。
+Node.js是必须的(建议8.x)。没有安装的话，推荐使用[Node version manager](https://github.com/creationix/nvm)。
 
 要在本地开发还需要安装[nwjs](https://nwjs.io)，装SDK版本。 
 

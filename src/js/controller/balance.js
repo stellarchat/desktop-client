@@ -16,6 +16,9 @@ myApp.controller("BalanceCtrl", [ '$scope', '$rootScope', '$http', 'StellarApi',
     $scope.delTrust = function(code, issuer) {
       $scope.setRemoving(code, issuer, true);
       StellarApi.changeTrust(code, issuer, "0", function(err, data){
+        if (err) {
+          console.error(StellarApi.getErrMsg(err));
+        }
         $scope.setRemoving(code, issuer, false);
         $scope.$apply();
       });
