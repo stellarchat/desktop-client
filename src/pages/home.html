@@ -27,26 +27,31 @@
 	  <h3 translate="stellar_desktop_client">Stellar Desktop Client</h3>
 	</div>
 
-	<p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
+	<p class="lead" translate="app_safe_notice" ng-show="!isPublicNetwork()">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
 
-	<div ng-show="isLangCN()">
-		<p class="lead">
-			使用教程：<a href="javascript:require('electron').shell.openExternal('http://hx.ripplefox.com')"><code>http://hx.ripplefox.com</code></a>
-		</p>
-		<p class="lead">
-			中文维基与资讯传播：<a href="javascript:require('electron').shell.openExternal('https://www.256kw.com')"><code>https://www.256kw.com/</code></a>
-		</p>
-	</div>
-
-	<div class="page-header" ng-show="stellar_ticker && isPublicNetwork()">
-	    <h3 translate="trade_volume">Trade Volume</h3>
-	</div>
 	<div class="island" ng-show="stellar_ticker && isPublicNetwork()">
+        <div class="row" >
+            <div class="row__shareOption" style="flex-grow: 1;">
+                <div style="display: block; text-align: left; align-items: baseline;">
+                    <p class="lead" translate="app_safe_notice">密钥保存在本地，一定要记得备份，备份，备份！自己的安全自己负责。</p>
+                    <div ng-show="isLangCN()">
+                        <p class="lead">
+                            <span translate="app_feedback">有修改建议请到社区QQ群566413562里讨论。</span>
+                            使用教程：<a href="http://hx.ripplefox.com" target="_blank"><code>http://hx.ripplefox.com</code></a>
+                        </p>
+                        <p class="lead">
+                            中文维基与资讯传播：<a href="https://www.256kw.com/" target="_blank"><code>https://www.256kw.com/</code></a>
+                        </p>
+                    </div>
+    
+                </div>
+            </div>
+            <div class="row__shareOption" style="flex-grow: 1;">
+                <canvas id="pie" class="chart chart-pie chart-xs" chart-data="pie.data" chart-labels="pie.labels" chart-options="pie.options"></canvas>
+            </div>
+        </div>
 		<div class="row" >
-			<div class="row__shareOption" style="flex-grow: 2;">
-				<canvas id="pie" class="chart chart-pie chart-xs" chart-data="pie.data" chart-labels="pie.labels" chart-options="pie.options"></canvas>
-			</div>
-			<div class="row__shareOption" style="flex-grow: 3;">
+			<div class="row__shareOption">
 				<table class="table table-hover" style="border: 1px solid #dedfe0;">
 					<thead>
 						<tr>
