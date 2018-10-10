@@ -26,6 +26,7 @@ myApp.factory('StellarHistory', ['SettingFactory',
         for(const r of data.records) {
           const t = {
             id: r.id,
+            hash : r.transaction_hash,
             type: r.type,
             transaction: r.transaction,
           };
