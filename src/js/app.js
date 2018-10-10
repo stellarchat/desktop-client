@@ -276,7 +276,6 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
 
     $rootScope.reset = function(){
       reset();
-      $rootScope.$apply();
     }
 
     $rootScope.objKeyLength = function(obj) {
