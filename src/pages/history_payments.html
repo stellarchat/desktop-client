@@ -27,17 +27,22 @@
         		</tr>
       		</thead>
       		<tbody>
-      			<tr class="HistoryTable-row" ng-repeat="tx in payments">
-      				<td>{{tx.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-      				<td class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">{{tx.nick}}</span></td>
-        			<td class="amount">
-								<span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
-                <span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
-                <strong>{{tx.asset.code}}</strong>
-							</td>
-							<td>{{tx.memo}}<br><span class="timestamp" ng-show="tx.memo_type && tx.memo_type!='none'">memo-{{tx.memo_type}}</span></td>
-        			<td>{{tx.id}}<br>{{tx.type}}</td>
-      			</tr>
+                <tr class="HistoryTable-row" ng-repeat-start="tx in payments">
+                    <td colspan=2>{{tx.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                    <td class="amount" rowspan=2>
+                        <span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
+                        <span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
+                        <strong>{{tx.asset.code}}</strong>
+                    </td>
+                    <td colspan=2>
+                        <a href="https://stellarchain.io/tx/{{tx.hash}}" target="_blank">{{tx.hash}}</a>
+                    </td>
+                </tr>
+                <tr class="HistoryTable-row" style="border-top:none;" ng-repeat-end>
+                    <td colspan=2 class="address"><span ng-hide="tx.nick">{{tx.counterparty}}</span><span ng-show="tx.nick" title="{{tx.counterparty}}">{{tx.nick}}</span></td>
+                    <td><span class="timestamp" ng-show="tx.memo_type && tx.memo_type!='none'">memo-{{tx.memo_type}}:</span> {{tx.memo}}</td>
+                    <td style="text-align: center;">{{tx.type}}</td>
+                </tr>
       		</tbody>
       	</table>
     	</div>
