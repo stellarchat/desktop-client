@@ -201,6 +201,8 @@ var translate_br = {
     other_url  : 'Network URL',
     passphrase : 'Passphrase or id',
     coin_ticket: 'Native asset code',
+    timeout    : 'Tempo limite de transação',
+    timeout_desc: 'É possível que o status de sua transação seja determinado após um longo período se a rede estiver altamente congestionada. O número de tempo limite não pode ser negativo. Se o valor for 0, a transação é boa indefinidamente.',
     fed_protocol: 'Federation Protocol',
     fed_network : 'Nome do Serviço (~)',
     fed_network_desc : 'Você pode utilizar ~name no lugar de name*federation.domain.',

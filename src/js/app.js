@@ -260,6 +260,7 @@ myApp.run(['$rootScope', '$window', '$location', '$translate', 'AuthenticationFa
     $translate.use(SettingFactory.getLang());
     try {
       StellarApi.setServer(SettingFactory.getStellarUrl(), SettingFactory.getNetPassphrase(), SettingFactory.getAllowHttp());
+      StellarApi.setTimeout(SettingFactory.getTimeout());
     } catch(e) {
       console.error("Cannot set server", SettingFactory.getStellarUrl(), SettingFactory.getNetworkType(), e);
       console.warn("Change network back to xlm.");

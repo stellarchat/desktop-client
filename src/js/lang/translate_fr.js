@@ -194,6 +194,8 @@ var translate_fr = {
   other_url  : 'URL de réseau',
   passphrase : 'Mot de passe ou id',
   coin_ticket: 'Code d\'actif natif',
+  timeout    : 'Délai de transaction',
+  timeout_desc: 'Il est possible que l\'état de votre transaction soit déterminé après une longue période si le réseau est fortement encombré. Le nombre de timeout ne peut pas être négatif. Si la valeur est 0, la transaction est valide indéfiniment.',
   fed_protocol: 'Protocole de Fédération',
   fed_network : 'Nom de service (~)',
   fed_network_desc : 'Vous pouvez utiliser ~nom au lieu de nom*federation.domain.',
