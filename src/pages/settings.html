@@ -64,6 +64,20 @@
 					<input class="form-control" type="text" ng-model="network_coin" placeholder="XLM"/>
 				</div>
 			</div>
+			
+			<div class="row" style="margin-bottom: 20px;">
+                <div class="col-xs-12 col-md-10">
+                    <label translate="timeout">Transaction Timeout</label>
+                    <p translate="timeout_desc">It is possible that the status of your transaction will be determined after a long time if the network is highly congested. The timeout number can not be negative. If the value is 0, the transaction is good indefinitely.</p>
+                    <input class="form-control" type="number" ng-model="network_timeout" placeholder="45" list="timeoutlist"/>
+                    <datalist id="timeoutlist">
+                        <option value="0">
+                        <option value="30">
+                        <option value="45">
+                        <option value="60">
+                    </datalist>
+                </div>
+            </div>
 
 			<div class="row" style="margin-bottom: 20px;">
 				<div class="col-xs-12 col-sm-5">

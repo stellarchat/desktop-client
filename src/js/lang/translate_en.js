@@ -194,6 +194,8 @@ var translate_en = {
   other_url  : 'Network URL',
   passphrase : 'Passphrase or id',
   coin_ticket: 'Native asset code',
+  timeout    : 'Transaction Timeout',
+  timeout_desc: 'It is possible that the status of your transaction will be determined after a long time if the network is highly congested. The timeout number can not be negative. If the value is 0, the transaction is good indefinitely.',
   fed_protocol: 'Federation Protocol',
   fed_network : 'Name Service (~)',
   fed_network_desc : 'You can use ~name instead of name*federation.domain.',

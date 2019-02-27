@@ -193,6 +193,8 @@ var translate_cn = {
   test_url   : '测试网络节点',
   other_url  : '网络节点',
   passphrase : '网络标识',
+  timeout    : '网络超时',
+  timeout_desc: '在网络繁忙时，你可以设置一个时间（秒）使其返回交易结果。设成0代表无限制。',
   coin_ticket: '资产代码',
   fed_protocol: '联邦协议',
   fed_network : '名称服务（~）',

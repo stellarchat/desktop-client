@@ -58,6 +58,14 @@ myApp.factory('SettingFactory', function($window) {
         tabs: ["history", "trade", "balance", "send", "trust"]
       }
     },
+
+    setTimeout : function(timeout) {
+      return $window.localStorage['timeout'] = timeout;
+    },
+    getTimeout : function(timeout) {
+      return $window.localStorage['timeout'] || '45';
+    },
+
     setLang : function(lang) {
       return $window.localStorage['lang'] = lang;
     },
@@ -268,12 +276,12 @@ myApp.factory('RemoteFactory', function($http) {
     var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/master/src/package.json";
     getResource(url, callback);
   }
-  
+
   remote.getNwjsClientVersion = function(callback) {
     var url = "https://raw.githubusercontent.com/stellarchat/desktop-client/nwjs/src/package.json";
     getResource(url, callback);
   }
-  
+
   return remote;
 });
 
