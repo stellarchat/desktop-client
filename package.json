@@ -26,7 +26,7 @@
     "nw-builder": "^3.5.4",
     "qrcode-generator": "^1.4.1",
     "sjcl": "^1.0.7",
-    "stellar-sdk": "^0.11.0",
+    "stellar-sdk": "^0.14.0",
     "underscore": "^1.9.1"
   },
   "devDependencies": {
