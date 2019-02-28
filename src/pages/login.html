@@ -15,7 +15,7 @@
           <a class="btn btn-link" ng-click="goTo('/register')" translate="create_new_account">Create new account</a>
           <a class="btn btn-link" ng-click="toggleTemp()" translate="open_temp_act">Temporary Wallet</a>
         </div>
-        <div class="form-group"><a class="btn btn-block btn-default" id="walletfile" ng-click="fileInputClick()">{{'select_file' | translate}} {{walletfile}}</a></div>
+        <div class="form-group"><a class="btn btn-block btn-default" id="walletfile" ng-click="fileInputClick()"><span ng-hide='walletfile'>{{'select_file' | translate}}</span>{{walletfile}}</a></div>
         <div class="form-group hide">
           <label for="login_walletfile" translate="select_file">Select account file</label>
           <input class="form-control" id="login_walletfile" name="login_walletfile" type="file" ng-model="walletfile"/>
