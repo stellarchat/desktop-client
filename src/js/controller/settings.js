@@ -22,6 +22,7 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
     $scope.network_coin = SettingFactory.getCoin();
     $scope.all_networks = SettingFactory.NETWORKS;
     $scope.network_timeout = parseFloat(SettingFactory.getTimeout());
+    $scope.network_basefee = parseFloat(SettingFactory.getBasefee());
 
     $scope.fed_network = SettingFactory.getFedNetwork();
     $scope.fed_ripple  = SettingFactory.getFedRipple();
@@ -65,7 +66,9 @@ myApp.controller("SettingsCtrl", [ '$scope', '$rootScope', '$location', 'Setting
           }
         }
         SettingFactory.setTimeout($scope.network_timeout);
+        SettingFactory.setBasefee($scope.network_basefee);
         StellarApi.setTimeout($scope.network_timeout);
+        StellarApi.setBasefee($scope.network_basefee);
       }
 
       if (mode == 'federation') {
