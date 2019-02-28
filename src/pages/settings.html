@@ -64,7 +64,13 @@
 					<input class="form-control" type="text" ng-model="network_coin" placeholder="XLM"/>
 				</div>
 			</div>
-			
+			<div class="row" style="margin-bottom: 20px;">
+                <div class="col-xs-12 col-md-10">
+                    <label translate="base_fee">Base Fee</label>
+                    <p>{{ 'base_fee_desc' | translate }} {{network_coin}}</p>
+                    <input class="form-control" type="number" ng-model="network_basefee" placeholder="100" />
+                </div>
+            </div>
 			<div class="row" style="margin-bottom: 20px;">
                 <div class="col-xs-12 col-md-10">
                     <label translate="timeout">Transaction Timeout</label>
