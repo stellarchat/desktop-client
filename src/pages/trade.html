@@ -82,7 +82,7 @@
 					</div>
 					<div ng-repeat="(code, sublines) in lines">
 						<div class="row" ng-repeat="(issuer, line) in sublines">
-							<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(line.issuer)">
+							<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(line.issuer, line.code)">
 								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}"
 										website="{{gateway.website}}" code="{{line.code}}" address="{{line.issuer}}"></gateway>
 							</div>

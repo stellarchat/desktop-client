@@ -386,6 +386,7 @@ myApp.factory('AnchorFactory', ['$rootScope', 'StellarApi',
           } else {
             self.address[asset.issuer] = {domain: domain, parsing: false, parsed: true};
           }
+          $scope.gateways.updateAsset(domain, asset);
         });
 
         $scope.$broadcast("anchorUpdate");

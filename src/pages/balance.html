@@ -30,7 +30,7 @@
 				</tbody>
 				<tbody ng-repeat="(code, sublines) in lines">
 					<tr class="BalancesTable__row" ng-repeat-start="(issuer, line) in sublines">
-						<td ng-init="gateway=gateways.getSourceById(line.issuer)">
+						<td ng-init="gateway=gateways.getSourceById(line.issuer, code)">
 							<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 								code="{{code}}" address="{{line.issuer}}"></gateway>
 						</td>

@@ -11,7 +11,7 @@
 			
 			<div ng-repeat="ico in ico_data.ongoing">
 				<div class="row" >
-					<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(ico.issuer)">
+					<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(ico.issuer, ico.code)">
 								<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}" 
 									code="{{ico.code}}" address="{{ico.issuer}}"></gateway>
 					</div>
