@@ -19,7 +19,7 @@ myApp.factory('SettingFactory', function($window) {
           name: "lumen",
           atom: "stroop",
           code: "XLM",
-          logo: "img/rocket.png"
+          logo: "img/xlm.png"
         },
         allowHTTP: false,
         tabs: ["history", "trade", "balance", "send", "trust", "service", "ico"]
