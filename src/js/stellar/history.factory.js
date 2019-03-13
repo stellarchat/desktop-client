@@ -28,6 +28,7 @@ myApp.factory('StellarHistory', ['$rootScope', 'SettingFactory', function($rootS
             hash : r.transaction_hash,
             type: r.type,
             transaction: r.transaction,
+            success: r.transaction_successful
           };
           switch(r.type) {
             case 'payment': {

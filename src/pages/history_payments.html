@@ -26,7 +26,8 @@
             		<tbody>
             			<tr class="HistoryTable-row" ng-repeat-start="tx in payments">
             				<td colspan=2>{{tx.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-            				<td class="amount" rowspan=2>
+            				<td ng-class="{true: 'amount', false: 'amount error'}[tx.success]" rowspan=2>
+            				    <span class="glyphicon glyphicon-remove" ng-hide="tx.success"></span>
                                 <span class="debit" ng-if="!tx.isInbound"><span class="bold">-</span>{{tx.amount}}</span>
                                 <span class="credit" ng-if="tx.isInbound"><span class="bold">+</span>{{tx.amount}}</span>
                                 <strong>{{tx.asset.code}}</strong>
