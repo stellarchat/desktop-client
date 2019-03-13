@@ -12,7 +12,7 @@
 			<div ng-repeat="(name, gateway) in gateways.getAllSources()">
 				<div class="row" ng-repeat="(code, asset) in gateway.assets" ng-show="asset.list || show_all">
 					<div class="row__fixedAsset">
-						<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
+						<gateway name="{{asset.name || gateway.name}}" logo="{{asset.logo || gateway.logo}}" website="{{gateway.website}}"
 							code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
 					</div>
 					<div class="row__shareOption">
@@ -62,7 +62,7 @@
 			</div>
 
 			<div class="row" ng-repeat="asset in fed_currencies">
-				<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(asset.issuer)">
+				<div class="row__fixedAsset" ng-init="gateway=gateways.getSourceById(asset.issuer, asset.code)">
 					<gateway name="{{gateway.name}}" logo="{{gateway.logo}}" website="{{gateway.website}}"
 								code="{{asset.code}}" address="{{asset.issuer}}"></gateway>
 				</div>
