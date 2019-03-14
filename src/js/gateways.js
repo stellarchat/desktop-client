@@ -218,7 +218,7 @@ var gateways = {
     }
     var gateway = this.dataByIssuer[accountId];
     var ret = {
-        logo    : code ? gateway.assets[code].logo || gateway.logo : gateway.logo,
+        logo    : code && gateway.assets[code] ? gateway.assets[code].logo || gateway.logo : gateway.logo,
         name    : gateway.name,
         website : gateway.website,
     }
