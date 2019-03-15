@@ -23,7 +23,7 @@
     "chart.js": "^2.7.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
-    "nw-builder": "^3.5.4",
+    "nw-builder": "^3.5.7",
     "qrcode-generator": "^1.4.1",
     "sjcl": "^1.0.7",
     "stellar-sdk": "^0.14.0",
