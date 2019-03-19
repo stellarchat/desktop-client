@@ -21,7 +21,7 @@ Foxlet allows you to encrypt your secret key and store it as a file locally on y
 
 ## Build
 
-You should have Node.js (4.8.x recommended) installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+You should have Node.js (8.x recommended) installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
 
 You need to install [nwjs](https://nwjs.io) if you want to do development.  
 

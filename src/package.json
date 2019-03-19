@@ -1,6 +1,6 @@
 {
   "name": "Foxlet",
-  "version": "4.3",
+  "version": "4.4",
   "main": "main.js",
   "window": {
   	"icon": "img/rocket.png"
