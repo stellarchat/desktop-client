@@ -1,3 +1,12 @@
+# RippleFox team is now developing the new version of Foxlet.
+
+Please use the new repository to download the Foxlet client. 
+
+https://github.com/ripplefox/stellarwallet
+
+RippleFox now maintain the both Foxlet client for Stellar and Ripple.
+
+
 [![Travis CI status](https://www.travis-ci.org/stellarchat/desktop-client.svg?branch=master)](https://travis-ci.org/stellarchat/desktop-client)
 
 # Foxlet Wallet (A Desktop Client for Stellar)
